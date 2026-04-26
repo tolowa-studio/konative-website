@@ -119,13 +119,14 @@ async function main() {
   const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, {
     defval: null,
     raw: false,
+    range: 2, // skip title row + blank row; real headers are on row 3 (0-indexed: 2)
   });
   console.log(`  ${rows.length} rows in "${sheetName}" sheet`);
 
   // Filter: skip header-ish rows and blank entries
   const valid = rows.filter((r) => {
     const name = col(r, "Plant Name", "plant_name_eia", "Plant name");
-    const state = col(r, "State", "state");
+    const state = col(r, "Plant State", "State", "state");
     return name && state && String(state).length === 2;
   });
   console.log(`  ${valid.length} valid planned generator records`);
@@ -140,7 +141,7 @@ async function main() {
       plant_id: String(col(r, "Plant ID", "plant_id_eia") ?? ""),
       plant_name: String(col(r, "Plant Name", "plant_name_eia") ?? "Unknown"),
       utility_name: String(col(r, "Utility Name", "utility_name_eia") ?? "") || null,
-      state: String(col(r, "State", "state") ?? ""),
+      state: String(col(r, "Plant State", "State", "state") ?? ""),
       county: String(col(r, "County", "county") ?? "") || null,
       technology: String(col(r, "Technology", "technology_description") ?? "") || null,
       capacity_mw: isNaN(mw) ? null : mw,
