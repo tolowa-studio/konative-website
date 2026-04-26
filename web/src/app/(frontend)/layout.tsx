@@ -9,6 +9,16 @@ export const metadata = {
   title: "Konative | Data Center Land Brokerage",
   description:
     "Konative brokers powered land to data center developers and hyperscalers. We source sites, connect investors, and manage the deal from first call to close. Own land near a substation? We want to talk.",
+  metadataBase: new URL("https://konative.com"),
+  openGraph: {
+    siteName: "Konative",
+    type: "website" as const,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    site: "@konative",
+  },
 };
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
