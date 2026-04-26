@@ -31,10 +31,12 @@ interface HifldFeature {
   attributes: {
     ID?: string | number
     VOLTAGE?: number
+    VOLT_CLASS?: string
     STATUS?: string
     OWNER?: string
     TYPE?: string
-    STATE?: string
+    SUB_1?: string
+    SUB_2?: string
   }
   geometry?: {
     paths?: number[][][]
@@ -47,22 +49,36 @@ interface HifldResponse {
 }
 
 async function fetchPage(offset: number, pageSize: number): Promise<HifldResponse> {
-  const params = new URLSearchParams({
-    where: `VOLTAGE >= ${MIN_KV} AND STATUS = 'IN SERVICE'`,
-    outFields: 'ID,VOLTAGE,STATUS,OWNER,TYPE,STATE',
-    resultOffset: String(offset),
-    resultRecordCount: String(pageSize),
-    outSR: '4326',
-    f: 'geojson',
-    returnGeometry: 'true',
-    geometryPrecision: '4',
-  })
+  // Use Esri JSON (f=json) — GeoJSON endpoint doesn't reliably return polyline geometry.
+  // Build URL manually: URLSearchParams double-encodes >= which causes 400s on this service.
+  // Note: geometryPrecision causes 400 on this service — omit it
+  const qs = [
+    `where=VOLTAGE+%3E%3D+${MIN_KV}`,
+    `outFields=ID,VOLTAGE,VOLT_CLASS,STATUS,OWNER,TYPE,SUB_1,SUB_2`,
+    `resultOffset=${offset}`,
+    `resultRecordCount=${pageSize}`,
+    `outSR=4326`,
+    `f=json`,
+    `returnGeometry=true`,
+  ].join('&')
 
-  const res = await fetch(`${BASE_URL}?${params}`, {
+  const res = await fetch(`${BASE_URL}?${qs}`, {
     headers: { 'User-Agent': 'konative-ingest/1.0' },
   })
   if (!res.ok) throw new Error(`HIFLD HTTP ${res.status}`)
-  return res.json() as Promise<HifldResponse>
+  // Esri JSON: { features: [{ attributes: {...}, geometry: { paths: [...] } }] }
+  const data = await res.json() as {
+    features?: Array<{ attributes: Record<string, unknown>; geometry?: { paths: number[][][] } }>
+    exceededTransferLimit?: boolean
+    error?: { message: string }
+  }
+  if (data.error) throw new Error(`HIFLD error: ${data.error.message}`)
+  // Normalise to HifldResponse shape
+  const features = (data.features ?? []).map(f => ({
+    attributes: f.attributes as HifldFeature['attributes'],
+    geometry: f.geometry,
+  }))
+  return { features, exceededTransferLimit: data.exceededTransferLimit }
 }
 
 function pathsToWKT(paths: number[][][]): string | null {
@@ -92,6 +108,7 @@ async function main() {
   console.log(`  ${allFeatures.length} transmission line segments to import`)
 
   const records = allFeatures
+    .filter(f => !f.attributes.STATUS || (f.attributes.STATUS as string).toUpperCase() !== 'INACTIVE')
     .map(f => {
       const geom = pathsToWKT(f.geometry?.paths ?? [])
       if (!geom) return null
@@ -102,7 +119,7 @@ async function main() {
         status: a.STATUS ?? null,
         owner: a.OWNER ?? null,
         type: a.TYPE ?? null,
-        state: a.STATE ?? null,
+        state: null,  // STATE not available in this service
         geom,
       }
     })
