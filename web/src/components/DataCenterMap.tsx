@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { Map, Source, Layer, Popup, type MapLayerMouseEvent } from 'react-map-gl/maplibre'
-import type { CircleLayerSpecification } from 'maplibre-gl'
+import maplibregl, { type CircleLayerSpecification } from 'maplibre-gl'
+import { Protocol } from 'pmtiles'
 import type { FeatureCollection, Feature, Point } from 'geojson'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import type { LayerCategory, LayerManifest, LayerManifestEntry } from '@/types/map-layers'
 
 // ── types ─────────────────────────────────────────────────────────────────────
 
@@ -30,6 +32,16 @@ export const LAYER_LABELS: Record<LayerKey, string> = {
   network:    'Network (PeeringDB)',
   power:      'Power Pipeline (EIA)',
 }
+
+// Infrastructure (CA · beta) — populated from tiles/v1/manifest.json (Stream A).
+const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] = [
+  { key: 'power',   label: 'Power',   color: '#eab308' },
+  { key: 'gas',     label: 'Gas',     color: '#f97316' },
+  { key: 'fiber',   label: 'Fiber',   color: '#a855f7' },
+  { key: 'water',   label: 'Water',   color: '#38bdf8' },
+  { key: 'land',    label: 'Land',    color: '#84cc16' },
+  { key: 'climate', label: 'Climate', color: '#94a3b8' },
+]
 
 export interface MapCounts {
   projects: number
@@ -83,11 +95,46 @@ function colourFeature(f: Feature): Feature {
 
 // ── component ─────────────────────────────────────────────────────────────────
 
+// Register the pmtiles:// protocol once for the page lifetime.
+let _pmtilesProtocolRegistered = false
+function ensurePMTilesProtocol() {
+  if (_pmtilesProtocolRegistered) return
+  const protocol = new Protocol()
+  maplibregl.addProtocol('pmtiles', protocol.tile)
+  _pmtilesProtocolRegistered = true
+}
+
 export default function DataCenterMap({ layerData: propData, counts: propCounts }: Props) {
   const [layerData, setLayerData] = useState<LayerData | null>(propData ?? null)
   const [counts, setCounts]       = useState<MapCounts | null>(propCounts ?? null)
   const [activeLayer, setActiveLayer] = useState<LayerKey | 'all'>('all')
   const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown> } | null>(null)
+
+  // Infrastructure (CA · beta) state
+  const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
+  const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
+    power: false, gas: false, fiber: false, water: false, land: false, climate: false,
+  })
+
+  useEffect(() => { ensurePMTilesProtocol() }, [])
+
+  useEffect(() => {
+    fetch('/api/v1/layer-manifest')
+      .then(r => r.json())
+      .then((m: LayerManifest) => setInfraManifest(m))
+      .catch(() => setInfraManifest({ version: 1, generatedAt: new Date(0).toISOString(), layers: [] }))
+  }, [])
+
+  const infraLayersByCategory = useMemo(() => {
+    const map: Record<LayerCategory, LayerManifestEntry[]> = {
+      power: [], gas: [], fiber: [], water: [], land: [], climate: [],
+    }
+    for (const layer of infraManifest?.layers ?? []) {
+      if (layer.country !== 'CA' && layer.country !== 'GLOBAL') continue
+      map[layer.category]?.push(layer)
+    }
+    return map
+  }, [infraManifest])
 
   // Fetch from new endpoint if no data was passed as props
   useEffect(() => {
@@ -159,6 +206,38 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
           <Layer {...circleLayer} />
         </Source>
 
+        {/* Infrastructure (CA · beta) PMTiles sources + layers */}
+        {INFRA_CATEGORIES.flatMap(cat =>
+          infraEnabled[cat.key]
+            ? infraLayersByCategory[cat.key].map(layer => (
+                <Source
+                  key={layer.id}
+                  id={`infra-${layer.id}`}
+                  type="vector"
+                  url={`pmtiles://${layer.tilesUrl}`}
+                  attribution={layer.attribution}
+                >
+                  <Layer
+                    id={`infra-${layer.id}-line`}
+                    type="line"
+                    source-layer={layer.sourceLayer}
+                    minzoom={layer.minZoom}
+                    maxzoom={layer.maxZoom}
+                    paint={{ 'line-color': cat.color, 'line-width': 1.2, 'line-opacity': 0.8 }}
+                  />
+                  <Layer
+                    id={`infra-${layer.id}-point`}
+                    type="circle"
+                    source-layer={layer.sourceLayer}
+                    minzoom={layer.minZoom}
+                    maxzoom={layer.maxZoom}
+                    paint={{ 'circle-color': cat.color, 'circle-radius': 3, 'circle-opacity': 0.85, 'circle-stroke-width': 0.5, 'circle-stroke-color': 'rgba(8,20,45,0.6)' }}
+                  />
+                </Source>
+              ))
+            : []
+        )}
+
         {hover && (
           <Popup longitude={hover.lng} latitude={hover.lat} closeButton={false} offset={14} anchor="top">
             <HoverCard props={hover.props} />
@@ -198,6 +277,48 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
             </button>
           )
         })}
+      </div>
+
+      {/* Infrastructure (CA · beta) panel */}
+      <div style={{
+        position: 'absolute', zIndex: 10, top: 64, left: 16,
+        background: 'rgba(8,20,45,0.88)', border: '1px solid rgba(255,255,255,0.1)',
+        padding: '10px 12px', backdropFilter: 'blur(8px)', fontFamily: 'Inter, sans-serif',
+      }}>
+        <div style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#E07B39', marginBottom: 8 }}>
+          Infrastructure · CA · beta
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {INFRA_CATEGORIES.map(cat => {
+            const count = infraLayersByCategory[cat.key].length
+            const disabled = count === 0
+            const active = infraEnabled[cat.key]
+            return (
+              <button
+                key={cat.key}
+                disabled={disabled}
+                onClick={() => setInfraEnabled(prev => ({ ...prev, [cat.key]: !prev[cat.key] }))}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '4px 8px', background: active ? cat.color : 'transparent',
+                  color: active ? '#fff' : disabled ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.75)',
+                  border: `1px solid ${active ? cat.color : 'rgba(255,255,255,0.12)'}`,
+                  fontSize: 11, fontWeight: 600, letterSpacing: '0.05em',
+                  cursor: disabled ? 'not-allowed' : 'pointer', textTransform: 'uppercase',
+                }}
+              >
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: cat.color, opacity: disabled ? 0.3 : 1 }} />
+                {cat.label}
+                <span style={{ opacity: 0.6, fontWeight: 400, marginLeft: 'auto' }}>{count}</span>
+              </button>
+            )
+          })}
+        </div>
+        {(infraManifest?.layers.length ?? 0) === 0 && (
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 8, maxWidth: 180, lineHeight: 1.4 }}>
+            Awaiting Phase 1 ETL.
+          </div>
+        )}
       </div>
 
       {/* Empty state */}
