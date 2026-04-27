@@ -16,6 +16,7 @@
     "builder": "builder",
     "builder:import": "builder import -o ./builder-export",
     "builder:create": "builder create",
+    "queue:ingest": "tsx scripts/queue/run-nightly.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
