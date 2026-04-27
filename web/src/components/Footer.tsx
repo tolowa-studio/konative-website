@@ -57,6 +57,7 @@ export default function Footer() {
               { label: 'Deals', href: '/deals' },
               { label: 'Market Intel', href: '/market-intel' },
               { label: 'Contact', href: '/contact' },
+              { label: 'Data Sources & Licenses', href: '/licenses' },
             ].map(l => (
               <Link key={l.label} href={l.href} style={{
                 display: 'block', fontFamily: 'Inter, sans-serif', fontSize: 13,
