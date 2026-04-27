@@ -8,7 +8,7 @@ const navLinks: { label: string; url: string }[] = [
   { label: "Markets", url: "/markets" },
   { label: "Projects", url: "/projects" },
   { label: "Methodology", url: "/methodology" },
-  { label: "Insights", url: "/intelligence" },
+  { label: "Intelligence", url: "/intelligence" },
   { label: "About", url: "/#team" },
 ];
 
