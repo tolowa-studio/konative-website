@@ -40,14 +40,6 @@ const SECTIONS = [
     accent: '#22c55e',
   },
   {
-    href: '/assessment',
-    label: 'T4 Site Evaluator',
-    eyebrow: 'Tools · Powered by Tier IV DevCo',
-    headline: 'Score your site in under 10 minutes',
-    summary: 'Run any parcel through the T4 Infrastructure Evaluation across power, fiber, site characteristics, development readiness, and market positioning. Get a scored readiness report you can share with buyers, lenders, or partners. No account required.',
-    accent: '#06b6d4',
-  },
-  {
     href: '/news',
     label: 'Live Market Intel Feed',
     eyebrow: 'News + Analysis',
@@ -75,8 +67,142 @@ export default function IntelligenceIndexPage() {
         </div>
       </section>
 
+      {/* Featured Tool — T4 Site Evaluator */}
+      <section style={{ padding: '3rem 2rem 1rem' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #083344 0%, #0e7490 35%, #06b6d4 100%)',
+            borderRadius: 12,
+            padding: '2.5rem 2.5rem',
+            position: 'relative',
+            overflow: 'hidden',
+            boxShadow: '0 20px 60px -20px rgba(6, 182, 212, 0.4)',
+          }}>
+            {/* Decorative grid lines */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: 'linear-gradient(0deg, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+              pointerEvents: 'none',
+            }} />
+
+            <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: '2rem', alignItems: 'center' }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.875rem', flexWrap: 'wrap' }}>
+                  <span style={{
+                    fontSize: '0.65rem',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: '#0b1020',
+                    background: '#67e8f9',
+                    padding: '4px 10px',
+                    borderRadius: 3,
+                    fontWeight: 800,
+                  }}>
+                    Free Tool
+                  </span>
+                  <span style={{
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    color: '#a5f3fc',
+                    fontWeight: 600,
+                  }}>
+                    Powered by Tier IV DevCo
+                  </span>
+                </div>
+
+                <h2 style={{
+                  fontSize: 'clamp(1.875rem, 4.5vw, 2.75rem)',
+                  fontFamily: 'Barlow Condensed, sans-serif',
+                  fontWeight: 800,
+                  margin: '0 0 0.75rem',
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.05,
+                  color: '#fff',
+                  textTransform: 'uppercase',
+                }}>
+                  T4 INFRASTRUCTURE<br />SITE EVALUATOR
+                </h2>
+
+                <p style={{
+                  color: '#cffafe',
+                  margin: '0 0 1.25rem',
+                  fontSize: '1.0625rem',
+                  lineHeight: 1.6,
+                  maxWidth: 560,
+                }}>
+                  Score any parcel in under 10 minutes across power, fiber, site characteristics, development readiness, and market positioning. Get a sharable readiness report you can put in front of buyers, lenders, or partners.
+                </p>
+
+                <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center', marginBottom: '1.25rem' }}>
+                  {['Power', 'Fiber', 'Site', 'Readiness', 'Market'].map((p) => (
+                    <span key={p} style={{
+                      fontSize: '0.7rem',
+                      color: '#0b1020',
+                      background: 'rgba(255,255,255,0.92)',
+                      padding: '4px 10px',
+                      borderRadius: 100,
+                      fontWeight: 600,
+                      letterSpacing: '0.04em',
+                    }}>
+                      {p}
+                    </span>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <Link href="/assessment" style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    background: '#fff',
+                    color: '#083344',
+                    padding: '0.875rem 1.75rem',
+                    borderRadius: 6,
+                    textDecoration: 'none',
+                    fontWeight: 800,
+                    fontSize: '0.9375rem',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  }}>
+                    Launch Site Evaluator →
+                  </Link>
+                  <span style={{ fontSize: '0.8rem', color: '#a5f3fc' }}>
+                    No account required · ~10 min
+                  </span>
+                </div>
+              </div>
+
+              {/* Big icon / visual anchor */}
+              <div style={{
+                fontFamily: 'Barlow Condensed, sans-serif',
+                fontSize: 'clamp(4rem, 10vw, 7rem)',
+                fontWeight: 900,
+                color: 'rgba(255,255,255,0.18)',
+                letterSpacing: '-0.04em',
+                lineHeight: 0.9,
+                whiteSpace: 'nowrap',
+                userSelect: 'none',
+              }}>
+                T4
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section header */}
+      <div style={{ maxWidth: 960, margin: '2rem auto 0', padding: '0 2rem' }}>
+        <p style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#64748b', margin: 0, fontWeight: 600 }}>
+          Research + Trackers
+        </p>
+      </div>
+
       {/* Sections */}
-      <section style={{ padding: '3rem 2rem' }}>
+      <section style={{ padding: '1rem 2rem 3rem' }}>
         <div style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gap: '1rem' }}>
           {SECTIONS.map(s => (
             <Link key={s.href} href={s.href} style={{ textDecoration: 'none', color: 'inherit', display: 'block', background: '#0f1728', border: '1px solid #1e293b', borderLeft: `3px solid ${s.accent}`, borderRadius: 8, padding: '1.5rem 1.75rem', transition: 'border-color 0.15s' }}>
