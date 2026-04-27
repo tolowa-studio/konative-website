@@ -40,6 +40,14 @@ const SECTIONS = [
     accent: '#22c55e',
   },
   {
+    href: '/assessment',
+    label: 'T4 Site Evaluator',
+    eyebrow: 'Tools · Powered by Tier IV DevCo',
+    headline: 'Score your site in under 10 minutes',
+    summary: 'Run any parcel through the T4 Infrastructure Evaluation across power, fiber, site characteristics, development readiness, and market positioning. Get a scored readiness report you can share with buyers, lenders, or partners. No account required.',
+    accent: '#06b6d4',
+  },
+  {
     href: '/news',
     label: 'Live Market Intel Feed',
     eyebrow: 'News + Analysis',

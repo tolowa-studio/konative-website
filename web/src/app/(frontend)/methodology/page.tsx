@@ -180,6 +180,9 @@ export default function MethodologyPage() {
             Every site we evaluate runs through this rubric before we put it in front of a buyer. The score isn&apos;t the deal — but it tells you in 60 seconds whether the deal is worth chasing.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/assessment" style={{ background: '#E07B39', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+              Run the T4 Site Evaluator →
+            </Link>
             <Link href="/projects" style={{ background: '#1E4FBF', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
               Browse Scored Facilities →
             </Link>
