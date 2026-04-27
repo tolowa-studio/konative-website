@@ -7,6 +7,7 @@ import { Protocol } from 'pmtiles'
 import type { FeatureCollection, Feature, Point } from 'geojson'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { LayerCategory, LayerManifest, LayerManifestEntry } from '@/types/map-layers'
+import LayerCredits from './LayerCredits'
 
 // ── types ─────────────────────────────────────────────────────────────────────
 
@@ -337,6 +338,8 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
           </div>
         </div>
       )}
+
+      <LayerCredits layers={infraManifest?.layers ?? []} />
 
       {/* Stats overlay */}
       {counts && counts.total > 0 && (
