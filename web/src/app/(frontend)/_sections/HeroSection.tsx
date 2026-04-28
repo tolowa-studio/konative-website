@@ -92,7 +92,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
       }}
     >
       <div style={{ position: 'absolute', inset: 0 }}>
-        <DataCenterMap />
+        <DataCenterMap backgroundMode />
       </div>
 
       <div style={{
@@ -176,9 +176,10 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             { val: formatCount(stats.waterSitesIndexed, '—'), label: 'Water Sites Indexed', rust: false },
           ].map((stat, i) => (
             <div key={i} style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: 'rgba(8,20,45,0.82)',
+              border: '1px solid rgba(255,255,255,0.1)',
               padding: '20px 22px',
+              backdropFilter: 'blur(12px)',
             }}>
               <div style={{
                 fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
@@ -197,9 +198,10 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             </div>
           ))}
           <div style={{
-            background: 'rgba(224,123,57,0.15)',
+            background: 'rgba(8,20,45,0.82)',
             border: '1px solid rgba(224,123,57,0.35)',
             padding: '20px 22px',
+            backdropFilter: 'blur(12px)',
           }}>
             <div ref={dealRef as React.RefObject<HTMLDivElement>} style={{
               fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,

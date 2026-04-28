@@ -73,6 +73,7 @@ interface LayerData {
 interface Props {
   layerData?: LayerData
   counts?: MapCounts
+  backgroundMode?: boolean
 }
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -108,7 +109,7 @@ function ensurePMTilesProtocol() {
   _pmtilesProtocolRegistered = true
 }
 
-export default function DataCenterMap({ layerData: propData, counts: propCounts }: Props) {
+export default function DataCenterMap({ layerData: propData, counts: propCounts, backgroundMode }: Props) {
   const [layerData, setLayerData] = useState<LayerData | null>(propData ?? null)
   const [counts, setCounts]       = useState<MapCounts | null>(propCounts ?? null)
   const [activeLayer, setActiveLayer] = useState<LayerKey | 'all'>('all')
@@ -235,16 +236,16 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
     k === 'all' ? (counts?.total ?? 0) : (counts?.[k] ?? 0)
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: backgroundMode ? 'none' : undefined }}>
       <Map
         initialViewState={{ longitude: -96, latitude: 45, zoom: 3.2 }}
         mapStyle="https://tiles.openfreemap.org/styles/dark"
-        interactiveLayerIds={['dc-bubbles']}
-        onMouseMove={onMove}
-        onMouseLeave={() => setHover(null)}
-        onClick={onMapClick}
-        cursor={hover ? 'pointer' : 'default'}
-        attributionControl={{ compact: true }}
+        interactiveLayerIds={backgroundMode ? [] : ['dc-bubbles']}
+        onMouseMove={backgroundMode ? undefined : onMove}
+        onMouseLeave={backgroundMode ? undefined : () => setHover(null)}
+        onClick={backgroundMode ? undefined : onMapClick}
+        cursor={backgroundMode ? 'default' : hover ? 'pointer' : 'default'}
+        attributionControl={backgroundMode ? false : { compact: true }}
       >
         <Source id="dc" type="geojson" data={combined}>
           {showHeatmap && (
@@ -311,6 +312,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
         )}
       </Map>
 
+      {!backgroundMode && <>
       {/* Layer toggle chips — two rows, all controls in one place */}
       <div style={{ position: 'absolute', zIndex: 10, top: 16, left: 16, display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 'calc(100% - 380px)' }}>
         {/* Row 1: view modes + data layers */}
@@ -482,6 +484,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
           </div>
         </div>
       )}
+      </>}
     </div>
   )
 }
