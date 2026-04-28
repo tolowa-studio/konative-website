@@ -12,6 +12,7 @@
     "start": "next start",
     "etl:canada:p0": "tsx scripts/etl/canada/run.ts",
     "etl:canada:p0:dry": "tsx scripts/etl/canada/run.ts --dry-run",
+    "etl:phase3": "tsx scripts/etl/phase3/run.ts",
     "sanity:typegen": "sanity schema extract --path=./src/sanity/extract.json && sanity typegen generate",
     "ingest-news": "tsx scripts/ingest-news.ts",
     "draft:saudi-tracker": "tsx scripts/draft-saudi-tracker.ts",
