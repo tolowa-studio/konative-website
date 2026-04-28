@@ -131,6 +131,9 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   // Phase 3 computed layer toggles
   const [showHeatmap, setShowHeatmap] = useState(false)
 
+  // Track map zoom to detect when infra layers need zoom-in
+  const [mapZoom, setMapZoom] = useState(3.2)
+
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
   const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
@@ -156,6 +159,20 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     }
     return map
   }, [infraManifest])
+
+  // Minimum zoom required for any currently-enabled infra layer
+  const infraMinZoomNeeded = useMemo(() => {
+    let min = 0
+    for (const cat of INFRA_CATEGORIES) {
+      if (!infraEnabled[cat.key]) continue
+      for (const layer of infraLayersByCategory[cat.key]) {
+        if (layer.minZoom > min) min = layer.minZoom
+      }
+    }
+    return min
+  }, [infraEnabled, infraLayersByCategory])
+
+  const needsZoomIn = infraMinZoomNeeded > 0 && mapZoom < infraMinZoomNeeded
 
   // Fetch from new endpoint if no data was passed as props
   useEffect(() => {
@@ -244,6 +261,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         onMouseMove={backgroundMode ? undefined : onMove}
         onMouseLeave={backgroundMode ? undefined : () => setHover(null)}
         onClick={backgroundMode ? undefined : onMapClick}
+        onZoom={backgroundMode ? undefined : e => setMapZoom(e.viewState.zoom)}
         cursor={backgroundMode ? 'default' : hover ? 'pointer' : 'default'}
         attributionControl={backgroundMode ? false : { compact: true }}
       >
@@ -284,21 +302,32 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                   url={`pmtiles://${layer.tilesUrl}`}
                   attribution={layer.attribution}
                 >
+                  {/* Fill — renders polygon/multipolygon geometries (water risk, fire zones, protected areas, etc.) */}
+                  <Layer
+                    id={`infra-${layer.id}-fill`}
+                    type="fill"
+                    source-layer={layer.sourceLayer}
+                    minzoom={layer.minZoom}
+                    maxzoom={layer.maxZoom}
+                    paint={{ 'fill-color': cat.color, 'fill-opacity': 0.18 }}
+                  />
+                  {/* Line — renders linestrings (transmission lines, pipelines) AND polygon outlines */}
                   <Layer
                     id={`infra-${layer.id}-line`}
                     type="line"
                     source-layer={layer.sourceLayer}
                     minzoom={layer.minZoom}
                     maxzoom={layer.maxZoom}
-                    paint={{ 'line-color': cat.color, 'line-width': 1.2, 'line-opacity': 0.8 }}
+                    paint={{ 'line-color': cat.color, 'line-width': 2.5, 'line-opacity': 0.9 }}
                   />
+                  {/* Circle — renders point geometries (substations, power plants) */}
                   <Layer
                     id={`infra-${layer.id}-point`}
                     type="circle"
                     source-layer={layer.sourceLayer}
                     minzoom={layer.minZoom}
                     maxzoom={layer.maxZoom}
-                    paint={{ 'circle-color': cat.color, 'circle-radius': 3, 'circle-opacity': 0.85, 'circle-stroke-width': 0.5, 'circle-stroke-color': 'rgba(8,20,45,0.6)' }}
+                    paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
                   />
                 </Source>
               ))
@@ -406,6 +435,22 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
           </div>
         )}
       </div>
+
+      {/* Zoom-in hint when infra layers need higher zoom */}
+      {needsZoomIn && (
+        <div style={{
+          position: 'absolute', zIndex: 10, bottom: 80, left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(8,20,45,0.92)', border: '1px solid rgba(255,255,255,0.15)',
+          padding: '8px 16px', backdropFilter: 'blur(8px)',
+          fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.7)',
+          letterSpacing: '0.06em', whiteSpace: 'nowrap',
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          <span style={{ color: '#E07B39', fontSize: 14 }}>↑</span>
+          Zoom in to zoom {infraMinZoomNeeded}+ to see this layer
+        </div>
+      )}
 
       {/* Empty state */}
       {layerData && combined.features.length === 0 && (
