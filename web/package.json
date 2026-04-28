@@ -26,7 +26,8 @@
     "builder:create": "builder create",
     "queue:ingest": "tsx scripts/queue/run-nightly.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "tiles:sync": "node -e \"const{cpSync}=require('fs');cpSync('../tiles/v1','public/tiles/v1',{recursive:true,force:true});console.log('tiles synced');\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",

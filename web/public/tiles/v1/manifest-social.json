@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-28T01:47:49.969Z",
+  "layers": [
+    {
+      "id": "ca_cirnac_indigenous_lands",
+      "title": "Indigenous lands — reserves & Crown land (Canada)",
+      "category": "land",
+      "country": "CA",
+      "tilesUrl": "/tiles/v1/ca_cirnac_indigenous_lands.pmtiles",
+      "sourceLayer": "indigenous_lands",
+      "minZoom": 3,
+      "maxZoom": 12,
+      "license": "OGL-Canada-2.0",
+      "attribution": "Crown-Indigenous Relations and Northern Affairs Canada. Contains information licensed under the Open Government Licence - Canada.",
+      "sourceUrl": "https://open.canada.ca/data/en/dataset/b6567c5c-8339-4055-99fa-63f92114d9e4",
+      "lastUpdated": "2026-04-28T01:47:49.954Z",
+      "defaultVisible": true
+    },
+    {
+      "id": "ca_statcan_census_subdivisions",
+      "title": "Census subdivisions 2021 (Canada)",
+      "category": "land",
+      "country": "CA",
+      "tilesUrl": "/tiles/v1/ca_statcan_census_subdivisions.pmtiles",
+      "sourceLayer": "census_subdivisions",
+      "minZoom": 5,
+      "maxZoom": 12,
+      "license": "OGL-Canada-2.0",
+      "attribution": "Statistics Canada, 2021 Census. Adapted from Statistics Canada. This does not constitute an endorsement by Statistics Canada.",
+      "sourceUrl": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/index-eng.cfm",
+      "lastUpdated": "2026-04-28T01:47:49.969Z",
+      "defaultVisible": false
+    }
+  ]
+}

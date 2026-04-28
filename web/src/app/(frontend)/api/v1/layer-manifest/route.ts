@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { LayerManifest, LayerManifestEntry } from "@/types/map-layers";
 
-const TILES_V1 = path.join(process.cwd(), "..", "tiles", "v1");
+const TILES_V1 = path.join(process.cwd(), "public", "tiles", "v1");
 
 const EMPTY: LayerManifest = {
   version: 1,
