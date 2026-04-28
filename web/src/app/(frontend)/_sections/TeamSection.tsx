@@ -55,7 +55,7 @@ export default function TeamSection() {
           {members.map((member, i) => (
             <div key={i} style={{ background: '#0C2046', overflow: 'hidden' }}>
               <div style={{
-                height: 260, position: 'relative',
+                height: 320, position: 'relative',
                 backgroundImage: `url('${member.photo}')`,
                 backgroundSize: 'cover', backgroundPosition: 'center top',
               }}>
