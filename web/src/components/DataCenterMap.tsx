@@ -11,6 +11,7 @@ import type { QueueRadiusResponse, QueueAuthority, QueueResourceType } from '@/t
 import type { CASResult } from '@/lib/availability-score'
 import LayerCredits from './LayerCredits'
 import AvailabilityScorePanel from './AvailabilityScorePanel'
+import SiteProfilePanel, { type SiteProfilePanelState } from './SiteProfilePanel'
 
 // ── types ─────────────────────────────────────────────────────────────────────
 
@@ -128,6 +129,9 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     result: CASResult | null;
   } | null>(null)
 
+  // Site Profile Panel state (replaces old queue/cas panels for click handling)
+  const [profilePanel, setProfilePanel] = useState<SiteProfilePanelState | null>(null)
+
   // Phase 3 computed layer toggles
   const [showHeatmap, setShowHeatmap] = useState(false)
 
@@ -228,25 +232,27 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   }, [])
 
   const onMapClick = useCallback((e: MapLayerMouseEvent) => {
-    // Only open panels when clicking empty map space (not a DC bubble)
-    if (e.features && e.features.length > 0) return
     const { lat, lng } = e.lngLat
 
-    // Queue panel (Phase 2)
-    setQueuePanel({ lat, lng, status: 'loading', data: null })
-    fetch(`/api/v1/queue?lat=${lat}&lng=${lng}&radius_km=50`)
-      .then(r => r.json())
-      .then((data: QueueRadiusResponse) => setQueuePanel(prev => prev ? { ...prev, status: 'done', data } : null))
-      .catch(() => setQueuePanel(prev => prev ? { ...prev, status: 'error', data: null } : null))
-
-    // CAS panel (Phase 4) — only for Canadian coordinates
-    if (lat >= 41 && lat <= 84 && lng >= -141 && lng <= -52) {
-      setCasPanel({ status: 'loading', result: null })
-      fetch(`/api/v1/availability-score?lat=${lat}&lng=${lng}`)
-        .then(r => r.json())
-        .then((result: CASResult) => setCasPanel({ status: 'done', result }))
-        .catch(() => setCasPanel({ status: 'error', result: null }))
+    if (e.features && e.features.length > 0) {
+      // Clicked a DC dot — open Site Profile Panel
+      const feature = e.features[0]
+      const props = (feature.properties ?? {}) as Record<string, unknown>
+      // Extract lat/lng from the feature geometry
+      const geom = feature.geometry as { type: string; coordinates: number[] }
+      const fLng = geom.type === 'Point' ? geom.coordinates[0] : lng
+      const fLat = geom.type === 'Point' ? geom.coordinates[1] : lat
+      setProfilePanel({ mode: 'site', properties: props, lat: fLat, lng: fLng })
+      // Clear old panels
+      setQueuePanel(null)
+      setCasPanel(null)
+      return
     }
+
+    // Clicked empty space — open Identify panel
+    setProfilePanel({ mode: 'identify', lat, lng })
+    setQueuePanel(null)
+    setCasPanel(null)
   }, [])
 
   const layerCount = (k: LayerKey | 'all') =>
@@ -471,9 +477,16 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
       <LayerCredits layers={infraManifest?.layers ?? []} />
 
-      {/* Phase 4 — Canadian Availability Score™ Panel */}
-      {/* Positioned left of the queue panel (which is at right:16, width:340) */}
-      {casPanel && casPanel.status === 'done' && casPanel.result && (
+      {/* Site Profile Panel — handles both site clicks and identify (empty space) clicks */}
+      {profilePanel && (
+        <SiteProfilePanel
+          state={profilePanel}
+          onClose={() => setProfilePanel(null)}
+        />
+      )}
+
+      {/* Legacy Phase 4 — Canadian Availability Score™ Panel (shown only if old panels are active without profilePanel) */}
+      {!profilePanel && casPanel && casPanel.status === 'done' && casPanel.result && (
         <div style={{ position: 'absolute', right: queuePanel ? 372 : 16, top: 16, bottom: 32, zIndex: 20, width: 320 }}>
           <AvailabilityScorePanel
             result={casPanel.result}
@@ -481,7 +494,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
           />
         </div>
       )}
-      {casPanel && casPanel.status === 'loading' && (
+      {!profilePanel && casPanel && casPanel.status === 'loading' && (
         <div style={{
           position: 'absolute', right: queuePanel ? 372 : 16, top: 16, zIndex: 20,
           background: 'rgba(8,20,45,0.88)', border: '1px solid rgba(255,255,255,0.1)',
@@ -494,8 +507,8 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         </div>
       )}
 
-      {/* Phase 2 — Interconnection Queue Radius Panel */}
-      {queuePanel && (
+      {/* Legacy Phase 2 — Interconnection Queue Radius Panel */}
+      {!profilePanel && queuePanel && (
         <QueuePanel
           panel={queuePanel}
           onClose={() => { setQueuePanel(null); setCasPanel(null) }}
