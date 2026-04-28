@@ -7,6 +7,7 @@ import { Protocol } from 'pmtiles'
 import type { FeatureCollection, Feature, Point } from 'geojson'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { LayerCategory, LayerManifest, LayerManifestEntry } from '@/types/map-layers'
+import type { QueueRadiusResponse, QueueAuthority, QueueResourceType } from '@/types/queue'
 import LayerCredits from './LayerCredits'
 
 // ── types ─────────────────────────────────────────────────────────────────────
@@ -111,6 +112,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
   const [activeLayer, setActiveLayer] = useState<LayerKey | 'all'>('all')
   const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown> } | null>(null)
 
+  // Phase 2 queue panel state
+  const [queuePanel, setQueuePanel] = useState<{
+    lat: number; lng: number;
+    status: 'loading' | 'done' | 'error';
+    data: QueueRadiusResponse | null;
+  } | null>(null)
+
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
   const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
@@ -189,6 +197,17 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
     setHover({ lng, lat, props: f.properties as Record<string, unknown> })
   }, [])
 
+  const onMapClick = useCallback((e: MapLayerMouseEvent) => {
+    // Only open queue panel when clicking empty map space (not a DC bubble)
+    if (e.features && e.features.length > 0) return
+    const { lat, lng } = e.lngLat
+    setQueuePanel({ lat, lng, status: 'loading', data: null })
+    fetch(`/api/v1/queue?lat=${lat}&lng=${lng}&radius_km=50`)
+      .then(r => r.json())
+      .then((data: QueueRadiusResponse) => setQueuePanel(prev => prev ? { ...prev, status: 'done', data } : null))
+      .catch(() => setQueuePanel(prev => prev ? { ...prev, status: 'error', data: null } : null))
+  }, [])
+
   const layerCount = (k: LayerKey | 'all') =>
     k === 'all' ? (counts?.total ?? 0) : (counts?.[k] ?? 0)
 
@@ -200,6 +219,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
         interactiveLayerIds={['dc-bubbles']}
         onMouseMove={onMove}
         onMouseLeave={() => setHover(null)}
+        onClick={onMapClick}
         cursor={hover ? 'pointer' : 'default'}
         attributionControl={{ compact: true }}
       >
@@ -341,6 +361,14 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
 
       <LayerCredits layers={infraManifest?.layers ?? []} />
 
+      {/* Phase 2 — Interconnection Queue Radius Panel */}
+      {queuePanel && (
+        <QueuePanel
+          panel={queuePanel}
+          onClose={() => setQueuePanel(null)}
+        />
+      )}
+
       {/* Stats overlay */}
       {counts && counts.total > 0 && (
         <div style={{
@@ -368,6 +396,174 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts 
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+// ── queue panel ───────────────────────────────────────────────────────────────
+
+const AUTHORITY_COLORS: Partial<Record<QueueAuthority, string>> = {
+  IESO: '#22d3ee',
+  AESO: '#f97316',
+  HQ:   '#a855f7',
+  BCH:  '#38bdf8',
+}
+
+const RESOURCE_ICONS: Partial<Record<QueueResourceType, string>> = {
+  wind:    '🌬',
+  solar:   '☀',
+  hydro:   '💧',
+  battery: '⚡',
+  gas:     '🔥',
+  nuclear: '⚛',
+}
+
+function QueuePanel({
+  panel,
+  onClose,
+}: {
+  panel: { lat: number; lng: number; status: 'loading' | 'done' | 'error'; data: QueueRadiusResponse | null }
+  onClose: () => void
+}) {
+  const panelStyle: React.CSSProperties = {
+    position: 'absolute', right: 16, top: 16, bottom: 32, zIndex: 10, width: 340,
+    overflowY: 'auto',
+    background: 'rgba(8,20,45,0.88)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    backdropFilter: 'blur(8px)',
+    fontFamily: 'Inter, sans-serif',
+    display: 'flex', flexDirection: 'column',
+  }
+  const labelStyle: React.CSSProperties = {
+    fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#E07B39',
+  }
+
+  return (
+    <div style={panelStyle}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px 8px', borderBottom: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}>
+        <div>
+          <div style={labelStyle}>Queue Radius · 50 km</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>
+            {panel.lat.toFixed(3)}, {panel.lng.toFixed(3)}
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: 4 }}
+          aria-label="Close"
+        >
+          ×
+        </button>
+      </div>
+
+      {/* Body */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 14px' }}>
+        {panel.status === 'loading' && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, gap: 10, color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
+            <span style={{ animation: 'spin 1s linear infinite', display: 'inline-block', fontSize: 18 }}>⟳</span>
+            Loading…
+            <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+          </div>
+        )}
+
+        {panel.status === 'error' && (
+          <div style={{ color: 'rgba(255,100,100,0.8)', fontSize: 12, marginTop: 16 }}>
+            Failed to load queue data.
+          </div>
+        )}
+
+        {panel.status === 'done' && panel.data && (() => {
+          const { totalMw, countByAuthority, medianYearsToCod, rows } = panel.data
+          const sorted = [...rows].sort((a, b) => {
+            // distance is not pre-computed in the response; sort by id as proxy if no distanceKm field
+            const da = (a as { distanceKm?: number }).distanceKm ?? 0
+            const db = (b as { distanceKm?: number }).distanceKm ?? 0
+            return da - db
+          })
+          return (
+            <>
+              {rows.length === 0 ? (
+                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginTop: 16 }}>
+                  No queue projects within 50 km.
+                </div>
+              ) : (
+                <>
+                  {/* Summary stats */}
+                  <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
+                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', padding: '8px 10px' }}>
+                      <div style={labelStyle}>Total MW</div>
+                      <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginTop: 2 }}>{totalMw.toLocaleString()}</div>
+                    </div>
+                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', padding: '8px 10px' }}>
+                      <div style={labelStyle}>Projects</div>
+                      <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginTop: 2 }}>{rows.length}</div>
+                    </div>
+                    {medianYearsToCod !== null && (
+                      <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', padding: '8px 10px' }}>
+                        <div style={labelStyle}>Median COD</div>
+                        <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginTop: 2 }}>{medianYearsToCod.toFixed(1)}y</div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* By authority */}
+                  {Object.keys(countByAuthority).length > 0 && (
+                    <div style={{ marginBottom: 12 }}>
+                      <div style={{ ...labelStyle, marginBottom: 6 }}>By Authority</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                        {(Object.entries(countByAuthority) as [QueueAuthority, number][]).map(([auth, cnt]) => (
+                          <span key={auth} style={{
+                            fontSize: 10, fontWeight: 700, letterSpacing: '0.05em',
+                            padding: '3px 8px',
+                            background: `${AUTHORITY_COLORS[auth] ?? '#6b7280'}22`,
+                            border: `1px solid ${AUTHORITY_COLORS[auth] ?? '#6b7280'}`,
+                            color: AUTHORITY_COLORS[auth] ?? '#9ca3af',
+                          }}>
+                            {auth} · {cnt}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Project rows */}
+                  <div style={labelStyle as React.CSSProperties}>Projects · Closest First</div>
+                  <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {sorted.map(row => {
+                      const authColor = AUTHORITY_COLORS[row.authority] ?? '#6b7280'
+                      const icon = RESOURCE_ICONS[row.resourceType] ?? '●'
+                      const distKm = (row as { distanceKm?: number }).distanceKm
+                      return (
+                        <div key={row.id} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', padding: '8px 10px' }}>
+                          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
+                            <div style={{ fontSize: 12, fontWeight: 600, color: '#fff', lineHeight: 1.3, flex: 1 }}>{row.projectName}</div>
+                            <span style={{
+                              fontSize: 9, fontWeight: 700, letterSpacing: '0.05em',
+                              padding: '2px 6px', flexShrink: 0,
+                              background: `${authColor}22`,
+                              border: `1px solid ${authColor}`,
+                              color: authColor,
+                            }}>{row.authority}</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 5, flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>{row.capacityMw.toLocaleString()} MW</span>
+                            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>{icon} {row.resourceType}</span>
+                            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{row.studyPhase.replace(/_/g, ' ')}</span>
+                            {distKm !== undefined && (
+                              <span style={{ fontSize: 10, color: '#E07B39', marginLeft: 'auto' }}>{distKm.toFixed(0)} km</span>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </>
+              )}
+            </>
+          )
+        })()}
+      </div>
     </div>
   )
 }
