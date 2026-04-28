@@ -46,7 +46,10 @@ interface ProvinceBBox {
 }
 
 const PROVINCE_BBOXES: ProvinceBBox[] = [
-  { code: 'BC', name: 'British Columbia',  minLat: 48.3,  maxLat: 60.0, minLng: -139.1, maxLng: -114.0 },
+  // BC eastern edge approximates the Continental Divide at populated latitudes (~-116°W
+   // at 51°N). Real BC extends to ~-114.05°W only at the southern panhandle — tightening
+   // here trades minor SE-BC accuracy for correct AB classification of Calgary/Edmonton.
+  { code: 'BC', name: 'British Columbia',  minLat: 48.3,  maxLat: 60.0, minLng: -139.1, maxLng: -116.0 },
   { code: 'AB', name: 'Alberta',           minLat: 49.0,  maxLat: 60.0, minLng: -120.0, maxLng: -110.0 },
   { code: 'SK', name: 'Saskatchewan',      minLat: 49.0,  maxLat: 60.0, minLng: -110.0, maxLng: -101.4 },
   { code: 'MB', name: 'Manitoba',          minLat: 49.0,  maxLat: 60.0, minLng: -102.0, maxLng:  -88.9 },
