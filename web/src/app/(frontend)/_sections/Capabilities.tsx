@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 const capabilities = [
   {
@@ -37,12 +38,13 @@ const capabilities = [
 
 export default function Capabilities() {
   const [hovered, setHovered] = useState<number | null>(null)
+  const isMobile = useIsMobile()
 
   return (
-    <section id="capabilities" style={{ background: '#08142D', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 48px' }}>
+    <section id="capabilities" style={{ background: '#08142D', padding: isMobile ? '64px 0' : '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ maxWidth: 1320, margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'end', marginBottom: 64 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 24 : 80, alignItems: 'end', marginBottom: 48 }}>
           <div>
             <div style={{
               display: 'flex', alignItems: 'center', gap: 12,
@@ -71,7 +73,8 @@ export default function Capabilities() {
         </div>
 
         <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
           gap: 1, background: 'rgba(255,255,255,0.08)',
         }}>
           {capabilities.map((cap, i) => (
@@ -81,7 +84,7 @@ export default function Capabilities() {
               onMouseLeave={() => setHovered(null)}
               style={{
                 background: '#08142D',
-                padding: '40px 36px',
+                padding: isMobile ? '28px 24px' : '40px 36px',
                 borderLeft: hovered === i ? '2px solid #E07B39' : '2px solid transparent',
                 transition: 'border-color 0.2s',
               }}

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 const DataCenterMap = dynamic(() => import('@/components/DataCenterMap'), { ssr: false })
 
@@ -79,6 +80,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
   const tickerDeals = [...displayDeals, ...displayDeals]
 
   const [dealCount, dealRef] = useCountUp(stats.dealCount || displayDeals.length)
+  const isMobile = useIsMobile()
 
   return (
     <section
@@ -102,11 +104,15 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
 
       <div style={{
         position: 'relative', zIndex: 2, flex: 1,
-        display: 'flex', alignItems: 'center',
+        display: 'flex', alignItems: isMobile ? 'flex-start' : 'center',
+        flexDirection: isMobile ? 'column' : 'row',
         maxWidth: 1320, margin: '0 auto', width: '100%',
-        padding: '0 48px', gap: 80, paddingTop: 68,
+        padding: isMobile ? '0 20px' : '0 48px',
+        gap: isMobile ? 40 : 80,
+        paddingTop: 68,
+        paddingBottom: isMobile ? 40 : 0,
       }}>
-        <div style={{ flex: 1, maxWidth: 800 }}>
+        <div style={{ flex: 1, maxWidth: isMobile ? '100%' : 800 }}>
           <p style={{
             display: 'flex', alignItems: 'center', gap: 12,
             fontFamily: 'Inter, sans-serif', fontWeight: 600,
@@ -140,7 +146,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             from first call to close.
           </p>
 
-          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', flexDirection: isMobile ? 'column' : 'row', alignItems: 'flex-start' }}>
             <Link href="/land/submit" style={{
               fontFamily: 'Inter, sans-serif', fontWeight: 600,
               fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
@@ -169,7 +175,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
           </div>
         </div>
 
-        <div style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <div style={{ flexShrink: 0, width: isMobile ? '100%' : 280, display: 'flex', flexDirection: isMobile ? 'row' : 'column', flexWrap: 'wrap', gap: 1 }}>
           {[
             { val: formatCount(stats.facilitiesScored, '—'), label: 'DC Facilities Scored', rust: true },
             { val: formatCount(stats.generatorsTracked, '—'), label: 'Planned Generators Tracked', rust: false },
@@ -179,6 +185,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
               background: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.08)',
               padding: '20px 22px',
+              flex: isMobile ? '1 1 calc(50% - 1px)' : undefined,
             }}>
               <div style={{
                 fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
@@ -200,6 +207,7 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             background: 'rgba(224,123,57,0.15)',
             border: '1px solid rgba(224,123,57,0.35)',
             padding: '20px 22px',
+            flex: isMobile ? '1 1 100%' : undefined,
           }}>
             <div ref={dealRef as React.RefObject<HTMLDivElement>} style={{
               fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,

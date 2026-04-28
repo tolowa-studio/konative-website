@@ -1,10 +1,16 @@
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
+import type { Viewport } from "next";
 
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata = {
   title: "Konative | Datacenter Brokerage",
