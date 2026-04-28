@@ -160,49 +160,60 @@ async function fetchIesoRows(): Promise<QueueUpsertRow[]> {
   return output;
 }
 
-function parseMarkdownMarketRows(
-  content: string,
+interface FyiProject {
+  _uniqueId: string;
+  "Project Name": string;
+  State?: string;
+  Status?: string;
+  County?: string;
+  "Queue Date"?: string;
+  "Queue ID"?: string;
+  "MW (AC)"?: string | number;
+  "MW (DC)"?: string | number;
+  "Summer MW"?: string | number;
+  "Fuel 1"?: string;
+  "Proposed COD"?: string;
+  [key: string]: unknown;
+}
+
+function parseFyiProjects(
+  html: string,
   authority: QueueAuthority,
   sourceUrl: string
 ): QueueUpsertRow[] {
+  const match = /<script id="__NEXT_DATA__" type="application\/json"[^>]*>([\s\S]*?)<\/script>/.exec(html);
+  if (!match) return [];
+  let nextData: { props?: { pageProps?: { projects?: FyiProject[] } } };
+  try {
+    nextData = JSON.parse(match[1]);
+  } catch {
+    return [];
+  }
+  const projects = nextData?.props?.pageProps?.projects ?? [];
   const output: QueueUpsertRow[] = [];
-  const lines = content.split("\n");
-  for (const line of lines) {
-    if (!line.startsWith("| [")) continue;
-    const cols = line
-      .split("|")
-      .map((col) => col.trim())
-      .filter(Boolean);
-    if (cols.length < 5) continue;
-
-    const nameMatch = /\[([^\]]+)\]\(([^)]+)\)/.exec(cols[0]);
-    const projectName = nameMatch?.[1] ?? cols[0];
-    const projectUrl = nameMatch?.[2] ?? null;
-    const queueId = cols[1];
-    const province = cols[2];
-    const county = cols[3];
-    const status = cols[4];
+  for (const p of projects) {
+    const province = p.State ?? "";
     const centroid = PROVINCE_CENTROIDS[province] ?? null;
-
+    const mw =
+      Number(p["MW (AC)"] ?? p["Summer MW"] ?? p["MW (DC)"] ?? 0) || 0;
+    const queueId = String(p["Queue ID"] ?? p._uniqueId);
     output.push({
       authority,
       source_id: queueId,
-      project_name: projectName,
-      capacity_mw: parseCapacityMw(projectName),
-      resource_type: inferResourceType(projectName),
-      study_phase: mapMarketStatusToPhase(status),
-      queue_date: todayIsoDate(),
-      expected_cod: null,
-      poi_name: county || null,
+      project_name: p["Project Name"] ?? queueId,
+      capacity_mw: mw,
+      resource_type: inferResourceType(
+        String(p["Fuel 1"] ?? p["Project Name"] ?? "")
+      ),
+      study_phase: mapMarketStatusToPhase(String(p.Status ?? "")),
+      queue_date: parsePossibleDate(p["Queue Date"]) ?? todayIsoDate(),
+      expected_cod: parsePossibleDate(p["Proposed COD"]),
+      poi_name: p.County ?? null,
       poi_lat: centroid?.[0] ?? null,
       poi_lng: centroid?.[1] ?? null,
       source_url: sourceUrl,
       last_updated: new Date().toISOString(),
-      metadata: {
-        province,
-        status,
-        marketProjectUrl: projectUrl,
-      },
+      metadata: { province, status: p.Status },
     });
   }
   return output;
@@ -216,8 +227,8 @@ async function fetchMarketRows(
     headers: { "User-Agent": "konative-site/1.0 (queue-ingest)" },
   });
   if (!res.ok) throw new Error(`${authority} fetch failed: ${res.status}`);
-  const content = await res.text();
-  return parseMarkdownMarketRows(content, authority, sourceUrl);
+  const html = await res.text();
+  return parseFyiProjects(html, authority, sourceUrl);
 }
 
 export async function ingestAllAuthorities(client: SupabaseClient): Promise<QueueIngestSummary> {
@@ -228,7 +239,13 @@ export async function ingestAllAuthorities(client: SupabaseClient): Promise<Queu
     fetchMarketRows("BCH", BCH_LIST_URL),
   ]);
 
-  const allRows = [...iesoRows, ...aesoRows, ...hqRows, ...bchRows];
+  const seen = new Set<string>();
+  const allRows = [...iesoRows, ...aesoRows, ...hqRows, ...bchRows].filter((r) => {
+    const key = `${r.authority}:${r.source_id}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
   const { data, error } = await client
     .from("interconnection_queue")
     .upsert(allRows, { onConflict: "authority,source_id" })
