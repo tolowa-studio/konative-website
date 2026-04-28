@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useState, useCallback } from 'react'
-import { Map, Source, Layer, Popup, type MapLayerMouseEvent } from 'react-map-gl/maplibre'
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import { Map, Source, Layer, Popup, type MapLayerMouseEvent, type MapRef } from 'react-map-gl/maplibre'
 import maplibregl, { type CircleLayerSpecification } from 'maplibre-gl'
 import { Protocol } from 'pmtiles'
 import type { FeatureCollection, Feature, Point } from 'geojson'
@@ -12,6 +12,10 @@ import type { CASResult } from '@/lib/availability-score'
 import LayerCredits from './LayerCredits'
 import AvailabilityScorePanel from './AvailabilityScorePanel'
 import SiteProfilePanel, { type SiteProfilePanelState } from './SiteProfilePanel'
+import LayerControlPanel from './LayerControlPanel'
+import MapSearchBar from './MapSearchBar'
+import MapReadout from './MapReadout'
+import DemoViews from './DemoViews'
 
 // ── types ─────────────────────────────────────────────────────────────────────
 
@@ -46,6 +50,7 @@ const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] =
   { key: 'water',   label: 'Water',   color: '#38bdf8' },
   { key: 'land',    label: 'Land',    color: '#84cc16' },
   { key: 'climate', label: 'Climate', color: '#94a3b8' },
+  { key: 'rail',    label: 'Rail',    color: '#a16207' },
 ]
 
 export interface MapCounts {
@@ -111,10 +116,13 @@ function ensurePMTilesProtocol() {
 }
 
 export default function DataCenterMap({ layerData: propData, counts: propCounts, backgroundMode }: Props) {
+  const mapRef = useRef<MapRef | null>(null)
   const [layerData, setLayerData] = useState<LayerData | null>(propData ?? null)
   const [counts, setCounts]       = useState<MapCounts | null>(propCounts ?? null)
   const [activeLayer, setActiveLayer] = useState<LayerKey | 'all'>('all')
   const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown> } | null>(null)
+  // Cursor coordinates for MapReadout (separate from hover popup which only fires on DC dots)
+  const [cursorCoord, setCursorCoord] = useState<{ lat: number; lng: number }>({ lat: 0, lng: 0 })
 
   // Phase 2 queue panel state
   const [queuePanel, setQueuePanel] = useState<{
@@ -141,7 +149,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
   const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
-    power: false, gas: false, fiber: false, water: false, land: false, climate: false,
+    power: false, gas: false, fiber: false, water: false, land: false, climate: false, rail: false,
   })
 
   useEffect(() => { ensurePMTilesProtocol() }, [])
@@ -155,7 +163,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
   const infraLayersByCategory = useMemo(() => {
     const map: Record<LayerCategory, LayerManifestEntry[]> = {
-      power: [], gas: [], fiber: [], water: [], land: [], climate: [],
+      power: [], gas: [], fiber: [], water: [], land: [], climate: [], rail: [],
     }
     for (const layer of infraManifest?.layers ?? []) {
       if (layer.country !== 'CA' && layer.country !== 'GLOBAL') continue
@@ -225,6 +233,8 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   }
 
   const onMove = useCallback((e: MapLayerMouseEvent) => {
+    // Always update cursor coordinate for MapReadout
+    setCursorCoord({ lat: e.lngLat.lat, lng: e.lngLat.lng })
     const f = e.features?.[0]
     if (!f) return setHover(null)
     const [lng, lat] = (f.geometry as Point).coordinates
@@ -261,11 +271,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: backgroundMode ? 'none' : undefined }}>
       <Map
+        ref={mapRef}
         initialViewState={{ longitude: -96, latitude: 45, zoom: 3.2 }}
         mapStyle="https://tiles.openfreemap.org/styles/dark"
         interactiveLayerIds={backgroundMode ? [] : ['dc-bubbles']}
         onMouseMove={backgroundMode ? undefined : onMove}
-        onMouseLeave={backgroundMode ? undefined : () => setHover(null)}
+        onMouseLeave={backgroundMode ? undefined : () => { setHover(null) }}
         onClick={backgroundMode ? undefined : onMapClick}
         onZoom={backgroundMode ? undefined : e => setMapZoom(e.viewState.zoom)}
         cursor={backgroundMode ? 'default' : hover ? 'pointer' : 'default'}
@@ -348,99 +359,35 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
       </Map>
 
       {!backgroundMode && <>
-      {/* Layer toggle chips — two rows, all controls in one place */}
-      <div style={{ position: 'absolute', zIndex: 10, top: 16, left: 16, display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 'calc(100% - 380px)' }}>
-        {/* Row 1: view modes + data layers */}
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {/* DC Heatmap toggle */}
-          <button
-            onClick={() => setShowHeatmap(v => !v)}
-            style={{
-              padding: '6px 12px',
-              background: showHeatmap ? '#22d3ee' : 'rgba(8,20,45,0.88)',
-              color: showHeatmap ? '#fff' : 'rgba(255,255,255,0.8)',
-              border: `1px solid ${showHeatmap ? '#22d3ee' : 'rgba(255,255,255,0.2)'}`,
-              fontFamily: 'Inter, sans-serif', fontWeight: 600,
-              fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
-              backdropFilter: 'blur(8px)',
-            }}
-          >
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: showHeatmap ? '#fff' : '#22d3ee', flexShrink: 0 }} />
-            DC Heatmap
-          </button>
-          {(['all', 'projects', 'facilities', 'network', 'power'] as const).map(k => {
-            const count = layerCount(k)
-            const active = activeLayer === k
-            const color = k === 'all' ? '#E07B39' : LAYER_COLORS[k]
-            const label = k === 'all' ? 'All Layers' : LAYER_LABELS[k]
-            return (
-              <button
-                key={k}
-                onClick={() => setActiveLayer(k)}
-                disabled={count === 0 && k !== 'all'}
-                style={{
-                  padding: '6px 12px',
-                  background: active ? color : 'rgba(8,20,45,0.88)',
-                  color: active ? '#fff' : count === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.8)',
-                  border: `1px solid ${active ? color : count > 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.07)'}`,
-                  fontFamily: 'Inter, sans-serif', fontWeight: 600,
-                  fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase',
-                  cursor: count === 0 && k !== 'all' ? 'not-allowed' : 'pointer',
-                  display: 'flex', alignItems: 'center', gap: 5,
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                {k !== 'all' && (
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: active ? '#fff' : color, flexShrink: 0, opacity: count === 0 ? 0.25 : 1 }} />
-                )}
-                {label}
-                <span style={{ opacity: 0.65, fontWeight: 400 }}>({count.toLocaleString()})</span>
-              </button>
-            )
-          })}
-        </div>
+      {/* ── GIS Layer Control Panel (left side) ── */}
+      <LayerControlPanel
+        activeLayer={activeLayer}
+        setActiveLayer={setActiveLayer}
+        showHeatmap={showHeatmap}
+        setShowHeatmap={setShowHeatmap}
+        counts={counts}
+        infraCategories={INFRA_CATEGORIES}
+        infraEnabled={infraEnabled}
+        setInfraEnabled={setInfraEnabled}
+        infraLayersByCategory={infraLayersByCategory}
+        infraManifest={infraManifest}
+      />
 
-        {/* Row 2: CA Infrastructure toggles (only when manifest has layers) */}
-        {(infraManifest?.layers.length ?? 0) > 0 && (
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{
-              fontFamily: 'Inter, sans-serif', fontSize: 9, letterSpacing: '0.18em',
-              textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
-              paddingRight: 4, alignSelf: 'center',
-            }}>
-              CA Infra
-            </span>
-            {INFRA_CATEGORIES.map(cat => {
-              const count = infraLayersByCategory[cat.key].length
-              const disabled = count === 0
-              const active = infraEnabled[cat.key]
-              return (
-                <button
-                  key={cat.key}
-                  disabled={disabled}
-                  onClick={() => setInfraEnabled(prev => ({ ...prev, [cat.key]: !prev[cat.key] }))}
-                  style={{
-                    padding: '5px 10px',
-                    background: active ? cat.color : 'rgba(8,20,45,0.88)',
-                    color: active ? '#fff' : disabled ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)',
-                    border: `1px solid ${active ? cat.color : disabled ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.15)'}`,
-                    fontFamily: 'Inter, sans-serif', fontWeight: 600,
-                    fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase',
-                    cursor: disabled ? 'not-allowed' : 'pointer',
-                    display: 'flex', alignItems: 'center', gap: 5,
-                    backdropFilter: 'blur(8px)',
-                  }}
-                >
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: cat.color, flexShrink: 0, opacity: disabled ? 0.25 : 1 }} />
-                  {cat.label}
-                  <span style={{ opacity: 0.55, fontWeight: 400 }}>({count})</span>
-                </button>
-              )
-            })}
-          </div>
-        )}
-      </div>
+      {/* ── Search Bar (top center) ── */}
+      <MapSearchBar mapRef={mapRef} />
+
+      {/* ── Demo Views (top right) ── */}
+      <DemoViews
+        mapRef={mapRef}
+        onApply={(cfg) => setInfraEnabled(cfg)}
+      />
+
+      {/* ── Coordinate / Scale Readout (bottom left) ── */}
+      <MapReadout
+        lat={cursorCoord.lat}
+        lng={cursorCoord.lng}
+        zoom={mapZoom}
+      />
 
       {/* Zoom-in hint when infra layers need higher zoom */}
       {needsZoomIn && (

@@ -7,7 +7,8 @@ export type LayerCategory =
   | "fiber"
   | "water"
   | "land"
-  | "climate";
+  | "climate"
+  | "rail";
 
 export type LayerCountry = "CA" | "US" | "GLOBAL";
 
