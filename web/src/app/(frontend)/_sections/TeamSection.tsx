@@ -8,6 +8,8 @@ const members = [
     role: 'Founder & Principal',
     bio: 'Former CIO turned Gartner advisor. Solutions architect and infrastructure operations background spanning ISP, tribal enterprise, and enterprise consulting. Brings the technical depth and boardroom credibility to get deals done.',
     photo: '/team/jeramey-james.png',
+    photoSize: 'contain' as const,
+    photoPosition: 'center center',
     linkedin: 'https://www.linkedin.com/in/jerameyjames/',
   },
   {
@@ -61,7 +63,10 @@ export default function TeamSection() {
               <div style={{
                 height: 320, position: 'relative',
                 backgroundImage: `url('${member.photo}')`,
-                backgroundSize: 'cover', backgroundPosition: 'center top',
+                backgroundSize: member.photoSize ?? 'cover',
+                backgroundPosition: member.photoPosition ?? 'center top',
+                backgroundColor: '#0a1c3e',
+                backgroundRepeat: 'no-repeat',
               }}>
                 <div style={{
                   position: 'absolute', inset: 0,

@@ -8,7 +8,7 @@
       "category": "land",
       "country": "CA",
       "tilesUrl": "/tiles/v1/ca_cirnac_indigenous_lands.pmtiles",
-      "sourceLayer": "indigenous_lands",
+      "sourceLayer": "ca_cirnac_indigenous_lands",
       "minZoom": 3,
       "maxZoom": 12,
       "license": "OGL-Canada-2.0",

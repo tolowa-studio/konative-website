@@ -1,0 +1,283 @@
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
+import type { MapRef } from 'react-map-gl/maplibre'
+import type { LayerCategory } from '@/types/map-layers'
+
+// ── types ─────────────────────────────────────────────────────────────────────
+
+export interface DemoViewLayers {
+  dc: boolean
+  transmission: boolean
+  pipelines: boolean
+  rail: boolean
+  industrial: boolean
+  hotCorridors: boolean
+}
+
+interface DemoViewPreset {
+  name: string
+  description: string
+  center: [number, number]
+  zoom: number
+  layers: DemoViewLayers
+}
+
+// ── presets ───────────────────────────────────────────────────────────────────
+
+const PRESETS: DemoViewPreset[] = [
+  {
+    name: 'Alberta Industrial Heartland',
+    description: 'Dense energy corridor NE of Edmonton — power, pipelines, industrial',
+    center: [-113.2, 53.5],
+    zoom: 6.5,
+    layers: { dc: true, transmission: true, pipelines: true, rail: true, industrial: true, hotCorridors: false },
+  },
+  {
+    name: 'BC Lower Mainland',
+    description: 'Metro Vancouver — fiber, transmission, industrial zones',
+    center: [-122.7, 49.2],
+    zoom: 8,
+    layers: { dc: true, transmission: true, pipelines: false, rail: false, industrial: true, hotCorridors: false },
+  },
+  {
+    name: 'GTA / Greater Toronto',
+    description: 'Ontario grid node — full infra overlay for site selection',
+    center: [-79.4, 43.7],
+    zoom: 7.5,
+    layers: { dc: true, transmission: true, pipelines: true, rail: true, industrial: true, hotCorridors: false },
+  },
+  {
+    name: 'Quebec Hydro Corridor',
+    description: 'Hydro-Québec backbone — power + rail from Montréal to Trois-Rivières',
+    center: [-72.5, 46.8],
+    zoom: 6,
+    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: false, hotCorridors: false },
+  },
+]
+
+// Map DemoViewLayers → infraEnabled Record<LayerCategory, boolean>
+function toInfraEnabled(v: DemoViewLayers): Record<LayerCategory, boolean> {
+  return {
+    power:   v.transmission,
+    gas:     v.pipelines,
+    fiber:   v.transmission,   // fiber follows transmission toggle
+    water:   false,
+    land:    v.industrial,
+    climate: false,
+    rail:    v.rail,
+  }
+}
+
+// ── component ─────────────────────────────────────────────────────────────────
+
+interface Props {
+  mapRef: React.RefObject<MapRef | null>
+  onApply: (infraEnabled: Record<LayerCategory, boolean>) => void
+}
+
+export default function DemoViews({ mapRef, onApply }: Props) {
+  const [open, setOpen] = useState(false)
+  const [activePreset, setActivePreset] = useState<string | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Close on outside click
+  useEffect(() => {
+    function handle(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handle)
+    return () => document.removeEventListener('mousedown', handle)
+  }, [])
+
+  const handleSelect = (preset: DemoViewPreset) => {
+    mapRef.current?.flyTo({
+      center: preset.center,
+      zoom: preset.zoom,
+      duration: 1800,
+    })
+    onApply(toInfraEnabled(preset.layers))
+    setActivePreset(preset.name)
+    setOpen(false)
+  }
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        position: 'absolute',
+        zIndex: 10,
+        top: 16,
+        right: 16,
+        fontFamily: 'Inter, sans-serif',
+      }}
+    >
+      {/* Trigger button */}
+      <button
+        onClick={() => setOpen(v => !v)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          background: open ? 'rgba(224,123,57,0.15)' : 'rgba(8,20,45,0.92)',
+          border: `1px solid ${open ? 'rgba(224,123,57,0.5)' : 'rgba(255,255,255,0.12)'}`,
+          backdropFilter: 'blur(8px)',
+          cursor: 'pointer',
+          padding: '8px 14px',
+          color: '#fff',
+          fontFamily: 'Inter, sans-serif',
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          whiteSpace: 'nowrap',
+          transition: 'background 0.15s, border 0.15s',
+        }}
+      >
+        {activePreset ? (
+          <span style={{ color: '#E07B39' }}>◉</span>
+        ) : (
+          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>◈</span>
+        )}
+        Demo Views
+        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>
+          {open ? '▲' : '▾'}
+        </span>
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <div style={{
+          position: 'absolute',
+          top: 'calc(100% + 4px)',
+          right: 0,
+          background: 'rgba(8,20,45,0.98)',
+          border: '1px solid rgba(255,255,255,0.12)',
+          backdropFilter: 'blur(8px)',
+          width: 300,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+        }}>
+          {/* Header */}
+          <div style={{
+            padding: '10px 14px 8px',
+            borderBottom: '1px solid rgba(255,255,255,0.08)',
+          }}>
+            <div style={{
+              fontSize: 9,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: '#E07B39',
+              fontFamily: 'Inter, sans-serif',
+              marginBottom: 1,
+            }}>
+              Bookmark Views
+            </div>
+            <div style={{
+              fontFamily: '"Barlow Condensed", sans-serif',
+              fontSize: 13,
+              fontWeight: 700,
+              color: 'rgba(255,255,255,0.7)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+            }}>
+              Pre-set GIS Perspectives
+            </div>
+          </div>
+
+          {/* Preset list */}
+          {PRESETS.map((preset, i) => {
+            const isActive = activePreset === preset.name
+            return (
+              <button
+                key={preset.name}
+                onClick={() => handleSelect(preset)}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  gap: 3,
+                  width: '100%',
+                  background: isActive ? 'rgba(224,123,57,0.10)' : 'none',
+                  border: 'none',
+                  borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                  cursor: 'pointer',
+                  padding: '10px 14px',
+                  textAlign: 'left',
+                  transition: 'background 0.12s',
+                }}
+                onMouseEnter={e => {
+                  if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'none'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%' }}>
+                  <span style={{
+                    fontFamily: '"Barlow Condensed", sans-serif',
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: isActive ? '#E07B39' : '#fff',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    flex: 1,
+                  }}>
+                    {preset.name}
+                  </span>
+                  {isActive && (
+                    <span style={{ color: '#E07B39', fontSize: 10, flexShrink: 0 }}>●</span>
+                  )}
+                </div>
+                <div style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: 10,
+                  color: 'rgba(255,255,255,0.4)',
+                  lineHeight: 1.4,
+                  letterSpacing: '0.02em',
+                }}>
+                  {preset.description}
+                </div>
+                {/* Layer badges */}
+                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
+                  {Object.entries(preset.layers)
+                    .filter(([, v]) => v)
+                    .map(([k]) => (
+                      <span key={k} style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: 8,
+                        fontWeight: 700,
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        color: '#E07B39',
+                        background: 'rgba(224,123,57,0.12)',
+                        border: '1px solid rgba(224,123,57,0.25)',
+                        padding: '1px 5px',
+                      }}>
+                        {k}
+                      </span>
+                    ))
+                  }
+                </div>
+              </button>
+            )
+          })}
+
+          {/* Footer */}
+          <div style={{
+            padding: '8px 14px',
+            borderTop: '1px solid rgba(255,255,255,0.06)',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: 9,
+            color: 'rgba(255,255,255,0.2)',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }}>
+            Selecting a view flies the map + enables layers
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

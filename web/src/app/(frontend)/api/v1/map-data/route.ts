@@ -46,13 +46,16 @@ async function fetchProjects() {
   try {
     const rows = await sanity.fetch(`*[_type == "dataCenterProject" && defined(location)]{
       _id, name, operator, location, city, state, country,
-      status, capacityMw, source, sourceUrl
+      status, capacityMw, source, sourceUrl,
+      announcedDate, expectedOnlineDate, extractionConfidence, verified
     }`);
     const features = rows.map((p: {
       _id: string; name: string; operator?: string;
       location: { lat: number; lng: number };
       city?: string; state?: string; country: string;
       status: string; capacityMw?: number; source: string; sourceUrl?: string;
+      announcedDate?: string; expectedOnlineDate?: string;
+      extractionConfidence?: number; verified?: boolean;
     }) => ({
       type: "Feature" as const,
       geometry: point(p.location.lng, p.location.lat),
@@ -62,6 +65,10 @@ async function fetchProjects() {
         city: p.city, state: p.state, country: p.country,
         status: p.status, mw: p.capacityMw || 0,
         source: p.source, sourceUrl: p.sourceUrl,
+        announcedDate: p.announcedDate ?? null,
+        expectedOnlineDate: p.expectedOnlineDate ?? null,
+        extractionConfidence: p.extractionConfidence ?? null,
+        verified: p.verified ?? false,
       },
     }));
     return { features, total: features.length };

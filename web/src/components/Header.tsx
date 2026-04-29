@@ -171,8 +171,9 @@ export default function Header() {
     flexDirection: "column",
     padding: "12px 0 20px",
     transform: menuOpen ? "translateY(0)" : "translateY(-110%)",
-    transition: "transform 0.25s ease",
+    transition: "transform 0.25s ease, visibility 0.25s",
     pointerEvents: menuOpen ? "auto" : "none",
+    visibility: menuOpen ? "visible" : "hidden",
   };
 
   return (
