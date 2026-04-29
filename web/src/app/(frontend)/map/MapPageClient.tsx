@@ -119,106 +119,78 @@ export default function MapPageClient() {
 
   // ── Editorial Mode — page with header + map + footer ─────────────────────
   return (
-    <div style={{ background: '#08142D', height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{ background: '#08142D', height: 'calc(100dvh - 64px)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
-      {/* Page header */}
+      {/* Compact toolbar */}
       <div style={{
-        paddingTop: 80, paddingBottom: 20,
-        paddingLeft: 48, paddingRight: 48,
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        height: 44,
         flexShrink: 0,
+        padding: '0 20px',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 16,
+        background: 'rgba(4,12,28,0.96)',
       }}>
-        <div style={{ maxWidth: 1320, margin: '0 auto', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+        {/* Left — title + count */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <h1 style={{
+            fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
+            fontSize: 15, lineHeight: 1, textTransform: 'uppercase',
+            color: '#fff', margin: 0, whiteSpace: 'nowrap',
+          }}>
+            US + Canada&nbsp;<span style={{ color: '#E07B39' }}>Data Center Map</span>
+          </h1>
+          {total > 0 && (
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.25)', whiteSpace: 'nowrap' }}>
+              <strong style={{ color: 'rgba(255,140,60,0.6)' }}>{total.toLocaleString()}</strong> records
+            </span>
+          )}
+        </div>
 
-          {/* Title block — compact */}
-          <div>
-            <p style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              fontFamily: 'Inter, sans-serif', fontWeight: 600,
-              fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase',
-              color: '#E07B39', marginBottom: 6,
-            }}>
-              <span style={{ display: 'block', width: 20, height: 1, background: '#E07B39' }} />
-              Live Intelligence
-            </p>
-            <h1 style={{
-              fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
-              fontSize: 'clamp(28px, 3.5vw, 48px)', lineHeight: 0.92,
-              textTransform: 'uppercase', color: '#fff', marginBottom: 0,
-            }}>
-              US + CANADA&nbsp;
-              <span style={{ color: '#E07B39' }}>Data Center Map</span>
-            </h1>
-            {total > 0 && (
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 5 }}>
-                <strong style={{ color: 'rgba(255,140,60,0.7)' }}>{total.toLocaleString()}</strong> records · toggle layers in the left panel
-              </p>
-            )}
+        {/* Right — source badges + Tool Mode button */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {SOURCES.map(({ key, label, url }) => {
+              const count = counts?.[key as LayerKey] ?? 0
+              const active = count > 0
+              return (
+                <a key={key} href={url} target="_blank" rel="noopener noreferrer" style={{
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  fontFamily: 'Inter, sans-serif', fontSize: 9,
+                  color: active ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.12)',
+                  textDecoration: 'none', whiteSpace: 'nowrap',
+                }}>
+                  <span style={{
+                    width: 5, height: 5, borderRadius: '50%',
+                    background: LAYER_COLORS[key as LayerKey],
+                    opacity: active ? 0.9 : 0.2, flexShrink: 0,
+                  }} />
+                  {label}
+                  {active && <span style={{ color: 'rgba(255,255,255,0.18)' }}>({count.toLocaleString()})</span>}
+                </a>
+              )
+            })}
           </div>
-
-          {/* Right side — source badges + Tool Mode button */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 20, flexWrap: 'wrap' }}>
-
-            {/* Compact source badges */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-              {SOURCES.map(({ key, label, url }) => {
-                const count = counts?.[key as LayerKey] ?? 0
-                const active = count > 0
-                return (
-                  <a key={key} href={url} target="_blank" rel="noopener noreferrer" style={{
-                    display: 'flex', alignItems: 'center', gap: 5,
-                    fontFamily: 'Inter, sans-serif', fontSize: 10,
-                    color: active ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.15)',
-                    textDecoration: 'none',
-                  }}>
-                    <span style={{
-                      width: 6, height: 6, borderRadius: '50%',
-                      background: LAYER_COLORS[key as LayerKey],
-                      opacity: active ? 0.9 : 0.2,
-                      flexShrink: 0,
-                    }} />
-                    {label}
-                    {active && <span style={{ color: 'rgba(255,255,255,0.2)' }}>({count.toLocaleString()})</span>}
-                  </a>
-                )
-              })}
-            </div>
-
-            {/* Tool Mode button */}
-            <button
-              onClick={() => setToolMode(true)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 7,
-                background: 'rgba(224,123,57,0.08)',
-                border: '1px solid rgba(224,123,57,0.35)',
-                cursor: 'pointer',
-                padding: '7px 14px',
-                color: '#E07B39',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                transition: 'background 0.15s, border-color 0.15s',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={e => {
-                const btn = e.currentTarget
-                btn.style.background = 'rgba(224,123,57,0.18)'
-                btn.style.borderColor = 'rgba(224,123,57,0.65)'
-              }}
-              onMouseLeave={e => {
-                const btn = e.currentTarget
-                btn.style.background = 'rgba(224,123,57,0.08)'
-                btn.style.borderColor = 'rgba(224,123,57,0.35)'
-              }}
-            >
-              <span style={{ fontSize: 13, lineHeight: 1 }}>⛶</span>
-              Launch Tool Mode
-            </button>
-          </div>
+          <button
+            onClick={() => setToolMode(true)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              background: 'rgba(224,123,57,0.08)',
+              border: '1px solid rgba(224,123,57,0.35)',
+              cursor: 'pointer', padding: '5px 12px',
+              color: '#E07B39', fontFamily: 'Inter, sans-serif',
+              fontSize: 9, fontWeight: 700,
+              letterSpacing: '0.12em', textTransform: 'uppercase',
+              transition: 'background 0.15s, border-color 0.15s', whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(224,123,57,0.18)'; e.currentTarget.style.borderColor = 'rgba(224,123,57,0.65)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(224,123,57,0.08)'; e.currentTarget.style.borderColor = 'rgba(224,123,57,0.35)' }}
+          >
+            <span style={{ fontSize: 11, lineHeight: 1 }}>⛶</span>
+            Launch Tool Mode
+          </button>
         </div>
       </div>
 
