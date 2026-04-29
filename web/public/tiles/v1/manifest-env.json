@@ -15,7 +15,8 @@
       "attribution": "World Resources Institute, Aqueduct 4.0. CC BY 4.0.",
       "sourceUrl": "https://www.wri.org/data/aqueduct-global-maps-40-data",
       "lastUpdated": "2026-04-28T02:11:55.289Z",
-      "defaultVisible": true
+      "defaultVisible": true,
+      "geometryHint": "polygon"
     },
     {
       "id": "ca_cwfis_fire_zones",
@@ -30,7 +31,8 @@
       "attribution": "Canadian Wildland Fire Information System / NRCan. Contains information licensed under the Open Government Licence - Canada.",
       "sourceUrl": "https://cwfis.cfs.nrcan.gc.ca",
       "lastUpdated": "2026-04-28T02:11:55.289Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "polygon"
     },
     {
       "id": "ca_cpcad_protected_areas",
@@ -45,7 +47,8 @@
       "attribution": "Environment and Climate Change Canada, CPCAD December 2023. Contains information licensed under the Open Government Licence - Canada.",
       "sourceUrl": "https://www.canada.ca/en/environment-climate-change/services/national-wildlife-areas/protected-areas-database.html",
       "lastUpdated": "2026-04-28T05:37:03.282Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "polygon"
     }
   ]
 }
