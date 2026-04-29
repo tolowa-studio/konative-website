@@ -25,6 +25,8 @@
     "builder:import": "builder import -o ./builder-export",
     "builder:create": "builder create",
     "queue:ingest": "tsx scripts/queue/run-nightly.ts",
+    "seed:audience:tribes": "tsx --env-file=.env.local scripts/seed-audience-tribes.ts",
+    "seed:audience:advisors": "tsx --env-file=.env.local scripts/seed-audience-advisors.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "tiles:sync": "node -e \"const{cpSync}=require('fs');cpSync('../tiles/v1','public/tiles/v1',{recursive:true,force:true});console.log('tiles synced');\""

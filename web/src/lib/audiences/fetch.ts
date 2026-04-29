@@ -21,7 +21,7 @@ const AUDIENCE_PROJECTION = `{
 export async function getAudiencePage(slug: string): Promise<AudiencePage | null> {
   const client = getSanityReadClient();
   const result = await client.fetch<AudiencePage | null>(
-    `*[_type == "audiencePage" && slug.current == $slug][0]${AUDIENCE_PROJECTION}`,
+    `*[_type == "audiencePage" && !(_id in path("drafts.**")) && slug.current == $slug][0]${AUDIENCE_PROJECTION}`,
     { slug },
   );
   return result ?? null;
@@ -30,7 +30,7 @@ export async function getAudiencePage(slug: string): Promise<AudiencePage | null
 export async function listAudiencePages(): Promise<AudiencePage[]> {
   const client = getSanityReadClient();
   const result = await client.fetch<AudiencePage[]>(
-    `*[_type == "audiencePage"] | order(order asc, displayName asc)${AUDIENCE_PROJECTION}`,
+    `*[_type == "audiencePage" && !(_id in path("drafts.**"))] | order(order asc, displayName asc)${AUDIENCE_PROJECTION}`,
   );
   return result ?? [];
 }
