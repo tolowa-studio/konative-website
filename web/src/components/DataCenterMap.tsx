@@ -406,14 +406,33 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         <div style={{
           position: 'absolute', zIndex: 10, bottom: 80, left: '50%',
           transform: 'translateX(-50%)',
-          background: 'rgba(8,20,45,0.92)', border: '1px solid rgba(255,255,255,0.15)',
-          padding: '8px 16px', backdropFilter: 'blur(8px)',
-          fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.7)',
-          letterSpacing: '0.06em', whiteSpace: 'nowrap',
-          display: 'flex', alignItems: 'center', gap: 8,
+          background: 'rgba(8,20,45,0.97)', border: '1px solid rgba(224,123,57,0.5)',
+          padding: '12px 20px', backdropFilter: 'blur(10px)',
+          fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap',
+          display: 'flex', alignItems: 'center', gap: 16,
+          boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
         }}>
-          <span style={{ color: '#E07B39', fontSize: 14 }}>↑</span>
-          Zoom in to zoom {infraMinZoomNeeded}+ to see this layer
+          <span style={{ color: '#E07B39', fontSize: 20, lineHeight: 1 }}>↑</span>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#E07B39', marginBottom: 4 }}>
+              Zoom in to see this layer
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 22, fontWeight: 700, color: 'rgba(255,255,255,0.45)', lineHeight: 1, fontFamily: '"Barlow Condensed", sans-serif' }}>
+                  {mapZoom.toFixed(1)}
+                </div>
+                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 2 }}>Current</div>
+              </div>
+              <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.2)' }}>→</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 22, fontWeight: 700, color: '#E07B39', lineHeight: 1, fontFamily: '"Barlow Condensed", sans-serif' }}>
+                  {infraMinZoomNeeded}+
+                </div>
+                <div style={{ fontSize: 9, color: 'rgba(224,123,57,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 2 }}>Required</div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
