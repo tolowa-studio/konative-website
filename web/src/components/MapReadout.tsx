@@ -58,7 +58,7 @@ export default function MapReadout({ lat, lng, zoom }: Props) {
       position: 'absolute',
       zIndex: 10,
       bottom: 40,
-      left: 16,
+      left: 304,
       background: 'rgba(8,20,45,0.92)',
       border: '1px solid rgba(255,255,255,0.10)',
       backdropFilter: 'blur(8px)',

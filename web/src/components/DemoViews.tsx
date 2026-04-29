@@ -35,10 +35,17 @@ const PRESETS: DemoViewPreset[] = [
   },
   {
     name: 'BC Lower Mainland',
-    description: 'Metro Vancouver — fiber, transmission, industrial zones',
+    description: 'Metro Vancouver — transmission grid, CN/CP rail corridors, industrial zones',
     center: [-122.7, 49.2],
     zoom: 8,
-    layers: { dc: true, transmission: true, pipelines: false, rail: false, industrial: true, hotCorridors: false },
+    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: true, hotCorridors: false },
+  },
+  {
+    name: 'NE BC Energy Corridor',
+    description: 'Fort St John / Peace River — NGTL pipelines, rail, remote industrial',
+    center: [-120.8, 56.25],
+    zoom: 7,
+    layers: { dc: false, transmission: true, pipelines: true, rail: true, industrial: true, hotCorridors: false },
   },
   {
     name: 'GTA / Greater Toronto',
@@ -268,13 +275,36 @@ export default function DemoViews({ mapRef, onApply }: Props) {
           <div style={{
             padding: '8px 14px',
             borderTop: '1px solid rgba(255,255,255,0.06)',
-            fontFamily: 'Inter, sans-serif',
-            fontSize: 9,
-            color: 'rgba(255,255,255,0.2)',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 8,
           }}>
-            Selecting a view flies the map + enables layers
+            <span style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 9,
+              color: 'rgba(255,255,255,0.2)',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+            }}>
+              Flies map + enables layers
+            </span>
+            <a
+              href="/land/submit"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 700,
+                fontSize: 9,
+                letterSpacing: '0.10em',
+                textTransform: 'uppercase',
+                color: '#E07B39',
+                textDecoration: 'none',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+              }}
+            >
+              Submit Land →
+            </a>
           </div>
         </div>
       )}
