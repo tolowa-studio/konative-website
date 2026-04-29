@@ -1,1 +1,2 @@
-*.pmtiles filter=lfs diff=lfs merge=lfs -text
+# PMTiles stored as regular git objects (not LFS) for Vercel static serving
+*.pmtiles binary
