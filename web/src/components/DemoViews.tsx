@@ -27,6 +27,36 @@ interface DemoViewPreset {
 // ── presets ───────────────────────────────────────────────────────────────────
 
 const PRESETS: DemoViewPreset[] = [
+  // ── British Columbia ──────────────────────────────────────────────────────
+  {
+    name: 'BC — Province Overview',
+    description: 'Full-province view — transmission, protected areas, industrial land, indigenous territories',
+    center: [-124.5, 54.0],
+    zoom: 5.2,
+    layers: { dc: true, transmission: true, pipelines: true, rail: true, industrial: true, exclusions: true, hotCorridors: false },
+  },
+  {
+    name: 'BC — Lower Mainland',
+    description: 'Metro Vancouver & Fraser Valley — fiber hubs, BC Hydro grid, CN/CP rail, industrial zones',
+    center: [-122.4, 49.15],
+    zoom: 8.5,
+    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: true, exclusions: true, hotCorridors: false },
+  },
+  {
+    name: 'BC — Interior Corridor',
+    description: 'Cache Creek → Kamloops → Prince George — large parcels, BC Hydro, CN mainline, cool climate',
+    center: [-121.5, 51.8],
+    zoom: 6.5,
+    layers: { dc: false, transmission: true, pipelines: false, rail: true, industrial: true, exclusions: true, hotCorridors: false },
+  },
+  {
+    name: 'BC — Peace River / NE',
+    description: 'Fort St John & Site C — NGTL pipelines, clean power surplus, large flat land',
+    center: [-120.8, 56.25],
+    zoom: 7,
+    layers: { dc: false, transmission: true, pipelines: true, rail: true, industrial: true, exclusions: false, hotCorridors: false },
+  },
+  // ── Alberta ───────────────────────────────────────────────────────────────
   {
     name: 'Alberta Industrial Heartland',
     description: 'Dense energy corridor NE of Edmonton — power, pipelines, industrial',
@@ -34,20 +64,7 @@ const PRESETS: DemoViewPreset[] = [
     zoom: 6.5,
     layers: { dc: true, transmission: true, pipelines: true, rail: true, industrial: true, exclusions: true, hotCorridors: false },
   },
-  {
-    name: 'BC Lower Mainland',
-    description: 'Metro Vancouver — transmission grid, CN/CP rail corridors, industrial zones',
-    center: [-122.7, 49.2],
-    zoom: 8,
-    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: true, exclusions: true, hotCorridors: false },
-  },
-  {
-    name: 'NE BC Energy Corridor',
-    description: 'Fort St John / Peace River — NGTL pipelines, rail, remote industrial',
-    center: [-120.8, 56.25],
-    zoom: 7,
-    layers: { dc: false, transmission: true, pipelines: true, rail: true, industrial: true, exclusions: false, hotCorridors: false },
-  },
+  // ── Ontario / Quebec ──────────────────────────────────────────────────────
   {
     name: 'GTA / Greater Toronto',
     description: 'Ontario grid node — full infra overlay for site selection',
@@ -197,6 +214,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
           </div>
 
           {/* Preset list */}
+          <div style={{ maxHeight: 400, overflowY: 'auto' }}>
           {PRESETS.map((preset, i) => {
             const isActive = activePreset === preset.name
             return (
@@ -273,6 +291,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
               </button>
             )
           })}
+          </div>
 
           {/* Footer */}
           <div style={{
