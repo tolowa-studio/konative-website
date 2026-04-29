@@ -351,7 +351,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         type="fill"
                         source-layer={layer.sourceLayer}
                         minzoom={layer.minZoom}
-                        maxzoom={layer.maxZoom}
+
                         paint={{ 'fill-color': cat.color, 'fill-opacity': fillOpacity }}
                       />
                     )}
@@ -362,7 +362,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         type="line"
                         source-layer={layer.sourceLayer}
                         minzoom={layer.minZoom}
-                        maxzoom={layer.maxZoom}
+
                         paint={{
                           'line-color': 'rgba(8,20,45,0.85)',
                           'line-width': ['interpolate', ['linear'], ['zoom'], 4, 3.5, 8, 5, 12, 7],
@@ -377,7 +377,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         type="line"
                         source-layer={layer.sourceLayer}
                         minzoom={layer.minZoom}
-                        maxzoom={layer.maxZoom}
+
                         paint={hint === 'line' ? {
                           'line-color': cat.color,
                           'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.5, 8, 2.5, 12, 4],
@@ -396,7 +396,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         type="circle"
                         source-layer={layer.sourceLayer}
                         minzoom={layer.minZoom}
-                        maxzoom={layer.maxZoom}
+
                         paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
                       />
                     )}
