@@ -311,43 +311,78 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         {/* Infrastructure (CA · beta) PMTiles sources + layers */}
         {INFRA_CATEGORIES.flatMap(cat =>
           infraEnabled[cat.key]
-            ? infraLayersByCategory[cat.key].map(layer => (
-                <Source
-                  key={layer.id}
-                  id={`infra-${layer.id}`}
-                  type="vector"
-                  url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
-                  attribution={layer.attribution}
-                >
-                  {/* Fill — renders polygon/multipolygon geometries (water risk, fire zones, protected areas, etc.) */}
-                  <Layer
-                    id={`infra-${layer.id}-fill`}
-                    type="fill"
-                    source-layer={layer.sourceLayer}
-                    minzoom={layer.minZoom}
-                    maxzoom={layer.maxZoom}
-                    paint={{ 'fill-color': cat.color, 'fill-opacity': 0.18 }}
-                  />
-                  {/* Line — renders linestrings (transmission lines, pipelines) AND polygon outlines */}
-                  <Layer
-                    id={`infra-${layer.id}-line`}
-                    type="line"
-                    source-layer={layer.sourceLayer}
-                    minzoom={layer.minZoom}
-                    maxzoom={layer.maxZoom}
-                    paint={{ 'line-color': cat.color, 'line-width': 2.5, 'line-opacity': 0.9 }}
-                  />
-                  {/* Circle — renders point geometries (substations, power plants) */}
-                  <Layer
-                    id={`infra-${layer.id}-point`}
-                    type="circle"
-                    source-layer={layer.sourceLayer}
-                    minzoom={layer.minZoom}
-                    maxzoom={layer.maxZoom}
-                    paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
-                  />
-                </Source>
-              ))
+            ? infraLayersByCategory[cat.key].map(layer => {
+                const hint = layer.geometryHint ?? 'mixed'
+                const showFill   = hint === 'polygon' || hint === 'mixed'
+                const showLine   = hint === 'line'    || hint === 'polygon' || hint === 'mixed'
+                const showCircle = hint === 'point'   || hint === 'mixed'
+                return (
+                  <Source
+                    key={layer.id}
+                    id={`infra-${layer.id}`}
+                    type="vector"
+                    url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
+                    attribution={layer.attribution}
+                  >
+                    {/* Fill — polygon/multipolygon (water risk, fire zones, protected areas, land use) */}
+                    {showFill && (
+                      <Layer
+                        id={`infra-${layer.id}-fill`}
+                        type="fill"
+                        source-layer={layer.sourceLayer}
+                        minzoom={layer.minZoom}
+                        maxzoom={layer.maxZoom}
+                        paint={{ 'fill-color': cat.color, 'fill-opacity': 0.18 }}
+                      />
+                    )}
+                    {/* Line casing — dark underline for path readability */}
+                    {showLine && hint === 'line' && (
+                      <Layer
+                        id={`infra-${layer.id}-line-casing`}
+                        type="line"
+                        source-layer={layer.sourceLayer}
+                        minzoom={layer.minZoom}
+                        maxzoom={layer.maxZoom}
+                        paint={{
+                          'line-color': 'rgba(8,20,45,0.85)',
+                          'line-width': ['interpolate', ['linear'], ['zoom'], 4, 3.5, 8, 5, 12, 7],
+                          'line-opacity': 0.7,
+                        }}
+                      />
+                    )}
+                    {/* Line — linestrings (transmission lines, pipelines, rail) + polygon outlines */}
+                    {showLine && (
+                      <Layer
+                        id={`infra-${layer.id}-line`}
+                        type="line"
+                        source-layer={layer.sourceLayer}
+                        minzoom={layer.minZoom}
+                        maxzoom={layer.maxZoom}
+                        paint={hint === 'line' ? {
+                          'line-color': cat.color,
+                          'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.5, 8, 2.5, 12, 4],
+                          'line-opacity': 0.9,
+                        } : {
+                          'line-color': cat.color,
+                          'line-width': 1.5,
+                          'line-opacity': 0.6,
+                        }}
+                      />
+                    )}
+                    {/* Circle — discrete point geometries (substations, power plants) */}
+                    {showCircle && (
+                      <Layer
+                        id={`infra-${layer.id}-point`}
+                        type="circle"
+                        source-layer={layer.sourceLayer}
+                        minzoom={layer.minZoom}
+                        maxzoom={layer.maxZoom}
+                        paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
+                      />
+                    )}
+                  </Source>
+                )
+              })
             : []
         )}
 

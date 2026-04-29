@@ -15,7 +15,8 @@
       "attribution": "NRCan / NACEI. Contains information licensed under the Open Government Licence - Canada.",
       "sourceUrl": "https://open.canada.ca/data/en/dataset/35c51098-5cd8-44b0-b1cd-c8ce2f5dae89",
       "lastUpdated": "2026-04-28T00:39:49.324Z",
-      "defaultVisible": true
+      "defaultVisible": true,
+      "geometryHint": "line"
     },
     {
       "id": "ca_nrcan_substations",
@@ -30,7 +31,8 @@
       "attribution": "NRCan / Open Government. Contains information licensed under the Open Government Licence - Canada.",
       "sourceUrl": "https://open.canada.ca/data/en/dataset/3393d1fd-9c20-4854-9acc-dcc504aec275",
       "lastUpdated": "2026-04-28T00:39:50.257Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "point"
     },
     {
       "id": "ca_nrcan_power_plants",
@@ -45,7 +47,8 @@
       "attribution": "NRCan / NACEI. Contains information licensed under the Open Government Licence - Canada.",
       "sourceUrl": "https://open.canada.ca/data/en/dataset/40fbe40c-01cd-49d3-8add-0d20ed64c90d",
       "lastUpdated": "2026-04-28T00:39:52.175Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "point"
     },
     {
       "id": "ca_cer_pipelines",
@@ -60,7 +63,8 @@
       "attribution": "Canada Energy Regulator / NACEI. Contains information licensed under the Open Government Licence - Canada (Canada Energy Regulator).",
       "sourceUrl": "https://open.canada.ca/data/en/dataset/16282d1a-383f-4b9e-b703-a3ee21e59dc5",
       "lastUpdated": "2026-04-28T00:39:53.263Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "line"
     }
   ]
 }

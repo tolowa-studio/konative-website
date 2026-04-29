@@ -15,7 +15,8 @@
       "attribution": "© OpenStreetMap contributors",
       "sourceUrl": "https://www.openstreetmap.org",
       "lastUpdated": "2026-04-29T02:18:21.735Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "line"
     },
     {
       "id": "osm_ca_transmission",
@@ -30,7 +31,8 @@
       "attribution": "© OpenStreetMap contributors",
       "sourceUrl": "https://www.openstreetmap.org",
       "lastUpdated": "2026-04-29T02:18:51.300Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "line"
     },
     {
       "id": "osm_ca_pipelines",
@@ -45,7 +47,8 @@
       "attribution": "© OpenStreetMap contributors",
       "sourceUrl": "https://www.openstreetmap.org",
       "lastUpdated": "2026-04-29T02:19:04.955Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "line"
     },
     {
       "id": "osm_ca_industrial",
@@ -60,7 +63,8 @@
       "attribution": "© OpenStreetMap contributors",
       "sourceUrl": "https://www.openstreetmap.org",
       "lastUpdated": "2026-04-29T02:19:26.472Z",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "geometryHint": "polygon"
     }
   ]
 }
