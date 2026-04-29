@@ -11,7 +11,9 @@ function keyFor(seed: string): string {
   );
 }
 
-function toSanityDoc(page: AudiencePage): Record<string, unknown> {
+type AudienceSanityDoc = Record<string, unknown> & { _type: "audiencePage" };
+
+function toSanityDoc(page: AudiencePage): AudienceSanityDoc {
   return {
     _type: "audiencePage",
     slug: { _type: "slug", current: page.slug },
