@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useIsMobile } from '@/hooks/useIsMobile'
 
 interface Article {
   id: string
@@ -39,7 +38,6 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
   const [email, setEmail]         = useState('')
   const [submitted, setSubmitted]   = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const isMobile = useIsMobile()
 
   const display = articles.length > 0 ? articles.slice(0, 6) : PLACEHOLDER_ARTICLES
   const [featured, ...rest] = display
@@ -60,8 +58,8 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
   }
 
   return (
-    <section id="market-intel" style={{ background: '#08142D', padding: isMobile ? '64px 0' : '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-      <div style={{ maxWidth: 1320, margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}>
+    <section id="market-intel" style={{ background: '#08142D', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 48px' }}>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 60, flexWrap: 'wrap', gap: 20 }}>
           <div>
@@ -90,7 +88,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 360px', gap: isMobile ? 32 : 64 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 64 }}>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <a href={featured.url || '#'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
@@ -129,7 +127,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
               </div>
             </a>
 
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.08)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.08)' }}>
               {rest.slice(0, 2).map((article) => (
                 <a key={article.id} href={article.url || '#'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                   <div style={{ background: '#0C2046', overflow: 'hidden' }}>
@@ -225,11 +223,9 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
         </div>
 
         <div style={{
-          background: '#1E4FBF', marginTop: 48,
-          padding: isMobile ? '28px 20px' : '40px 48px',
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'center',
+          background: '#1E4FBF', marginTop: 64,
+          padding: '40px 48px',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           flexWrap: 'wrap', gap: 24,
         }}>
           <div>
@@ -248,7 +244,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
               Subscribed ✓
             </p>
           ) : (
-            <div style={{ display: 'flex', gap: 0, flexDirection: isMobile ? 'column' : 'row' }}>
+            <div style={{ display: 'flex', gap: 0 }}>
               <input
                 type="email"
                 placeholder="your@email.com"
@@ -256,12 +252,9 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSubscribe()}
                 style={{
-                  padding: '14px 18px',
-                  width: isMobile ? '100%' : 260,
+                  padding: '14px 18px', width: 260,
                   background: 'rgba(255,255,255,0.12)',
-                  border: '1px solid rgba(255,255,255,0.25)',
-                  borderRight: isMobile ? '1px solid rgba(255,255,255,0.25)' : 'none',
-                  borderBottom: isMobile ? 'none' : '1px solid rgba(255,255,255,0.25)',
+                  border: '1px solid rgba(255,255,255,0.25)', borderRight: 'none',
                   color: '#fff', fontFamily: 'Inter, sans-serif', fontSize: 14, outline: 'none',
                 }}
               />
@@ -273,7 +266,6 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
                   fontFamily: 'Inter, sans-serif', fontWeight: 700,
                   fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase',
                   border: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
-                  width: isMobile ? '100%' : undefined,
                 }}
               >
                 Subscribe Free

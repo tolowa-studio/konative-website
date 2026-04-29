@@ -9,6 +9,7 @@ export const contactSchema = z.object({
   projectStage: z.string().optional(),
   message: z.string().optional(),
   referralSource: z.string().optional(),
+  audience: z.string().optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;

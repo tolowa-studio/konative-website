@@ -10,15 +10,22 @@ const navLinks: { label: string; url: string }[] = [
   { label: "Map", url: "/map" },
   { label: "Methodology", url: "/methodology" },
   { label: "Intelligence", url: "/intelligence" },
+  { label: "For", url: "/for" },
   { label: "About", url: "/#team" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
 const DARK_HERO_PAGES = new Set(["/", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/intelligence/first-nations", "/news", "/market-intel", "/contact", "/assessment"]);
 
+function isDarkHeroPath(pathname: string): boolean {
+  if (DARK_HERO_PAGES.has(pathname)) return true;
+  if (pathname === "/for" || pathname.startsWith("/for/")) return true;
+  return false;
+}
+
 export default function Header() {
   const pathname = usePathname();
-  const hasDarkHero = DARK_HERO_PAGES.has(pathname);
+  const hasDarkHero = isDarkHeroPath(pathname);
 
   const [scrolled, setScrolled] = useState(!hasDarkHero);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);

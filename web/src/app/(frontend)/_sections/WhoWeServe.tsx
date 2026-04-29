@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { useIsMobile } from '@/hooks/useIsMobile'
 
 const panels = [
   {
@@ -36,11 +35,10 @@ const panels = [
 
 export default function WhoWeServe() {
   const [hovered, setHovered] = useState<number | null>(null)
-  const isMobile = useIsMobile()
 
   return (
-    <section id="who-we-serve" style={{ background: '#0C2046', padding: isMobile ? '64px 0' : '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-      <div style={{ maxWidth: 1320, margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}>
+    <section id="who-we-serve" style={{ background: '#0C2046', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 48px' }}>
 
         <div style={{
           display: 'flex', alignItems: 'center', gap: 12,
@@ -62,8 +60,7 @@ export default function WhoWeServe() {
         </h2>
 
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 1, background: 'rgba(255,255,255,0.08)',
         }}>
           {panels.map((panel, i) => (
@@ -73,7 +70,7 @@ export default function WhoWeServe() {
               onMouseLeave={() => setHovered(null)}
               style={{
                 background: '#0C2046',
-                padding: isMobile ? '32px 24px' : '48px 40px',
+                padding: '48px 40px',
                 borderTop: panel.primary
                   ? '3px solid #E07B39'
                   : hovered === i ? '3px solid rgba(255,255,255,0.3)' : '3px solid transparent',

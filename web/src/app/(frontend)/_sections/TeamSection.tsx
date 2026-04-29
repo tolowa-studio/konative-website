@@ -1,7 +1,5 @@
 'use client'
 
-import { useIsMobile } from '@/hooks/useIsMobile'
-
 const members = [
   {
     name: 'Jeramey James',
@@ -29,10 +27,9 @@ const members = [
 ]
 
 export default function TeamSection() {
-  const isMobile = useIsMobile()
   return (
-    <section id="team" style={{ background: '#0C2046', padding: isMobile ? '64px 0' : '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-      <div style={{ maxWidth: 1320, margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}>
+    <section id="team" style={{ background: '#0C2046', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 48px' }}>
 
         <div style={{
           display: 'flex', alignItems: 'center', gap: 12,
@@ -54,8 +51,7 @@ export default function TeamSection() {
         </h2>
 
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 1, background: 'rgba(255,255,255,0.08)',
         }}>
           {members.map((member, i) => (
@@ -116,12 +112,8 @@ export default function TeamSection() {
           marginTop: 1,
           background: 'rgba(255,255,255,0.02)',
           border: '1px dashed rgba(255,255,255,0.08)',
-          padding: isMobile ? '24px 20px' : '32px 40px',
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          gap: isMobile ? 8 : 0,
-          justifyContent: 'space-between',
-          alignItems: isMobile ? 'flex-start' : 'center',
+          padding: '32px 40px',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         }}>
           <span style={{
             fontFamily: 'Inter, sans-serif', fontSize: 13,

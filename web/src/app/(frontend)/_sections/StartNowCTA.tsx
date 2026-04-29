@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useIsMobile } from '@/hooks/useIsMobile'
 
 const doors = [
   {
@@ -35,10 +34,9 @@ const doors = [
 ]
 
 export default function StartNowCTA() {
-  const isMobile = useIsMobile()
   return (
     <section id="start-now" style={{
-      background: '#0C2046', padding: isMobile ? '64px 0' : '100px 0',
+      background: '#0C2046', padding: '100px 0',
       borderTop: '1px solid rgba(255,255,255,0.08)',
       position: 'relative', overflow: 'hidden',
     }}>
@@ -51,7 +49,7 @@ export default function StartNowCTA() {
 
       <div style={{
         position: 'relative', zIndex: 1,
-        maxWidth: 1320, margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px',
+        maxWidth: 1320, margin: '0 auto', padding: '0 48px',
       }}>
         <div style={{ textAlign: 'center', marginBottom: 64 }}>
           <div style={{
@@ -82,14 +80,13 @@ export default function StartNowCTA() {
         </div>
 
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)',
+          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
           gap: 1, background: 'rgba(255,255,255,0.08)', marginBottom: 32,
         }}>
           {doors.map((door, i) => (
             <div key={i} style={{
               background: '#0C2046',
-              padding: isMobile ? '28px 20px' : '44px 40px',
+              padding: '44px 40px',
               borderTop: door.primary ? '3px solid #E07B39' : '3px solid transparent',
               display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
             }}>

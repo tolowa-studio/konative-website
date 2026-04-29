@@ -1,17 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { useIsMobile } from '@/hooks/useIsMobile'
 
 export default function Footer() {
-  const isMobile = useIsMobile()
   return (
     <footer style={{ background: '#08142D', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '64px 0 32px' }}>
-      <div style={{ maxWidth: 1320, margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}>
+      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 48px' }}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : '2fr 1fr 1fr 1fr', gap: isMobile ? 32 : 48, marginBottom: 48 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
 
-          <div style={isMobile ? { gridColumn: '1 / -1' } : undefined}>
+          <div>
             <Link href="/" style={{
               display: 'inline-block', marginBottom: 16, textDecoration: 'none',
               fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
@@ -97,10 +95,7 @@ export default function Footer() {
         <div style={{
           borderTop: '1px solid rgba(255,255,255,0.08)',
           paddingTop: 24,
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          gap: isMobile ? 6 : 0,
-          justifyContent: 'space-between',
+          display: 'flex', justifyContent: 'space-between',
           fontFamily: 'Inter, sans-serif', fontSize: 11,
           color: 'rgba(255,255,255,0.2)',
         }}>

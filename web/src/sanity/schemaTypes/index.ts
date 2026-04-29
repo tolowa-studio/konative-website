@@ -1,5 +1,6 @@
 import type { SchemaTypeDefinition } from "sanity";
 
+import { audiencePage } from "./audiencePage";
 import { capacityRequest } from "./capacityRequest";
 import { dataCenterProject } from "./dataCenterProject";
 import { contactInquiry } from "./contactInquiry";
@@ -38,6 +39,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   marketIntelPost,
   deal,
   // Site structure
+  audiencePage,
   page,
   service,
   testimonial,

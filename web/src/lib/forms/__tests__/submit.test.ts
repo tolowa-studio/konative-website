@@ -67,3 +67,29 @@ describe("submitForm", () => {
     }
   });
 });
+
+import { contactSchema } from "@/lib/forms/schemas/contact";
+
+describe("contactSchema audience field", () => {
+  it("preserves a known audience slug on the parsed payload", () => {
+    const parsed = contactSchema.safeParse({
+      name: "Jane",
+      email: "jane@example.com",
+      organization: "Test",
+      audience: "tribes",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.audience).toBe("tribes");
+    }
+  });
+
+  it("treats audience as optional", () => {
+    const parsed = contactSchema.safeParse({
+      name: "Jane",
+      email: "jane@example.com",
+      organization: "Test",
+    });
+    expect(parsed.success).toBe(true);
+  });
+});
