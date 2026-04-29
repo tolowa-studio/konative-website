@@ -357,15 +357,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                       'line-opacity': 0.9,
                     }}
                   />
-                  {/* Circle — renders point geometries (substations, power plants) */}
-                  <Layer
-                    id={`infra-${layer.id}-point`}
-                    type="circle"
-                    source-layer={layer.sourceLayer}
-                    minzoom={layer.minZoom}
-                    maxzoom={layer.maxZoom}
-                    paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
-                  />
+
                 </Source>
               ))
             : []
