@@ -96,6 +96,84 @@ function toInfraEnabled(v: DemoViewLayers): Record<LayerCategory, boolean> {
   }
 }
 
+// ── preset row ────────────────────────────────────────────────────────────────
+
+function PresetRow({ preset, index, isActive, onSelect }: {
+  preset: DemoViewPreset
+  index: number
+  isActive: boolean
+  onSelect: (p: DemoViewPreset) => void
+}) {
+  return (
+    <button
+      onClick={() => onSelect(preset)}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: 3,
+        width: '100%',
+        background: isActive ? 'rgba(224,123,57,0.10)' : 'none',
+        border: 'none',
+        borderTop: index > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+        cursor: 'pointer',
+        padding: '10px 14px',
+        textAlign: 'left',
+        transition: 'background 0.12s',
+      }}
+      onMouseEnter={e => {
+        if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'
+      }}
+      onMouseLeave={e => {
+        if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'none'
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%' }}>
+        <span style={{
+          fontFamily: '"Barlow Condensed", sans-serif',
+          fontSize: 13,
+          fontWeight: 700,
+          color: isActive ? '#E07B39' : '#fff',
+          textTransform: 'uppercase',
+          letterSpacing: '0.04em',
+          flex: 1,
+        }}>
+          {preset.name}
+        </span>
+        {isActive && <span style={{ color: '#E07B39', fontSize: 10, flexShrink: 0 }}>●</span>}
+      </div>
+      <div style={{
+        fontFamily: 'Inter, sans-serif',
+        fontSize: 10,
+        color: 'rgba(255,255,255,0.4)',
+        lineHeight: 1.4,
+        letterSpacing: '0.02em',
+      }}>
+        {preset.description}
+      </div>
+      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
+        {Object.entries(preset.layers)
+          .filter(([, v]) => v)
+          .map(([k]) => (
+            <span key={k} style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 8,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: '#E07B39',
+              background: 'rgba(224,123,57,0.12)',
+              border: '1px solid rgba(224,123,57,0.25)',
+              padding: '1px 5px',
+            }}>
+              {k}
+            </span>
+          ))}
+      </div>
+    </button>
+  )
+}
+
 // ── component ─────────────────────────────────────────────────────────────────
 
 interface Props {
@@ -185,6 +263,10 @@ export default function DemoViews({ mapRef, onApply }: Props) {
           backdropFilter: 'blur(8px)',
           width: 300,
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+          maxHeight: 520,
+          overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
         }}>
           {/* Header */}
           <div style={{
@@ -214,84 +296,15 @@ export default function DemoViews({ mapRef, onApply }: Props) {
           </div>
 
           {/* Preset list */}
-          <div style={{ maxHeight: 400, overflowY: 'auto' }}>
-          {PRESETS.map((preset, i) => {
-            const isActive = activePreset === preset.name
-            return (
-              <button
-                key={preset.name}
-                onClick={() => handleSelect(preset)}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: 3,
-                  width: '100%',
-                  background: isActive ? 'rgba(224,123,57,0.10)' : 'none',
-                  border: 'none',
-                  borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-                  cursor: 'pointer',
-                  padding: '10px 14px',
-                  textAlign: 'left',
-                  transition: 'background 0.12s',
-                }}
-                onMouseEnter={e => {
-                  if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'
-                }}
-                onMouseLeave={e => {
-                  if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'none'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%' }}>
-                  <span style={{
-                    fontFamily: '"Barlow Condensed", sans-serif',
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: isActive ? '#E07B39' : '#fff',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    flex: 1,
-                  }}>
-                    {preset.name}
-                  </span>
-                  {isActive && (
-                    <span style={{ color: '#E07B39', fontSize: 10, flexShrink: 0 }}>●</span>
-                  )}
-                </div>
-                <div style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: 10,
-                  color: 'rgba(255,255,255,0.4)',
-                  lineHeight: 1.4,
-                  letterSpacing: '0.02em',
-                }}>
-                  {preset.description}
-                </div>
-                {/* Layer badges */}
-                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
-                  {Object.entries(preset.layers)
-                    .filter(([, v]) => v)
-                    .map(([k]) => (
-                      <span key={k} style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: 8,
-                        fontWeight: 700,
-                        letterSpacing: '0.1em',
-                        textTransform: 'uppercase',
-                        color: '#E07B39',
-                        background: 'rgba(224,123,57,0.12)',
-                        border: '1px solid rgba(224,123,57,0.25)',
-                        padding: '1px 5px',
-                      }}>
-                        {k}
-                      </span>
-                    ))
-                  }
-                </div>
-              </button>
-            )
-          })}
-          </div>
+          {PRESETS.map((preset, i) => (
+            <PresetRow
+              key={preset.name}
+              preset={preset}
+              index={i}
+              isActive={activePreset === preset.name}
+              onSelect={handleSelect}
+            />
+          ))}
 
           {/* Footer */}
           <div style={{
@@ -301,6 +314,8 @@ export default function DemoViews({ mapRef, onApply }: Props) {
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: 8,
+            flexShrink: 0,
+            marginTop: 'auto',
           }}>
             <span style={{
               fontFamily: 'Inter, sans-serif',
