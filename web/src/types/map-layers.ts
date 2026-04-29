@@ -8,7 +8,8 @@ export type LayerCategory =
   | "water"
   | "land"
   | "climate"
-  | "rail";
+  | "rail"
+  | "indigenous";
 
 export type LayerCountry = "CA" | "US" | "GLOBAL";
 

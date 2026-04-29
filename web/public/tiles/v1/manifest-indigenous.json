@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-29T06:40:00.000Z",
+  "layers": [
+    {
+      "id": "ca_cirnac_indigenous_lands",
+      "title": "First Nations reserves & Indigenous lands (Canada)",
+      "category": "indigenous",
+      "country": "CA",
+      "tilesUrl": "/tiles/v1/ca_cirnac_indigenous_lands.pmtiles",
+      "sourceLayer": "ca_cirnac_indigenous_lands",
+      "minZoom": 3,
+      "maxZoom": 12,
+      "license": "OGL-Canada-2.0",
+      "attribution": "Crown-Indigenous Relations and Northern Affairs Canada. Contains information licensed under the Open Government Licence - Canada.",
+      "sourceUrl": "https://open.canada.ca/data/en/dataset/b6567c5c-8339-4055-99fa-63f92114d9e4",
+      "lastUpdated": "2026-04-28T01:47:49.954Z",
+      "defaultVisible": true
+    },
+    {
+      "id": "us_tiger_aiannh",
+      "title": "American Indian / Alaska Native / Native Hawaiian Areas (US)",
+      "category": "indigenous",
+      "country": "US",
+      "tilesUrl": "/tiles/v1/us_tiger_aiannh.pmtiles",
+      "sourceLayer": "us_tiger_aiannh",
+      "minZoom": 2,
+      "maxZoom": 10,
+      "license": "Public-Domain",
+      "attribution": "US Census Bureau, TIGER/Line 2023.",
+      "sourceUrl": "https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html",
+      "lastUpdated": "2026-04-29T06:40:00.000Z",
+      "defaultVisible": true
+    }
+  ]
+}

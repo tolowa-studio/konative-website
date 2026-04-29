@@ -550,7 +550,7 @@ export default function LayerControlPanel({
         {hasInfra && (
           <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: 8 }}>
             <SectionHeader
-              label="CA Infrastructure"
+              label="Overlay Layers"
               expanded={infraExpanded}
               onToggle={() => setInfraExpanded(v => !v)}
               count={infraCategories.filter(c => infraLayersByCategory[c.key].length > 0).length}

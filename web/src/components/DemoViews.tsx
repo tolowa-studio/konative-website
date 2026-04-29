@@ -59,6 +59,7 @@ const PRESETS: DemoViewPreset[] = [
 // Map DemoViewLayers → infraEnabled Record<LayerCategory, boolean>
 function toInfraEnabled(v: DemoViewLayers): Record<LayerCategory, boolean> {
   return {
+    indigenous: true,          // always keep indigenous lands visible
     power:   v.transmission,
     gas:     v.pipelines,
     fiber:   v.transmission,   // fiber follows transmission toggle

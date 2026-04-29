@@ -44,6 +44,7 @@ export const LAYER_LABELS: Record<LayerKey, string> = {
 
 // Infrastructure (CA · beta) — populated from tiles/v1/manifest.json (Stream A).
 const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] = [
+  { key: 'indigenous', label: 'Indigenous Lands', color: '#c17f3b' },
   { key: 'power',   label: 'Power',   color: '#eab308' },
   { key: 'gas',     label: 'Gas',     color: '#f97316' },
   { key: 'fiber',   label: 'Fiber',   color: '#a855f7' },
@@ -120,7 +121,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   const [layerData, setLayerData] = useState<LayerData | null>(propData ?? null)
   const [counts, setCounts]       = useState<MapCounts | null>(propCounts ?? null)
   const [activeLayer, setActiveLayer] = useState<LayerKey | 'all'>('all')
-  const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown> } | null>(null)
+  const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown>; layerId?: string } | null>(null)
   // Cursor coordinates for MapReadout (separate from hover popup which only fires on DC dots)
   const [cursorCoord, setCursorCoord] = useState<{ lat: number; lng: number }>({ lat: 0, lng: 0 })
 
@@ -149,7 +150,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
   const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
-    power: false, gas: false, fiber: false, water: false, land: false, climate: false, rail: false,
+    indigenous: true, power: false, gas: false, fiber: false, water: false, land: false, climate: false, rail: false,
   })
 
   useEffect(() => { ensurePMTilesProtocol() }, [])
@@ -163,10 +164,11 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
   const infraLayersByCategory = useMemo(() => {
     const map: Record<LayerCategory, LayerManifestEntry[]> = {
-      power: [], gas: [], fiber: [], water: [], land: [], climate: [], rail: [],
+      indigenous: [], power: [], gas: [], fiber: [], water: [], land: [], climate: [], rail: [],
     }
     for (const layer of infraManifest?.layers ?? []) {
-      if (layer.country !== 'CA' && layer.country !== 'GLOBAL') continue
+      // Indigenous layers are shown for all countries; other layers are CA/GLOBAL only
+      if (layer.category !== 'indigenous' && layer.country !== 'CA' && layer.country !== 'GLOBAL') continue
       map[layer.category]?.push(layer)
     }
     return map
@@ -237,8 +239,14 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     setCursorCoord({ lat: e.lngLat.lat, lng: e.lngLat.lng })
     const f = e.features?.[0]
     if (!f) return setHover(null)
+    const layerId = (f as { layer?: { id?: string } }).layer?.id
+    // For polygon features (indigenous lands etc.), anchor popup at cursor
+    if (f.geometry.type !== 'Point') {
+      setHover({ lng: e.lngLat.lng, lat: e.lngLat.lat, props: f.properties as Record<string, unknown>, layerId })
+      return
+    }
     const [lng, lat] = (f.geometry as Point).coordinates
-    setHover({ lng, lat, props: f.properties as Record<string, unknown> })
+    setHover({ lng, lat, props: f.properties as Record<string, unknown>, layerId })
   }, [])
 
   const onMapClick = useCallback((e: MapLayerMouseEvent) => {
@@ -274,7 +282,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         ref={mapRef}
         initialViewState={{ longitude: -96, latitude: 45, zoom: 3.2 }}
         mapStyle="https://tiles.openfreemap.org/styles/dark"
-        interactiveLayerIds={backgroundMode ? [] : ['dc-bubbles']}
+        interactiveLayerIds={backgroundMode ? [] : [
+          'dc-bubbles',
+          ...infraLayersByCategory.indigenous
+            .filter(l => infraEnabled.indigenous)
+            .map(l => `infra-${l.id}-fill`),
+        ]}
         onMouseMove={backgroundMode ? undefined : onMove}
         onMouseLeave={backgroundMode ? undefined : () => { setHover(null) }}
         onClick={backgroundMode ? undefined : onMapClick}
@@ -326,7 +339,10 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                     source-layer={layer.sourceLayer}
                     minzoom={layer.minZoom}
                     maxzoom={layer.maxZoom}
-                    paint={{ 'fill-color': cat.color, 'fill-opacity': 0.18 }}
+                    paint={{
+                      'fill-color': cat.color,
+                      'fill-opacity': cat.key === 'indigenous' ? 0.35 : 0.18,
+                    }}
                   />
                   {/* Line — renders linestrings (transmission lines, pipelines) AND polygon outlines */}
                   <Layer
@@ -335,7 +351,11 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                     source-layer={layer.sourceLayer}
                     minzoom={layer.minZoom}
                     maxzoom={layer.maxZoom}
-                    paint={{ 'line-color': cat.color, 'line-width': 2.5, 'line-opacity': 0.9 }}
+                    paint={{
+                      'line-color': cat.color,
+                      'line-width': cat.key === 'indigenous' ? 1.5 : 2.5,
+                      'line-opacity': 0.9,
+                    }}
                   />
                   {/* Circle — renders point geometries (substations, power plants) */}
                   <Layer
@@ -353,7 +373,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
         {hover && (
           <Popup longitude={hover.lng} latitude={hover.lat} closeButton={false} offset={14} anchor="top">
-            <HoverCard props={hover.props} />
+            <HoverCard props={hover.props} layerId={hover.layerId} />
           </Popup>
         )}
       </Map>
@@ -664,11 +684,34 @@ function QueuePanel({
 
 // ── hover popup ───────────────────────────────────────────────────────────────
 
-function HoverCard({ props: p }: { props: Record<string, unknown> }) {
+function HoverCard({ props: p, layerId }: { props: Record<string, unknown>; layerId?: string }) {
   const str = (v: unknown) => String(v ?? '')
   const num = (v: unknown) => Number(v ?? 0)
   const layer = p.layer as LayerKey
   const color = LAYER_COLORS[layer] ?? '#888'
+
+  if (layerId?.includes('indigenous') || layerId?.includes('aiannh')) {
+    const name = str(p.NAMELSAD || p.BAND_NAME || p.NAME || p.name || 'Unknown Territory')
+    const area = num(p.ALAND || p.AREA_SQ_KM)
+    const areaDisplay = p.ALAND
+      ? `${(num(p.ALAND) / 1_000_000).toFixed(1)} km²`
+      : p.AREA_SQ_KM
+        ? `${num(p.AREA_SQ_KM).toFixed(1)} km²`
+        : null
+    const source = layerId.includes('aiannh') ? 'US Census TIGER/Line' : 'CIRNAC Canada'
+    return (
+      <div style={{ fontSize: 12, color: '#0C2046', minWidth: 180, maxWidth: 260 }}>
+        <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: 4 }}>
+          {name}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ color: '#c17f3b', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Indigenous Lands</span>
+          {areaDisplay && <span style={{ color: '#777', fontSize: 10 }}>{areaDisplay}</span>}
+        </div>
+        <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>{source}</div>
+      </div>
+    )
+  }
 
   return (
     <div style={{ fontSize: 12, color: '#0C2046', minWidth: 200, maxWidth: 280 }}>
