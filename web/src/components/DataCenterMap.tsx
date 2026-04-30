@@ -122,7 +122,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   const [layerData, setLayerData] = useState<LayerData | null>(propData ?? null)
   const [counts, setCounts]       = useState<MapCounts | null>(propCounts ?? null)
   const [activeLayer, setActiveLayer] = useState<LayerKey | 'all'>('all')
-  const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown>; layerId?: string } | null>(null)
+  const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown>; layerId?: string; infraCategory?: LayerCategory } | null>(null)
   // Cursor coordinates for MapReadout (separate from hover popup which only fires on DC dots)
   const [cursorCoord, setCursorCoord] = useState<{ lat: number; lng: number }>({ lat: 0, lng: 0 })
 
@@ -242,14 +242,25 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     const f = e.features?.[0]
     if (!f) return setHover(null)
     const layerId = (f as { layer?: { id?: string } }).layer?.id
-    // For polygon features (indigenous lands etc.), anchor popup at cursor
+
+    let infraCategory: LayerCategory | undefined
+    if (layerId?.startsWith('infra-')) {
+      for (const cat of INFRA_CATEGORIES) {
+        if (infraLayersByCategory[cat.key].some(l => layerId.startsWith(`infra-${l.id}`))) {
+          infraCategory = cat.key
+          break
+        }
+      }
+    }
+
+    // For polygon/line features, anchor popup at cursor
     if (f.geometry.type !== 'Point') {
-      setHover({ lng: e.lngLat.lng, lat: e.lngLat.lat, props: f.properties as Record<string, unknown>, layerId })
+      setHover({ lng: e.lngLat.lng, lat: e.lngLat.lat, props: f.properties as Record<string, unknown>, layerId, infraCategory })
       return
     }
     const [lng, lat] = (f.geometry as Point).coordinates
-    setHover({ lng, lat, props: f.properties as Record<string, unknown>, layerId })
-  }, [])
+    setHover({ lng, lat, props: f.properties as Record<string, unknown>, layerId, infraCategory })
+  }, [infraLayersByCategory])
 
   const onMapClick = useCallback((e: MapLayerMouseEvent) => {
     const { lat, lng } = e.lngLat
@@ -291,6 +302,9 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
               .filter(() => infraEnabled[cat])
               .map(l => `infra-${l.id}-fill`)
           )),
+          ...infraLayersByCategory['fiber']
+            .filter(() => infraEnabled['fiber'])
+            .map(l => `infra-${l.id}-line`),
         ]}
         onMouseMove={backgroundMode ? undefined : onMove}
         onMouseLeave={backgroundMode ? undefined : () => { setHover(null) }}
@@ -409,7 +423,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
         {hover && (
           <Popup longitude={hover.lng} latitude={hover.lat} closeButton={false} offset={14} anchor="top">
-            <HoverCard props={hover.props} layerId={hover.layerId} />
+            <HoverCard props={hover.props} layerId={hover.layerId} infraCategory={hover.infraCategory} />
           </Popup>
         )}
       </Map>
@@ -739,11 +753,38 @@ function QueuePanel({
 
 // ── hover popup ───────────────────────────────────────────────────────────────
 
-function HoverCard({ props: p, layerId }: { props: Record<string, unknown>; layerId?: string }) {
+function HoverCard({ props: p, layerId, infraCategory }: { props: Record<string, unknown>; layerId?: string; infraCategory?: LayerCategory }) {
   const str = (v: unknown) => String(v ?? '')
   const num = (v: unknown) => Number(v ?? 0)
   const layer = p.layer as LayerKey
   const color = LAYER_COLORS[layer] ?? '#888'
+
+  if (infraCategory === 'fiber') {
+    const name = str(p.name || p.operator || 'Fiber Route')
+    const operator = str(p.operator || p['operator:short'] || '')
+    const cableType = str(p['cable:type'] || p.cable || p.technology || '')
+    const capacity = str(p.capacity || p.bandwidth || '')
+    const ref = str(p.ref || '')
+    return (
+      <div style={{ fontSize: 12, color: '#0C2046', minWidth: 180, maxWidth: 260 }}>
+        <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 14, textTransform: 'uppercase', lineHeight: 1.2, marginBottom: 4 }}>
+          {name}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: operator ? 4 : 0 }}>
+          <span style={{ color: '#a855f7', textTransform: 'uppercase', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em' }}>Fiber</span>
+          {cableType && <span style={{ color: '#555', fontSize: 10 }}>{cableType}</span>}
+          {ref && <span style={{ color: '#777', fontSize: 10 }}>{ref}</span>}
+        </div>
+        {operator && <div style={{ color: '#555', fontSize: 11, marginBottom: 4 }}>{operator}</div>}
+        {capacity && (
+          <div style={{ color: '#777', fontSize: 10, marginBottom: 3 }}>
+            <span style={{ fontWeight: 600 }}>{capacity}</span> capacity
+          </div>
+        )}
+        <div style={{ fontSize: 10, color: '#999', marginTop: 3 }}>OpenStreetMap</div>
+      </div>
+    )
+  }
 
   if (layerId?.includes('indigenous') || layerId?.includes('aiannh')) {
     const name = str(p.NAMELSAD || p.BAND_NAME || p.NAME || p.name || 'Unknown Territory')
