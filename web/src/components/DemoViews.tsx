@@ -14,6 +14,8 @@ export interface DemoViewLayers {
   industrial: boolean
   exclusions: boolean
   hotCorridors: boolean
+  water?: boolean
+  fiber?: boolean
 }
 
 interface DemoViewPreset {
@@ -27,6 +29,28 @@ interface DemoViewPreset {
 // ── presets ───────────────────────────────────────────────────────────────────
 
 const PRESETS: DemoViewPreset[] = [
+  // ── Vancouver Island — full infra showcase ────────────────────────────────
+  {
+    name: 'Vancouver Island — Full Infra',
+    description: 'Complete site-suitability view: BC Hydro grid, fiber routes, rivers & watersheds, exclusion zones, indigenous territories',
+    center: [-125.2, 49.65],
+    zoom: 7.5,
+    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: true, exclusions: true, hotCorridors: false, water: true, fiber: true },
+  },
+  {
+    name: 'VI — Victoria / South Island',
+    description: 'Capital region — highest fiber density on VI, BC Hydro substation cluster, CRD watersheds',
+    center: [-123.5, 48.5],
+    zoom: 9,
+    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: true, exclusions: true, hotCorridors: false, water: true, fiber: true },
+  },
+  {
+    name: 'VI — Nanaimo / Central Island',
+    description: 'Mid-island hub — industrial land, CN rail terminus, transmission corridor, Nanaimo River watershed',
+    center: [-124.0, 49.15],
+    zoom: 9,
+    layers: { dc: true, transmission: true, pipelines: false, rail: true, industrial: true, exclusions: true, hotCorridors: false, water: true, fiber: true },
+  },
   // ── British Columbia ──────────────────────────────────────────────────────
   {
     name: 'BC — Province Overview',
@@ -89,8 +113,8 @@ function toInfraEnabled(v: DemoViewLayers): Record<LayerCategory, boolean> {
     'land-use': v.industrial,
     power:      v.transmission,
     gas:        v.pipelines,
-    fiber:      v.transmission,
-    water:      false,
+    fiber:      v.fiber ?? v.transmission,
+    water:      v.water ?? false,
     climate:    false,
     rail:       v.rail,
   }

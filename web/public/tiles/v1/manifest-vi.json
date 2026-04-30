@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-30T00:00:00.000Z",
+  "layers": [
+    {
+      "id": "vi-water",
+      "title": "VI — Rivers & Water Bodies",
+      "category": "water",
+      "country": "CA",
+      "sourceType": "geojson",
+      "geojsonUrl": "/api/v1/vi-infra/water",
+      "tilesUrl": "",
+      "sourceLayer": "",
+      "minZoom": 5,
+      "maxZoom": 16,
+      "license": "ODbL-1.0",
+      "attribution": "© OpenStreetMap contributors",
+      "sourceUrl": "https://www.openstreetmap.org",
+      "lastUpdated": "2026-04-30T00:00:00.000Z",
+      "geometryHint": "mixed",
+      "defaultVisible": false
+    },
+    {
+      "id": "vi-power",
+      "title": "VI — Transmission Lines & Substations",
+      "category": "power",
+      "country": "CA",
+      "sourceType": "geojson",
+      "geojsonUrl": "/api/v1/vi-infra/power",
+      "tilesUrl": "",
+      "sourceLayer": "",
+      "minZoom": 5,
+      "maxZoom": 16,
+      "license": "ODbL-1.0",
+      "attribution": "© OpenStreetMap contributors",
+      "sourceUrl": "https://www.openstreetmap.org",
+      "lastUpdated": "2026-04-30T00:00:00.000Z",
+      "geometryHint": "mixed",
+      "defaultVisible": false
+    },
+    {
+      "id": "vi-fiber",
+      "title": "VI — Fiber & Telecom Routes",
+      "category": "fiber",
+      "country": "CA",
+      "sourceType": "geojson",
+      "geojsonUrl": "/api/v1/vi-infra/fiber",
+      "tilesUrl": "",
+      "sourceLayer": "",
+      "minZoom": 5,
+      "maxZoom": 16,
+      "license": "ODbL-1.0",
+      "attribution": "© OpenStreetMap contributors",
+      "sourceUrl": "https://www.openstreetmap.org",
+      "lastUpdated": "2026-04-30T00:00:00.000Z",
+      "geometryHint": "mixed",
+      "defaultVisible": false
+    }
+  ]
+}

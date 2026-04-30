@@ -26,14 +26,16 @@ export type LayerLicense =
 /** Controls which MapLibre sub-layers are rendered for this source. */
 export type GeometryHint = "line" | "point" | "polygon" | "mixed";
 
+export type LayerSourceType = "pmtiles" | "geojson";
+
 export interface LayerManifestEntry {
   id: string;
   title: string;
   category: LayerCategory;
   country: LayerCountry;
-  /** PMTiles URL or path under tiles/v{N}/. */
+  /** PMTiles URL or path under tiles/v{N}/. Used when sourceType is "pmtiles" (default). */
   tilesUrl: string;
-  /** MapLibre source-layer name within the PMTiles archive. */
+  /** MapLibre source-layer name within the PMTiles archive. Ignored for geojson sources. */
   sourceLayer: string;
   minZoom: number;
   maxZoom: number;
@@ -46,7 +48,7 @@ export interface LayerManifestEntry {
   /** Default visibility on first paint. */
   defaultVisible?: boolean;
   /**
-   * Dominant geometry type in the PMTiles source.
+   * Dominant geometry type in the source.
    * Controls which MapLibre sub-layers are rendered:
    *   "line"    → cased line only (no circles)
    *   "point"   → circles only (no lines or fill)
@@ -54,6 +56,13 @@ export interface LayerManifestEntry {
    *   "mixed"   → all three (legacy default)
    */
   geometryHint?: GeometryHint;
+  /**
+   * "pmtiles" (default) — vector tile source served as PMTiles.
+   * "geojson" — live GeoJSON fetched from geojsonUrl at runtime.
+   */
+  sourceType?: LayerSourceType;
+  /** API URL returning a GeoJSON FeatureCollection. Required when sourceType is "geojson". */
+  geojsonUrl?: string;
 }
 
 export interface LayerManifest {

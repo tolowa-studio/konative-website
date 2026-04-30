@@ -154,6 +154,10 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     indigenous: true, exclusions: true, 'land-use': false, power: true, gas: true, fiber: false, water: false, climate: false, rail: true,
   })
 
+  // Live GeoJSON data for manifest entries with sourceType === 'geojson'
+  const [liveInfraData, setLiveInfraData] = useState<Record<string, FeatureCollection>>({})
+  const [liveInfraLoading, setLiveInfraLoading] = useState<Record<string, boolean>>({})
+
   useEffect(() => { ensurePMTilesProtocol() }, [])
 
   useEffect(() => {
@@ -174,6 +178,25 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     }
     return map
   }, [infraManifest])
+
+  // Fetch live GeoJSON for manifest layers with sourceType === 'geojson' when enabled
+  useEffect(() => {
+    const geojsonLayers = infraManifest?.layers.filter(l => l.sourceType === 'geojson') ?? []
+    for (const layer of geojsonLayers) {
+      if (!infraEnabled[layer.category]) continue
+      if (liveInfraData[layer.id] || liveInfraLoading[layer.id]) continue
+      if (!layer.geojsonUrl) continue
+
+      setLiveInfraLoading(prev => ({ ...prev, [layer.id]: true }))
+      fetch(layer.geojsonUrl)
+        .then(r => r.json())
+        .then((data: FeatureCollection) => {
+          setLiveInfraData(prev => ({ ...prev, [layer.id]: data }))
+        })
+        .catch(() => {})
+        .finally(() => setLiveInfraLoading(prev => ({ ...prev, [layer.id]: false })))
+    }
+  }, [infraManifest, infraEnabled]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Lowest minZoom across all currently-enabled infra layers — show hint only when
   // the map hasn't reached the point where ANY enabled layer becomes visible.
@@ -339,7 +362,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         </Source>
 
 
-        {/* Infrastructure (CA · beta) PMTiles sources + layers */}
+        {/* Infrastructure (CA · beta) — PMTiles + live GeoJSON sources */}
         {INFRA_CATEGORIES.flatMap(cat =>
           infraEnabled[cat.key]
             ? infraLayersByCategory[cat.key].map(layer => {
@@ -351,33 +374,25 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                   : cat.key === 'exclusions' ? 0.28
                   : cat.key === 'land-use'   ? 0.22
                   : 0.18
-                return (
-                  <Source
-                    key={layer.id}
-                    id={`infra-${layer.id}`}
-                    type="vector"
-                    url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
-                    attribution={layer.attribution}
-                  >
-                    {/* Fill — polygon/multipolygon (water risk, fire zones, protected areas, land use) */}
+
+                // ── Shared sub-layers (work for both source types) ──────────────
+                const subLayers = (
+                  <>
                     {showFill && (
                       <Layer
                         id={`infra-${layer.id}-fill`}
                         type="fill"
-                        source-layer={layer.sourceLayer}
+                        source-layer={layer.sourceType === 'geojson' ? undefined : layer.sourceLayer}
                         minzoom={layer.minZoom}
-
                         paint={{ 'fill-color': cat.color, 'fill-opacity': fillOpacity }}
                       />
                     )}
-                    {/* Line casing — dark underline for path readability */}
                     {showLine && hint === 'line' && (
                       <Layer
                         id={`infra-${layer.id}-line-casing`}
                         type="line"
-                        source-layer={layer.sourceLayer}
+                        source-layer={layer.sourceType === 'geojson' ? undefined : layer.sourceLayer}
                         minzoom={layer.minZoom}
-
                         paint={{
                           'line-color': 'rgba(8,20,45,0.85)',
                           'line-width': ['interpolate', ['linear'], ['zoom'], 4, 3.5, 8, 5, 12, 7],
@@ -385,14 +400,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         }}
                       />
                     )}
-                    {/* Line — linestrings (transmission lines, pipelines, rail) + polygon outlines */}
                     {showLine && (
                       <Layer
                         id={`infra-${layer.id}-line`}
                         type="line"
-                        source-layer={layer.sourceLayer}
+                        source-layer={layer.sourceType === 'geojson' ? undefined : layer.sourceLayer}
                         minzoom={layer.minZoom}
-
                         paint={hint === 'line' ? {
                           'line-color': cat.color,
                           'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.5, 8, 2.5, 12, 4],
@@ -404,17 +417,45 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         }}
                       />
                     )}
-                    {/* Circle — discrete point geometries (substations, power plants) */}
                     {showCircle && (
                       <Layer
                         id={`infra-${layer.id}-point`}
                         type="circle"
-                        source-layer={layer.sourceLayer}
+                        source-layer={layer.sourceType === 'geojson' ? undefined : layer.sourceLayer}
                         minzoom={layer.minZoom}
-
                         paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
                       />
                     )}
+                  </>
+                )
+
+                // ── GeoJSON source (live Overpass data) ─────────────────────────
+                if (layer.sourceType === 'geojson') {
+                  const data = liveInfraData[layer.id]
+                  if (!data) return null  // still loading; spinner shown below
+                  return (
+                    <Source
+                      key={layer.id}
+                      id={`infra-${layer.id}`}
+                      type="geojson"
+                      data={data}
+                      attribution={layer.attribution}
+                    >
+                      {subLayers}
+                    </Source>
+                  )
+                }
+
+                // ── PMTiles source (default) ────────────────────────────────────
+                return (
+                  <Source
+                    key={layer.id}
+                    id={`infra-${layer.id}`}
+                    type="vector"
+                    url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
+                    attribution={layer.attribution}
+                  >
+                    {subLayers}
                   </Source>
                 )
               })
@@ -491,6 +532,23 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Live layer loading indicator */}
+      {Object.values(liveInfraLoading).some(Boolean) && (
+        <div style={{
+          position: 'absolute', zIndex: 10, bottom: 112, left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(8,20,45,0.95)', border: '1px solid rgba(168,85,247,0.4)',
+          padding: '8px 16px', backdropFilter: 'blur(10px)',
+          fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap',
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <span style={{ color: '#a855f7', fontSize: 15, animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</span>
+          <span style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)' }}>
+            Loading live layer data…
+          </span>
         </div>
       )}
 
