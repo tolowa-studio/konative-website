@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { Map, Source, Layer, Popup, type MapLayerMouseEvent, type MapRef } from 'react-map-gl/maplibre'
-import maplibregl, { type CircleLayerSpecification } from 'maplibre-gl'
+import maplibregl, { type CircleLayerSpecification, type ExpressionSpecification } from 'maplibre-gl'
 import { Protocol } from 'pmtiles'
 import type { FeatureCollection, Feature, Point } from 'geojson'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -388,7 +388,11 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         {/* Infrastructure (CA · beta) — PMTiles + live GeoJSON sources */}
         {INFRA_CATEGORIES.flatMap(cat =>
           infraEnabled[cat.key]
-            ? infraLayersByCategory[cat.key].map(layer => {
+            ? infraLayersByCategory[cat.key]
+                // Only render layers that are on by default; layers with defaultVisible:false
+                // (e.g. substations, power plants) are hidden until per-layer toggles exist.
+                .filter(layer => layer.defaultVisible !== false)
+                .map(layer => {
                 const hint = layer.geometryHint ?? 'mixed'
                 const showFill   = hint === 'polygon' || hint === 'mixed'
                 const showLine   = hint === 'line'    || hint === 'polygon' || hint === 'mixed'
@@ -397,6 +401,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                   : cat.key === 'exclusions' ? 0.28
                   : cat.key === 'land-use'   ? 0.22
                   : 0.18
+                // Power lines are thinner so they don't overwhelm the base map
+                const lineWidthMain: ExpressionSpecification = cat.key === 'power'
+                  ? ['interpolate', ['linear'], ['zoom'], 4, 0.8, 8, 1.5, 12, 2.5]
+                  : ['interpolate', ['linear'], ['zoom'], 4, 1.5, 8, 2.5, 12, 4]
+                const lineWidthCasing: ExpressionSpecification = cat.key === 'power'
+                  ? ['interpolate', ['linear'], ['zoom'], 4, 2, 8, 3, 12, 4.5]
+                  : ['interpolate', ['linear'], ['zoom'], 4, 3.5, 8, 5, 12, 7]
 
                 // ── GeoJSON source (live Overpass data) ─────────────────────────
                 // Layer children must be direct (non-Fragment) children of Source so
@@ -427,7 +438,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                           minzoom={layer.minZoom}
                           paint={{
                             'line-color': 'rgba(8,20,45,0.85)',
-                            'line-width': ['interpolate', ['linear'], ['zoom'], 4, 3.5, 8, 5, 12, 7],
+                            'line-width': lineWidthCasing,
                             'line-opacity': 0.7,
                           }}
                         />
@@ -439,7 +450,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                           minzoom={layer.minZoom}
                           paint={hint === 'line' ? {
                             'line-color': cat.color,
-                            'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.5, 8, 2.5, 12, 4],
+                            'line-width': lineWidthMain,
                             'line-opacity': 0.9,
                           } : {
                             'line-color': cat.color,
@@ -486,7 +497,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         minzoom={layer.minZoom}
                         paint={{
                           'line-color': 'rgba(8,20,45,0.85)',
-                          'line-width': ['interpolate', ['linear'], ['zoom'], 4, 3.5, 8, 5, 12, 7],
+                          'line-width': lineWidthCasing,
                           'line-opacity': 0.7,
                         }}
                       />
@@ -499,7 +510,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         minzoom={layer.minZoom}
                         paint={hint === 'line' ? {
                           'line-color': cat.color,
-                          'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.5, 8, 2.5, 12, 4],
+                          'line-width': lineWidthMain,
                           'line-opacity': 0.9,
                         } : {
                           'line-color': cat.color,
