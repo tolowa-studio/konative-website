@@ -128,9 +128,9 @@ function toGeoJSON(elements: OverpassElement[]): FeatureCollection {
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { category: string } }
+  { params }: { params: Promise<{ category: string }> }
 ) {
-  const category = params.category
+  const { category } = await params
 
   const query = QUERIES[category]
   if (!query) {
