@@ -63,6 +63,12 @@ export interface LayerManifestEntry {
   sourceType?: LayerSourceType;
   /** API URL returning a GeoJSON FeatureCollection. Required when sourceType is "geojson". */
   geojsonUrl?: string;
+  /**
+   * Shown in the Layer Control Panel when this category is enabled but returns
+   * fewer than 50 features — i.e. data exists but is too sparse to be useful.
+   * Write as a single actionable sentence visible to end users.
+   */
+  emptyStateInsight?: string;
 }
 
 export interface LayerManifest {

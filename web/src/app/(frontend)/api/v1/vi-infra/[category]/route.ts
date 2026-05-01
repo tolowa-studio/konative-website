@@ -132,6 +132,15 @@ export async function GET(
 ) {
   const category = params.category
 
+  // Broadband: CRTC data requires offline ETL — return empty FC so the
+  // empty-state insight fires in the Layer Control Panel.
+  if (category === 'broadband') {
+    const empty: FeatureCollection = { type: 'FeatureCollection', features: [] }
+    return NextResponse.json(empty, {
+      headers: { 'Cache-Control': 'public, s-maxage=3600' },
+    })
+  }
+
   const query = QUERIES[category]
   if (!query) {
     return NextResponse.json({ error: `Unknown category: ${category}` }, { status: 400 })

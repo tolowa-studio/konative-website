@@ -198,6 +198,24 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     }
   }, [infraManifest, infraEnabled]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Per-category insight: shown in the panel when a category is on but data is sparse (<50 features)
+  const categoryInsights = useMemo(() => {
+    const result: Partial<Record<LayerCategory, string>> = {}
+    for (const cat of INFRA_CATEGORIES) {
+      if (!infraEnabled[cat.key]) continue
+      const geojsonLayers = infraLayersByCategory[cat.key].filter(l => l.sourceType === 'geojson')
+      if (geojsonLayers.length === 0) continue
+      const allLoaded = geojsonLayers.every(l => liveInfraData[l.id] !== undefined)
+      if (!allLoaded) continue
+      const total = geojsonLayers.reduce((n, l) => n + (liveInfraData[l.id]?.features.length ?? 0), 0)
+      if (total < 50) {
+        const insight = geojsonLayers.find(l => l.emptyStateInsight)?.emptyStateInsight
+        if (insight) result[cat.key] = insight
+      }
+    }
+    return result
+  }, [infraEnabled, infraLayersByCategory, liveInfraData])
+
   // Lowest minZoom across all currently-enabled infra layers — show hint only when
   // the map hasn't reached the point where ANY enabled layer becomes visible.
   const infraMinZoomNeeded = useMemo(() => {
@@ -484,6 +502,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         setInfraEnabled={setInfraEnabled}
         infraLayersByCategory={infraLayersByCategory}
         infraManifest={infraManifest}
+        categoryInsights={categoryInsights}
       />
 
       {/* ── Search Bar (top center) ── */}

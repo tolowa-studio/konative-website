@@ -40,7 +40,7 @@
     },
     {
       "id": "vi-fiber",
-      "title": "VI — Fiber & Telecom Routes",
+      "title": "VI — Fiber & Telecom Routes (OSM)",
       "category": "fiber",
       "country": "CA",
       "sourceType": "geojson",
@@ -54,7 +54,27 @@
       "sourceUrl": "https://www.openstreetmap.org",
       "lastUpdated": "2026-04-30T00:00:00.000Z",
       "geometryHint": "mixed",
-      "defaultVisible": false
+      "defaultVisible": false,
+      "emptyStateInsight": "Telecom carriers don't publish route data — fiber routes on Vancouver Island are largely unmapped in OSM. Enable Broadband Coverage (CRTC) to assess where gigabit service is available for site selection. No internet exchange point exists on VI; nearest is VANIX on the mainland."
+    },
+    {
+      "id": "vi-broadband",
+      "title": "VI — Broadband Coverage (CRTC)",
+      "category": "fiber",
+      "country": "CA",
+      "sourceType": "geojson",
+      "geojsonUrl": "/api/v1/vi-infra/broadband",
+      "tilesUrl": "",
+      "sourceLayer": "",
+      "minZoom": 5,
+      "maxZoom": 16,
+      "license": "OGL-Canada-2.0",
+      "attribution": "CRTC National Broadband Data · Statistics Canada",
+      "sourceUrl": "https://open.canada.ca/data/en/dataset/00a331db-121b-445d-b119-35dbbe3eedd9",
+      "lastUpdated": "2026-04-30T00:00:00.000Z",
+      "geometryHint": "polygon",
+      "defaultVisible": false,
+      "emptyStateInsight": "CRTC broadband tiles not yet built. Run: bash scripts/build-crtc-tiles.sh — requires tippecanoe + gdal (~5 min). Once built, this layer shows gigabit availability per 250m hex across all of Vancouver Island."
     }
   ]
 }

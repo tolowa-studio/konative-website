@@ -41,6 +41,9 @@ interface Props {
   setInfraEnabled: React.Dispatch<React.SetStateAction<Record<LayerCategory, boolean>>>
   infraLayersByCategory: Record<LayerCategory, LayerManifestEntry[]>
   infraManifest: { version: number; generatedAt: string; layers: LayerManifestEntry[] } | null
+
+  /** Insight text per category — shown when category is on but data is sparse. */
+  categoryInsights?: Partial<Record<LayerCategory, string>>
 }
 
 // ── collapsible section ───────────────────────────────────────────────────────
@@ -96,11 +99,13 @@ function InfraRow({
   layers,
   enabled,
   onToggle,
+  insight,
 }: {
   cat: InfraCategory
   layers: LayerManifestEntry[]
   enabled: boolean
   onToggle: () => void
+  insight?: string
 }) {
   const [tooltipOpen, setTooltipOpen] = useState<string | null>(null)
   const disabled = layers.length === 0
@@ -175,6 +180,37 @@ function InfraRow({
           {enabled ? '◉' : '○'}
         </button>
       </div>
+
+      {/* Empty-state insight — shown when layer is on but data is sparse */}
+      {enabled && insight && (
+        <div style={{
+          margin: '3px 0 5px 0',
+          padding: '7px 10px',
+          background: 'rgba(224,123,57,0.08)',
+          border: '1px solid rgba(224,123,57,0.25)',
+          borderLeft: `3px solid #E07B39`,
+        }}>
+          <div style={{
+            fontSize: 9,
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 700,
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            color: '#E07B39',
+            marginBottom: 4,
+          }}>
+            Data Insight
+          </div>
+          <div style={{
+            fontSize: 10,
+            fontFamily: 'Inter, sans-serif',
+            color: 'rgba(255,255,255,0.65)',
+            lineHeight: 1.5,
+          }}>
+            {insight}
+          </div>
+        </div>
+      )}
 
       {/* Sub-layers (when category is enabled) */}
       {enabled && layers.map(layer => (
@@ -361,6 +397,7 @@ export default function LayerControlPanel({
   setInfraEnabled,
   infraLayersByCategory,
   infraManifest,
+  categoryInsights = {},
 }: Props) {
   const [collapsed, setCollapsed] = useState(false)
   const [dcExpanded, setDcExpanded] = useState(true)
@@ -567,6 +604,7 @@ export default function LayerControlPanel({
                     layers={infraLayersByCategory[cat.key]}
                     enabled={infraEnabled[cat.key]}
                     onToggle={() => setInfraEnabled(prev => ({ ...prev, [cat.key]: !prev[cat.key] }))}
+                    insight={categoryInsights[cat.key]}
                   />
                 ))}
               </div>
