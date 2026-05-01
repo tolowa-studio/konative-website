@@ -191,7 +191,10 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
       fetch(layer.geojsonUrl)
         .then(r => r.json())
         .then((data: FeatureCollection) => {
-          setLiveInfraData(prev => ({ ...prev, [layer.id]: data }))
+          const fc: FeatureCollection = (data?.type === 'FeatureCollection' && Array.isArray(data.features))
+            ? data
+            : { type: 'FeatureCollection', features: [] }
+          setLiveInfraData(prev => ({ ...prev, [layer.id]: fc }))
         })
         .catch(() => {})
         .finally(() => setLiveInfraLoading(prev => ({ ...prev, [layer.id]: false })))
@@ -207,7 +210,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
       if (geojsonLayers.length === 0) continue
       const allLoaded = geojsonLayers.every(l => liveInfraData[l.id] !== undefined)
       if (!allLoaded) continue
-      const total = geojsonLayers.reduce((n, l) => n + (liveInfraData[l.id]?.features.length ?? 0), 0)
+      const total = geojsonLayers.reduce((n, l) => n + (liveInfraData[l.id]?.features?.length ?? 0), 0)
       if (total < 50) {
         const insight = geojsonLayers.find(l => l.emptyStateInsight)?.emptyStateInsight
         if (insight) result[cat.key] = insight
