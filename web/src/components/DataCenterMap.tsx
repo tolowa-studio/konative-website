@@ -389,14 +389,17 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         {INFRA_CATEGORIES.flatMap(cat =>
           infraEnabled[cat.key]
             ? infraLayersByCategory[cat.key]
-                // Only render layers that are on by default; layers with defaultVisible:false
-                // (e.g. substations, power plants) are hidden until per-layer toggles exist.
-                .filter(layer => layer.defaultVisible !== false)
+                // Suppress pure-point layers that aren't default-visible (e.g. substations,
+                // power plants) — they flood the map with circles. Line/polygon/mixed layers
+                // always render when their category is toggled on.
+                .filter(layer => !(layer.defaultVisible === false && (layer.geometryHint ?? 'mixed') === 'point'))
                 .map(layer => {
                 const hint = layer.geometryHint ?? 'mixed'
                 const showFill   = hint === 'polygon' || hint === 'mixed'
                 const showLine   = hint === 'line'    || hint === 'polygon' || hint === 'mixed'
-                const showCircle = hint === 'point'   || hint === 'mixed'
+                // Never render circles for mixed layers — Overpass nodes (substations etc)
+                // clutter the map. Circles only for explicit point-only layers.
+                const showCircle = hint === 'point'
                 const fillOpacity = cat.key === 'indigenous' ? 0.35
                   : cat.key === 'exclusions' ? 0.28
                   : cat.key === 'land-use'   ? 0.22
