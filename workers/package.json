@@ -1,0 +1,16 @@
+{
+  "name": "konative-workers",
+  "version": "1.0.0",
+  "description": "Railway cron worker for konative.com — replaces Vercel cron jobs",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "node-cron": "^3.0.3"
+  }
+}

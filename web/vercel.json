@@ -2,13 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "npm ci",
-  "buildCommand": "npm run build",
-  "crons": [
-    { "path": "/api/ingest-news", "schedule": "0 6 * * *" },
-    { "path": "/api/ingest-osm", "schedule": "0 4 * * 0" },
-    { "path": "/api/ingest-wikidata", "schedule": "30 4 * * 0" },
-    { "path": "/api/ingest-ieso", "schedule": "0 5 * * 0" },
-    { "path": "/api/extract-projects", "schedule": "30 6 * * *" },
-    { "path": "/api/v1/queue/ingest", "schedule": "0 7 * * *" }
-  ]
+  "buildCommand": "npm run build"
 }
