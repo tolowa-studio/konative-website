@@ -39,6 +39,25 @@
       "sourceType": "geojson",
       "geojsonUrl": "/api/v1/governor-data?type=stalled-projects",
       "emptyStateInsight": "No stalled projects loaded — run scripts/seed-governor-projects.ts."
+    },
+    {
+      "id": "politics_tribal_projects",
+      "title": "Tribal / First Nations data center projects",
+      "category": "politics",
+      "country": "US",
+      "tilesUrl": "",
+      "sourceLayer": "",
+      "minZoom": 2,
+      "maxZoom": 14,
+      "license": "Proprietary-Link-Out",
+      "attribution": "Compiled from public reporting (FAS, DCD, ICT, Cherokee Phoenix, Native News Online, CBC, etc.)",
+      "sourceUrl": "https://www.honorearth.org/datacentertracker",
+      "lastUpdated": "2026-05-08T00:00:00.000Z",
+      "defaultVisible": true,
+      "geometryHint": "point",
+      "sourceType": "geojson",
+      "geojsonUrl": "/api/v1/governor-data?type=tribal-projects",
+      "emptyStateInsight": "No tribal projects loaded — run scripts/seed-tribal-projects.ts."
     }
   ]
 }

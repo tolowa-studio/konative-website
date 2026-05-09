@@ -1,9 +1,10 @@
 /**
- * GET /api/v1/governor-data?type=governors|stalled-projects|all
+ * GET /api/v1/governor-data?type=governors|stalled-projects|tribal-projects|all
  *
  * Returns GeoJSON FeatureCollections backing the /governors map page:
  *   - governors        : Sanity `governor` docs (capital city points)
  *   - stalled-projects : Sanity `dataCenterProject` filtered to stalled/canceled/paused/blocked
+ *   - tribal-projects  : Sanity `tribalProject` docs (US + Canada tribal/First Nations)
  *
  * Properties on each feature carry everything the sidebar needs (no second fetch).
  */
@@ -127,6 +128,60 @@ async function fetchStalledProjects(): Promise<FC> {
   return fc(features);
 }
 
+interface TribalRow {
+  _id: string;
+  name: string;
+  tribe: string;
+  location: { lat: number; lng: number };
+  city?: string;
+  state?: string;
+  country: "US" | "CA";
+  tribalStatus: string;
+  partnerStructure?: string;
+  landType?: string;
+  opportunityClass?: string;
+  capacityMw?: number;
+  partner?: string;
+  summary?: string;
+  voteOrDate?: string;
+  sources?: string[];
+  priority?: number;
+  // contactPath intentionally NOT exposed to client.
+}
+
+async function fetchTribalProjects(): Promise<FC> {
+  const rows = await sanity.fetch<TribalRow[]>(
+    `*[_type == "tribalProject" && defined(location)] | order(coalesce(priority, 100) asc){
+      _id, name, tribe, location, city, state, country,
+      tribalStatus, partnerStructure, landType, opportunityClass,
+      capacityMw, partner, summary, voteOrDate, sources, priority
+    }`,
+  );
+  const features = rows.map((p) => ({
+    type: "Feature" as const,
+    geometry: point(p.location.lng, p.location.lat),
+    properties: {
+      layer: "tribal-projects",
+      id: p._id,
+      name: p.name,
+      tribe: p.tribe,
+      city: p.city ?? "",
+      state: p.state ?? "",
+      country: p.country,
+      tribalStatus: p.tribalStatus,
+      partnerStructure: p.partnerStructure ?? "",
+      landType: p.landType ?? "",
+      opportunityClass: p.opportunityClass ?? "",
+      mw: p.capacityMw ?? null,
+      partner: p.partner ?? "",
+      summary: p.summary ?? "",
+      voteOrDate: p.voteOrDate ?? "",
+      sources: p.sources ?? [],
+    },
+  }));
+  return fc(features);
+}
+
 export async function GET(req: NextRequest) {
   const type = req.nextUrl.searchParams.get("type") ?? "all";
 
@@ -137,17 +192,29 @@ export async function GET(req: NextRequest) {
     if (type === "stalled-projects") {
       return NextResponse.json(await fetchStalledProjects());
     }
-    const [governors, stalled] = await Promise.all([
+    if (type === "tribal-projects") {
+      return NextResponse.json(await fetchTribalProjects());
+    }
+    const [governors, stalled, tribal] = await Promise.all([
       fetchGovernors(),
       fetchStalledProjects(),
+      fetchTribalProjects(),
     ]);
     return NextResponse.json({
       type: "FeatureCollection",
-      features: [...governors.features, ...stalled.features],
+      features: [
+        ...governors.features,
+        ...stalled.features,
+        ...tribal.features,
+      ],
       counts: {
         governors: governors.features.length,
         stalledProjects: stalled.features.length,
-        total: governors.features.length + stalled.features.length,
+        tribalProjects: tribal.features.length,
+        total:
+          governors.features.length +
+          stalled.features.length +
+          tribal.features.length,
       },
     });
   } catch (e) {
