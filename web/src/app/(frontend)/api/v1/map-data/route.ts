@@ -44,7 +44,7 @@ function fc(features: GeoJSON.Feature[]) {
 
 async function fetchProjects() {
   try {
-    const rows = await sanity.fetch(`*[_type == "dataCenterProject" && defined(location)]{
+    const rows = await sanity.fetch(`*[_type == "dataCenterProject" && defined(location) && status in ["operational","construction","announced"]]{
       _id, name, operator, location, city, state, country,
       status, capacityMw, source, sourceUrl,
       announcedDate, expectedOnlineDate, extractionConfidence, verified

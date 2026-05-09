@@ -10,7 +10,8 @@ export type LayerCategory =
   | "land-use"
   | "climate"
   | "rail"
-  | "indigenous";
+  | "indigenous"
+  | "politics";
 
 export type LayerCountry = "CA" | "US" | "GLOBAL";
 

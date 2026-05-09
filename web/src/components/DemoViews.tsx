@@ -117,6 +117,7 @@ function toInfraEnabled(v: DemoViewLayers): Record<LayerCategory, boolean> {
     water:      v.water ?? false,
     climate:    false,
     rail:       v.rail,
+    politics:   false,
   }
 }
 

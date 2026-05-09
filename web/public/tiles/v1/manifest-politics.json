@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-08T00:00:00.000Z",
+  "layers": [
+    {
+      "id": "politics_governors",
+      "title": "Governors (target states)",
+      "category": "politics",
+      "country": "US",
+      "tilesUrl": "",
+      "sourceLayer": "",
+      "minZoom": 2,
+      "maxZoom": 14,
+      "license": "Public-Domain",
+      "attribution": "Public records (NGA, governor press releases)",
+      "sourceUrl": "https://www.nga.org",
+      "lastUpdated": "2026-05-08T00:00:00.000Z",
+      "defaultVisible": true,
+      "geometryHint": "point",
+      "sourceType": "geojson",
+      "geojsonUrl": "/api/v1/governor-data?type=governors",
+      "emptyStateInsight": "No governors loaded — seed governor docs in Sanity (4 expected: NV, WV, FL, OK)."
+    },
+    {
+      "id": "politics_stalled_projects",
+      "title": "Stalled / canceled data center projects",
+      "category": "politics",
+      "country": "US",
+      "tilesUrl": "",
+      "sourceLayer": "",
+      "minZoom": 2,
+      "maxZoom": 14,
+      "license": "Proprietary-Link-Out",
+      "attribution": "Compiled from public reporting (DCD, local press, PUC dockets)",
+      "sourceUrl": "https://www.datacenterwatch.org",
+      "lastUpdated": "2026-05-08T00:00:00.000Z",
+      "defaultVisible": true,
+      "geometryHint": "point",
+      "sourceType": "geojson",
+      "geojsonUrl": "/api/v1/governor-data?type=stalled-projects",
+      "emptyStateInsight": "No stalled projects loaded — run scripts/seed-governor-projects.ts."
+    },
+    {
+      "id": "politics_tribal_projects",
+      "title": "Tribal / First Nations data center projects",
+      "category": "politics",
+      "country": "US",
+      "tilesUrl": "",
+      "sourceLayer": "",
+      "minZoom": 2,
+      "maxZoom": 14,
+      "license": "Proprietary-Link-Out",
+      "attribution": "Compiled from public reporting (FAS, DCD, ICT, Cherokee Phoenix, Native News Online, CBC, etc.)",
+      "sourceUrl": "https://www.honorearth.org/datacentertracker",
+      "lastUpdated": "2026-05-08T00:00:00.000Z",
+      "defaultVisible": true,
+      "geometryHint": "point",
+      "sourceType": "geojson",
+      "geojsonUrl": "/api/v1/governor-data?type=tribal-projects",
+      "emptyStateInsight": "No tribal projects loaded — run scripts/seed-tribal-projects.ts."
+    }
+  ]
+}

@@ -151,7 +151,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
   const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
-    indigenous: true, exclusions: true, 'land-use': false, power: true, gas: true, fiber: false, water: false, climate: false, rail: true,
+    indigenous: true, exclusions: true, 'land-use': false, power: true, gas: true, fiber: false, water: false, climate: false, rail: true, politics: false,
   })
 
   // Live GeoJSON data for manifest entries with sourceType === 'geojson'
@@ -169,11 +169,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
   const infraLayersByCategory = useMemo(() => {
     const map: Record<LayerCategory, LayerManifestEntry[]> = {
-      indigenous: [], exclusions: [], 'land-use': [], power: [], gas: [], fiber: [], water: [], climate: [], rail: [],
+      indigenous: [], exclusions: [], 'land-use': [], power: [], gas: [], fiber: [], water: [], climate: [], rail: [], politics: [],
     }
     for (const layer of infraManifest?.layers ?? []) {
       // Indigenous layers are shown for all countries; other layers are CA/GLOBAL only
       if (layer.category !== 'indigenous' && layer.country !== 'CA' && layer.country !== 'GLOBAL') continue
+      // Politics layers are owned by /governors and should not appear on /map
+      if (layer.category === 'politics') continue
       map[layer.category]?.push(layer)
     }
     return map
