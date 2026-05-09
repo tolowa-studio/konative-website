@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-30T17:41:49.402Z",
+  "generatedAt": "2026-05-09T03:03:41.609Z",
   "layers": [
     {
       "id": "bc_er_pipelines_permitted",
       "title": "BC pipelines — permitted (BCER)",
       "category": "gas",
       "country": "CA",
-      "tilesUrl": "/tiles/v1/bc_er_pipelines_permitted.pmtiles",
+      "tilesUrl": "https://pub-70584c42a8ad4fb1a38f5273a1665067.r2.dev/tiles/v1/bc_er_pipelines_permitted.pmtiles",
       "sourceLayer": "bc_er_pipelines_permitted",
       "minZoom": 4,
       "maxZoom": 14,
@@ -23,7 +23,7 @@
       "title": "BC pipeline installations — permitted (BCER)",
       "category": "gas",
       "country": "CA",
-      "tilesUrl": "/tiles/v1/bc_er_pipeline_installations_permitted.pmtiles",
+      "tilesUrl": "https://pub-70584c42a8ad4fb1a38f5273a1665067.r2.dev/tiles/v1/bc_er_pipeline_installations_permitted.pmtiles",
       "sourceLayer": "bc_er_pipeline_installations_permitted",
       "minZoom": 6,
       "maxZoom": 14,

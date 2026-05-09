@@ -2,9 +2,13 @@
 **/.DS_Store
 .vercel
 
-# ETL build artifacts (intermediate files — committed PMTiles go in tiles/v1/)
+# ETL build artifacts
 .tmp/
 .superpowers/
+.tiles-raw/
+
+# PMTiles are stored in Cloudflare R2, not git (see scripts/migrate-tiles-to-r2.sh)
+web/public/tiles/v1/*.pmtiles
 
 # Never nest a second checkout here (breaks monorepo layout and confuses agents)
 konative-site/

@@ -1,0 +1,591 @@
+name: Refresh static PMTiles
+
+# Scheduled cadence (all times UTC):
+#   CWFIS fire zones        – monthly 04:00 on the 1st, May–Oct (fire season)
+#   NRCAN power/transmission – quarterly 04:00 on the 1st of Jan/Apr/Jul/Oct
+#   CPCAD + CIRNAC/TIGER    – annually 04:00 / 05:00 on 1 Nov (post-summer update)
+#   WRI Aqueduct            – manual only (new versions every 2–3 years)
+#
+# Manual trigger: Actions → "Refresh static PMTiles" → Run workflow → pick a layer.
+#
+# Required GitHub Secrets:
+#   CLOUDFLARE_ACCOUNT_ID   – Cloudflare account ID (dash.cloudflare.com → right sidebar)
+#   R2_ACCESS_KEY_ID        – R2 API token client ID  (Cloudflare → R2 → Manage R2 API tokens)
+#   R2_SECRET_ACCESS_KEY    – R2 API token secret
+#   R2_BUCKET_NAME          – bucket name, e.g. "konative-tiles"
+#   R2_PUBLIC_URL           – public bucket URL, e.g. "https://pub-abc123.r2.dev"
+#   GH_PAT                  – GitHub PAT with repo write scope (to push manifest updates)
+
+on:
+  schedule:
+    - cron: '0 4 1 5-10 *'       # CWFIS – monthly May–Oct
+    - cron: '0 4 1 1,4,7,10 *'   # NRCAN – quarterly
+    - cron: '0 4 1 11 *'         # CPCAD – annually Nov
+    - cron: '0 5 1 11 *'         # CIRNAC + TIGER – annually Nov
+  workflow_dispatch:
+    inputs:
+      layer:
+        description: 'Layer to refresh'
+        required: true
+        default: 'cwfis'
+        type: choice
+        options:
+          - cwfis
+          - nrcan
+          - cpcad
+          - indigenous
+          - wri-aqueduct
+          - all
+
+# ── Shared env ────────────────────────────────────────────────────────────────
+env:
+  R2_BUCKET: ${{ secrets.R2_BUCKET_NAME }}
+  R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
+  TILES_PREFIX: tiles/v1   # key prefix inside the R2 bucket
+
+# ── Helper: returns true when this job should run ─────────────────────────────
+# GitHub exposes github.event.schedule with the cron string that fired.
+# workflow_dispatch passes github.event.inputs.layer.
+
+jobs:
+
+  # ── 1. CWFIS fire weather zones ─────────────────────────────────────────────
+  cwfis:
+    name: CWFIS fire weather zones
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 4 1 5-10 *') ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.layer == 'cwfis' || github.event.inputs.layer == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gdal-bin tippecanoe unzip curl jq
+          npm install -g wrangler
+
+      - name: Download CWFIS fire weather zones (WFS)
+        run: |
+          mkdir -p .tiles-raw
+          # CWFIS GeoServer WFS – fire weather zone polygons (national)
+          curl -sf \
+            "https://cwfis.cfs.nrcan.gc.ca/geoserver/public/wfs\
+?service=WFS&version=2.0.0&request=GetFeature\
+&typeName=public:fwf\
+&outputFormat=application/json\
+&srsName=EPSG:4326" \
+            -o .tiles-raw/cwfis_raw.geojson \
+            -H "User-Agent: konative-site/1.0 (deals@konative.com)"
+          echo "Features: $(jq '.features | length' .tiles-raw/cwfis_raw.geojson)"
+
+      - name: Build PMTiles
+        run: |
+          tippecanoe \
+            -o .tiles-raw/ca_cwfis_fire_zones.pmtiles \
+            --force \
+            -Z3 -z10 \
+            --drop-densest-as-needed \
+            --layer=ca_cwfis_fire_zones \
+            .tiles-raw/cwfis_raw.geojson
+
+      - name: Upload to R2
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          wrangler r2 object put \
+            "$R2_BUCKET/$TILES_PREFIX/ca_cwfis_fire_zones.pmtiles" \
+            --file .tiles-raw/ca_cwfis_fire_zones.pmtiles \
+            --content-type application/octet-stream
+
+      - name: Update manifest
+        run: |
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          node -e "
+            const fs = require('fs');
+            const path = 'web/public/tiles/v1/manifest-env.json';
+            const m = JSON.parse(fs.readFileSync(path, 'utf8'));
+            for (const l of m.layers) {
+              if (l.id === 'ca_cwfis_fire_zones') {
+                l.tilesUrl = '${R2_PUBLIC_URL}/${TILES_PREFIX}/ca_cwfis_fire_zones.pmtiles';
+                l.lastUpdated = '${NOW}';
+              }
+            }
+            m.generatedAt = '${NOW}';
+            fs.writeFileSync(path, JSON.stringify(m, null, 2) + '\n');
+            console.log('manifest-env.json updated');
+          "
+
+      - name: Commit manifest update
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add web/public/tiles/v1/manifest-env.json
+          git diff --staged --quiet || git commit -m "chore(tiles): refresh CWFIS fire weather zones [skip ci]"
+          git push
+
+  # ── 2. NRCAN power + transmission + CER pipelines ───────────────────────────
+  nrcan:
+    name: NRCAN power, transmission, CER pipelines
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 4 1 1,4,7,10 *') ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.layer == 'nrcan' || github.event.inputs.layer == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gdal-bin tippecanoe unzip curl jq
+          npm install -g wrangler
+
+      - name: Download NRCAN datasets (open.canada.ca CKAN API)
+        run: |
+          mkdir -p .tiles-raw/nrcan
+          # Fetch current resource URL from CKAN for each dataset, then download.
+          # CKAN API: /data/api/3/action/package_show?id=<dataset-id>
+          # We grab the first GeoJSON or SHP resource.
+
+          fetch_ckan_resource() {
+            local dataset_id="$1"
+            local out_dir="$2"
+            local out_name="$3"
+            local resp
+            resp=$(curl -sf \
+              "https://open.canada.ca/data/api/3/action/package_show?id=${dataset_id}" \
+              -H "User-Agent: konative-site/1.0 (deals@konative.com)")
+            # Prefer GeoJSON, fall back to Shapefile zip
+            local url
+            url=$(echo "$resp" | jq -r '
+              .result.resources[]
+              | select(.format | test("GeoJSON|geojson|SHP|Shapefile|ZIP"; "i"))
+              | .url' | head -1)
+            echo "  -> $url"
+            curl -sL "$url" -o "${out_dir}/${out_name}" \
+              -H "User-Agent: konative-site/1.0 (deals@konative.com)"
+          }
+
+          echo "==> Transmission lines (35c51098-…)"
+          fetch_ckan_resource "35c51098-5cd8-44b0-b1cd-c8ce2f5dae89" ".tiles-raw/nrcan" "transmission.zip"
+          echo "==> Substations (3393d1fd-…)"
+          fetch_ckan_resource "3393d1fd-9c20-4854-9acc-dcc504aec275" ".tiles-raw/nrcan" "substations.zip"
+          echo "==> Power plants (40fbe40c-…)"
+          fetch_ckan_resource "40fbe40c-01cd-49d3-8add-0d20ed64c90d" ".tiles-raw/nrcan" "powerplants.zip"
+          echo "==> CER pipelines (16282d1a-…)"
+          fetch_ckan_resource "16282d1a-383f-4b9e-b703-a3ee21e59dc5" ".tiles-raw/nrcan" "pipelines.zip"
+
+      - name: Convert to GeoJSON
+        run: |
+          for name in transmission substations powerplants pipelines; do
+            src=".tiles-raw/nrcan/${name}.zip"
+            if file "$src" | grep -q 'Zip'; then
+              unzip -o "$src" -d ".tiles-raw/nrcan/${name}/" 2>/dev/null || true
+              shp=$(find ".tiles-raw/nrcan/${name}" -name "*.shp" | head -1)
+              gpkg=$(find ".tiles-raw/nrcan/${name}" -name "*.gpkg" | head -1)
+              src_file="${gpkg:-$shp}"
+            else
+              # already GeoJSON
+              src_file="$src"
+            fi
+            echo "==> $name -> $src_file"
+            ogr2ogr \
+              -f GeoJSON \
+              -t_srs EPSG:4326 \
+              -nlt PROMOTE_TO_MULTI \
+              ".tiles-raw/nrcan/${name}.geojson" \
+              "$src_file"
+          done
+
+      - name: Build PMTiles
+        run: |
+          # Map name -> layer name in manifest
+          declare -A LAYERS=(
+            [transmission]="transmission_lines"
+            [substations]="substations"
+            [powerplants]="power_plants"
+            [pipelines]="pipelines"
+          )
+          declare -A ZOOM_MAX=([transmission]=12 [substations]=13 [powerplants]=12 [pipelines]=12)
+          declare -A ZOOM_MIN=([transmission]=4  [substations]=5  [powerplants]=4  [pipelines]=4)
+
+          for name in transmission substations powerplants pipelines; do
+            tippecanoe \
+              -o ".tiles-raw/nrcan/${name}.pmtiles" \
+              --force \
+              -Z${ZOOM_MIN[$name]} -z${ZOOM_MAX[$name]} \
+              --drop-densest-as-needed \
+              --layer=${LAYERS[$name]} \
+              ".tiles-raw/nrcan/${name}.geojson"
+          done
+
+      - name: Upload to R2
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          declare -A FILE_KEYS=(
+            [transmission]="ca_nrcan_transmission_lines"
+            [substations]="ca_nrcan_substations"
+            [powerplants]="ca_nrcan_power_plants"
+            [pipelines]="ca_cer_pipelines"
+          )
+          for name in transmission substations powerplants pipelines; do
+            key="${FILE_KEYS[$name]}"
+            wrangler r2 object put \
+              "$R2_BUCKET/$TILES_PREFIX/${key}.pmtiles" \
+              --file ".tiles-raw/nrcan/${name}.pmtiles" \
+              --content-type application/octet-stream
+            echo "Uploaded ${key}.pmtiles"
+          done
+
+      - name: Update manifest
+        run: |
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          node -e "
+            const fs = require('fs');
+            const path = 'web/public/tiles/v1/manifest-p0.json';
+            const m = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const keyMap = {
+              ca_nrcan_transmission_lines: 'ca_nrcan_transmission_lines',
+              ca_nrcan_substations: 'ca_nrcan_substations',
+              ca_nrcan_power_plants: 'ca_nrcan_power_plants',
+              ca_cer_pipelines: 'ca_cer_pipelines',
+            };
+            for (const l of m.layers) {
+              if (keyMap[l.id]) {
+                l.tilesUrl = \`${R2_PUBLIC_URL}/${TILES_PREFIX}/\${keyMap[l.id]}.pmtiles\`;
+                l.lastUpdated = '${NOW}';
+              }
+            }
+            m.generatedAt = '${NOW}';
+            fs.writeFileSync(path, JSON.stringify(m, null, 2) + '\n');
+            console.log('manifest-p0.json updated');
+          "
+
+      - name: Commit manifest update
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add web/public/tiles/v1/manifest-p0.json
+          git diff --staged --quiet || git commit -m "chore(tiles): refresh NRCAN power/transmission/CER pipelines [skip ci]"
+          git push
+
+  # ── 3. CPCAD protected areas ─────────────────────────────────────────────────
+  cpcad:
+    name: CPCAD protected areas
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 4 1 11 *') ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.layer == 'cpcad' || github.event.inputs.layer == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gdal-bin tippecanoe unzip curl jq
+          npm install -g wrangler
+
+      - name: Download CPCAD (open.canada.ca CKAN)
+        run: |
+          mkdir -p .tiles-raw/cpcad
+          # Dataset: 6c343726-1e92-451a-876a-76e17d398a1c
+          resp=$(curl -sf \
+            "https://open.canada.ca/data/api/3/action/package_show?id=6c343726-1e92-451a-876a-76e17d398a1c" \
+            -H "User-Agent: konative-site/1.0 (deals@konative.com)")
+          url=$(echo "$resp" | jq -r '
+            .result.resources[]
+            | select(.format | test("GeoJSON|SHP|Shapefile|ZIP"; "i"))
+            | .url' | head -1)
+          echo "Download URL: $url"
+          curl -sL "$url" -o .tiles-raw/cpcad/cpcad.zip \
+            -H "User-Agent: konative-site/1.0 (deals@konative.com)"
+
+      - name: Convert to GeoJSON
+        run: |
+          unzip -o .tiles-raw/cpcad/cpcad.zip -d .tiles-raw/cpcad/src/ 2>/dev/null || true
+          gpkg=$(find .tiles-raw/cpcad/src -name "*.gpkg" | head -1)
+          shp=$(find  .tiles-raw/cpcad/src -name "*.shp"  | head -1)
+          src="${gpkg:-$shp}"
+          echo "Source: $src"
+          ogr2ogr \
+            -f GeoJSON \
+            -t_srs EPSG:4326 \
+            -nlt PROMOTE_TO_MULTI \
+            -select "NAME_E,AICHI_GOALS,IUCN_CAT,STATUS,BIOME" \
+            .tiles-raw/cpcad/ca_cpcad_protected_areas.geojson \
+            "$src"
+          echo "Features: $(jq '.features | length' .tiles-raw/cpcad/ca_cpcad_protected_areas.geojson)"
+
+      - name: Build PMTiles
+        run: |
+          tippecanoe \
+            -o .tiles-raw/cpcad/ca_cpcad_protected_areas.pmtiles \
+            --force \
+            -Z3 -z10 \
+            --drop-densest-as-needed \
+            --layer=protected_areas \
+            .tiles-raw/cpcad/ca_cpcad_protected_areas.geojson
+
+      - name: Upload to R2
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          wrangler r2 object put \
+            "$R2_BUCKET/$TILES_PREFIX/ca_cpcad_protected_areas.pmtiles" \
+            --file .tiles-raw/cpcad/ca_cpcad_protected_areas.pmtiles \
+            --content-type application/octet-stream
+
+      - name: Update manifest
+        run: |
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          node -e "
+            const fs = require('fs');
+            const path = 'web/public/tiles/v1/manifest-env.json';
+            const m = JSON.parse(fs.readFileSync(path, 'utf8'));
+            for (const l of m.layers) {
+              if (l.id === 'ca_cpcad_protected_areas') {
+                l.tilesUrl = '${R2_PUBLIC_URL}/${TILES_PREFIX}/ca_cpcad_protected_areas.pmtiles';
+                l.lastUpdated = '${NOW}';
+              }
+            }
+            m.generatedAt = '${NOW}';
+            fs.writeFileSync(path, JSON.stringify(m, null, 2) + '\n');
+            console.log('manifest-env.json updated (cpcad)');
+          "
+
+      - name: Commit manifest update
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add web/public/tiles/v1/manifest-env.json
+          git diff --staged --quiet || git commit -m "chore(tiles): refresh CPCAD protected areas [skip ci]"
+          git push
+
+  # ── 4. CIRNAC indigenous lands + US TIGER AIANNH ────────────────────────────
+  indigenous:
+    name: CIRNAC indigenous lands + US TIGER
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 5 1 11 *') ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.layer == 'indigenous' || github.event.inputs.layer == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gdal-bin tippecanoe unzip curl jq
+          npm install -g wrangler
+
+      - name: Download CIRNAC (open.canada.ca CKAN)
+        run: |
+          mkdir -p .tiles-raw/indigenous
+          # Dataset: b6567c5c-8339-4055-99fa-63f92114d9e4
+          resp=$(curl -sf \
+            "https://open.canada.ca/data/api/3/action/package_show?id=b6567c5c-8339-4055-99fa-63f92114d9e4" \
+            -H "User-Agent: konative-site/1.0 (deals@konative.com)")
+          url=$(echo "$resp" | jq -r '
+            .result.resources[]
+            | select(.format | test("GeoJSON|SHP|Shapefile|ZIP"; "i"))
+            | .url' | head -1)
+          echo "CIRNAC URL: $url"
+          curl -sL "$url" -o .tiles-raw/indigenous/cirnac.zip \
+            -H "User-Agent: konative-site/1.0 (deals@konative.com)"
+
+      - name: Download US TIGER AIANNH
+        run: |
+          # TIGER/Line – American Indian / Alaska Native / Native Hawaiian Areas
+          # URL format: https://www2.census.gov/geo/tiger/TIGER{YEAR}/AIANNH/tl_{YEAR}_us_aiannh.zip
+          # Derive current year (fall back to previous if Jan data not yet released)
+          YEAR=$(date +%Y)
+          TIGER_URL="https://www2.census.gov/geo/tiger/TIGER${YEAR}/AIANNH/tl_${YEAR}_us_aiannh.zip"
+          echo "TIGER URL: $TIGER_URL"
+          HTTP=$(curl -sf -o .tiles-raw/indigenous/tiger.zip -w "%{http_code}" "$TIGER_URL" || true)
+          if [ "$HTTP" != "200" ]; then
+            YEAR=$((YEAR - 1))
+            TIGER_URL="https://www2.census.gov/geo/tiger/TIGER${YEAR}/AIANNH/tl_${YEAR}_us_aiannh.zip"
+            echo "Falling back to $YEAR: $TIGER_URL"
+            curl -sL "$TIGER_URL" -o .tiles-raw/indigenous/tiger.zip
+          fi
+
+      - name: Convert to GeoJSON
+        run: |
+          # CIRNAC
+          unzip -o .tiles-raw/indigenous/cirnac.zip -d .tiles-raw/indigenous/cirnac_src/ 2>/dev/null || true
+          gpkg=$(find .tiles-raw/indigenous/cirnac_src -name "*.gpkg" | head -1)
+          shp=$(find  .tiles-raw/indigenous/cirnac_src -name "*.shp"  | head -1)
+          src="${gpkg:-$shp}"
+          echo "CIRNAC source: $src"
+          ogr2ogr -f GeoJSON -t_srs EPSG:4326 -nlt PROMOTE_TO_MULTI \
+            .tiles-raw/indigenous/cirnac.geojson "$src"
+
+          # US TIGER AIANNH
+          unzip -o .tiles-raw/indigenous/tiger.zip -d .tiles-raw/indigenous/tiger_src/ 2>/dev/null || true
+          shp=$(find .tiles-raw/indigenous/tiger_src -name "*.shp" | head -1)
+          ogr2ogr -f GeoJSON -t_srs EPSG:4326 -nlt PROMOTE_TO_MULTI \
+            .tiles-raw/indigenous/tiger.geojson "$shp"
+
+      - name: Build PMTiles (separate files per source)
+        run: |
+          tippecanoe \
+            -o .tiles-raw/indigenous/ca_cirnac_indigenous_lands.pmtiles \
+            --force -Z3 -z12 --drop-densest-as-needed \
+            --layer=ca_cirnac_indigenous_lands \
+            .tiles-raw/indigenous/cirnac.geojson
+
+          tippecanoe \
+            -o .tiles-raw/indigenous/us_tiger_aiannh.pmtiles \
+            --force -Z2 -z10 --drop-densest-as-needed \
+            --layer=us_tiger_aiannh \
+            .tiles-raw/indigenous/tiger.geojson
+
+      - name: Upload to R2
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          wrangler r2 object put \
+            "$R2_BUCKET/$TILES_PREFIX/ca_cirnac_indigenous_lands.pmtiles" \
+            --file .tiles-raw/indigenous/ca_cirnac_indigenous_lands.pmtiles \
+            --content-type application/octet-stream
+
+          wrangler r2 object put \
+            "$R2_BUCKET/$TILES_PREFIX/us_tiger_aiannh.pmtiles" \
+            --file .tiles-raw/indigenous/us_tiger_aiannh.pmtiles \
+            --content-type application/octet-stream
+
+      - name: Update manifest
+        run: |
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          node -e "
+            const fs = require('fs');
+            const path = 'web/public/tiles/v1/manifest-indigenous.json';
+            const m = JSON.parse(fs.readFileSync(path, 'utf8'));
+            for (const l of m.layers) {
+              l.tilesUrl = \`${R2_PUBLIC_URL}/${TILES_PREFIX}/\${l.id}.pmtiles\`;
+              l.lastUpdated = '${NOW}';
+            }
+            m.generatedAt = '${NOW}';
+            fs.writeFileSync(path, JSON.stringify(m, null, 2) + '\n');
+            console.log('manifest-indigenous.json updated');
+          "
+
+      - name: Commit manifest update
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add web/public/tiles/v1/manifest-indigenous.json
+          git diff --staged --quiet || git commit -m "chore(tiles): refresh CIRNAC + TIGER indigenous lands [skip ci]"
+          git push
+
+  # ── 5. WRI Aqueduct water risk (manual-only) ─────────────────────────────────
+  wri-aqueduct:
+    name: WRI Aqueduct water risk (manual only)
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'workflow_dispatch' &&
+      (github.event.inputs.layer == 'wri-aqueduct' || github.event.inputs.layer == 'all')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gdal-bin tippecanoe unzip curl jq
+          npm install -g wrangler
+
+      - name: Download WRI Aqueduct 4.0 GeoJSON (GitHub release)
+        run: |
+          mkdir -p .tiles-raw/wri
+          # WRI publishes source data on GitHub: https://github.com/wri/Aqueduct40
+          # The baseline annual risk GeoJSON is the primary layer we tile.
+          # Update this URL when WRI releases a new version.
+          WRI_URL="https://github.com/wri/Aqueduct40/releases/download/v4.0/Aqueduct40_waterrisk_directory_and_annual_variability_baseline_v01.zip"
+          echo "==> Downloading WRI Aqueduct 4.0 ..."
+          curl -sL "$WRI_URL" -o .tiles-raw/wri/aqueduct.zip \
+            -H "User-Agent: konative-site/1.0 (deals@konative.com)"
+          unzip -o .tiles-raw/wri/aqueduct.zip -d .tiles-raw/wri/src/ 2>/dev/null || true
+          ls .tiles-raw/wri/src/
+
+      - name: Convert to GeoJSON (clip to North America to keep tile size small)
+        run: |
+          gpkg=$(find .tiles-raw/wri/src -name "*.gpkg" | head -1)
+          shp=$(find  .tiles-raw/wri/src -name "*.shp"  | head -1)
+          geojson=$(find .tiles-raw/wri/src -name "*.geojson" | head -1)
+          src="${gpkg:-${shp:-$geojson}}"
+          echo "Source: $src"
+          # Clip to North America bbox (roughly): -170 14 -50 85
+          ogr2ogr \
+            -f GeoJSON \
+            -t_srs EPSG:4326 \
+            -nlt PROMOTE_TO_MULTI \
+            -spat -170 14 -50 85 -spat_srs EPSG:4326 \
+            -select "bws_label,bws_score,bfd_label,drr_label,rfr_label,cfr_label" \
+            .tiles-raw/wri/global_wri_aqueduct_water_risk.geojson \
+            "$src"
+          echo "Features: $(jq '.features | length' .tiles-raw/wri/global_wri_aqueduct_water_risk.geojson)"
+
+      - name: Build PMTiles
+        run: |
+          tippecanoe \
+            -o .tiles-raw/wri/global_wri_aqueduct_water_risk.pmtiles \
+            --force \
+            -Z2 -z8 \
+            --drop-densest-as-needed \
+            --layer=global_wri_aqueduct_water_risk \
+            .tiles-raw/wri/global_wri_aqueduct_water_risk.geojson
+
+      - name: Upload to R2
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          wrangler r2 object put \
+            "$R2_BUCKET/$TILES_PREFIX/global_wri_aqueduct_water_risk.pmtiles" \
+            --file .tiles-raw/wri/global_wri_aqueduct_water_risk.pmtiles \
+            --content-type application/octet-stream
+
+      - name: Update manifest
+        run: |
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          node -e "
+            const fs = require('fs');
+            const path = 'web/public/tiles/v1/manifest-env.json';
+            const m = JSON.parse(fs.readFileSync(path, 'utf8'));
+            for (const l of m.layers) {
+              if (l.id === 'global_wri_aqueduct_water_risk') {
+                l.tilesUrl = '${R2_PUBLIC_URL}/${TILES_PREFIX}/global_wri_aqueduct_water_risk.pmtiles';
+                l.lastUpdated = '${NOW}';
+              }
+            }
+            m.generatedAt = '${NOW}';
+            fs.writeFileSync(path, JSON.stringify(m, null, 2) + '\n');
+            console.log('manifest-env.json updated (wri-aqueduct)');
+          "
+
+      - name: Commit manifest update
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add web/public/tiles/v1/manifest-env.json
+          git diff --staged --quiet || git commit -m "chore(tiles): refresh WRI Aqueduct water risk [skip ci]"
+          git push

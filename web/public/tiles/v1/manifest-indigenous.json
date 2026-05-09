@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-29T06:40:00.000Z",
+  "generatedAt": "2026-05-09T03:03:41.609Z",
   "layers": [
     {
       "id": "ca_cirnac_indigenous_lands",
       "title": "First Nations reserves & Indigenous lands (Canada)",
       "category": "indigenous",
       "country": "CA",
-      "tilesUrl": "/tiles/v1/ca_cirnac_indigenous_lands.pmtiles",
+      "tilesUrl": "https://pub-70584c42a8ad4fb1a38f5273a1665067.r2.dev/tiles/v1/ca_cirnac_indigenous_lands.pmtiles",
       "sourceLayer": "ca_cirnac_indigenous_lands",
       "minZoom": 3,
       "maxZoom": 12,
@@ -23,7 +23,7 @@
       "title": "American Indian / Alaska Native / Native Hawaiian Areas (US)",
       "category": "indigenous",
       "country": "US",
-      "tilesUrl": "/tiles/v1/us_tiger_aiannh.pmtiles",
+      "tilesUrl": "https://pub-70584c42a8ad4fb1a38f5273a1665067.r2.dev/tiles/v1/us_tiger_aiannh.pmtiles",
       "sourceLayer": "us_tiger_aiannh",
       "minZoom": 2,
       "maxZoom": 10,

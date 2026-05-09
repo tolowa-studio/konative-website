@@ -480,7 +480,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                     key={layer.id}
                     id={`infra-${layer.id}`}
                     type="vector"
-                    url={`pmtiles://${window.location.origin}${layer.tilesUrl}`}
+                    url={
+                      // Support both relative paths (/tiles/v1/…) and absolute CDN
+                      // URLs (https://…) so tiles can be served from R2 or /public/.
+                      layer.tilesUrl.startsWith('http')
+                        ? `pmtiles://${layer.tilesUrl}`
+                        : `pmtiles://${window.location.origin}${layer.tilesUrl}`
+                    }
                     attribution={layer.attribution}
                   >
                     {showFill && (
