@@ -1,6 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitForm } from "@/lib/forms/submit";
 import { newsletterSchema } from "@/lib/forms/schemas/newsletter";
+import {
+  ghostAdminFetch,
+  ghostAdminKey,
+  KONATIVE_NEWSLETTER_ID,
+} from "@/lib/ghost";
+
+// Newsletter signup → CMS + Ghost.
+//
+// Two-stage write so a Ghost outage doesn't lose the lead:
+//   1. submitForm saves a `newsletterSubscriber` record in the CMS (canonical
+//      record of intent, with provenance fields).
+//   2. Ghost Admin API creates a member subscribed to the Konative Dispatch
+//      newsletter — fire-and-don't-fail so a Ghost hiccup returns 200 to the
+//      user while we still have the lead in CMS for backfill.
+//
+// Beehiiv was dropped 2026-05-23 — see STRATEGY.md B6.
 
 export async function POST(request: NextRequest) {
   let body: unknown;
@@ -24,20 +40,35 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: result.message ?? "Subscription failed" }, { status: 500 });
   }
 
-  // Optional: Beehiiv sync (non-blocking)
-  const beehiivKey = process.env.BEEHIIV_API_KEY;
-  const beehiivPub = process.env.BEEHIIV_PUBLICATION_ID;
+  // Ghost member upsert (non-blocking — never fail the user signup on Ghost
+  // problems; the CMS record is the canonical lead capture).
   const b = body as Record<string, string>;
-  if (beehiivKey && beehiivPub && b.email) {
-    fetch(`https://api.beehiiv.com/v2/publications/${beehiivPub}/subscriptions`, {
+  const email = b.email?.toLowerCase().trim();
+  if (email && ghostAdminKey()) {
+    const memberPayload = {
+      members: [
+        {
+          email,
+          name: b.name || b.fullName || undefined,
+          newsletters: [{ id: KONATIVE_NEWSLETTER_ID }],
+          subscribed: true,
+          labels: [{ name: "konative" }],
+          note: b.utmSource || b.source ? `source: ${b.utmSource || b.source}` : undefined,
+        },
+      ],
+    };
+    ghostAdminFetch("/ghost/api/admin/members/", {
       method: "POST",
-      headers: { Authorization: `Bearer ${beehiivKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: b.email.toLowerCase().trim(),
-        utm_source: b.utmSource || b.source || "website",
-        utm_medium: b.utmMedium || "organic",
-      }),
-    }).catch(err => console.error("[newsletter] Beehiiv sync error:", err));
+      body: JSON.stringify(memberPayload),
+    })
+      .then(async (res) => {
+        if (!res.ok && res.status !== 422) {
+          // 422 = member already exists, which is fine.
+          const text = await res.text().catch(() => "");
+          console.warn(`[newsletter] Ghost member create ${res.status}:`, text.slice(0, 300));
+        }
+      })
+      .catch((err) => console.error("[newsletter] Ghost member create error:", err));
   }
 
   return NextResponse.json({ success: true, message: "Subscribed!" });

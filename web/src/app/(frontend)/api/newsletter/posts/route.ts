@@ -1,51 +1,70 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server";
+import {
+  ghostContentFetch,
+  ghostContentKey,
+  ghostUrl,
+  KONATIVE_NEWSLETTER_SLUG,
+} from "@/lib/ghost";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 interface NewsletterPost {
-  id: string
-  title: string
-  subtitle: string
-  content_html: string
-  thumbnail_url: string | null
-  web_url: string
-  publish_date: string
+  id: string;
+  title: string;
+  subtitle: string;
+  content_html: string;
+  thumbnail_url: string | null;
+  web_url: string;
+  publish_date: string;
 }
 
-export async function GET() {
-  const posts: NewsletterPost[] = []
+interface GhostContentPost {
+  id: string;
+  title?: string;
+  custom_excerpt?: string | null;
+  excerpt?: string | null;
+  html?: string | null;
+  feature_image?: string | null;
+  url?: string | null;
+  slug?: string;
+  published_at?: string | null;
+  newsletter?: { slug?: string } | null;
+}
 
-  // Beehiiv integration
-  if (process.env.BEEHIIV_API_KEY && process.env.BEEHIIV_PUBLICATION_ID) {
-    try {
-      const res = await fetch(
-        `https://api.beehiiv.com/v2/publications/${process.env.BEEHIIV_PUBLICATION_ID}/posts?status=confirmed&limit=20`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.BEEHIIV_API_KEY}`,
-          },
-        },
-      )
-      if (res.ok) {
-        const data = await res.json()
-        for (const p of data.data || []) {
-          posts.push({
-            id: p.id,
-            title: p.title || '',
-            subtitle: p.subtitle || '',
-            content_html: p.content?.free?.web || '',
-            thumbnail_url: p.thumbnail_url || null,
-            web_url: p.web_url || '',
-            publish_date: p.publish_date
-              ? new Date(p.publish_date * 1000).toISOString()
-              : '',
-          })
-        }
-      }
-    } catch (err) {
-      console.error('Beehiiv posts fetch error:', err)
-    }
+// Source-of-truth pivot 2026-05-23: Beehiiv → shared Tolowa Studio Ghost.
+// Filters posts to the Konative Dispatch newsletter so the blog feed and
+// /dispatch archive only show Konative-branded issues.
+
+export async function GET() {
+  if (!ghostUrl() || !ghostContentKey()) {
+    return NextResponse.json({ posts: [] satisfies NewsletterPost[] });
   }
 
-  return NextResponse.json({ posts })
+  const filter = encodeURIComponent(`newsletter.slug:${KONATIVE_NEWSLETTER_SLUG}+status:published`);
+  const fields = "id,title,custom_excerpt,excerpt,feature_image,url,slug,published_at";
+  const path = `/ghost/api/content/posts/?filter=${filter}&include=newsletter&fields=${fields}&limit=20&order=published_at%20desc`;
+
+  let posts: NewsletterPost[] = [];
+  try {
+    const res = await ghostContentFetch(path);
+    if (res.ok) {
+      const data = (await res.json()) as { posts?: GhostContentPost[] };
+      posts = (data.posts ?? []).map((p): NewsletterPost => ({
+        id: p.id,
+        title: p.title ?? "",
+        subtitle: p.custom_excerpt ?? p.excerpt ?? "",
+        content_html: p.html ?? "",
+        thumbnail_url: p.feature_image ?? null,
+        web_url: p.url ?? `${ghostUrl()}/${p.slug ?? ""}/`,
+        publish_date: p.published_at ?? "",
+      }));
+    } else {
+      const text = await res.text().catch(() => "");
+      console.warn(`[newsletter/posts] Ghost ${res.status}:`, text.slice(0, 300));
+    }
+  } catch (err) {
+    console.error("[newsletter/posts] Ghost fetch error:", err);
+  }
+
+  return NextResponse.json({ posts });
 }

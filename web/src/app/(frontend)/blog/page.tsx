@@ -33,7 +33,7 @@ export default function BlogPage() {
             publish_date: string;
           }) => ({
             ...p,
-            source: "beehiiv",
+            source: "Dispatch",
           }),
         );
         setPosts(mapped);
