@@ -86,7 +86,18 @@ export async function ghostContentFetch(
 // --- newsletter identity (Konative Dispatch) -------------------------------
 // Created 2026-05-23 in shared Tolowa Studio Ghost instance.
 // See STRATEGY.md B6, Stash /projects/konative/strategy.
+//
+// Two identifiers, two purposes:
+//   - KONATIVE_NEWSLETTER_ID — the Ghost "newsletter" record. Used to subscribe
+//     new members to Konative Dispatch on signup and to drive email sends.
+//   - KONATIVE_TAG_SLUG — the Ghost primary-tag slug used to categorize posts
+//     belonging to this publication. Filtering posts by primary_tag is more
+//     reliable than filtering by `newsletter.slug` because Ghost only sets a
+//     post's newsletter when the email actually goes out — web-only / archive
+//     posts have `newsletter: null`. Tag is set at publish time and persists.
 export const KONATIVE_NEWSLETTER_ID =
   process.env.KONATIVE_NEWSLETTER_ID || "6a1115c22d98680001cb1028";
 export const KONATIVE_NEWSLETTER_SLUG =
   process.env.KONATIVE_NEWSLETTER_SLUG || "konative-dispatch";
+export const KONATIVE_TAG_SLUG =
+  process.env.KONATIVE_TAG_SLUG || "konative-dispatch";

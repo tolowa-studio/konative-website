@@ -3,7 +3,7 @@ import {
   ghostContentFetch,
   ghostContentKey,
   ghostUrl,
-  KONATIVE_NEWSLETTER_SLUG,
+  KONATIVE_TAG_SLUG,
 } from "@/lib/ghost";
 
 export const dynamic = "force-dynamic";
@@ -28,21 +28,21 @@ interface GhostContentPost {
   url?: string | null;
   slug?: string;
   published_at?: string | null;
-  newsletter?: { slug?: string } | null;
+  primary_tag?: { slug?: string } | null;
 }
 
 // Source-of-truth pivot 2026-05-23: Beehiiv → shared Tolowa Studio Ghost.
-// Filters posts to the Konative Dispatch newsletter so the blog feed and
-// /dispatch archive only show Konative-branded issues.
+// Posts belonging to Konative Dispatch are identified by primary_tag
+// (more reliable than newsletter.slug — see web/src/lib/ghost.ts notes).
 
 export async function GET() {
   if (!ghostUrl() || !ghostContentKey()) {
     return NextResponse.json({ posts: [] satisfies NewsletterPost[] });
   }
 
-  const filter = encodeURIComponent(`newsletter.slug:${KONATIVE_NEWSLETTER_SLUG}+status:published`);
+  const filter = encodeURIComponent(`primary_tag:${KONATIVE_TAG_SLUG}+status:published`);
   const fields = "id,title,custom_excerpt,excerpt,feature_image,url,slug,published_at";
-  const path = `/ghost/api/content/posts/?filter=${filter}&include=newsletter&fields=${fields}&limit=20&order=published_at%20desc`;
+  const path = `/ghost/api/content/posts/?filter=${filter}&fields=${fields}&limit=20&order=published_at%20desc`;
 
   let posts: NewsletterPost[] = [];
   try {

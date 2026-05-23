@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import {
-  getBeehiivDashboardUrl,
-  getGhostAdminUrl,
-  getIntegrationHealth,
-} from "@/lib/system-tools";
+import { getGhostAdminUrl, getIntegrationHealth } from "@/lib/system-tools";
 
 export const metadata: Metadata = {
   title: "Systems | Konative",
-  description: "CMS and publishing tools — Sanity, Builder.io, Beehiiv, Ghost.",
+  description: "CMS and publishing tools — Sanity, Builder.io, Ghost.",
   robots: { index: false, follow: false },
 };
 
@@ -49,12 +45,10 @@ function EnvVar({ name }: { name: string }) {
 export default async function CmsSystemPage() {
   const health = await getIntegrationHealth();
   const ghostAdmin = getGhostAdminUrl();
-  const beehiivApp = getBeehiivDashboardUrl();
 
   const allConfigured =
     health.sanity.configured &&
     health.builder.configured &&
-    health.beehiiv.configured &&
     health.ghost.configured;
 
   return (
@@ -207,61 +201,6 @@ export default async function CmsSystemPage() {
             )}
           </div>
 
-          {/* ── Beehiiv ── */}
-          <div className="cms-hub__card">
-            <div className="cms-hub__card-top">
-              <h2 className="cms-hub__card-title">Beehiiv</h2>
-              <Badge
-                tone={
-                  health.beehiiv.configured && health.beehiiv.reachable
-                    ? "ok"
-                    : health.beehiiv.configured
-                      ? "warn"
-                      : "setup"
-                }
-                label={
-                  health.beehiiv.configured && health.beehiiv.reachable
-                    ? "API OK"
-                    : health.beehiiv.configured
-                      ? "Check key"
-                      : "Not configured"
-                }
-              />
-            </div>
-            <p className="cms-hub__card-desc">
-              Newsletter posts powering <Link href="/blog">/blog</Link> and
-              subscriber opt-in flows.
-            </p>
-
-            {health.beehiiv.configured ? (
-              <a
-                href={beehiivApp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cms-hub__card-cta"
-              >
-                Open Beehiiv ↗
-              </a>
-            ) : (
-              <ol className="cms-hub__setup-list">
-                <SetupStep num={1}>
-                  Go to{" "}
-                  <a href="https://app.beehiiv.com" target="_blank" rel="noopener noreferrer">
-                    app.beehiiv.com
-                  </a>{" "}
-                  → Settings → API
-                </SetupStep>
-                <SetupStep num={2}>
-                  Generate API key → set <EnvVar name="BEEHIIV_API_KEY" />
-                </SetupStep>
-                <SetupStep num={3}>
-                  Settings → Publication → copy ID → set{" "}
-                  <EnvVar name="BEEHIIV_PUBLICATION_ID" />
-                </SetupStep>
-              </ol>
-            )}
-          </div>
-
           {/* ── Ghost ── */}
           <div className="cms-hub__card">
             <div className="cms-hub__card-top">
@@ -284,8 +223,9 @@ export default async function CmsSystemPage() {
               />
             </div>
             <p className="cms-hub__card-desc">
-              Long-form articles at{" "}
-              <Link href="/blog">/blog</Link> via Ghost Content API.
+              Shared Tolowa Studio Ghost — powers the{" "}
+              <Link href="/dispatch">Konative Dispatch</Link> newsletter and{" "}
+              <Link href="/blog">/blog</Link> via Content API.
             </p>
 
             {health.ghost.configured && ghostAdmin ? (

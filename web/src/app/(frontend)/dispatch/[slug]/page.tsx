@@ -6,7 +6,7 @@ import {
   ghostContentFetch,
   ghostContentKey,
   ghostUrl,
-  KONATIVE_NEWSLETTER_SLUG,
+  KONATIVE_TAG_SLUG,
 } from "@/lib/ghost";
 
 export const revalidate = 300;
@@ -34,21 +34,26 @@ interface GhostPost {
   published_at?: string | null;
   reading_time?: number | null;
   authors?: Array<{ name?: string; profile_image?: string | null }>;
-  newsletter?: { slug?: string } | null;
+  primary_tag?: { slug?: string } | null;
+  tags?: Array<{ slug?: string }>;
 }
 
 async function getIssue(slug: string): Promise<DispatchIssue | null> {
   if (!ghostUrl() || !ghostContentKey()) return null;
   const fields = "id,title,custom_excerpt,excerpt,html,slug,feature_image,published_at,reading_time";
-  const path = `/ghost/api/content/posts/slug/${encodeURIComponent(slug)}/?include=newsletter,authors&fields=${fields}`;
+  const path = `/ghost/api/content/posts/slug/${encodeURIComponent(slug)}/?include=tags,authors&fields=${fields}`;
   try {
     const res = await ghostContentFetch(path);
     if (!res.ok) return null;
     const data = (await res.json()) as { posts?: GhostPost[] };
     const post = data.posts?.[0];
     if (!post) return null;
-    // Only render if this post belongs to the Konative Dispatch newsletter.
-    if (post.newsletter?.slug !== KONATIVE_NEWSLETTER_SLUG) return null;
+    // Only render if this post belongs to Konative Dispatch (by tag).
+    const tagSlugs = new Set([
+      post.primary_tag?.slug,
+      ...(post.tags?.map((t) => t.slug) ?? []),
+    ]);
+    if (!tagSlugs.has(KONATIVE_TAG_SLUG)) return null;
     return {
       id: post.id,
       title: post.title ?? "",

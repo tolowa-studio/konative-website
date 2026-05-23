@@ -5,7 +5,7 @@ import {
   ghostContentFetch,
   ghostContentKey,
   ghostUrl,
-  KONATIVE_NEWSLETTER_SLUG,
+  KONATIVE_TAG_SLUG,
 } from "@/lib/ghost";
 
 export const revalidate = 300; // 5 min ISR — fresh enough, light on Ghost
@@ -37,7 +37,7 @@ interface DispatchPost {
 
 async function getDispatchPosts(): Promise<DispatchPost[]> {
   if (!ghostUrl() || !ghostContentKey()) return [];
-  const filter = encodeURIComponent(`newsletter.slug:${KONATIVE_NEWSLETTER_SLUG}+status:published`);
+  const filter = encodeURIComponent(`primary_tag:${KONATIVE_TAG_SLUG}+status:published`);
   const fields = "id,title,custom_excerpt,excerpt,slug,feature_image,published_at,reading_time";
   const path = `/ghost/api/content/posts/?filter=${filter}&fields=${fields}&limit=50&order=published_at%20desc`;
   try {

@@ -1,7 +1,7 @@
 /**
  * Shared types for audience landing pages under /for/<slug>.
  * Both the Sanity schema and the AudienceLanding component conform to this shape.
- * Newsletter and other downstream consumers (beehiiv, OG, social) can reuse the same shape.
+ * Newsletter (Ghost) and other downstream consumers (OG, social) can reuse the same shape.
  */
 
 export type AudienceSlug =
