@@ -106,3 +106,33 @@ export function breadcrumbSchema(
     })),
   };
 }
+
+export function faqSchema(
+  items: Array<{ question: string; answer: string }>,
+): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((it) => ({
+      "@type": "Question",
+      name: it.question,
+      acceptedAnswer: { "@type": "Answer", text: it.answer },
+    })),
+  };
+}
+
+export function definedTermSchema(args: {
+  name: string;
+  description: string;
+  termCode?: string;
+  inDefinedTermSet?: string;
+}): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    name: args.name,
+    description: args.description,
+    termCode: args.termCode,
+    inDefinedTermSet: args.inDefinedTermSet,
+  };
+}
