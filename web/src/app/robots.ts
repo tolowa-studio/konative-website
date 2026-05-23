@@ -6,9 +6,16 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/studio/', '/api/', '/dashboard/', '/cms/'],
+        disallow: [
+          '/api/',
+          '/studio/',
+          '/builder/',
+          '/cms/',
+          '/dashboard/',
+        ],
       },
     ],
     sitemap: 'https://konative.com/sitemap.xml',
+    host: 'https://konative.com',
   }
 }

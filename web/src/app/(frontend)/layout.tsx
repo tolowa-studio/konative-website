@@ -4,6 +4,11 @@ import type { Viewport } from "next";
 
 import ConditionalFooter from "../../components/ConditionalFooter";
 import Header from "../../components/Header";
+import {
+  JsonLd,
+  organizationSchema,
+  websiteSchema,
+} from "@/components/seo/JsonLd";
 
 import "./globals.css";
 
@@ -26,6 +31,11 @@ export const metadata = {
     card: "summary_large_image" as const,
     site: "@konative",
   },
+  // Google Search Console verification — set GOOGLE_SITE_VERIFICATION on Vercel
+  // (production) to emit the meta tag without redeploying code.
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
@@ -39,6 +49,8 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
           href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        {/* Site-wide structured data — see web/src/components/seo/JsonLd.tsx */}
+        <JsonLd data={[organizationSchema, websiteSchema]} />
       </head>
       <body>
         <Header />

@@ -8,6 +8,12 @@ import {
   ghostUrl,
   KONATIVE_TAG_SLUG,
 } from "@/lib/ghost";
+import {
+  JsonLd,
+  SITE_URL,
+  articleSchema,
+  breadcrumbSchema,
+} from "@/components/seo/JsonLd";
 
 export const revalidate = 300;
 
@@ -106,8 +112,26 @@ export default async function DispatchIssuePage({
   const issue = await getIssue(slug);
   if (!issue) notFound();
 
+  const canonicalUrl = `${SITE_URL}/dispatch/${issue.slug}`;
+  const article = articleSchema({
+    url: canonicalUrl,
+    headline: issue.title,
+    description: issue.excerpt,
+    image: issue.feature_image,
+    datePublished: issue.published_at,
+    authors: issue.authors.map((a) => ({ name: a.name })),
+    section: "Konative Dispatch",
+    tags: ["powered land", "data center", "konative dispatch"],
+  });
+  const breadcrumbs = breadcrumbSchema([
+    { name: "Home", url: SITE_URL },
+    { name: "Konative Dispatch", url: `${SITE_URL}/dispatch` },
+    { name: issue.title, url: canonicalUrl },
+  ]);
+
   return (
     <article className="dispatch-issue">
+      <JsonLd data={[article, breadcrumbs]} />
       <div className="dispatch-issue__inner">
         <Link href="/dispatch" className="dispatch-issue__back">
           ← All issues
