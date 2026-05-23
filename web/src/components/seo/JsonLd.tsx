@@ -136,3 +136,36 @@ export function definedTermSchema(args: {
     inDefinedTermSet: args.inDefinedTermSet,
   };
 }
+
+export function serviceSchema(args: {
+  name: string;
+  description: string;
+  url: string;
+  serviceType?: string;
+  areaServed?: string | string[];
+  offerLow?: number;
+  offerHigh?: number;
+  currency?: string;
+}): JsonLdObject {
+  const offers: JsonLdObject | undefined =
+    args.offerLow !== undefined
+      ? {
+          "@type": "AggregateOffer",
+          priceCurrency: args.currency ?? "USD",
+          lowPrice: args.offerLow,
+          highPrice: args.offerHigh ?? args.offerLow,
+          availability: "https://schema.org/InStock",
+        }
+      : undefined;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: args.name,
+    description: args.description,
+    url: args.url,
+    serviceType: args.serviceType,
+    areaServed: args.areaServed,
+    provider: { "@id": `${SITE_URL}/#organization` },
+    offers,
+  };
+}
