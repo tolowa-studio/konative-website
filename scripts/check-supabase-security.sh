@@ -4,9 +4,23 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WEB="$ROOT/web"
+GCP_PROJECT="${GCP_PROJECT:-spokanewire}"
+GCP_SECRET="${GCP_SUPABASE_TOKEN_SECRET:-konative-supabase-access-token}"
+
+if [[ -z "${SUPABASE_ACCESS_TOKEN:-}" ]] && command -v gcloud >/dev/null 2>&1; then
+  if SUPABASE_ACCESS_TOKEN="$(gcloud secrets versions access latest \
+    --project="$GCP_PROJECT" \
+    --secret="$GCP_SECRET" 2>/dev/null)"; then
+    export SUPABASE_ACCESS_TOKEN
+    echo "Loaded SUPABASE_ACCESS_TOKEN from GCP Secret Manager ($GCP_PROJECT/$GCP_SECRET)."
+  fi
+fi
 
 if [[ -z "${SUPABASE_ACCESS_TOKEN:-}" ]]; then
-  echo "SUPABASE_ACCESS_TOKEN is required (Supabase Dashboard → Account → Access Tokens)." >&2
+  echo "SUPABASE_ACCESS_TOKEN is required." >&2
+  echo "  - GCP: gcloud secrets versions access latest --project=$GCP_PROJECT --secret=$GCP_SECRET" >&2
+  echo "  - Or: export SUPABASE_ACCESS_TOKEN=... (Supabase Dashboard → Account → Access Tokens)" >&2
+  echo "  - Or: ./scripts/sync-gcp-secrets-to-github.sh (for CI)" >&2
   exit 1
 fi
 

@@ -35,22 +35,46 @@ These still appear in Security Advisor until a larger PostGIS/pg_net maintenance
 GitHub Actions workflow **Supabase security lint** (`.github/workflows/supabase-security-lint.yml`):
 
 - Runs on PRs that touch `web/supabase/**` and every Monday 12:00 UTC.
-- Requires repo secret **`SUPABASE_ACCESS_TOKEN`** (personal access token with project read access).
-- Fails the job on **ERROR**-level lints.
+- Loads **`SUPABASE_ACCESS_TOKEN`** from GCP Secret Manager (`spokanewire` / `konative-supabase-access-token`) via Workload Identity Federation.
+- Falls back to GitHub secret **`SUPABASE_ACCESS_TOKEN`** if GCP auth is not configured.
+- Fails the job on **ERROR**-level lints (no silent skip).
+
+### Bootstrap CI from GCP (run once on your machine)
+
+Keys live in **GCP Secret Manager** (`spokanewire`). Sync into GitHub:
+
+```bash
+gcloud auth login
+gh auth login
+cp scripts/gcp-github-secrets.map.example scripts/gcp-github-secrets.map
+# Edit map if your secret IDs differ
+./scripts/sync-gcp-secrets-to-github.sh
+```
+
+This sets:
+
+- **Secret** `SUPABASE_ACCESS_TOKEN` (fallback for CI)
+- **Variables** `GCP_WIF_PROVIDER` and `GCP_SERVICE_ACCOUNT` (for keyless GCP auth in Actions)
+
+Confirm secret IDs:
+
+```bash
+gcloud secrets list --project=spokanewire --filter='name:supabase OR name:konative OR name:github'
+```
 
 ### After schema changes
 
-From `web/`:
-
-```bash
-export SUPABASE_ACCESS_TOKEN=your_token
-npx supabase db lint --linked --fail-on error
-```
-
-Or from repo root:
+From repo root (reads token from GCP when `gcloud` is authenticated):
 
 ```bash
 ./scripts/check-supabase-security.sh
+```
+
+Or from `web/` with an explicit token:
+
+```bash
+export SUPABASE_ACCESS_TOKEN="$(gcloud secrets versions access latest --project=spokanewire --secret=konative-supabase-access-token)"
+npx supabase db lint --linked --fail-on error
 ```
 
 ### Manual dashboard review
