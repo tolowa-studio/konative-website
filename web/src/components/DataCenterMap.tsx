@@ -42,6 +42,29 @@ export const LAYER_LABELS: Record<LayerKey, string> = {
   power:      'Power Pipeline (EIA)',
 }
 
+/** Hero background: DC bubbles only — infra polygons/lines clutter Canada at continental zoom. */
+const BACKGROUND_INFRA_ENABLED: Record<LayerCategory, boolean> = {
+  indigenous: false, exclusions: false, 'land-use': false, power: false, gas: false,
+  fiber: false, water: false, climate: false, rail: false, politics: false,
+}
+
+/** Default overlay toggles for /map (cleaner than showing every CA vector at once). */
+const DEFAULT_INFRA_ENABLED: Record<LayerCategory, boolean> = {
+  indigenous: true, exclusions: false, 'land-use': false, power: false, gas: false,
+  fiber: false, water: false, climate: false, rail: false, politics: false,
+}
+
+function shouldRenderInfraLayer(layer: LayerManifestEntry): boolean {
+  const hint = layer.geometryHint ?? 'mixed'
+  // Substations / power-plant centroids only when explicitly default-visible.
+  if (layer.defaultVisible === false && hint === 'point') return false
+  return true
+}
+
+function indigenousFillMinZoom(layer: LayerManifestEntry): number {
+  return Math.max(layer.minZoom, 5)
+}
+
 // Infrastructure (CA · beta) — populated from tiles/v1/manifest.json (Stream A).
 const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] = [
   { key: 'indigenous',  label: 'Indigenous Lands',  color: '#2d7a4f' },
@@ -162,9 +185,11 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
   // Infrastructure (CA · beta) state
   const [infraManifest, setInfraManifest] = useState<LayerManifest | null>(null)
-  const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>({
-    indigenous: true, exclusions: true, 'land-use': false, power: true, gas: true, fiber: false, water: false, climate: false, rail: true, politics: false,
-  })
+  const [infraEnabled, setInfraEnabled] = useState<Record<LayerCategory, boolean>>(
+    () => (backgroundMode ? BACKGROUND_INFRA_ENABLED : DEFAULT_INFRA_ENABLED)
+  )
+
+  const effectiveInfraEnabled = backgroundMode ? BACKGROUND_INFRA_ENABLED : infraEnabled
 
   // Live GeoJSON data for manifest entries with sourceType === 'geojson'
   const [liveInfraData, setLiveInfraData] = useState<Record<string, FeatureCollection>>({})
@@ -197,7 +222,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   useEffect(() => {
     const geojsonLayers = infraManifest?.layers.filter(l => l.sourceType === 'geojson') ?? []
     for (const layer of geojsonLayers) {
-      if (!infraEnabled[layer.category]) continue
+      if (!effectiveInfraEnabled[layer.category]) continue
       if (liveInfraData[layer.id] || liveInfraLoading[layer.id]) continue
       if (!layer.geojsonUrl) continue
 
@@ -213,13 +238,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         .catch(() => {})
         .finally(() => setLiveInfraLoading(prev => ({ ...prev, [layer.id]: false })))
     }
-  }, [infraManifest, infraEnabled]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [infraManifest, effectiveInfraEnabled]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Per-category insight: shown in the panel when a category is on but data is sparse (<50 features)
   const categoryInsights = useMemo(() => {
     const result: Partial<Record<LayerCategory, string>> = {}
     for (const cat of INFRA_CATEGORIES) {
-      if (!infraEnabled[cat.key]) continue
+      if (!effectiveInfraEnabled[cat.key]) continue
       const geojsonLayers = infraLayersByCategory[cat.key].filter(l => l.sourceType === 'geojson')
       if (geojsonLayers.length === 0) continue
       const allLoaded = geojsonLayers.every(l => liveInfraData[l.id] !== undefined)
@@ -231,20 +256,20 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
       }
     }
     return result
-  }, [infraEnabled, infraLayersByCategory, liveInfraData])
+  }, [effectiveInfraEnabled, infraLayersByCategory, liveInfraData])
 
   // Lowest minZoom across all currently-enabled infra layers — show hint only when
   // the map hasn't reached the point where ANY enabled layer becomes visible.
   const infraMinZoomNeeded = useMemo(() => {
     let lowest = Infinity
     for (const cat of INFRA_CATEGORIES) {
-      if (!infraEnabled[cat.key]) continue
+      if (!effectiveInfraEnabled[cat.key]) continue
       for (const layer of infraLayersByCategory[cat.key]) {
         if (layer.minZoom < lowest) lowest = layer.minZoom
       }
     }
     return lowest === Infinity ? 0 : lowest
-  }, [infraEnabled, infraLayersByCategory])
+  }, [effectiveInfraEnabled, infraLayersByCategory])
 
   const needsZoomIn = infraMinZoomNeeded > 0 && mapZoom < infraMinZoomNeeded
 
@@ -357,12 +382,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
           'dc-bubbles',
           ...((['indigenous', 'exclusions', 'land-use'] as LayerCategory[]).flatMap(cat =>
             infraLayersByCategory[cat]
-              .filter(() => infraEnabled[cat])
+              .filter(() => effectiveInfraEnabled[cat])
               .map(l => `infra-${l.id}-fill`)
           )),
           ...(['fiber', 'gas', 'power', 'water', 'rail'] as LayerCategory[]).flatMap(cat =>
             infraLayersByCategory[cat]
-              .filter(() => infraEnabled[cat])
+              .filter(() => effectiveInfraEnabled[cat])
               .map(l => `infra-${l.id}-line`)
           ),
         ]}
@@ -401,20 +426,20 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
 
         {/* Infrastructure (CA · beta) — PMTiles + live GeoJSON sources */}
         {INFRA_CATEGORIES.flatMap(cat =>
-          infraEnabled[cat.key]
+          effectiveInfraEnabled[cat.key]
             ? infraLayersByCategory[cat.key]
-                // Suppress pure-point layers that aren't default-visible (e.g. substations,
-                // power plants) — they flood the map with circles. Line/polygon/mixed layers
-                // always render when their category is toggled on.
-                .filter(layer => !(layer.defaultVisible === false && (layer.geometryHint ?? 'mixed') === 'point'))
+                .filter(shouldRenderInfraLayer)
                 .map(layer => {
                 const hint = layer.geometryHint ?? 'mixed'
+                const isIndigenousPolygon = cat.key === 'indigenous' && (hint === 'polygon' || hint === 'mixed')
                 const showFill   = hint === 'polygon' || hint === 'mixed'
                 const showLine   = hint === 'line'    || hint === 'polygon' || hint === 'mixed'
                 // Never render circles for mixed layers — Overpass nodes (substations etc)
                 // clutter the map. Circles only for explicit point-only layers.
                 const showCircle = hint === 'point'
-                const fillOpacity = cat.key === 'indigenous' ? 0.35
+                const fillMinZoom = isIndigenousPolygon ? indigenousFillMinZoom(layer) : layer.minZoom
+                const fillOpacity: number | ExpressionSpecification = cat.key === 'indigenous'
+                  ? ['interpolate', ['linear'], ['zoom'], 5, 0.1, 7, 0.22, 10, 0.35]
                   : cat.key === 'exclusions' ? 0.28
                   : cat.key === 'land-use'   ? 0.22
                   : 0.18
@@ -444,7 +469,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         <Layer
                           id={`infra-${layer.id}-fill`}
                           type="fill"
-                          minzoom={layer.minZoom}
+                          minzoom={fillMinZoom}
                           paint={{ 'fill-color': cat.color, 'fill-opacity': fillOpacity }}
                         />
                       )}
@@ -471,8 +496,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                             'line-opacity': 0.9,
                           } : {
                             'line-color': cat.color,
-                            'line-width': 1.5,
-                            'line-opacity': 0.6,
+                            'line-width': isIndigenousPolygon
+                              ? ['interpolate', ['linear'], ['zoom'], 3, 0.6, 7, 1.2, 10, 1.5]
+                              : 1.5,
+                            'line-opacity': isIndigenousPolygon
+                              ? ['interpolate', ['linear'], ['zoom'], 3, 0.35, 7, 0.55, 10, 0.65]
+                              : 0.6,
                           }}
                         />
                       )}
@@ -502,7 +531,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                         id={`infra-${layer.id}-fill`}
                         type="fill"
                         source-layer={layer.sourceLayer}
-                        minzoom={layer.minZoom}
+                        minzoom={fillMinZoom}
                         paint={{ 'fill-color': cat.color, 'fill-opacity': fillOpacity }}
                       />
                     )}
@@ -531,8 +560,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                           'line-opacity': 0.9,
                         } : {
                           'line-color': cat.color,
-                          'line-width': 1.5,
-                          'line-opacity': 0.6,
+                          'line-width': isIndigenousPolygon
+                            ? ['interpolate', ['linear'], ['zoom'], 3, 0.6, 7, 1.2, 10, 1.5]
+                            : 1.5,
+                          'line-opacity': isIndigenousPolygon
+                            ? ['interpolate', ['linear'], ['zoom'], 3, 0.35, 7, 0.55, 10, 0.65]
+                            : 0.6,
                         }}
                       />
                     )}

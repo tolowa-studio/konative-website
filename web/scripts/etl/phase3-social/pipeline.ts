@@ -103,7 +103,8 @@ async function fetchEsriAllFeatures(
       let geometry: GeoJSON.Geometry | null = null;
       if (ef.geometry) {
         if (ef.geometry.rings) {
-          geometry = { type: "MultiPolygon", coordinates: ef.geometry.rings.map((r) => [r]) } as GeoJSON.MultiPolygon;
+          // ESRI rings: [exterior, hole1, hole2, …] → one GeoJSON Polygon (not one polygon per ring).
+          geometry = { type: "Polygon", coordinates: ef.geometry.rings } as GeoJSON.Polygon;
         } else if (ef.geometry.paths) {
           geometry = { type: "MultiLineString", coordinates: ef.geometry.paths } as GeoJSON.MultiLineString;
         } else if (ef.geometry.x !== undefined && ef.geometry.y !== undefined) {
@@ -177,13 +178,14 @@ async function runEsriPipeline(config: LayerConfig): Promise<void> {
     await writeFile(rawGeoJson, JSON.stringify(fc), "utf8");
   }
 
-  // Normalize CRS and promote geometry types
+  // Normalize CRS, repair invalid polygons, and promote geometry types
   await runCommand("ogr2ogr", [
     "-f", "GeoJSON",
     normalizedGeoJson,
     rawGeoJson,
     "-t_srs", "EPSG:4326",
     "-nlt", "PROMOTE_TO_MULTI",
+    "-makevalid",
     "-lco", "COORDINATE_PRECISION=6",
     "-nln", config.sourceLayer,
   ]);
@@ -235,8 +237,9 @@ async function runTippecanoe(config: LayerConfig): Promise<void> {
     "--read-parallel",
     "-z", String(config.maxZoom),
     "-Z", String(config.minZoom),
+    "--drop-densest-as-needed",
     "--drop-smallest-as-needed",
-    "--simplification=8",
+    "--simplification=12",
     "--coalesce-smallest-as-needed",
     "--layer", config.sourceLayer,
     "--output", outputPmtiles,

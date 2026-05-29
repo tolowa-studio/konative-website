@@ -436,7 +436,7 @@ jobs:
           shp=$(find  .tiles-raw/indigenous/cirnac_src -name "*.shp"  | head -1)
           src="${gpkg:-$shp}"
           echo "CIRNAC source: $src"
-          ogr2ogr -f GeoJSON -t_srs EPSG:4326 -nlt PROMOTE_TO_MULTI \
+          ogr2ogr -f GeoJSON -t_srs EPSG:4326 -nlt PROMOTE_TO_MULTI -makevalid \
             .tiles-raw/indigenous/cirnac.geojson "$src"
 
           # US TIGER AIANNH
@@ -449,7 +449,11 @@ jobs:
         run: |
           tippecanoe \
             -o .tiles-raw/indigenous/ca_cirnac_indigenous_lands.pmtiles \
-            --force -Z3 -z12 --drop-densest-as-needed \
+            --force -Z5 -z12 \
+            --drop-densest-as-needed \
+            --drop-smallest-as-needed \
+            --coalesce-smallest-as-needed \
+            --simplification=12 \
             --layer=ca_cirnac_indigenous_lands \
             .tiles-raw/indigenous/cirnac.geojson
 

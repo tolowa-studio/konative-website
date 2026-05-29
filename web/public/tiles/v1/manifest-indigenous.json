@@ -9,7 +9,7 @@
       "country": "CA",
       "tilesUrl": "https://pub-70584c42a8ad4fb1a38f5273a1665067.r2.dev/tiles/v1/ca_cirnac_indigenous_lands.pmtiles",
       "sourceLayer": "ca_cirnac_indigenous_lands",
-      "minZoom": 3,
+      "minZoom": 5,
       "maxZoom": 12,
       "license": "OGL-Canada-2.0",
       "attribution": "Crown-Indigenous Relations and Northern Affairs Canada. Contains information licensed under the Open Government Licence - Canada.",

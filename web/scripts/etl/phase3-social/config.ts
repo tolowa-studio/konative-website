@@ -34,7 +34,7 @@ export const LAYERS: LayerConfig[] = [
     title: "Indigenous lands — reserves & Crown land (Canada)",
     category: "land",
     country: "CA",
-    sourceLayer: "indigenous_lands",
+    sourceLayer: "ca_cirnac_indigenous_lands",
     tilesPath: "tiles/v1/ca_cirnac_indigenous_lands.pmtiles",
     sourceUrl:
       "https://open.canada.ca/data/en/dataset/b6567c5c-8339-4055-99fa-63f92114d9e4",
@@ -44,7 +44,7 @@ export const LAYERS: LayerConfig[] = [
       "https://proxyinternet.nrcan-rncan.gc.ca/arcgis/rest/services/CLSS-SATC/CLSS_Administrative_Boundaries/MapServer/0/query",
     where: process.env.CA_CIRNAC_WHERE || "1=1",
     outFields: ["*"],
-    minZoom: 3,
+    minZoom: 5,
     maxZoom: 12,
     license: "OGL-Canada-2.0",
     attribution:
