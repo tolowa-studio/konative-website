@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { createClient } from '@sanity/client'
 
 export const metadata: Metadata = {
   title: 'Canada Data Center Market — Konative',
@@ -107,7 +108,40 @@ const FIRST_NATIONS_PROJECTS = [
   },
 ]
 
-export default function CanadaPage() {
+async function getLiveStats() {
+  try {
+    const sanity = createClient({
+      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+      apiVersion: '2024-01-01',
+      useCdn: true,
+    })
+    const stats = await sanity.fetch(`{
+      "operational": count(*[_type == "dataCenterProject" && country == "CA" && status == "operational"]),
+      "pipeline": count(*[_type == "dataCenterProject" && country == "CA" && status in ["announced","construction"]]),
+      "stalled": count(*[_type == "dataCenterProject" && country == "CA" && status in ["stalled","blocked","paused","canceled"]]),
+      "totalMw": math::sum(*[_type == "dataCenterProject" && country == "CA" && defined(capacityMw)].capacityMw)
+    }`)
+    return stats as { operational: number; pipeline: number; stalled: number; totalMw: number }
+  } catch {
+    return null
+  }
+}
+
+export default async function CanadaPage() {
+  const live = await getLiveStats()
+  const headlineStats = [
+    {
+      v: live?.totalMw ? `${Math.round(live.totalMw).toLocaleString()} MW` : '~10 GW',
+      l: 'Tracked Canadian DC capacity (MW sum)',
+    },
+    {
+      v: live ? `${live.operational} / ${live.pipeline}` : '117 / 30+',
+      l: 'Operational / pipeline (live dataset)',
+    },
+    { v: 'C$2B', l: 'Federal Sovereign AI Compute Strategy' },
+    { v: '650 MW', l: 'Largest Indigenous-led project (Woodland Cree)' },
+  ]
   return (
     <div style={{ background: '#0b1020', minHeight: '100vh', color: '#f6f7fb', fontFamily: 'Inter, system-ui, sans-serif' }}>
       {/* Hero */}
@@ -120,10 +154,13 @@ export default function CanadaPage() {
             CANADA: 10 GW PIPELINE, FOUR DIFFERENT MARKETS
           </h1>
           <p style={{ color: '#94a3b8', maxWidth: 720, lineHeight: 1.65, margin: '0 0 1.5rem', fontSize: '1.0625rem' }}>
-            Canada has 117 existing data centres, 30+ in development, and ~10 GW of announced capacity. But unlike the US, the four major markets (Quebec, Ontario, Alberta, BC) operate under structurally different power regimes — and the federal Sovereign AI Compute Strategy is committing C$2B with explicit preference for Indigenous-partnered projects. Konative covers all four provinces and the First Nations land + power vector that defines the 2026–2030 build cycle.
+            Canada has {live?.operational ?? 117} operational data centres tracked, {live?.pipeline ?? '30+'} in the pipeline, and {live?.stalled ?? 'multiple'} with stalled or blocked status in our research dataset. The four major markets (Quebec, Ontario, Alberta, BC) operate under structurally different power regimes — and the federal Sovereign AI Compute Strategy is committing C$2B with explicit preference for Indigenous-partnered projects.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <Link href="/contact" style={{ background: '#E07B39', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+            <Link href="/map" style={{ background: '#E07B39', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+              Explore Canada on the Map →
+            </Link>
+            <Link href="/contact" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
               Discuss a Canadian Site →
             </Link>
             <Link href="/methodology" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
@@ -137,10 +174,7 @@ export default function CanadaPage() {
       <section style={{ padding: '2.5rem 2rem', borderBottom: '1px solid #1e293b' }}>
         <div style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
           {[
-            { v: '~10 GW', l: 'Announced Canadian DC capacity' },
-            { v: '117 / 30+', l: 'Existing / upcoming facilities' },
-            { v: 'C$2B', l: 'Federal Sovereign AI Compute Strategy' },
-            { v: '650 MW', l: 'Largest Indigenous-led project (Woodland Cree)' },
+            ...headlineStats,
           ].map(s => (
             <div key={s.l} style={{ background: '#0f1728', border: '1px solid #1e293b', borderRadius: 8, padding: '1.25rem' }}>
               <div style={{ fontSize: '1.875rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#E07B39', lineHeight: 1, marginBottom: '0.4rem' }}>{s.v}</div>

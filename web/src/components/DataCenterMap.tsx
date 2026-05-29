@@ -19,13 +19,18 @@ import DemoViews from './DemoViews'
 
 // ── types ─────────────────────────────────────────────────────────────────────
 
-type Status = 'operational' | 'construction' | 'announced'
+type Status = 'operational' | 'construction' | 'announced' | 'stalled' | 'blocked' | 'paused' | 'canceled'
 export type LayerKey = 'projects' | 'facilities' | 'network' | 'power'
+export type CountryFilter = 'all' | 'CA' | 'US'
 
 export const STATUS_COLORS: Record<Status, string> = {
   operational: '#22d3ee',
   construction: '#E07B39',
   announced: '#a78bfa',
+  stalled: '#f59e0b',
+  blocked: '#ef4444',
+  paused: '#fb923c',
+  canceled: '#64748b',
 }
 
 export const LAYER_COLORS: Record<LayerKey, string> = {
@@ -80,6 +85,7 @@ const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] =
 
 export interface MapCounts {
   projects: number
+  projects_stalled?: number
   facilities: number
   network: number
   power: number
@@ -96,6 +102,7 @@ export interface MapStats {
 
 interface LayerData {
   projects: FeatureCollection
+  projects_stalled?: FeatureCollection
   facilities: FeatureCollection
   network: FeatureCollection
   power: FeatureCollection
@@ -109,22 +116,24 @@ interface Props {
 
 const SOURCE_LABELS: Record<string, string> = {
   osm: 'OpenStreetMap', wikidata: 'Wikidata',
-  news_extraction: 'News', ieso_queue: 'IESO', manual: 'Manual',
-  im3: 'IM3 Atlas', peeringdb: 'PeeringDB', eia_860m: 'EIA-860M',
+  news_extraction: 'News', ieso_queue: 'IESO',
+  aeso_queue: 'AESO', hq_queue: 'Hydro-Québec', bch_queue: 'BC Hydro',
+  manual: 'Konative Research', peeringdb: 'PeeringDB', eia_860m: 'EIA-860M',
+  im3: 'IM3 Atlas',
 }
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
 // Assign a colour to every feature based on its layer + status
 function colourFeature(f: Feature): Feature {
-  const layer = f.properties?.layer as LayerKey | undefined
+  const layer = f.properties?.layer as LayerKey | 'projects_stalled' | undefined
   const status = f.properties?.status as Status | undefined
 
   let color: string
-  if (layer === 'projects' && status && STATUS_COLORS[status]) {
+  if ((layer === 'projects' || layer === 'projects_stalled') && status && STATUS_COLORS[status]) {
     color = STATUS_COLORS[status]
   } else {
-    color = LAYER_COLORS[layer ?? 'facilities']
+    color = LAYER_COLORS[(layer === 'projects_stalled' ? 'projects' : layer) as LayerKey ?? 'facilities']
   }
   return { ...f, properties: { ...f.properties, _color: color } }
 }
@@ -157,6 +166,8 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
   const [layerData, setLayerData] = useState<LayerData | null>(propData ?? null)
   const [counts, setCounts]       = useState<MapCounts | null>(propCounts ?? null)
   const [activeLayer, setActiveLayer] = useState<LayerKey | 'all'>('all')
+  const [countryFilter, setCountryFilter] = useState<CountryFilter>('all')
+  const [showStalled, setShowStalled] = useState(false)
   const [hover, setHover] = useState<{ lng: number; lat: number; props: Record<string, unknown>; layerId?: string; infraCategory?: LayerCategory } | null>(null)
   // Cursor coordinates for MapReadout (separate from hover popup which only fires on DC dots)
   const [cursorCoord, setCursorCoord] = useState<{ lat: number; lng: number }>({ lat: 0, lng: 0 })
@@ -299,9 +310,18 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
     if (!layerData) return { type: 'FeatureCollection', features: [] }
     const layers: LayerKey[] = ['projects', 'facilities', 'network', 'power']
     const active = activeLayer === 'all' ? layers : [activeLayer]
-    const features = active.flatMap(k => (layerData[k]?.features ?? []).map(colourFeature))
+    let features = active.flatMap(k => (layerData[k]?.features ?? []).map(colourFeature))
+
+    if (showStalled && layerData.projects_stalled?.features?.length) {
+      features = features.concat(layerData.projects_stalled.features.map(colourFeature))
+    }
+
+    if (countryFilter !== 'all') {
+      features = features.filter((f) => f.properties?.country === countryFilter)
+    }
+
     return { type: 'FeatureCollection', features }
-  }, [layerData, activeLayer])
+  }, [layerData, activeLayer, showStalled, countryFilter])
 
 
   const circleLayer: CircleLayerSpecification = {
@@ -598,6 +618,10 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         setActiveLayer={setActiveLayer}
         showHeatmap={showHeatmap}
         setShowHeatmap={setShowHeatmap}
+        countryFilter={countryFilter}
+        setCountryFilter={setCountryFilter}
+        showStalled={showStalled}
+        setShowStalled={setShowStalled}
         counts={counts}
         infraCategories={INFRA_CATEGORIES}
         infraEnabled={infraEnabled}

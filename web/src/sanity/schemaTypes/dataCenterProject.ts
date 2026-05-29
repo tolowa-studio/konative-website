@@ -16,6 +16,15 @@ export const dataCenterProject = defineType({
     defineField({ name: 'city', title: 'City', type: 'string' }),
     defineField({ name: 'state', title: 'State / Province', type: 'string' }),
     defineField({
+      name: 'provinceCode',
+      title: 'Province / Territory Code',
+      type: 'string',
+      options: {
+        list: ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT'],
+      },
+      description: 'ISO 3166-2:CA code for Canadian records.',
+    }),
+    defineField({
       name: 'country',
       title: 'Country',
       type: 'string',
@@ -90,7 +99,19 @@ export const dataCenterProject = defineType({
       name: 'source',
       title: 'Data Source',
       type: 'string',
-      options: { list: ['osm', 'wikidata', 'news_extraction', 'ieso_queue', 'manual'] },
+      options: {
+        list: [
+          'osm',
+          'wikidata',
+          'news_extraction',
+          'ieso_queue',
+          'aeso_queue',
+          'hq_queue',
+          'bch_queue',
+          'peeringdb',
+          'manual',
+        ],
+      },
     }),
     defineField({ name: 'sourceId', title: 'Source ID', type: 'string', description: 'OSM ID, Wikidata QID, news article ID, etc.' }),
     defineField({ name: 'sourceUrl', title: 'Source URL', type: 'url' }),

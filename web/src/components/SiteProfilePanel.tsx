@@ -12,6 +12,10 @@ const STATUS_COLORS: Record<string, string> = {
   operational: '#22d3ee',
   construction: '#E07B39',
   announced: '#a78bfa',
+  stalled: '#f59e0b',
+  blocked: '#ef4444',
+  paused: '#fb923c',
+  canceled: '#64748b',
 }
 
 const VERDICT_COLORS = {
@@ -141,6 +145,8 @@ interface SiteProps {
     sourceUrl?: string
     announcedDate?: string | null
     expectedOnlineDate?: string | null
+    blockReason?: string | null
+    blockReasonDetail?: string | null
     extractionConfidence?: number | null
     verified?: boolean
     lat?: number
@@ -258,6 +264,21 @@ function SiteModePanel({ feature: p, lat, lng, onClose }: SiteProps) {
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', marginTop: 2 }}>
                   {new Date(p.expectedOnlineDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
                 </div>
+              </div>
+            )}
+          </div>
+        )}
+        {(p.blockReason || p.blockReasonDetail) && (
+          <div style={{ marginTop: 10, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', padding: '8px 10px' }}>
+            <div style={LABEL_STYLE}>Pipeline Issue</div>
+            {p.blockReason && (
+              <div style={{ fontSize: 12, color: '#fca5a5', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                {p.blockReason.replace(/_/g, ' ')}
+              </div>
+            )}
+            {p.blockReasonDetail && (
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)', marginTop: 6, lineHeight: 1.55 }}>
+                {p.blockReasonDetail}
               </div>
             )}
           </div>

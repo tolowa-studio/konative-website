@@ -45,14 +45,14 @@ function fc(features: GeoJSON.Feature[]) {
 async function fetchProjects() {
   try {
     const rows = await sanity.fetch(`*[_type == "dataCenterProject" && defined(location) && status in ["operational","construction","announced"]]{
-      _id, name, operator, location, city, state, country,
+      _id, name, operator, location, city, state, provinceCode, country,
       status, capacityMw, source, sourceUrl,
       announcedDate, expectedOnlineDate, extractionConfidence, verified
     }`);
     const features = rows.map((p: {
       _id: string; name: string; operator?: string;
       location: { lat: number; lng: number };
-      city?: string; state?: string; country: string;
+      city?: string; state?: string; provinceCode?: string; country: string;
       status: string; capacityMw?: number; source: string; sourceUrl?: string;
       announcedDate?: string; expectedOnlineDate?: string;
       extractionConfidence?: number; verified?: boolean;
@@ -62,10 +62,48 @@ async function fetchProjects() {
       properties: {
         layer: "projects",
         id: p._id, name: p.name, operator: p.operator,
-        city: p.city, state: p.state, country: p.country,
+        city: p.city, state: p.state, provinceCode: p.provinceCode ?? null,
+        country: p.country,
         status: p.status, mw: p.capacityMw || 0,
         source: p.source, sourceUrl: p.sourceUrl,
         announcedDate: p.announcedDate ?? null,
+        expectedOnlineDate: p.expectedOnlineDate ?? null,
+        extractionConfidence: p.extractionConfidence ?? null,
+        verified: p.verified ?? false,
+      },
+    }));
+    return { features, total: features.length };
+  } catch {
+    return { features: [], total: 0 };
+  }
+}
+
+async function fetchStalledProjects() {
+  try {
+    const rows = await sanity.fetch(`*[_type == "dataCenterProject" && country == "CA" && defined(location) && status in ["stalled","blocked","paused","canceled"]]{
+      _id, name, operator, location, city, state, provinceCode, country,
+      status, capacityMw, source, sourceUrl, blockReason, blockReasonDetail,
+      expectedOnlineDate, extractionConfidence, verified
+    }`);
+    const features = rows.map((p: {
+      _id: string; name: string; operator?: string;
+      location: { lat: number; lng: number };
+      city?: string; state?: string; provinceCode?: string; country: string;
+      status: string; capacityMw?: number; source: string; sourceUrl?: string;
+      blockReason?: string; blockReasonDetail?: string;
+      expectedOnlineDate?: string; extractionConfidence?: number; verified?: boolean;
+    }) => ({
+      type: "Feature" as const,
+      geometry: point(p.location.lng, p.location.lat),
+      properties: {
+        layer: "projects_stalled",
+        id: p._id, name: p.name, operator: p.operator,
+        city: p.city, state: p.state, provinceCode: p.provinceCode ?? null,
+        country: p.country,
+        status: p.status, mw: p.capacityMw || 0,
+        source: p.source, sourceUrl: p.sourceUrl,
+        blockReason: p.blockReason ?? null,
+        blockReasonDetail: p.blockReasonDetail ?? null,
         expectedOnlineDate: p.expectedOnlineDate ?? null,
         extractionConfidence: p.extractionConfidence ?? null,
         verified: p.verified ?? false,
@@ -178,8 +216,9 @@ async function fetchPower() {
 // ── handler ───────────────────────────────────────────────────────────────────
 
 export async function GET() {
-  const [projects, facilities, network, power] = await Promise.all([
+  const [projects, stalled, facilities, network, power] = await Promise.all([
     fetchProjects(),
+    fetchStalledProjects(),
     fetchFacilities(),
     fetchNetwork(),
     fetchPower(),
@@ -188,16 +227,18 @@ export async function GET() {
   return NextResponse.json({
     layers: {
       projects: fc(projects.features),
+      projects_stalled: fc(stalled.features),
       facilities: fc(facilities.features),
       network: fc(network.features),
       power: fc(power.features),
     },
     counts: {
       projects: projects.total,
+      projects_stalled: stalled.total,
       facilities: facilities.total,
       network: network.total,
       power: power.total,
-      total: projects.total + facilities.total + network.total + power.total,
+      total: projects.total + stalled.total + facilities.total + network.total + power.total,
     },
   });
 }

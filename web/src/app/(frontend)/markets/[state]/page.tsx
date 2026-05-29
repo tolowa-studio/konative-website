@@ -103,6 +103,69 @@ export const MARKETS: Record<string, {
     subheadline: 'BC limits new DC interconnections in 2026 to 300 MW for AI and 100 MW general — but Site C just came online and First Nations partnerships are unlocking the bulk of viable opportunities.',
     tier: 'developing',
   },
+  saskatchewan: {
+    name: 'Saskatchewan', abbr: 'SK', country: 'CA',
+    iso: 'SaskPower', isoFull: 'SaskPower',
+    headline: 'TELECOM HUB + EMERGING AI CAMPUSES',
+    subheadline: 'Regina and Saskatoon host provincial telecom DCs; Bell\'s 300 MW Saskatchewan AI campus and George Gordon FN partnership signal the next wave.',
+    tier: 'developing',
+  },
+  manitoba: {
+    name: 'Manitoba', abbr: 'MB', country: 'CA',
+    iso: 'Manitoba Hydro', isoFull: 'Manitoba Hydro',
+    headline: 'WINNIPEG CONVERSION PLAY',
+    subheadline: 'Bell\'s Winnipeg food-plant-to-AI conversion and Cerebras\' announced Manitoba campus put Winnipeg on the sovereign compute map.',
+    tier: 'developing',
+  },
+  'nova-scotia': {
+    name: 'Nova Scotia', abbr: 'NS', country: 'CA',
+    iso: 'NS Power', isoFull: 'Nova Scotia Power',
+    headline: 'ATLANTIC CONNECTIVITY',
+    subheadline: 'Halifax anchors Atlantic telecom and colocation — smaller scale but strategic for east-coast latency.',
+    tier: 'developing',
+  },
+  'new-brunswick': {
+    name: 'New Brunswick', abbr: 'NB', country: 'CA',
+    iso: 'NB Power', isoFull: 'NB Power',
+    headline: 'MONCTON / SAINT JOHN CORRIDOR',
+    subheadline: 'Equinix SJ1 and Bell Moncton provide regional peering and enterprise colocation.',
+    tier: 'developing',
+  },
+  newfoundland: {
+    name: 'Newfoundland and Labrador', abbr: 'NL', country: 'CA',
+    iso: 'NL Hydro', isoFull: 'Newfoundland and Labrador Hydro',
+    headline: 'ST. JOHN\'S TELECOM NODE',
+    subheadline: 'Limited colo footprint; primarily telecom and enterprise DC capacity.',
+    tier: 'developing',
+  },
+  'prince-edward-island': {
+    name: 'Prince Edward Island', abbr: 'PE', country: 'CA',
+    iso: 'Maritime Electric', isoFull: 'Maritime Electric',
+    headline: 'ISLAND TELECOM DC',
+    subheadline: 'Single provincial telecom hub — niche edge use cases only.',
+    tier: 'developing',
+  },
+  'northwest-territories': {
+    name: 'Northwest Territories', abbr: 'NT', country: 'CA',
+    iso: 'NTPC', isoFull: 'Northwest Territories Power Corporation',
+    headline: 'ARCTIC EDGE TELECOM',
+    subheadline: 'Yellowknife Northwestel hub — cooling advantage, limited MW.',
+    tier: 'developing',
+  },
+  yukon: {
+    name: 'Yukon', abbr: 'YT', country: 'CA',
+    iso: 'Yukon Energy', isoFull: 'Yukon Energy',
+    headline: 'NORTHERN TELECOM',
+    subheadline: 'No major colo/hyperscale footprint tracked yet.',
+    tier: 'developing',
+  },
+  nunavut: {
+    name: 'Nunavut', abbr: 'NU', country: 'CA',
+    iso: 'Qulliq Energy', isoFull: 'Qulliq Energy Corporation',
+    headline: 'NO MAJOR DC INVENTORY',
+    subheadline: 'Honest zero — monitor for Arctic edge / sovereign compute pilots.',
+    tier: 'developing',
+  },
   queretaro: {
     name: 'Querétaro', abbr: 'QRO', country: 'MX',
     iso: 'CENACE', isoFull: 'Centro Nacional de Control de Energía',
@@ -151,9 +214,9 @@ const sanity = createSanity({
 async function getMarketData(abbr: string, name: string) {
   const [projects, facilities, network, power, news] = await Promise.allSettled([
     // DC projects from Sanity
-    sanity.fetch(`*[_type == "dataCenterProject" && (state == $abbr || state == $name)] | order(_createdAt desc) {
-      _id, name, operator, city, state, status, capacityMw, source
-    }[0...20]`, { abbr, name }),
+    sanity.fetch(`*[_type == "dataCenterProject" && country == "CA" && (provinceCode == $abbr || state == $name || state == $abbr)] | order(capacityMw desc) {
+      _id, name, operator, city, state, provinceCode, status, capacityMw, source, blockReason
+    }[0...50]`, { abbr, name }),
 
     // IM3 facilities
     supabase.from('dc_facilities').select('id,name,operator,city,state,status,capacity_mw,facility_type')
@@ -195,6 +258,7 @@ type NewsItem = { _id: string; title: string; publishedAt?: string; sourceUrl?: 
 
 const STATUS_COLORS: Record<string, string> = {
   operational: '#22d3ee', construction: '#E07B39', announced: '#a78bfa',
+  stalled: '#f59e0b', blocked: '#ef4444', paused: '#fb923c', canceled: '#64748b',
 }
 const TIER_LABELS = { primary: 'PRIMARY MARKET', emerging: 'EMERGING MARKET', developing: 'DEVELOPING MARKET' }
 const TIER_COLORS = { primary: '#E07B39', emerging: '#a78bfa', developing: '#4ade80' }

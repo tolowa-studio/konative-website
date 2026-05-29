@@ -1,0 +1,80 @@
+{
+  "AB": {
+    "operational_count": 11,
+    "pipeline_count": 7,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 9770.0
+  },
+  "BC": {
+    "operational_count": 16,
+    "pipeline_count": 7,
+    "operational_mw_known": 181.8,
+    "pipeline_mw_known": 1200.0
+  },
+  "MB": {
+    "operational_count": 2,
+    "pipeline_count": 2,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 0
+  },
+  "NB": {
+    "operational_count": 2,
+    "pipeline_count": 0,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 0
+  },
+  "NL": {
+    "operational_count": 1,
+    "pipeline_count": 0,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 0
+  },
+  "NS": {
+    "operational_count": 2,
+    "pipeline_count": 0,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 0
+  },
+  "NT": {
+    "operational_count": 1,
+    "pipeline_count": 0,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 0
+  },
+  "NU": {
+    "operational_count": 0,
+    "pipeline_count": 0,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 0
+  },
+  "ON": {
+    "operational_count": 37,
+    "pipeline_count": 7,
+    "operational_mw_known": 111.0,
+    "pipeline_mw_known": 84.0
+  },
+  "PE": {
+    "operational_count": 1,
+    "pipeline_count": 0,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 0
+  },
+  "QC": {
+    "operational_count": 35,
+    "pipeline_count": 10,
+    "operational_mw_known": 219.6,
+    "pipeline_mw_known": 117.0
+  },
+  "SK": {
+    "operational_count": 2,
+    "pipeline_count": 2,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 300.0
+  },
+  "YT": {
+    "operational_count": 0,
+    "pipeline_count": 0,
+    "operational_mw_known": 0,
+    "pipeline_mw_known": 0
+  }
+}

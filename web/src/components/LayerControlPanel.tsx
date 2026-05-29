@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { LayerCategory, LayerManifestEntry } from '@/types/map-layers'
-import type { LayerKey, MapCounts } from './DataCenterMap'
+import type { LayerKey, MapCounts, CountryFilter } from './DataCenterMap'
 import { LAYER_COLORS, LAYER_LABELS } from './DataCenterMap'
 
 // ── style constants ───────────────────────────────────────────────────────────
@@ -33,6 +33,10 @@ interface Props {
   setActiveLayer: (k: LayerKey | 'all') => void
   showHeatmap: boolean
   setShowHeatmap: (v: boolean) => void
+  countryFilter: CountryFilter
+  setCountryFilter: (v: CountryFilter) => void
+  showStalled: boolean
+  setShowStalled: (v: boolean) => void
   counts: MapCounts | null
 
   // Infra state
@@ -391,6 +395,10 @@ export default function LayerControlPanel({
   setActiveLayer,
   showHeatmap,
   setShowHeatmap,
+  countryFilter,
+  setCountryFilter,
+  showStalled,
+  setShowStalled,
   counts,
   infraCategories,
   infraEnabled,
@@ -566,6 +574,54 @@ export default function LayerControlPanel({
                 </span>
                 <span style={{ fontSize: 10, color: showHeatmap ? '#22d3ee' : 'rgba(255,255,255,0.25)' }}>
                   {showHeatmap ? 'ON' : 'OFF'}
+                </span>
+              </button>
+
+              <div style={{ display: 'flex', gap: 4, marginBottom: 8, flexWrap: 'wrap' }}>
+                {(['all', 'CA', 'US'] as CountryFilter[]).map((code) => (
+                  <button
+                    key={code}
+                    onClick={() => setCountryFilter(code)}
+                    style={{
+                      flex: 1,
+                      minWidth: 52,
+                      padding: '4px 6px',
+                      borderRadius: 3,
+                      border: countryFilter === code ? '1px solid rgba(224,123,57,0.6)' : '1px solid rgba(255,255,255,0.12)',
+                      background: countryFilter === code ? 'rgba(224,123,57,0.15)' : 'transparent',
+                      color: countryFilter === code ? '#fff' : 'rgba(255,255,255,0.55)',
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: '0.08em',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {code === 'all' ? 'ALL' : code}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setShowStalled(!showStalled)}
+                style={{
+                  background: showStalled ? 'rgba(245,158,11,0.15)' : 'transparent',
+                  border: showStalled ? '1px solid rgba(245,158,11,0.5)' : '1px solid transparent',
+                  cursor: 'pointer',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '5px 6px',
+                  borderRadius: 3,
+                  marginBottom: 6,
+                }}
+              >
+                <span style={{ width: 8, height: 8, borderRadius: 2, background: '#f59e0b', flexShrink: 0, opacity: showStalled ? 1 : 0.5 }} />
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: showStalled ? '#fff' : 'rgba(255,255,255,0.6)', flex: 1, textAlign: 'left' }}>
+                  Pipeline Issues (CA)
+                </span>
+                <span style={{ fontSize: 10, color: showStalled ? '#f59e0b' : 'rgba(255,255,255,0.25)' }}>
+                  {(counts?.projects_stalled ?? 0).toLocaleString()}
                 </span>
               </button>
 
