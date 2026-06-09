@@ -5,17 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "Markets", url: "/markets" },
-  { label: "Projects", url: "/projects" },
-  { label: "Map", url: "/map" },
-  { label: "Methodology", url: "/methodology" },
+  { label: "Connectivity", url: "/connectivity" },
+  { label: "Tribal", url: "/tribal" },
+  { label: "Data Centers", url: "/data-center-connectivity" },
   { label: "Intelligence", url: "/intelligence" },
-  { label: "For", url: "/for" },
+  { label: "Map", url: "/map" },
   { label: "About", url: "/#team" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
-const DARK_HERO_PAGES = new Set(["/", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/intelligence/first-nations", "/news", "/market-intel", "/contact", "/assessment"]);
+const DARK_HERO_PAGES = new Set(["/", "/connectivity", "/tribal", "/data-center-connectivity", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/intelligence/first-nations", "/news", "/market-intel", "/contact", "/assessment"]);
 
 function isDarkHeroPath(pathname: string): boolean {
   if (DARK_HERO_PAGES.has(pathname)) return true;
@@ -228,12 +227,12 @@ export default function Header() {
           {!isMobile && (
             <div style={actionsStyle}>
               <Link
-                href="/land/submit"
+                href="/contact"
                 style={ctaStyle}
                 onMouseEnter={() => setCtaHovered(true)}
                 onMouseLeave={() => setCtaHovered(false)}
               >
-                Submit land →
+                Get a quote →
               </Link>
             </div>
           )}
@@ -274,7 +273,7 @@ export default function Header() {
           </Link>
         ))}
         <Link
-          href="/land/submit"
+          href="/contact"
           style={{
             fontFamily: "'Inter', sans-serif",
             fontWeight: 600,
@@ -289,7 +288,7 @@ export default function Header() {
             textAlign: "center",
           }}
         >
-          Submit land →
+          Get a quote →
         </Link>
       </nav>
     </>

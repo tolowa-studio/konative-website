@@ -22,7 +22,7 @@ export default function Footer() {
               fontFamily: 'Inter, sans-serif', fontSize: 13,
               lineHeight: 1.7, color: 'rgba(255,255,255,0.35)', maxWidth: 260,
             }}>
-              End-to-end energy infrastructure brokerage and development. Connecting investors, landholders, supply chain, and teams to close deals that move.
+              Vendor-neutral internet & network connectivity brokerage. We source, design, and manage connectivity for Tribal enterprises and the data centers powering AI — backed by Avant&apos;s supplier portfolio, at no cost to you.
             </p>
           </div>
 
@@ -32,10 +32,10 @@ export default function Footer() {
               fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
               color: 'rgba(255,255,255,0.25)', marginBottom: 16,
             }}>
-              Services
+              What We Broker
             </h4>
-            {['Capital Matchmaking', 'Site Acquisition', 'Supply Chain', 'Power Sourcing', 'BTM Strategy', 'Staffing'].map(s => (
-              <Link key={s} href="/contact" style={{
+            {['Internet & Fiber', 'Dark Fiber & Waves', 'SD-WAN & Managed Network', 'UCaaS & CCaaS', 'Cloud On-Ramps', 'Cybersecurity'].map(s => (
+              <Link key={s} href="/connectivity" style={{
                 display: 'block', fontFamily: 'Inter, sans-serif', fontSize: 13,
                 color: 'rgba(255,255,255,0.45)', textDecoration: 'none', marginBottom: 8,
               }}>
@@ -54,8 +54,8 @@ export default function Footer() {
             </h4>
             {[
               { label: 'Team', href: '/#team' },
-              { label: 'Deals', href: '/deals' },
-              { label: 'Market Intel', href: '/market-intel' },
+              { label: 'Intelligence', href: '/intelligence' },
+              { label: 'Data Center Map', href: '/map' },
               { label: 'Contact', href: '/contact' },
               { label: 'Data Sources & Licenses', href: '/licenses' },
             ].map(l => (
@@ -77,9 +77,9 @@ export default function Footer() {
               Start Here
             </h4>
             {[
-              { label: "I'm an Investor", href: '/contact' },
-              { label: 'I Have Land', href: '/contact' },
-              { label: 'I Have a Project', href: '/contact' },
+              { label: 'Tribal Enterprise', href: '/tribal' },
+              { label: 'Data Center Connectivity', href: '/data-center-connectivity' },
+              { label: 'Get a Quote', href: '/contact' },
               { label: 'Newsletter', href: '/#market-intel' },
             ].map(l => (
               <Link key={l.label} href={l.href} style={{
@@ -100,7 +100,7 @@ export default function Footer() {
           color: 'rgba(255,255,255,0.2)',
         }}>
           <span>© 2026 Konative · tolowastudio.com</span>
-          <span>Datacenter Brokerage &amp; Development</span>
+          <span>Connectivity Brokerage · Avant Partner</span>
         </div>
 
       </div>

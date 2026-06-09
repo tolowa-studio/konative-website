@@ -3,12 +3,11 @@
 import { useState } from 'react'
 import type { HomeConnectivityContent } from '@/content/homeConnectivity'
 
-export default function Capabilities({ content }: { content: HomeConnectivityContent }) {
+export default function ConnectivityPortfolio({ content }: { content: HomeConnectivityContent }) {
   const [hovered, setHovered] = useState<number | null>(null)
-  const capabilities = content.capabilities
 
   return (
-    <section id="capabilities" style={{ background: '#0C2046', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+    <section id="connectivity" style={{ background: '#0C2046', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
       <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 48px' }}>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'end', marginBottom: 64 }}>
@@ -20,21 +19,22 @@ export default function Capabilities({ content }: { content: HomeConnectivityCon
               color: '#E07B39', marginBottom: 20,
             }}>
               <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
-              {content.howEyebrow}
+              {content.portfolioEyebrow}
             </div>
             <h2 style={{
               fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
               fontSize: 'clamp(44px, 5.5vw, 80px)', lineHeight: 0.9,
               textTransform: 'uppercase', letterSpacing: '0.01em', color: '#fff',
             }}>
-              {content.howHeadingTop}<br /><span style={{ color: '#E07B39' }}>{content.howHeadingBottom}</span>
+              {content.portfolioHeadingTop}<br />
+              <span style={{ color: '#E07B39' }}>{content.portfolioHeadingBottom}</span>
             </h2>
           </div>
           <p style={{
             fontFamily: 'Inter, sans-serif', fontSize: 16, lineHeight: 1.75,
-            color: 'rgba(255,255,255,0.45)', maxWidth: 480,
+            color: 'rgba(255,255,255,0.5)', maxWidth: 520,
           }}>
-            {content.howIntro}
+            {content.portfolioIntro}
           </p>
         </div>
 
@@ -42,36 +42,36 @@ export default function Capabilities({ content }: { content: HomeConnectivityCon
           display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 1, background: 'rgba(255,255,255,0.08)',
         }}>
-          {capabilities.map((cap, i) => (
+          {content.portfolioItems.map((item, i) => (
             <div
               key={i}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               style={{
                 background: '#0C2046',
-                padding: '40px 36px',
-                borderLeft: hovered === i ? '2px solid #E07B39' : '2px solid transparent',
+                padding: '32px 30px',
+                borderTop: hovered === i ? '2px solid #E07B39' : '2px solid transparent',
                 transition: 'border-color 0.2s',
               }}
             >
               <div style={{
                 fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
-                fontSize: 13, letterSpacing: '0.2em', color: '#E07B39', marginBottom: 16,
+                fontSize: 12, letterSpacing: '0.18em', color: 'rgba(224,123,57,0.7)', marginBottom: 14,
               }}>
-                {cap.num}
+                {String(i + 1).padStart(2, '0')}
               </div>
               <h3 style={{
                 fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
-                fontSize: 26, textTransform: 'uppercase', color: '#fff',
-                lineHeight: 1, marginBottom: 12,
+                fontSize: 23, textTransform: 'uppercase', color: '#fff',
+                lineHeight: 1.05, marginBottom: 10,
               }}>
-                {cap.title}
+                {item.name}
               </h3>
               <p style={{
                 fontFamily: 'Inter, sans-serif', fontSize: 13,
                 lineHeight: 1.7, color: 'rgba(255,255,255,0.45)',
               }}>
-                {cap.body}
+                {item.blurb}
               </p>
             </div>
           ))}

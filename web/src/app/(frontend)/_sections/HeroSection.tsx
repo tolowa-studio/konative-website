@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { useEffect, useRef, useState } from 'react'
+import type { HomeConnectivityContent, Tone } from '@/content/homeConnectivity'
 
 const DataCenterMap = dynamic(() => import('@/components/DataCenterMap'), { ssr: false })
 
@@ -25,60 +25,30 @@ interface HealthStats {
   networkNodesIndexed?: number
 }
 
-function formatCount(n: number | undefined, fallback: string): string {
-  if (!n || n <= 0) return fallback
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}K`
-  return String(n)
-}
-
 interface HeroSectionProps {
   deals: Deal[]
   stats: HealthStats
+  content: HomeConnectivityContent
 }
 
 const PLACEHOLDER_DEALS: Deal[] = [
-  { id: '1', name: 'Loudoun County Land Package',  entity: 'Undisclosed Hyperscaler',    size: '320 acres · 230kV', status: 'ACTIVE',    geography: 'Northern Virginia' },
-  { id: '2', name: 'Permian Basin Power Site',      entity: 'Infrastructure Fund',        size: '1,200 acres',       status: 'ANNOUNCED', geography: 'West Texas' },
-  { id: '3', name: 'Alberta Transmission Corridor', entity: 'Canadian Pension / AI Co.',  size: '2,400 acres',       status: 'ACTIVE',    geography: 'Alberta, Canada' },
-  { id: '4', name: 'Carolina Colo Campus',          entity: 'Colo Operator + Family JV',  size: '180MW RFP',         status: 'ANNOUNCED', geography: 'North Carolina' },
-  { id: '5', name: 'Pacific Northwest Land Play',   entity: 'Sovereign Wealth Fund',      size: '800 acres · 500kV', status: 'ACTIVE',    geography: 'Pacific Northwest' },
+  { id: '1', name: 'Tribal Gaming Enterprise — SD-WAN + DIA',  entity: 'Sovereign Nation',          size: '7 sites',          status: 'ACTIVE',    geography: 'Pacific Northwest' },
+  { id: '2', name: 'Hyperscale Campus — Dark Fiber + Waves',   entity: 'AI Data Center Developer',  size: '400G transport',   status: 'ANNOUNCED', geography: 'Northern Virginia' },
+  { id: '3', name: 'Colo Interconnect — Cloud On-Ramps',       entity: 'Colocation Operator',       size: 'AWS / Azure DX',   status: 'ACTIVE',    geography: 'Alberta, Canada' },
+  { id: '4', name: 'Tribal Health Network — UCaaS + Security', entity: 'Tribal Health System',      size: '12 clinics',       status: 'ANNOUNCED', geography: 'Southwest' },
+  { id: '5', name: 'Multi-Site Retail — Managed Network',      entity: 'Regional Enterprise',       size: '40 locations',     status: 'ACTIVE',    geography: 'Nationwide' },
 ]
 
-function useCountUp(target: number, duration = 1200) {
-  const [val, setVal] = useState<number | string>(0)
-  const ref = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const io = new IntersectionObserver(entries => {
-      if (!entries[0].isIntersecting) return
-      io.disconnect()
-      const isFloat = String(target).includes('.')
-      const start = performance.now()
-      const tick = (now: number) => {
-        const t = Math.min((now - start) / duration, 1)
-        const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
-        const cur = ease * target
-        setVal(isFloat ? parseFloat(cur.toFixed(1)) : Math.floor(cur))
-        if (t < 1) requestAnimationFrame(tick)
-        else setVal(target)
-      }
-      requestAnimationFrame(tick)
-    }, { threshold: 0.5 })
-    io.observe(el)
-    return () => io.disconnect()
-  }, [target, duration])
-  return [val, ref] as const
-}
+const toneColor = (tone: Tone): string =>
+  tone === 'rust' ? '#E07B39' : tone === 'dim' ? 'rgba(255,255,255,0.22)' : '#fff'
 
 const statusDot = (s: string) =>
   s === 'ACTIVE' ? '#22c55e' : s === 'ANNOUNCED' ? '#D97706' : '#888'
 
-export default function HeroSection({ deals, stats }: HeroSectionProps) {
+export default function HeroSection({ deals, content }: HeroSectionProps) {
   const displayDeals = deals.length > 0 ? deals : PLACEHOLDER_DEALS
   const tickerDeals = [...displayDeals, ...displayDeals]
-
-  const [dealCount, dealRef] = useCountUp(stats.dealCount || displayDeals.length)
+  const [primaryCta, ...restSecondary] = content.heroSecondaryCtas
 
   return (
     <section
@@ -114,109 +84,88 @@ export default function HeroSection({ deals, stats }: HeroSectionProps) {
             color: '#E07B39', marginBottom: 32,
           }}>
             <span style={{ display: 'block', width: 36, height: 1, background: '#E07B39', flexShrink: 0 }} />
-            Datacenter Brokerage
+            {content.heroEyebrow}
           </p>
 
           <h1 style={{
             fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
-            fontSize: 'clamp(56px, 8vw, 104px)', lineHeight: 0.88,
+            fontSize: 'clamp(52px, 7.4vw, 96px)', lineHeight: 0.9,
             textTransform: 'uppercase', letterSpacing: '0.01em',
             color: '#fff', marginBottom: 32,
           }}>
-            OWN POWERED<br />
-            <span style={{ color: '#E07B39' }}>LAND?</span><br />
-            <span style={{ color: 'rgba(255,255,255,0.22)' }}>THE AI BUILDOUT</span><br />
-            WANTS TO TALK.
+            {content.heroHeadline.map((line, i) => (
+              <span key={i} style={{ color: toneColor(line.tone), display: 'block' }}>
+                {line.text}
+              </span>
+            ))}
           </h1>
 
           <p style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 400,
             fontSize: 17, lineHeight: 1.7,
-            color: 'rgba(255,255,255,0.55)',
-            maxWidth: 580, marginBottom: 44,
+            color: 'rgba(255,255,255,0.6)',
+            maxWidth: 600, marginBottom: 44,
           }}>
-            Hyperscalers and data center developers are racing to lock up powered land across North America.
-            Konative brokers those deals — sourcing sites, connecting investors, and managing the transaction
-            from first call to close.
+            {content.heroSubhead}
           </p>
 
-          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-            <Link href="/land/submit" style={{
+          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Link href={content.heroPrimaryCta.href} style={{
               fontFamily: 'Inter, sans-serif', fontWeight: 600,
               fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
               background: '#E07B39', color: '#fff',
               padding: '18px 40px', textDecoration: 'none', display: 'inline-block',
             }}>
-              Submit Your Land →
+              {content.heroPrimaryCta.label}
             </Link>
-            <Link href="/capacity" style={{
-              fontFamily: 'Inter, sans-serif', fontWeight: 500,
-              fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
-              background: 'transparent', color: 'rgba(255,255,255,0.7)',
-              padding: '17px 32px', border: '1px solid rgba(255,255,255,0.25)',
-              textDecoration: 'none', display: 'inline-block',
-            }}>
-              Find Capacity →
-            </Link>
-            <Link href="/assessment" style={{
-              fontFamily: 'Inter, sans-serif', fontWeight: 500,
-              fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
-              background: 'transparent', color: 'rgba(255,255,255,0.4)',
-              padding: '17px 0', textDecoration: 'none', display: 'inline-block',
-            }}>
-              Evaluate a Site →
-            </Link>
+            {primaryCta && (
+              <Link href={primaryCta.href} style={{
+                fontFamily: 'Inter, sans-serif', fontWeight: 500,
+                fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
+                background: 'transparent', color: 'rgba(255,255,255,0.7)',
+                padding: '17px 32px', border: '1px solid rgba(255,255,255,0.25)',
+                textDecoration: 'none', display: 'inline-block',
+              }}>
+                {primaryCta.label}
+              </Link>
+            )}
+            {restSecondary.map((cta) => (
+              <Link key={cta.href} href={cta.href} style={{
+                fontFamily: 'Inter, sans-serif', fontWeight: 500,
+                fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
+                background: 'transparent', color: 'rgba(255,255,255,0.45)',
+                padding: '17px 0', textDecoration: 'none', display: 'inline-block',
+              }}>
+                {cta.label}
+              </Link>
+            ))}
           </div>
         </div>
 
         <div style={{ flexShrink: 0, width: 280, display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {[
-            { val: formatCount(stats.facilitiesScored, '—'), label: 'DC Facilities Scored', rust: true },
-            { val: formatCount(stats.generatorsTracked, '—'), label: 'Planned Generators Tracked', rust: false },
-            { val: formatCount(stats.waterSitesIndexed, '—'), label: 'Water Sites Indexed', rust: false },
-          ].map((stat, i) => (
+          {content.heroStats.map((stat, i) => (
             <div key={i} style={{
               background: 'rgba(8,20,45,0.82)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              border: stat.highlight ? '1px solid rgba(224,123,57,0.35)' : '1px solid rgba(255,255,255,0.1)',
               padding: '20px 22px',
               backdropFilter: 'blur(12px)',
             }}>
               <div style={{
                 fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
-                fontSize: 40, lineHeight: 1, marginBottom: 4,
-                color: stat.rust ? '#E07B39' : '#fff',
+                fontSize: stat.highlight ? 30 : 40, lineHeight: 1, marginBottom: 4,
+                color: stat.rust || stat.highlight ? '#E07B39' : '#fff',
               }}>
-                {stat.val}
+                {stat.value}
               </div>
               <div style={{
                 fontFamily: 'Inter, sans-serif', fontWeight: 500,
-                fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.35)',
+                fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.35)', lineHeight: 1.4,
               }}>
                 {stat.label}
               </div>
             </div>
           ))}
-          <div style={{
-            background: 'rgba(8,20,45,0.82)',
-            border: '1px solid rgba(224,123,57,0.35)',
-            padding: '20px 22px',
-            backdropFilter: 'blur(12px)',
-          }}>
-            <div ref={dealRef as React.RefObject<HTMLDivElement>} style={{
-              fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
-              fontSize: 28, lineHeight: 1.2, marginBottom: 4, color: '#E07B39',
-            }}>
-              {dealCount} ACTIVE
-            </div>
-            <div style={{
-              fontFamily: 'Inter, sans-serif', fontWeight: 500,
-              fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.35)',
-            }}>
-              Transactions in Motion
-            </div>
-          </div>
         </div>
       </div>
 

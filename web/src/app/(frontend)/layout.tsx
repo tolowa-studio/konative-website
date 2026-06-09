@@ -18,9 +18,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata = {
-  title: "Konative | Datacenter Brokerage",
+  title: "Konative | Internet & Network Connectivity Brokerage",
   description:
-    "Konative brokers powered land to data center developers and hyperscalers. We source sites, connect investors, and manage the deal from first call to close. Own land near a substation? We want to talk.",
+    "Konative is a vendor-neutral connectivity brokerage. We source, design, and manage internet, fiber, transport, SD-WAN, voice, and cloud connectivity for Tribal enterprises and the data centers powering AI — backed by Avant's 100+ supplier portfolio, at no cost to you.",
   metadataBase: new URL("https://konative.com"),
   openGraph: {
     siteName: "Konative",

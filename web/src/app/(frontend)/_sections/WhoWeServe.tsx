@@ -2,42 +2,14 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import type { HomeConnectivityContent } from '@/content/homeConnectivity'
 
-const panels = [
-  {
-    num: '01',
-    eyebrow: 'For Landowners',
-    title: 'You hold\npowered land.',
-    desc: 'Near a substation, transmission corridor, or utility easement? Data center developers are paying significant premiums for well-sited land. We run the analysis, bring qualified buyers, and broker the deal — sale, ground lease, or joint venture.',
-    cta: 'Submit Your Land →',
-    href: '/land/submit',
-    primary: true,
-  },
-  {
-    num: '02',
-    eyebrow: 'For Investors',
-    title: 'You have\ncapital to deploy.',
-    desc: 'Powered land, build-to-suit data centers, and operating assets across North America. We source off-market opportunities, structure the deal, and manage the transaction from LOI to close.',
-    cta: 'Talk to Us About Investing →',
-    href: '/invest',
-    primary: false,
-  },
-  {
-    num: '03',
-    eyebrow: 'For Occupiers',
-    title: 'You need\ndata center capacity.',
-    desc: 'Looking for MW? Tell us your requirements — power, market, timeline, workload. We find the right site or operator, make the introduction, and represent your interests through lease or acquisition.',
-    cta: 'Submit Your RFP →',
-    href: '/capacity',
-    primary: false,
-  },
-]
-
-export default function WhoWeServe() {
+export default function WhoWeServe({ content }: { content: HomeConnectivityContent }) {
   const [hovered, setHovered] = useState<number | null>(null)
+  const panels = content.wedges
 
   return (
-    <section id="who-we-serve" style={{ background: '#0C2046', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+    <section id="who-we-serve" style={{ background: '#08142D', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
       <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 48px' }}>
 
         <div style={{
@@ -47,7 +19,7 @@ export default function WhoWeServe() {
           color: '#E07B39', marginBottom: 20,
         }}>
           <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
-          Who We Work With
+          {content.wedgeEyebrow}
         </div>
 
         <h2 style={{
@@ -56,7 +28,7 @@ export default function WhoWeServe() {
           textTransform: 'uppercase', letterSpacing: '0.01em',
           color: '#fff', marginBottom: 60,
         }}>
-          THREE DOORS.<br /><span style={{ color: '#E07B39' }}>ONE BROKERAGE.</span>
+          {content.wedgeHeadingTop}<br /><span style={{ color: '#E07B39' }}>{content.wedgeHeadingBottom}</span>
         </h2>
 
         <div style={{
@@ -69,7 +41,7 @@ export default function WhoWeServe() {
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               style={{
-                background: '#0C2046',
+                background: '#08142D',
                 padding: '48px 40px',
                 borderTop: panel.primary
                   ? '3px solid #E07B39'
