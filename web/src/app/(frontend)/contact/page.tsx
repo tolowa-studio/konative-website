@@ -81,13 +81,13 @@ export default function ContactPage() {
           textTransform: "uppercase", color: "#fff",
           letterSpacing: "0.01em", marginBottom: 16,
         }}>
-          LET&rsquo;S TALK<br /><span style={{ color: "#E07B39" }}>LAND AND DEALS.</span>
+          LET&rsquo;S TALK<br /><span style={{ color: "#E07B39" }}>CONNECTIVITY.</span>
         </h1>
         <p style={{
           fontFamily: "'Inter', sans-serif", fontSize: 15, lineHeight: 1.65,
-          color: "rgba(255,255,255,0.5)", maxWidth: 520, marginBottom: 60,
+          color: "rgba(255,255,255,0.5)", maxWidth: 540, marginBottom: 60,
         }}>
-          Whether you own powered land near a substation, are raising a data center fund, or need site capacity — we connect the right parties and manage the deal from first call to close.
+          Tribal enterprise, a data center coming online, or multi-site business connectivity — tell us what you need. We&rsquo;re vendor-neutral, we quote the whole market through Avant&rsquo;s portfolio, and it costs you nothing.
         </p>
       </div>
 
@@ -122,26 +122,27 @@ export default function ContactPage() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <label style={labelStyle}>I am reaching out about…</label>
-            <select name="inquiryType" style={inputStyle}>
+            <select name="projectType" style={inputStyle}>
               <option value="">Select…</option>
-              <option value="land_owner">I own land near a substation / power source</option>
-              <option value="investor">I have capital to deploy into data center land</option>
-              <option value="capacity_buyer">I need powered site capacity (developer / hyperscaler)</option>
-              <option value="partnership">Partnership or joint venture inquiry</option>
-              <option value="market_intel">Market intelligence / advisory</option>
+              <option value="tribal_enterprise">Tribal enterprise connectivity</option>
+              <option value="data_center">Data center / interconnection connectivity</option>
+              <option value="business_connectivity">Multi-site business connectivity (internet, SD-WAN, voice)</option>
+              <option value="dark_fiber_transport">Dark fiber, transport, or wavelengths</option>
+              <option value="cloud_security">Cloud connectivity, UCaaS/CCaaS, or cybersecurity</option>
+              <option value="partnership">Partnership / referral (developer, MSP, agent)</option>
               <option value="other">Other</option>
             </select>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <label style={labelStyle}>Where are you in the process?</label>
-            <select name="dealStage" style={inputStyle}>
+            <select name="projectStage" style={inputStyle}>
               <option value="">Select…</option>
               <option value="early">Early — just exploring options</option>
-              <option value="site_identified">Have a site, evaluating buyers / partners</option>
-              <option value="capital_ready">Capital committed, need the right site</option>
-              <option value="ready_to_move">Ready to move — need execution support</option>
-              <option value="in_development">Already in development</option>
+              <option value="quoting">Ready for quotes / pricing</option>
+              <option value="renewal">Current contract ending / renewal</option>
+              <option value="new_site">New site or build coming online</option>
+              <option value="urgent">Urgent — active project, need to move</option>
             </select>
           </div>
 
@@ -189,9 +190,9 @@ export default function ContactPage() {
             <div style={eyebrowStyle}>What Happens Next</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 8 }}>
               {[
-                ["01", "We review your inquiry and qualify the opportunity."],
-                ["02", "A Konative principal reaches out directly to discuss fit."],
-                ["03", "If there's a deal to run, we structure it and make introductions."],
+                ["01", "We review your requirement and identify the right suppliers."],
+                ["02", "A Konative advisor reaches out to scope sites, speeds, and timeline."],
+                ["03", "We quote the market through Avant, recommend the best fit, and manage the install."],
               ].map(([num, text]) => (
                 <div key={num} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
                   <span style={{

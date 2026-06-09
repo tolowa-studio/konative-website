@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import HeroSection from "./_sections/HeroSection";
+import ConnectivityPortfolio from "./_sections/ConnectivityPortfolio";
 import WhoWeServe from "./_sections/WhoWeServe";
 import Capabilities from "./_sections/Capabilities";
 import TeamSection from "./_sections/TeamSection";
 import MarketIntel from "./_sections/MarketIntel";
 import StartNowCTA from "./_sections/StartNowCTA";
+import type { HomeConnectivityContent } from "@/content/homeConnectivity";
 
 interface ApiDeal {
   id: string;
@@ -76,7 +78,7 @@ function mapDeal(d: ApiDeal): Deal {
  * Production homepage: composed in-code sections (hero, capabilities, team, etc.).
  * Builder.io is not used for `/` — use `/builder/[[...path]]` for visual experiments.
  */
-export default function HomePage() {
+export default function HomePage({ content }: { content: HomeConnectivityContent }) {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [articles, setArticles] = useState<Article[]>([]);
   const [stats, setStats] = useState<HealthStats>({ articleCount: 61, feedCount: 16, dealCount: 5 });
@@ -103,9 +105,10 @@ export default function HomePage() {
 
   return (
     <>
-      <HeroSection deals={deals} stats={stats} />
-      <WhoWeServe />
-      <Capabilities />
+      <HeroSection deals={deals} stats={stats} content={content} />
+      <ConnectivityPortfolio content={content} />
+      <WhoWeServe content={content} />
+      <Capabilities content={content} />
       <TeamSection />
       <MarketIntel articles={articles} />
       <StartNowCTA />

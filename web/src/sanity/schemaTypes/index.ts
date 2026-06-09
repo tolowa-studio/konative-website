@@ -6,6 +6,7 @@ import { dataCenterProject } from "./dataCenterProject";
 import { contactInquiry } from "./contactInquiry";
 import { deal } from "./deal";
 import { governor } from "./governor";
+import { homeConnectivity } from "./homeConnectivity";
 import { ingestionRun } from "./ingestionRun";
 import { investorProfile } from "./investorProfile";
 import { landSubmission } from "./landSubmission";
@@ -43,6 +44,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   marketIntelPost,
   deal,
   // Site structure
+  homeConnectivity,
   audiencePage,
   page,
   service,
