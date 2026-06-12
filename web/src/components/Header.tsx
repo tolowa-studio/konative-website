@@ -55,9 +55,8 @@ export default function Header() {
   // Close mobile menu on route change
   useEffect(() => { closeMenu(); }, [pathname, closeMenu]);
 
-  // Dark hero pages have a navy background, so unscrolled state needs light text.
-  // Light pages (scrolled === true immediately) use white once header solidifies; dark text on light bg only applies to a non-dark-hero unscrolled state, which doesn't currently exist in the route set but kept for safety.
-  const linkColor = scrolled || hasDarkHero ? "#fff" : "#131f36";
+  // Unscrolled: transparent over dark heroes → white text. Scrolled: white bg → dark text.
+  const linkColor = scrolled ? "#111111" : "#ffffff";
 
   const headerStyle: React.CSSProperties = {
     position: "fixed",
@@ -66,8 +65,8 @@ export default function Header() {
     right: 0,
     height: 64,
     zIndex: 1000,
-    background: scrolled ? "rgba(8,20,45,1)" : "transparent",
-    borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
+    background: scrolled ? "rgba(255,255,255,0.98)" : "transparent",
+    borderBottom: scrolled ? "1px solid #E5E7EB" : "1px solid transparent",
     backdropFilter: scrolled ? "blur(8px)" : "none",
     transition: "background 0.3s, border-color 0.3s, color 0.3s",
   };
@@ -95,7 +94,7 @@ export default function Header() {
     fontSize: 22,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
-    color: scrolled || hasDarkHero ? "#fff" : "#131f36",
+    color: scrolled ? "#374151" : "#ffffff",
     transition: "color 0.3s",
   };
 
@@ -105,7 +104,7 @@ export default function Header() {
     fontSize: 22,
     letterSpacing: "0.04em",
     textTransform: "uppercase",
-    color: "#E07B39",
+    color: "#C8001F",
   };
 
   const navStyle: React.CSSProperties = {
@@ -129,7 +128,7 @@ export default function Header() {
     fontSize: 11,
     letterSpacing: "0.12em",
     textTransform: "uppercase",
-    background: ctaHovered ? "#c96a28" : "#E07B39",
+    background: ctaHovered ? "#A8001A" : "#C8001F",
     color: "#fff",
     padding: "10px 20px",
     textDecoration: "none",
@@ -152,7 +151,7 @@ export default function Header() {
   const barStyle = (n: 0 | 1 | 2): React.CSSProperties => ({
     width: 22,
     height: 2,
-    background: scrolled || hasDarkHero ? "#fff" : "#131f36",
+    background: scrolled ? "#111111" : "#ffffff",
     borderRadius: 2,
     transition: "transform 0.25s, opacity 0.25s",
     transformOrigin: "center",
@@ -169,9 +168,9 @@ export default function Header() {
     top: 64,
     left: 0,
     right: 0,
-    background: "rgba(8,20,45,0.98)",
+    background: "rgba(255,255,255,0.98)",
     backdropFilter: "blur(12px)",
-    borderBottom: "1px solid rgba(255,255,255,0.08)",
+    borderBottom: "1px solid #E5E7EB",
     zIndex: 999,
     display: "flex",
     flexDirection: "column",
@@ -204,7 +203,7 @@ export default function Header() {
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
                   textDecoration: "none",
-                  color: isHovered ? "#E07B39" : linkColor,
+                  color: isHovered ? "#C8001F" : linkColor,
                   opacity: isHovered ? 1 : 0.85,
                   transition: "color 0.3s, opacity 0.2s",
                 };
@@ -264,9 +263,9 @@ export default function Header() {
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               textDecoration: "none",
-              color: "#fff",
+              color: "#111111",
               padding: "13px 28px",
-              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              borderBottom: "1px solid #E5E7EB",
             }}
           >
             {link.label}
@@ -280,7 +279,7 @@ export default function Header() {
             fontSize: 11,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
-            background: "#E07B39",
+            background: "#C8001F",
             color: "#fff",
             padding: "13px 28px",
             textDecoration: "none",

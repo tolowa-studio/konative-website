@@ -1,30 +1,42 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   Konative — Design System: Editorial
+   Konative — Design System: Brokerage v2
    Fonts loaded via layout.tsx: Barlow Condensed (display) + Inter (body)
+   Palette: Velocity Red (#C8001F) + Steel Gray (#374151) on bright white
    ───────────────────────────────────────────────────────────────────────────── */
 
 /* ─── 1. Root Variables ─── */
 :root {
-  /* ── Legacy raw tokens (kept for inline styles that use them) ── */
-  --orange: #C84B1F;
-  --orange-dark: #A33D17;
-  --black: #111111;
-  --bg: #FFFFFF;
-  --dark: #0A0A0A;
-  --dark-card: #1A1A1A;
-  --warm-off: #F2F0EB;
-  --border: #E0DDD8;
-  --gray: #666666;
+  /* ── Brand palette ── */
+  --red-600:  #C8001F;
+  --red-700:  #A8001A;
+  --red-50:   #FFF0F2;
+  --gray-900: #111111;
+  --gray-700: #374151;
+  --gray-500: #6B7280;
+  --gray-200: #E5E7EB;
+  --gray-100: #F3F4F6;
+  --gray-50:  #F9FAFB;
+
+  /* ── Legacy raw tokens aliased to new palette ── */
+  --orange:      #C8001F;
+  --orange-dark: #A8001A;
+  --black:       #111111;
+  --bg:          #FFFFFF;
+  --dark:        #0A0A0A;
+  --dark-card:   #1A1A1A;
+  --warm-off:    #F9FAFB;
+  --border:      #E5E7EB;
+  --gray:        #6B7280;
 
   /* ── Semantic color tokens ── */
-  --color-primary: #C84B1F;
-  --color-primary-hover: #A33D17;
-  --color-warm: #C84B1F;
-  --color-text: #111111;
-  --color-text-muted: #666666;
-  --color-bg: #FFFFFF;
-  --color-surface: #F9F8F6;
-  --color-divider: #E0DDD8;
+  --color-primary:       #C8001F;
+  --color-primary-hover: #A8001A;
+  --color-warm:          #C8001F;
+  --color-text:          #111111;
+  --color-text-muted:    #6B7280;
+  --color-bg:            #FFFFFF;
+  --color-surface:       #F9FAFB;
+  --color-divider:       #E5E7EB;
 
   /* ── Typography ── */
   --font-display: 'Barlow Condensed', sans-serif;
@@ -58,28 +70,28 @@
   --radius-md: 8px;
   --radius-lg: 12px;
 
-  /* ── Shadows ── */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.05);
+  /* ── Shadows (lighter, corporate) ── */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.03);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
 
   /* ── Layout widths ── */
   --content-narrow: 640px;
   --content-default: 800px;
   --content-wide: 1200px;
 
-  /* ── Navy + Rust/Amber system (brokerage redesign) ── */
-  --navy-900: #08142D;
-  --navy-800: #0C2046;
-  --navy-700: #0F2A5C;
+  /* ── Dark section tokens (maps, footer, data viz overlays) ── */
+  --navy-900: #0A0F1E;
+  --navy-800: #0F1829;
+  --navy-700: #172136;
   --blue-600: #1E4FBF;
   --blue-400: #5B8DEF;
-  --rust-500: #E07B39;
-  --rust-600: #C86428;
+  --rust-500: #C8001F;
+  --rust-600: #A8001A;
   --amber-400: #F0A050;
-  --navy-border: rgba(255,255,255,0.08);
+  --navy-border:  rgba(255,255,255,0.08);
   --navy-border-2: rgba(255,255,255,0.13);
-  --navy-dim: rgba(255,255,255,0.45);
+  --navy-dim:    rgba(255,255,255,0.45);
   --navy-dimmer: rgba(255,255,255,0.22);
 }
 

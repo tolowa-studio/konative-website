@@ -24,6 +24,7 @@ import { teamMember } from "./teamMember";
 import { testimonial } from "./testimonial";
 import { theme } from "./theme";
 import { tribalProject } from "./tribalProject";
+import { connectivityBrief } from "./connectivityBrief";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Data infrastructure
@@ -42,6 +43,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   ingestionRun,
   marketReport,
   marketIntelPost,
+  connectivityBrief,
   deal,
   // Site structure
   homeConnectivity,
