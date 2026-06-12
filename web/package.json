@@ -6,7 +6,7 @@
     "node": "22"
   },
   "scripts": {
-    "dev": "next dev -p 3005",
+    "dev": "next dev",
     "build": "next build",
     "vercel-build": "next build",
     "start": "next start",
@@ -68,9 +68,11 @@
     "@builder.io/cli": "^1.2.10",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.0.0",
     "@vitest/coverage-v8": "^4.1.5",
     "better-sqlite3": "^12.9.0",
+    "pg": "^8.21.0",
     "tsx": "^4.21.0",
     "typescript": "^5.7.0",
     "vitest": "^4.1.5"

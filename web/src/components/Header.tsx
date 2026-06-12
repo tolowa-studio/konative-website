@@ -5,16 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "Connectivity", url: "/connectivity" },
-  { label: "Tribal", url: "/tribal" },
-  { label: "Data Centers", url: "/data-center-connectivity" },
   { label: "Intelligence", url: "/intelligence" },
-  { label: "Map", url: "/map" },
-  { label: "About", url: "/#team" },
+  { label: "Markets", url: "/markets" },
+  { label: "Coverage", url: "/map" },
+  { label: "Brokerage", url: "/connectivity" },
+  { label: "Insights", url: "/news" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
-const DARK_HERO_PAGES = new Set(["/", "/connectivity", "/tribal", "/data-center-connectivity", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/intelligence/first-nations", "/news", "/market-intel", "/contact", "/assessment"]);
+const DARK_HERO_PAGES = new Set(["/connectivity", "/tribal", "/data-center-connectivity", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/intelligence/first-nations", "/news", "/market-intel", "/contact", "/assessment"]);
 
 function isDarkHeroPath(pathname: string): boolean {
   if (DARK_HERO_PAGES.has(pathname)) return true;
@@ -227,11 +226,24 @@ export default function Header() {
             <div style={actionsStyle}>
               <Link
                 href="/contact"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 600,
+                  fontSize: 12.5,
+                  color: scrolled ? "#374151" : "#fff",
+                  textDecoration: "none",
+                  transition: "color 0.3s",
+                }}
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/contact"
                 style={ctaStyle}
                 onMouseEnter={() => setCtaHovered(true)}
                 onMouseLeave={() => setCtaHovered(false)}
               >
-                Get a quote →
+                Request Access
               </Link>
             </div>
           )}
