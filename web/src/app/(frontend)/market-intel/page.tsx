@@ -73,10 +73,10 @@ export default function MarketIntelPage() {
           <div style={{
             fontFamily: "'Inter', sans-serif", fontWeight: 600,
             fontSize: 10, textTransform: "uppercase", letterSpacing: "0.24em",
-            color: "#E07B39", marginBottom: 16,
+            color: "#C8001F", marginBottom: 16,
             display: "flex", alignItems: "center", gap: 12,
           }}>
-            <span style={{ display: "block", width: 28, height: 1, background: "#E07B39" }} />
+            <span style={{ display: "block", width: 28, height: 1, background: "#C8001F" }} />
             Live Intelligence
           </div>
           <h1 style={{
@@ -86,7 +86,7 @@ export default function MarketIntelPage() {
             letterSpacing: "0.01em", margin: "0 0 20px 0",
           }}>
             MARKET{" "}
-            <span style={{ color: "#E07B39" }}>INTELLIGENCE</span>
+            <span style={{ color: "#C8001F" }}>INTELLIGENCE</span>
           </h1>
           <p style={{
             fontFamily: "'Inter', sans-serif", fontSize: 16, lineHeight: 1.6,
@@ -118,8 +118,8 @@ export default function MarketIntelPage() {
                     fontFamily: "'Inter', sans-serif", fontWeight: 500,
                     fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em",
                     padding: "14px 20px", background: "transparent", border: "none",
-                    borderBottom: isActive ? "2px solid #E07B39" : "2px solid transparent",
-                    color: isActive ? "#E07B39" : "#555",
+                    borderBottom: isActive ? "2px solid #C8001F" : "2px solid transparent",
+                    color: isActive ? "#C8001F" : "#555",
                     cursor: "pointer", marginBottom: -1, whiteSpace: "nowrap",
                   }}
                 >
@@ -173,7 +173,7 @@ export default function MarketIntelPage() {
                       onMouseLeave={() => setHoveredCard(null)}
                       style={{
                         display: "flex", flexDirection: "column",
-                        borderLeft: isHovered ? "3px solid #E07B39" : "3px solid transparent",
+                        borderLeft: isHovered ? "3px solid #C8001F" : "3px solid transparent",
                         borderRight: isLastInRow ? "none" : "1px solid #E0DDD8",
                         borderBottom: isLastRow ? "none" : "1px solid #E0DDD8",
                         boxShadow: isHovered ? "0 4px 16px rgba(0,0,0,0.08)" : "none",
@@ -183,7 +183,7 @@ export default function MarketIntelPage() {
                       <div style={{ padding: "20px 20px 24px", display: "flex", flexDirection: "column", flex: 1 }}>
                         <div style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                           <span style={{
-                            display: "inline-block", background: "#E07B39", color: "#fff",
+                            display: "inline-block", background: "#C8001F", color: "#fff",
                             fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: 10,
                             letterSpacing: "0.12em", textTransform: "uppercase", padding: "3px 8px",
                           }}>
@@ -226,7 +226,7 @@ export default function MarketIntelPage() {
                             rel="noopener noreferrer"
                             style={{
                               fontFamily: "'Inter', sans-serif", fontWeight: 600,
-                              fontSize: 11, color: "#E07B39", textDecoration: "none",
+                              fontSize: 11, color: "#C8001F", textDecoration: "none",
                             }}
                           >
                             Read →
@@ -248,7 +248,7 @@ export default function MarketIntelPage() {
             <div style={{
               fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: 10,
               textTransform: "uppercase", letterSpacing: "0.2em",
-              color: "#E07B39", marginBottom: 16,
+              color: "#C8001F", marginBottom: 16,
             }}>
               THE INTELLIGENCE BRIEF
             </div>
@@ -271,7 +271,7 @@ export default function MarketIntelPage() {
             {subscribed ? (
               <div style={{
                 fontFamily: "'Inter', sans-serif", fontWeight: 600,
-                fontSize: 14, color: "#E07B39", padding: "14px 0",
+                fontSize: 14, color: "#C8001F", padding: "14px 0",
               }}>
                 Subscribed! ✓
               </div>
@@ -294,7 +294,7 @@ export default function MarketIntelPage() {
                   onClick={handleSubscribe}
                   disabled={subscribing}
                   style={{
-                    width: "100%", padding: 14, background: "#E07B39",
+                    width: "100%", padding: 14, background: "#C8001F",
                     color: "#fff", border: "none",
                     fontFamily: "'Inter', sans-serif", fontWeight: 600,
                     fontSize: 12, textTransform: "uppercase", letterSpacing: "0.12em",

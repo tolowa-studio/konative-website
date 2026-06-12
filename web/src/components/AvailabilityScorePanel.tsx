@@ -143,7 +143,7 @@ export default function AvailabilityScorePanel({ result, onClose }: Props) {
   ]
 
   const labelStyle: React.CSSProperties = {
-    fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#E07B39',
+    fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8001F',
   }
 
   return (
@@ -167,7 +167,7 @@ export default function AvailabilityScorePanel({ result, onClose }: Props) {
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>
             {result.lat.toFixed(3)}, {result.lng.toFixed(3)}
             {metadata.province && (
-              <span style={{ marginLeft: 6, color: '#E07B39' }}>{metadata.province}</span>
+              <span style={{ marginLeft: 6, color: '#C8001F' }}>{metadata.province}</span>
             )}
           </div>
         </div>

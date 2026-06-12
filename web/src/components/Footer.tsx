@@ -1,109 +1,81 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
+import Link from "next/link";
+
+const RED = "#C8001F";
+const TEXT = "#111111";
+const STEEL = "#374151";
+const MUTED = "#6B7280";
+const DIVIDER = "#E5E7EB";
+const SURFACE = "#F9FAFB";
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#08142D', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '64px 0 32px' }}>
-      <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 48px' }}>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
-
-          <div>
-            <Link href="/" style={{
-              display: 'inline-block', marginBottom: 16, textDecoration: 'none',
-              fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
-              fontSize: 22, letterSpacing: '0.04em', textTransform: 'uppercase',
-            }}>
-              <span style={{ color: '#fff' }}>KO</span>
-              <span style={{ color: '#E07B39' }}>NATIVE</span>
+    <footer style={{ background: "#fff", borderTop: `1px solid ${DIVIDER}`, padding: "64px 0 32px" }}>
+      <div style={{ maxWidth: 1320, margin: "0 auto", padding: "0 48px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 42, marginBottom: 48 }}>
+          <div style={{ minWidth: 0 }}>
+            <Link href="/" style={{ display: "inline-block", marginBottom: 16, textDecoration: "none", fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800, fontSize: 23, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              <span style={{ color: TEXT }}>KO</span>
+              <span style={{ color: RED }}>NATIVE</span>
             </Link>
-            <p style={{
-              fontFamily: 'Inter, sans-serif', fontSize: 13,
-              lineHeight: 1.7, color: 'rgba(255,255,255,0.35)', maxWidth: 260,
-            }}>
-              Vendor-neutral internet & network connectivity brokerage. We source, design, and manage connectivity for Tribal enterprises and the data centers powering AI — backed by Avant&apos;s supplier portfolio, at no cost to you.
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, lineHeight: 1.7, color: MUTED, maxWidth: 330 }}>
+              AI-native connectivity intelligence and brokerage for enterprise networks, datacenter connectivity, dark fiber, transport, cloud on-ramps, and market decisions.
             </p>
+            <Link href="/contact" style={{ display: "inline-block", marginTop: 18, background: RED, color: "#fff", padding: "12px 18px", textDecoration: "none", fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+              Request access
+            </Link>
           </div>
 
-          <div>
-            <h4 style={{
-              fontFamily: 'Inter, sans-serif', fontWeight: 600,
-              fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.25)', marginBottom: 16,
-            }}>
-              What We Broker
-            </h4>
-            {['Internet & Fiber', 'Dark Fiber & Waves', 'SD-WAN & Managed Network', 'UCaaS & CCaaS', 'Cloud On-Ramps', 'Cybersecurity'].map(s => (
-              <Link key={s} href="/connectivity" style={{
-                display: 'block', fontFamily: 'Inter, sans-serif', fontSize: 13,
-                color: 'rgba(255,255,255,0.45)', textDecoration: 'none', marginBottom: 8,
-              }}>
-                {s}
-              </Link>
-            ))}
-          </div>
-
-          <div>
-            <h4 style={{
-              fontFamily: 'Inter, sans-serif', fontWeight: 600,
-              fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.25)', marginBottom: 16,
-            }}>
-              Company
-            </h4>
-            {[
-              { label: 'Team', href: '/#team' },
-              { label: 'Intelligence', href: '/intelligence' },
-              { label: 'Data Center Map', href: '/map' },
-              { label: 'Contact', href: '/contact' },
-              { label: 'Data Sources & Licenses', href: '/licenses' },
-            ].map(l => (
-              <Link key={l.label} href={l.href} style={{
-                display: 'block', fontFamily: 'Inter, sans-serif', fontSize: 13,
-                color: 'rgba(255,255,255,0.45)', textDecoration: 'none', marginBottom: 8,
-              }}>
-                {l.label}
-              </Link>
-            ))}
-          </div>
-
-          <div>
-            <h4 style={{
-              fontFamily: 'Inter, sans-serif', fontWeight: 600,
-              fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.25)', marginBottom: 16,
-            }}>
-              Start Here
-            </h4>
-            {[
-              { label: 'Tribal Enterprise', href: '/tribal' },
-              { label: 'Data Center Connectivity', href: '/data-center-connectivity' },
-              { label: 'Get a Quote', href: '/contact' },
-              { label: 'Newsletter', href: '/#market-intel' },
-            ].map(l => (
-              <Link key={l.label} href={l.href} style={{
-                display: 'block', fontFamily: 'Inter, sans-serif', fontSize: 13,
-                color: 'rgba(255,255,255,0.45)', textDecoration: 'none', marginBottom: 8,
-              }}>
-                {l.label}
-              </Link>
-            ))}
-          </div>
+          <FooterGroup
+            title="Brokerage"
+            links={[
+              ["Connectivity", "/connectivity"],
+              ["Datacenters", "/datacenters"],
+              ["Data Center Connectivity", "/data-center-connectivity"],
+              ["Coverage Map", "/map"],
+            ]}
+          />
+          <FooterGroup
+            title="Intelligence"
+            links={[
+              ["Intelligence Hub", "/intelligence"],
+              ["Live Markets", "/markets"],
+              ["Market Intel Feed", "/news"],
+              ["Methodology", "/methodology"],
+            ]}
+          />
+          <FooterGroup
+            title="Company"
+            links={[
+              ["Team", "/#team"],
+              ["Contact", "/contact"],
+              ["Data Sources", "/licenses"],
+              ["Book on Cal.com", "https://cal.com/jeramey-james"],
+            ]}
+          />
         </div>
 
-        <div style={{
-          borderTop: '1px solid rgba(255,255,255,0.08)',
-          paddingTop: 24,
-          display: 'flex', justifyContent: 'space-between',
-          fontFamily: 'Inter, sans-serif', fontSize: 11,
-          color: 'rgba(255,255,255,0.2)',
-        }}>
-          <span>© 2026 Konative · tolowastudio.com</span>
-          <span>Connectivity Brokerage · Avant Partner</span>
+        <div style={{ borderTop: `1px solid ${DIVIDER}`, paddingTop: 24, display: "flex", justifyContent: "space-between", gap: 20, flexWrap: "wrap", fontFamily: "Inter, sans-serif", fontSize: 11, color: MUTED }}>
+          <span>© 2026 Konative · Tolowa Studio</span>
+          <span style={{ color: STEEL, fontWeight: 700 }}>Connectivity brokerage · Market intelligence · Avant partner</span>
         </div>
-
       </div>
     </footer>
-  )
+  );
+}
+
+function FooterGroup({ title, links }: { title: string; links: [string, string][] }) {
+  return (
+    <div style={{ background: SURFACE, borderTop: `3px solid ${RED}`, padding: "18px 18px 14px" }}>
+      <h4 style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: RED, marginBottom: 16 }}>
+        {title}
+      </h4>
+      {links.map(([label, href]) => (
+        <Link key={label} href={href} style={{ display: "block", fontFamily: "Inter, sans-serif", fontSize: 13, fontWeight: 600, color: STEEL, textDecoration: "none", marginBottom: 10 }}>
+          {label}
+        </Link>
+      ))}
+    </div>
+  );
 }

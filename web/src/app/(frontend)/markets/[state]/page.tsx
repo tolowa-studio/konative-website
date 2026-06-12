@@ -257,11 +257,11 @@ type NewsItem = { _id: string; title: string; publishedAt?: string; sourceUrl?: 
 // ── Status helpers ────────────────────────────────────────────────────────────
 
 const STATUS_COLORS: Record<string, string> = {
-  operational: '#22d3ee', construction: '#E07B39', announced: '#a78bfa',
+  operational: '#22d3ee', construction: '#C8001F', announced: '#a78bfa',
   stalled: '#f59e0b', blocked: '#ef4444', paused: '#fb923c', canceled: '#64748b',
 }
 const TIER_LABELS = { primary: 'PRIMARY MARKET', emerging: 'EMERGING MARKET', developing: 'DEVELOPING MARKET' }
-const TIER_COLORS = { primary: '#E07B39', emerging: '#a78bfa', developing: '#4ade80' }
+const TIER_COLORS = { primary: '#C8001F', emerging: '#a78bfa', developing: '#4ade80' }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -293,7 +293,7 @@ export default async function MarketPage({ params }: { params: Promise<{ state: 
               Markets
             </Link>
             <span style={{ color: 'rgba(255,255,255,0.15)' }}>/</span>
-            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#E07B39', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#C8001F', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
               {market.name}
             </span>
           </div>
@@ -319,7 +319,7 @@ export default async function MarketPage({ params }: { params: Promise<{ state: 
             textTransform: 'uppercase', color: '#fff', margin: '0 0 16px',
           }}>
             {market.name}<br />
-            <span style={{ color: '#E07B39' }}>{market.headline}</span>
+            <span style={{ color: '#C8001F' }}>{market.headline}</span>
           </h1>
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,0.45)', maxWidth: 580, margin: 0 }}>
             {market.subheadline}
@@ -444,7 +444,7 @@ export default async function MarketPage({ params }: { params: Promise<{ state: 
             <Row label="Full Name" value={market.isoFull} />
             <Row label="Power Layer" value={data.power.length > 0 ? `${data.power.length} planned plants` : 'EIA data pending'} />
             <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-              <Link href="/map" style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: '#E07B39', textDecoration: 'none', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              <Link href="/map" style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: '#C8001F', textDecoration: 'none', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 View on Map →
               </Link>
             </div>
@@ -492,7 +492,7 @@ export default async function MarketPage({ params }: { params: Promise<{ state: 
             </p>
             <Link href="/land/submit" style={{
               display: 'inline-block', padding: '8px 16px',
-              background: '#E07B39', color: '#fff',
+              background: '#C8001F', color: '#fff',
               fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 10,
               textTransform: 'uppercase', letterSpacing: '0.1em', textDecoration: 'none',
             }}>

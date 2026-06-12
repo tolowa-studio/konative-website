@@ -44,7 +44,7 @@ export default function PowerMarketsPage() {
             fontSize: 11,
             textTransform: 'uppercase',
             letterSpacing: '0.2em',
-            color: '#E07B39',
+            color: '#C8001F',
             marginBottom: 16,
             marginTop: 0,
           }}>
@@ -60,7 +60,7 @@ export default function PowerMarketsPage() {
             letterSpacing: '0.01em',
             margin: 0,
           }}>
-            <span style={{ color: '#E07B39' }}>POWER</span> IS THE CONSTRAINT.<br />WE TRACK IT.
+            <span style={{ color: '#C8001F' }}>POWER</span> IS THE CONSTRAINT.<br />WE TRACK IT.
           </h1>
           <p style={{
             fontFamily: "'Inter', sans-serif",
@@ -81,7 +81,7 @@ export default function PowerMarketsPage() {
             fontSize: 11,
             textTransform: 'uppercase',
             letterSpacing: '0.12em',
-            backgroundColor: '#E07B39',
+            backgroundColor: '#C8001F',
             color: '#FFFFFF',
             padding: '6px 16px',
           }}>
@@ -265,7 +265,7 @@ export default function PowerMarketsPage() {
               fontSize: 11,
               textTransform: 'uppercase',
               letterSpacing: '0.2em',
-              color: '#E07B39',
+              color: '#C8001F',
               marginBottom: 16,
               marginTop: 0,
             }}>
@@ -281,7 +281,7 @@ export default function PowerMarketsPage() {
               letterSpacing: '0.01em',
               margin: 0,
             }}>
-              HOW WE TRACK<br /><span style={{ color: '#E07B39' }}>GRID AVAILABILITY</span>
+              HOW WE TRACK<br /><span style={{ color: '#C8001F' }}>GRID AVAILABILITY</span>
             </h2>
             <p style={{
               fontFamily: "'Inter', sans-serif",
@@ -356,7 +356,7 @@ export default function PowerMarketsPage() {
             marginBottom: 24,
             marginTop: 0,
           }}>
-            GET <span style={{ color: '#E07B39' }}>EARLY ACCESS</span><br />TO LIVE DATA
+            GET <span style={{ color: '#C8001F' }}>EARLY ACCESS</span><br />TO LIVE DATA
           </h2>
           <p style={{
             fontFamily: "'Inter', sans-serif",
@@ -409,7 +409,7 @@ export default function PowerMarketsPage() {
                 type="submit"
                 style={{
                   padding: '14px 28px',
-                  backgroundColor: '#E07B39',
+                  backgroundColor: '#C8001F',
                   color: '#FFFFFF',
                   border: 'none',
                   fontFamily: "'Inter', sans-serif",

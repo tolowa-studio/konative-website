@@ -86,7 +86,7 @@ export default async function LicensesPage() {
               <div key={category} style={{ marginBottom: 40 }}>
                 <h3 style={{
                   fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
-                  color: "#E07B39", marginBottom: 12,
+                  color: "#C8001F", marginBottom: 12,
                 }}>
                   {category}
                 </h3>

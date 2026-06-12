@@ -347,7 +347,7 @@ function ProjectCard({ p }: { p: ProjectAssessment }) {
           <div style={{ color: '#cbd5e1', fontSize: '0.92rem', lineHeight: 1.6 }}>{p.whatTheRecordSays}</div>
         </div>
         <div>
-          <div style={{ fontSize: '0.7rem', color: '#E07B39', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700, marginBottom: 4 }}>Konative read</div>
+          <div style={{ fontSize: '0.7rem', color: '#C8001F', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700, marginBottom: 4 }}>Konative read</div>
           <div style={{ color: '#fff', fontSize: '0.95rem', lineHeight: 1.6 }}>{p.konativeRead}</div>
         </div>
       </div>
@@ -376,18 +376,18 @@ export default function RealityVsPressPage() {
       {/* Hero */}
       <section style={{ padding: '5rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#E07B39', fontSize: 11, fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 18 }}>
-            <span style={{ width: 28, height: 1, background: '#E07B39' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#C8001F', fontSize: 11, fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 18 }}>
+            <span style={{ width: 28, height: 1, background: '#C8001F' }} />
             Konative Editorial · Reality vs. Press
           </div>
           <h1 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800, fontSize: 'clamp(2.4rem, 6vw, 4.5rem)', lineHeight: 0.95, margin: 0, letterSpacing: '0.005em', textTransform: 'uppercase' }}>
-            Most announced<br />Canadian data centers<br /><span style={{ color: '#E07B39' }}>aren’t real builds yet.</span>
+            Most announced<br />Canadian data centers<br /><span style={{ color: '#C8001F' }}>aren’t real builds yet.</span>
           </h1>
           <p style={{ marginTop: '1.5rem', color: '#cbd5e1', fontSize: '1.1rem', lineHeight: 1.65, maxWidth: 760 }}>
             We score every major Canadian project on six factors — land control, financing, power agreements, water, Indigenous consent, and schedule credibility — using only public-record sources. The result is a 0–100 Reality Score that tells you which press releases to act on and which to wait out.
           </p>
           <p style={{ marginTop: '0.75rem', color: '#94a3b8', fontSize: '0.95rem', maxWidth: 760, lineHeight: 1.6 }}>
-            This scorecard is published by Konative and updated as the public record changes. We don’t take sponsor money to score projects. If you have a primary-source document that should change a score, send it to <a href="mailto:editorial@konative.com" style={{ color: '#E07B39' }}>editorial@konative.com</a>.
+            This scorecard is published by Konative and updated as the public record changes. We don’t take sponsor money to score projects. If you have a primary-source document that should change a score, send it to <a href="mailto:editorial@konative.com" style={{ color: '#C8001F' }}>editorial@konative.com</a>.
           </p>
           <div style={{ marginTop: '1.75rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
             <Link href="/methodology" style={{ background: 'transparent', border: '1px solid #334155', color: '#f6f7fb', padding: '0.7rem 1.2rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
@@ -434,7 +434,7 @@ export default function RealityVsPressPage() {
             Send us the project. We&apos;ll score it on the same six factors against the public record and tell you what the next 90 days actually look like.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#E07B39', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
+            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#C8001F', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
               Book a Call →
             </a>
             <Link href="/contact" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.9375rem', border: '1px solid #334155' }}>

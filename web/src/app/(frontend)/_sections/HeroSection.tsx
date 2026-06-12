@@ -40,7 +40,7 @@ const PLACEHOLDER_DEALS: Deal[] = [
 ]
 
 const toneColor = (tone: Tone): string =>
-  tone === 'rust' ? '#E07B39' : tone === 'dim' ? 'rgba(255,255,255,0.22)' : '#fff'
+  tone === 'rust' ? '#C8001F' : tone === 'dim' ? 'rgba(255,255,255,0.22)' : '#fff'
 
 const statusDot = (s: string) =>
   s === 'ACTIVE' ? '#22c55e' : s === 'ANNOUNCED' ? '#D97706' : '#888'
@@ -81,9 +81,9 @@ export default function HeroSection({ deals, content }: HeroSectionProps) {
             display: 'flex', alignItems: 'center', gap: 12,
             fontFamily: 'Inter, sans-serif', fontWeight: 600,
             fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
-            color: '#E07B39', marginBottom: 32,
+            color: '#C8001F', marginBottom: 32,
           }}>
-            <span style={{ display: 'block', width: 36, height: 1, background: '#E07B39', flexShrink: 0 }} />
+            <span style={{ display: 'block', width: 36, height: 1, background: '#C8001F', flexShrink: 0 }} />
             {content.heroEyebrow}
           </p>
 
@@ -113,7 +113,7 @@ export default function HeroSection({ deals, content }: HeroSectionProps) {
             <Link href={content.heroPrimaryCta.href} style={{
               fontFamily: 'Inter, sans-serif', fontWeight: 600,
               fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase',
-              background: '#E07B39', color: '#fff',
+              background: '#C8001F', color: '#fff',
               padding: '18px 40px', textDecoration: 'none', display: 'inline-block',
             }}>
               {content.heroPrimaryCta.label}
@@ -153,7 +153,7 @@ export default function HeroSection({ deals, content }: HeroSectionProps) {
               <div style={{
                 fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
                 fontSize: stat.highlight ? 30 : 40, lineHeight: 1, marginBottom: 4,
-                color: stat.rust || stat.highlight ? '#E07B39' : '#fff',
+                color: stat.rust || stat.highlight ? '#C8001F' : '#fff',
               }}>
                 {stat.value}
               </div>

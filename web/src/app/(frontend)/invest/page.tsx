@@ -76,9 +76,9 @@ export default function InvestPage() {
           display: 'flex', alignItems: 'center', gap: 12,
           fontFamily: 'Inter, sans-serif', fontWeight: 600,
           fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
-          color: '#E07B39', marginBottom: 20,
+          color: '#C8001F', marginBottom: 20,
         }}>
-          <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+          <span style={{ display: 'block', width: 28, height: 1, background: '#C8001F' }} />
           For Capital Partners
         </div>
 
@@ -89,7 +89,7 @@ export default function InvestPage() {
           letterSpacing: '0.01em', marginBottom: 20,
         }}>
           DEPLOY CAPITAL INTO<br />
-          <span style={{ color: '#E07B39' }}>THE AI BUILDOUT.</span>
+          <span style={{ color: '#C8001F' }}>THE AI BUILDOUT.</span>
         </h1>
 
         <p style={{
@@ -115,12 +115,12 @@ export default function InvestPage() {
           {dealTypes.map((d, i) => (
             <div key={i} style={{
               background: '#0C2046', padding: '36px 32px',
-              borderTop: i === 0 ? '3px solid #E07B39' : '3px solid transparent',
+              borderTop: i === 0 ? '3px solid #C8001F' : '3px solid transparent',
             }}>
               <div style={{
                 fontFamily: 'Inter, sans-serif', fontWeight: 600,
                 fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase',
-                color: '#E07B39', marginBottom: 12,
+                color: '#C8001F', marginBottom: 12,
               }}>
                 {d.tag}
               </div>
@@ -169,7 +169,7 @@ export default function InvestPage() {
               <div key={w.num} style={{ display: 'flex', gap: 20 }}>
                 <span style={{
                   fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700,
-                  fontSize: 32, color: '#E07B39', lineHeight: 1, minWidth: 36,
+                  fontSize: 32, color: '#C8001F', lineHeight: 1, minWidth: 36,
                 }}>
                   {w.num}
                 </span>
@@ -197,7 +197,7 @@ export default function InvestPage() {
           <div style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 600,
             fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
-            color: '#E07B39', marginBottom: 16,
+            color: '#C8001F', marginBottom: 16,
           }}>
             Investor Inquiry
           </div>
@@ -209,7 +209,7 @@ export default function InvestPage() {
             READY TO TALK<br />CAPITAL?
           </h2>
           <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.4)', marginBottom: 0 }}>
-            Fill out this form or email <a href="mailto:deals@konative.com" style={{ color: '#E07B39', textDecoration: 'none' }}>deals@konative.com</a> directly.
+            Fill out this form or email <a href="mailto:deals@konative.com" style={{ color: '#C8001F', textDecoration: 'none' }}>deals@konative.com</a> directly.
             A principal will respond within one business day.
           </p>
         </div>
@@ -226,7 +226,7 @@ export default function InvestPage() {
               <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: 'rgba(255,255,255,0.4)', marginBottom: 24 }}>
                 Inquiry received. Expect a response within one business day.
               </p>
-              <Link href="/" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#E07B39', textDecoration: 'none' }}>
+              <Link href="/" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C8001F', textDecoration: 'none' }}>
                 ← Back to home
               </Link>
             </div>
@@ -286,7 +286,7 @@ export default function InvestPage() {
                 type="submit"
                 disabled={formState === 'submitting'}
                 style={{
-                  padding: '16px 40px', background: '#E07B39', color: '#fff',
+                  padding: '16px 40px', background: '#C8001F', color: '#fff',
                   border: 'none', fontFamily: 'Inter, sans-serif', fontWeight: 700,
                   fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.16em',
                   cursor: formState === 'submitting' ? 'not-allowed' : 'pointer',

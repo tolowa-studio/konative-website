@@ -22,8 +22,8 @@ export default function Image() {
       >
         {/* Top: wordmark */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 32, height: 2, background: '#E07B39' }} />
-          <span style={{ fontSize: 14, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#E07B39' }}>
+          <div style={{ width: 32, height: 2, background: '#C8001F' }} />
+          <span style={{ fontSize: 14, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8001F' }}>
             KONATIVE
           </span>
         </div>
@@ -33,7 +33,7 @@ export default function Image() {
           <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 0.93, textTransform: 'uppercase', color: '#ffffff', letterSpacing: '0.01em' }}>
             NORTH AMERICAN
           </div>
-          <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 0.93, textTransform: 'uppercase', color: '#E07B39', letterSpacing: '0.01em' }}>
+          <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 0.93, textTransform: 'uppercase', color: '#C8001F', letterSpacing: '0.01em' }}>
             DATA CENTER MAP
           </div>
           <div style={{ fontSize: 20, color: 'rgba(255,255,255,0.5)', marginTop: 16, maxWidth: 620, lineHeight: 1.5 }}>

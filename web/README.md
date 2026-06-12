@@ -1,12 +1,12 @@
-# Konative WebOS Starter
+# Konative Website
 
-This repository is the first implementation of Tolowa Studio's WebOS.
+This repository contains the Next.js implementation of `konative.com`.
 
 ## Immediate mission
-Build `konative.com` as a premium professional-services website using Payload CMS + Next.js.
+Build `konative.com` as a premium connectivity intelligence and brokerage site.
 
 ## Strategic mission
-Turn this implementation into a reusable studio starter for future websites.
+Make Konative a credible public surface for market intelligence, carrier-neutral connectivity brokerage, datacenter connectivity, route/market coverage, and qualified buyer intake.
 
 ## Working docs
 - `AGENTS.md`

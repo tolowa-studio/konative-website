@@ -93,7 +93,7 @@ export default function MapReadout({ lat, lng, zoom }: Props) {
           fontWeight: 700,
           letterSpacing: '0.15em',
           textTransform: 'uppercase',
-          color: '#E07B39',
+          color: '#C8001F',
           flexShrink: 0,
         }}>
           Z {zoom.toFixed(1)}

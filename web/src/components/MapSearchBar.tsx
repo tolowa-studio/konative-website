@@ -192,7 +192,7 @@ export default function MapSearchBar({ mapRef }: Props) {
           }}
         />
         {loading && (
-          <span style={{ color: '#E07B39', fontSize: 12, flexShrink: 0 }}>●</span>
+          <span style={{ color: '#C8001F', fontSize: 12, flexShrink: 0 }}>●</span>
         )}
         {query && !loading && (
           <button

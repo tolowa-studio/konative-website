@@ -19,9 +19,9 @@ export default function AssessmentPage() {
           display: 'flex', alignItems: 'center', gap: 12,
           fontFamily: 'Inter, sans-serif', fontWeight: 600,
           fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
-          color: '#E07B39', marginBottom: 20,
+          color: '#C8001F', marginBottom: 20,
         }}>
-          <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+          <span style={{ display: 'block', width: 28, height: 1, background: '#C8001F' }} />
           Site Evaluation Tool
         </div>
 
@@ -32,7 +32,7 @@ export default function AssessmentPage() {
           letterSpacing: '0.01em', marginBottom: 20,
         }}>
           KNOW WHAT YOUR<br />
-          <span style={{ color: '#E07B39' }}>SITE IS WORTH.</span>
+          <span style={{ color: '#C8001F' }}>SITE IS WORTH.</span>
         </h1>
 
         <p style={{
@@ -64,7 +64,7 @@ export default function AssessmentPage() {
             {criteria.map((item, i) => (
               <div key={i} style={{
                 background: 'rgba(255,255,255,0.03)',
-                borderLeft: '3px solid #E07B39',
+                borderLeft: '3px solid #C8001F',
                 padding: '18px 24px',
                 display: 'flex', flexDirection: 'column', gap: 4,
               }}>
@@ -103,7 +103,7 @@ export default function AssessmentPage() {
             <div style={{
               fontFamily: 'Inter, sans-serif', fontWeight: 600,
               fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase',
-              color: '#E07B39', marginBottom: 16,
+              color: '#C8001F', marginBottom: 16,
             }}>
               Powered by Tier IV DevCo
             </div>
@@ -131,7 +131,7 @@ export default function AssessmentPage() {
               rel="noopener noreferrer"
               style={{
                 display: 'inline-block', padding: '18px 44px',
-                background: '#E07B39', color: '#fff',
+                background: '#C8001F', color: '#fff',
                 fontFamily: 'Inter, sans-serif', fontWeight: 700,
                 fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase',
                 textDecoration: 'none', marginBottom: 16,
@@ -160,7 +160,7 @@ export default function AssessmentPage() {
               After your evaluation, bring the results to Konative and we&apos;ll help you
               take next steps — whether that&apos;s finding a buyer, structuring a deal, or
               connecting with capital.{' '}
-              <a href="/contact" style={{ color: '#E07B39', textDecoration: 'none' }}>
+              <a href="/contact" style={{ color: '#C8001F', textDecoration: 'none' }}>
                 Get in touch →
               </a>
             </p>

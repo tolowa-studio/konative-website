@@ -8,10 +8,8 @@ continent. We use cutting-edge tools and AI-assisted research to deliver faster,
 analysis than any traditional brokerage. We work for our clients, not the carriers or developers.
 
 ## Default SEO
-
 - **Default meta title:** Konative | Tribal Connectivity & Data Center Brokerage — North America
 - **Default meta description:** Konative is North America's premier tribal connectivity and data center development brokerage. Vendor-neutral, AI-native. We help tribal nations, IDCs, and enterprises turn land, power, and connectivity needs into funded, sovereign-compatible infrastructure deals.
-
 ## Per-Page Meta
 
 ### Home

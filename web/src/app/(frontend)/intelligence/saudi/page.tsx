@@ -94,7 +94,7 @@ export default function SaudiTrackerPage() {
       {/* Hero */}
       <section style={{ padding: '4rem 2rem 3rem', borderBottom: '1px solid #1e293b', background: 'linear-gradient(180deg, #0f1728 0%, #0b1020 100%)' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#E07B39', marginBottom: '0.75rem' }}>
+          <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8001F', marginBottom: '0.75rem' }}>
             Intelligence · Gulf Capital Tracker
           </p>
           <h1 style={{ fontSize: 'clamp(2.25rem, 5.5vw, 3.5rem)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-0.01em', lineHeight: 1.05 }}>
@@ -104,7 +104,7 @@ export default function SaudiTrackerPage() {
             Saudi PIF (HUMAIN), Abu Dhabi sovereign capital (MGX, Mubadala, G42), and Saudi state holdings (Vision Invest / DataVolt) have collectively committed $70–80B to data center infrastructure with material US exposure. The MGX/AIP/GIP acquisition of Aligned Data Centers alone is the largest DC transaction in history at $40B. This is Konative&apos;s tracker on what they&apos;re building, where, and with whom.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#E07B39', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#C8001F', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
               Discuss a Site for a Gulf-Funded Build →
             </a>
             <Link href="/methodology" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
@@ -126,7 +126,7 @@ export default function SaudiTrackerPage() {
             { v: '500 MW', l: 'HUMAIN/AMD US capacity (5 yr)' },
           ].map(s => (
             <div key={s.l} style={{ background: '#0f1728', border: '1px solid #1e293b', borderRadius: 8, padding: '1.25rem' }}>
-              <div style={{ fontSize: '1.875rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#E07B39', lineHeight: 1, marginBottom: '0.4rem' }}>{s.v}</div>
+              <div style={{ fontSize: '1.875rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#C8001F', lineHeight: 1, marginBottom: '0.4rem' }}>{s.v}</div>
               <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.l}</div>
             </div>
           ))}
@@ -146,7 +146,7 @@ export default function SaudiTrackerPage() {
           {ENTITIES.map((e, i) => (
             <div key={e.name} style={{ marginBottom: '3rem', borderTop: i === 0 ? 'none' : '1px solid #1e293b', paddingTop: i === 0 ? 0 : '3rem' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-                <h3 style={{ fontSize: '1.75rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: 0, color: '#E07B39', letterSpacing: '0.01em' }}>
+                <h3 style={{ fontSize: '1.75rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: 0, color: '#C8001F', letterSpacing: '0.01em' }}>
                   {e.name.toUpperCase()}
                 </h3>
                 <span style={{ fontSize: '0.8rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
@@ -170,7 +170,7 @@ export default function SaudiTrackerPage() {
                         <div style={{ color: '#f6f7fb', fontWeight: 500 }}>{b.name}</div>
                         <div style={{ color: '#64748b', fontSize: '0.75rem' }}>{b.location}</div>
                       </div>
-                      <div style={{ color: '#E07B39', fontWeight: 600, whiteSpace: 'nowrap' }}>{b.mw}</div>
+                      <div style={{ color: '#C8001F', fontWeight: 600, whiteSpace: 'nowrap' }}>{b.mw}</div>
                       <div style={{ color: '#94a3b8', fontSize: '0.75rem', textAlign: 'right', maxWidth: 200 }}>{b.status}</div>
                     </div>
                   ))}
@@ -221,7 +221,7 @@ export default function SaudiTrackerPage() {
             One short email per week: new commitments, new sites, capital movements, and what they mean for North American DC site selection. No filler.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/news" style={{ background: '#E07B39', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
+            <Link href="/news" style={{ background: '#C8001F', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
               Subscribe →
             </Link>
             <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.9375rem', border: '1px solid #334155' }}>

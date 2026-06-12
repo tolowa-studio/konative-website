@@ -16,9 +16,9 @@ export default function ConnectivityPortfolio({ content }: { content: HomeConnec
               display: 'flex', alignItems: 'center', gap: 12,
               fontFamily: 'Inter, sans-serif', fontWeight: 600,
               fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
-              color: '#E07B39', marginBottom: 20,
+              color: '#C8001F', marginBottom: 20,
             }}>
-              <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+              <span style={{ display: 'block', width: 28, height: 1, background: '#C8001F' }} />
               {content.portfolioEyebrow}
             </div>
             <h2 style={{
@@ -27,7 +27,7 @@ export default function ConnectivityPortfolio({ content }: { content: HomeConnec
               textTransform: 'uppercase', letterSpacing: '0.01em', color: '#fff',
             }}>
               {content.portfolioHeadingTop}<br />
-              <span style={{ color: '#E07B39' }}>{content.portfolioHeadingBottom}</span>
+              <span style={{ color: '#C8001F' }}>{content.portfolioHeadingBottom}</span>
             </h2>
           </div>
           <p style={{
@@ -50,7 +50,7 @@ export default function ConnectivityPortfolio({ content }: { content: HomeConnec
               style={{
                 background: '#0C2046',
                 padding: '32px 30px',
-                borderTop: hovered === i ? '2px solid #E07B39' : '2px solid transparent',
+                borderTop: hovered === i ? '2px solid #C8001F' : '2px solid transparent',
                 transition: 'border-color 0.2s',
               }}
             >

@@ -37,9 +37,9 @@ export default function TeamSection() {
           display: 'flex', alignItems: 'center', gap: 12,
           fontFamily: 'Inter, sans-serif', fontWeight: 600,
           fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
-          color: '#E07B39', marginBottom: 20,
+          color: '#C8001F', marginBottom: 20,
         }}>
-          <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+          <span style={{ display: 'block', width: 28, height: 1, background: '#C8001F' }} />
           The Team
         </div>
 
@@ -49,7 +49,7 @@ export default function TeamSection() {
           textTransform: 'uppercase', letterSpacing: '0.01em',
           color: '#fff', marginBottom: 60,
         }}>
-          TOP TALENT.<br /><span style={{ color: '#E07B39' }}>REAL EXPERIENCE.</span>
+          TOP TALENT.<br /><span style={{ color: '#C8001F' }}>REAL EXPERIENCE.</span>
         </h2>
 
         <div style={{

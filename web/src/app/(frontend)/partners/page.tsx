@@ -74,7 +74,7 @@ const PARTNERS: Partner[] = [
 ]
 
 function PartnerCard({ p }: { p: Partner }) {
-  const ring = p.inaugural ? '#E07B39' : 'rgba(255,255,255,0.08)'
+  const ring = p.inaugural ? '#C8001F' : 'rgba(255,255,255,0.08)'
   const bg = p.inaugural ? 'linear-gradient(135deg, #0C2046 0%, #102b5a 100%)' : '#0C2046'
   return (
     <article
@@ -93,7 +93,7 @@ function PartnerCard({ p }: { p: Partner }) {
       {p.inaugural && (
         <div style={{
           position: 'absolute', top: 14, right: 14,
-          background: '#E07B39', color: '#fff',
+          background: '#C8001F', color: '#fff',
           padding: '0.25rem 0.55rem', borderRadius: 4,
           fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.14em',
         }}>
@@ -130,7 +130,7 @@ function PartnerCard({ p }: { p: Partner }) {
 
       {p.url && (
         <a href={p.url} target="_blank" rel="noopener noreferrer"
-           style={{ color: '#E07B39', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none', marginTop: 'auto' }}>
+           style={{ color: '#C8001F', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none', marginTop: 'auto' }}>
           Visit {p.name} →
         </a>
       )}
@@ -144,19 +144,19 @@ export default function PartnersPage() {
       {/* Hero */}
       <section style={{ padding: '5rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#E07B39', fontSize: 11, fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 18 }}>
-            <span style={{ width: 28, height: 1, background: '#E07B39' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#C8001F', fontSize: 11, fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 18 }}>
+            <span style={{ width: 28, height: 1, background: '#C8001F' }} />
             The Partner Ticker
           </div>
           <h1 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800, fontSize: 'clamp(2.4rem, 6vw, 4.5rem)', lineHeight: 0.95, margin: 0, letterSpacing: '0.005em', textTransform: 'uppercase' }}>
             A small bench of vetted partners.<br />
-            <span style={{ color: '#E07B39' }}>No pay-to-play.</span>
+            <span style={{ color: '#C8001F' }}>No pay-to-play.</span>
           </h1>
           <p style={{ marginTop: '1.5rem', color: '#cbd5e1', fontSize: '1.1rem', lineHeight: 1.65, maxWidth: 760 }}>
             Konative routes qualified opportunities to a curated bench of partners across capital, modular, connectivity, energy, legal, and GTM. Every partner is collectively vetted for community-first, low-water, behind-the-meter alignment. We keep it small on purpose.
           </p>
           <div style={{ marginTop: '1.75rem', display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
-            <Link href="/contact" style={{ background: '#E07B39', color: '#fff', padding: '0.7rem 1.2rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.875rem' }}>
+            <Link href="/contact" style={{ background: '#C8001F', color: '#fff', padding: '0.7rem 1.2rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.875rem' }}>
               Apply to be a partner →
             </Link>
             <Link href="/reality-vs-press" style={{ background: 'transparent', border: '1px solid #334155', color: '#f6f7fb', padding: '0.7rem 1.2rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
@@ -210,7 +210,7 @@ export default function PartnersPage() {
             We add partners by invitation and collective vetting. If you align with the standards above and want to be considered, send a one-paragraph note.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#E07B39', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
+            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#C8001F', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
               Book a Call →
             </a>
             <Link href="/contact" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.9375rem', border: '1px solid #334155' }}>

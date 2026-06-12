@@ -147,7 +147,7 @@ export default async function CanadaPage() {
       {/* Hero */}
       <section style={{ padding: '4rem 2rem 3rem', borderBottom: '1px solid #1e293b', background: 'linear-gradient(180deg, #0f1728 0%, #0b1020 100%)' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#E07B39', marginBottom: '0.75rem' }}>
+          <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8001F', marginBottom: '0.75rem' }}>
             Market Intelligence · Canada
           </p>
           <h1 style={{ fontSize: 'clamp(2.25rem, 5.5vw, 3.5rem)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-0.01em', lineHeight: 1.05 }}>
@@ -157,7 +157,7 @@ export default async function CanadaPage() {
             Canada has {live?.operational ?? 117} operational data centres tracked, {live?.pipeline ?? '30+'} in the pipeline, and {live?.stalled ?? 'multiple'} with stalled or blocked status in our research dataset. The four major markets (Quebec, Ontario, Alberta, BC) operate under structurally different power regimes — and the federal Sovereign AI Compute Strategy is committing C$2B with explicit preference for Indigenous-partnered projects.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <Link href="/map" style={{ background: '#E07B39', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+            <Link href="/map" style={{ background: '#C8001F', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
               Explore Canada on the Map →
             </Link>
             <Link href="/contact" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
@@ -177,7 +177,7 @@ export default async function CanadaPage() {
             ...headlineStats,
           ].map(s => (
             <div key={s.l} style={{ background: '#0f1728', border: '1px solid #1e293b', borderRadius: 8, padding: '1.25rem' }}>
-              <div style={{ fontSize: '1.875rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#E07B39', lineHeight: 1, marginBottom: '0.4rem' }}>{s.v}</div>
+              <div style={{ fontSize: '1.875rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#C8001F', lineHeight: 1, marginBottom: '0.4rem' }}>{s.v}</div>
               <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.l}</div>
             </div>
           ))}
@@ -197,7 +197,7 @@ export default async function CanadaPage() {
           {PROVINCES.map((p, i) => (
             <div key={p.name} style={{ marginBottom: '3rem', borderTop: i === 0 ? 'none' : '1px solid #1e293b', paddingTop: i === 0 ? 0 : '3rem' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-                <h3 style={{ fontSize: '1.75rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: 0, color: '#E07B39', letterSpacing: '0.01em' }}>
+                <h3 style={{ fontSize: '1.75rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: 0, color: '#C8001F', letterSpacing: '0.01em' }}>
                   {p.name.toUpperCase()}
                 </h3>
                 <span style={{ fontSize: '0.8rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{p.iso}</span>
@@ -252,7 +252,7 @@ export default async function CanadaPage() {
             {FIRST_NATIONS_PROJECTS.map(fn => (
               <div key={fn.nation} style={{ background: '#0b1020', border: '1px solid #1e293b', borderRadius: 8, padding: '1.25rem' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '0.75rem', alignItems: 'baseline', marginBottom: '0.5rem' }}>
-                  <h3 style={{ fontSize: '1.125rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: 0, color: '#E07B39', letterSpacing: '0.01em' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: 0, color: '#C8001F', letterSpacing: '0.01em' }}>
                     {fn.nation.toUpperCase()}
                   </h3>
                   <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{fn.location}</span>
@@ -291,7 +291,7 @@ export default async function CanadaPage() {
               { v: '100+ MW', l: 'Minimum capacity threshold for sovereign DC RFPs' },
             ].map(x => (
               <div key={x.l} style={{ background: '#0f1728', border: '1px solid #1e293b', borderRadius: 8, padding: '1rem' }}>
-                <div style={{ fontSize: '1.5rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#E07B39', marginBottom: '0.35rem' }}>{x.v}</div>
+                <div style={{ fontSize: '1.5rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#C8001F', marginBottom: '0.35rem' }}>{x.v}</div>
                 <div style={{ fontSize: '0.8rem', color: '#94a3b8', lineHeight: 1.45 }}>{x.l}</div>
               </div>
             ))}
@@ -309,7 +309,7 @@ export default async function CanadaPage() {
             We work in all four provinces and across First Nations partnerships. Bring us a site, a parcel, an LOI, or a thesis — we&apos;ll tell you in 60 seconds whether it&apos;s worth chasing, and what the next 90 days look like.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#E07B39', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
+            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#C8001F', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
               Book a Call →
             </a>
             <Link href="/contact" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.9375rem', border: '1px solid #334155' }}>

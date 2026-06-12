@@ -16,7 +16,7 @@ const labelStyle: React.CSSProperties = {
   fontFamily: 'Inter, sans-serif',
   letterSpacing: '0.2em',
   textTransform: 'uppercase',
-  color: '#E07B39',
+  color: '#C8001F',
 }
 
 // ── types ─────────────────────────────────────────────────────────────────────
@@ -84,7 +84,7 @@ function SectionHeader({
         fontWeight: 700,
         letterSpacing: '0.18em',
         textTransform: 'uppercase',
-        color: '#E07B39',
+        color: '#C8001F',
       }}>
         {label}
         {count !== undefined && (
@@ -192,7 +192,7 @@ function InfraRow({
           padding: '7px 10px',
           background: 'rgba(224,123,57,0.08)',
           border: '1px solid rgba(224,123,57,0.25)',
-          borderLeft: `3px solid #E07B39`,
+          borderLeft: `3px solid #C8001F`,
         }}>
           <div style={{
             fontSize: 9,
@@ -200,7 +200,7 @@ function InfraRow({
             fontWeight: 700,
             letterSpacing: '0.15em',
             textTransform: 'uppercase',
-            color: '#E07B39',
+            color: '#C8001F',
             marginBottom: 4,
           }}>
             Data Insight
@@ -287,7 +287,7 @@ function InfraRow({
                 href={layer.sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ fontSize: 10, color: '#E07B39', textDecoration: 'none', display: 'inline-block' }}
+                style={{ fontSize: 10, color: '#C8001F', textDecoration: 'none', display: 'inline-block' }}
               >
                 Source data →
               </a>
@@ -441,7 +441,7 @@ export default function LayerControlPanel({
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            color: '#E07B39',
+            color: '#C8001F',
             fontSize: 16,
             padding: 4,
             lineHeight: 1,
@@ -625,7 +625,7 @@ export default function LayerControlPanel({
                 </span>
               </button>
 
-              <DcLayerRow layerKey="all" label="All Layers" color="#E07B39" count={layerCount('all')} active={activeLayer === 'all'} onClick={() => setActiveLayer('all')} />
+              <DcLayerRow layerKey="all" label="All Layers" color="#C8001F" count={layerCount('all')} active={activeLayer === 'all'} onClick={() => setActiveLayer('all')} />
               {(['projects', 'facilities', 'network', 'power'] as LayerKey[]).map(k => (
                 <DcLayerRow
                   key={k}
@@ -676,7 +676,7 @@ export default function LayerControlPanel({
             fontWeight: 700,
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
-            color: '#E07B39',
+            color: '#C8001F',
             marginBottom: 6,
           }}>
             Hot Corridors
@@ -690,7 +690,7 @@ export default function LayerControlPanel({
             border: '1px solid rgba(255,255,255,0.05)',
             borderRadius: 3,
           }}>
-            <span style={{ width: 8, height: 8, borderRadius: 2, background: '#E07B39', opacity: 0.3, flexShrink: 0 }} />
+            <span style={{ width: 8, height: 8, borderRadius: 2, background: '#C8001F', opacity: 0.3, flexShrink: 0 }} />
             <span style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 11,
@@ -723,7 +723,7 @@ export default function LayerControlPanel({
           fontWeight: 700,
           letterSpacing: '0.15em',
           textTransform: 'uppercase',
-          color: '#E07B39',
+          color: '#C8001F',
           opacity: 0.8,
         }}>
           Konative

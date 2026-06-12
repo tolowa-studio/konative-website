@@ -4,7 +4,7 @@ import { AudienceCTAForm } from "./AudienceCTAForm";
 import { getAudienceIdentity } from "./audienceIdentity";
 
 const NAVY = "#08142D";
-const ORANGE = "#E07B39";
+const ORANGE = "#C8001F";
 const TEXT_DIM = "rgba(255,255,255,0.55)";
 const TEXT_FAINT = "rgba(255,255,255,0.35)";
 const BORDER = "rgba(255,255,255,0.07)";

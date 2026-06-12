@@ -165,7 +165,7 @@ export default function DealsPage() {
               fontSize: 11,
               textTransform: 'uppercase',
               letterSpacing: '0.2em',
-              color: '#E07B39',
+              color: '#C8001F',
               marginBottom: 16,
               margin: '0 0 16px',
             }}
@@ -185,7 +185,7 @@ export default function DealsPage() {
             }}
           >
             TRACK THE{' '}
-            <span style={{ color: '#E07B39' }}>CAPITAL</span>
+            <span style={{ color: '#C8001F' }}>CAPITAL</span>
             <br />
             MOVING INTO NORTH AMERICAN DATA CENTER.
           </h1>
@@ -262,9 +262,9 @@ export default function DealsPage() {
                   border: 'none',
                   cursor: 'pointer',
                   marginBottom: -1,
-                  color: activeTab === tab ? '#E07B39' : '#555',
+                  color: activeTab === tab ? '#C8001F' : '#555',
                   borderBottom:
-                    activeTab === tab ? '2px solid #E07B39' : '2px solid transparent',
+                    activeTab === tab ? '2px solid #C8001F' : '2px solid transparent',
                 }}
               >
                 {tab}
@@ -583,7 +583,7 @@ export default function DealsPage() {
             TRACK DEALS BEFORE
             <br />
             THEY&apos;RE{' '}
-            <span style={{ color: '#E07B39' }}>PUBLIC KNOWLEDGE.</span>
+            <span style={{ color: '#C8001F' }}>PUBLIC KNOWLEDGE.</span>
           </h2>
           <p
             style={{
@@ -608,7 +608,7 @@ export default function DealsPage() {
               fontSize: 13,
               textTransform: 'uppercase',
               letterSpacing: '0.12em',
-              background: hoveredCta ? '#c96a28' : '#E07B39',
+              background: hoveredCta ? '#c96a28' : '#C8001F',
               color: '#FFFFFF',
               padding: '20px 48px',
               textDecoration: 'none',

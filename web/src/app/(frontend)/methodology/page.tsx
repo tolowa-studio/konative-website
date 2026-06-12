@@ -102,7 +102,7 @@ export default function MethodologyPage() {
       {/* Hero */}
       <div style={{ borderBottom: '1px solid #1e293b', padding: '4rem 2rem 3rem' }}>
         <div style={{ maxWidth: 880, margin: '0 auto' }}>
-          <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#E07B39', marginBottom: '0.75rem' }}>
+          <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8001F', marginBottom: '0.75rem' }}>
             Methodology
           </p>
           <h1 style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-0.01em', lineHeight: 1.05 }}>
@@ -180,7 +180,7 @@ export default function MethodologyPage() {
             Every site we evaluate runs through this rubric before we put it in front of a buyer. The score isn&apos;t the deal — but it tells you in 60 seconds whether the deal is worth chasing.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/assessment" style={{ background: '#E07B39', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+            <Link href="/assessment" style={{ background: '#C8001F', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
               Run the T4 Site Evaluator →
             </Link>
             <Link href="/projects" style={{ background: '#1E4FBF', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>

@@ -140,7 +140,7 @@ export default function MapPageClient() {
             fontSize: 15, lineHeight: 1, textTransform: 'uppercase',
             color: '#fff', margin: 0, whiteSpace: 'nowrap',
           }}>
-            US + Canada&nbsp;<span style={{ color: '#E07B39' }}>Data Center Map</span>
+            US + Canada&nbsp;<span style={{ color: '#C8001F' }}>Data Center Map</span>
           </h1>
           {total > 0 && (
             <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.25)', whiteSpace: 'nowrap' }}>
@@ -180,7 +180,7 @@ export default function MapPageClient() {
               background: 'rgba(224,123,57,0.08)',
               border: '1px solid rgba(224,123,57,0.35)',
               cursor: 'pointer', padding: '5px 12px',
-              color: '#E07B39', fontFamily: 'Inter, sans-serif',
+              color: '#C8001F', fontFamily: 'Inter, sans-serif',
               fontSize: 9, fontWeight: 700,
               letterSpacing: '0.12em', textTransform: 'uppercase',
               transition: 'background 0.15s, border-color 0.15s', whiteSpace: 'nowrap',

@@ -1,27 +1,27 @@
 # Testimonials Content
 
-> Note: All entries below are clearly marked placeholders and should be replaced with approved client references before publishing.
+> Note: All entries below are placeholders and should be replaced with approved client references before publishing.
 
 ## Testimonial 1
-- **Quote:** [PLACEHOLDER] "Konative gave us disciplined territory coverage from day one. Within two quarters, we had stronger dealer engagement across Washington and clearer visibility into where our line was gaining traction in outdoor living and hardscape channels."
+- **Quote:** [PLACEHOLDER] "Konative helped us compare route options, supplier availability, and commercial terms without forcing us through five disconnected carrier conversations."
 - **Author name:** [PLACEHOLDER] Dana Mitchell
-- **Title:** [PLACEHOLDER] Vice President of Sales
-- **Company:** [PLACEHOLDER] Summit Outdoor Surfaces
+- **Title:** [PLACEHOLDER] VP Infrastructure
+- **Company:** [PLACEHOLDER] Enterprise Buyer
 
 ## Testimonial 2
-- **Quote:** [PLACEHOLDER] "We needed a manufacturer rep partner who could balance premium brand positioning with real channel execution. Konative helped us improve showroom presentation, tighten dealer communication, and create a more reliable regional sales rhythm."
+- **Quote:** [PLACEHOLDER] "The value was not only the quote. It was understanding which carriers could actually deliver against our site, timing, redundancy, and escalation requirements."
 - **Author name:** [PLACEHOLDER] Alex Romero
-- **Title:** [PLACEHOLDER] Director of Channel Development
-- **Company:** [PLACEHOLDER] Northline Fabrication Systems
+- **Title:** [PLACEHOLDER] Director of Network Engineering
+- **Company:** [PLACEHOLDER] Datacenter Operator
 
 ## Testimonial 3
-- **Quote:** [PLACEHOLDER] "Konative understands how dealer relationships actually work in the Pacific Northwest. Their follow-through, field presence, and practical market guidance helped us align our branch teams with a manufacturer line we wanted to grow."
+- **Quote:** [PLACEHOLDER] "Konative gave us a clearer read on market constraints before we entered procurement, which changed the timing and supplier strategy."
 - **Author name:** [PLACEHOLDER] Erin Caldwell
-- **Title:** [PLACEHOLDER] Regional Dealer Principal
-- **Company:** [PLACEHOLDER] Cascade Stone & Patio Supply
+- **Title:** [PLACEHOLDER] Development Lead
+- **Company:** [PLACEHOLDER] Infrastructure Developer
 
 ## Testimonial 4
-- **Quote:** [PLACEHOLDER] "The difference with Konative is operational clarity. They represent the brand professionally, communicate with precision, and bring actionable insight from showroom, fabricator, and dealer conversations that we can use immediately."
+- **Quote:** [PLACEHOLDER] "One accountable advisor across suppliers, order management, and escalation made the connectivity process much easier to manage."
 - **Author name:** [PLACEHOLDER] Michael Tran
-- **Title:** [PLACEHOLDER] Senior Channel Manager
-- **Company:** [PLACEHOLDER] Meridian Architectural Surfaces
+- **Title:** [PLACEHOLDER] Operations Executive
+- **Company:** [PLACEHOLDER] Multi-Site Organization
