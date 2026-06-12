@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 const THUMBNAIL_PLACEHOLDER =
   "repeating-linear-gradient(-55deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 18px), " +
-  "linear-gradient(160deg, #091523 0%, #0C2046 60%, #0f2a55 100%)";
+  "linear-gradient(160deg, #111111 0%, #374151 100%)";
 
 type NewsPageProps = {
   searchParams: Promise<{
@@ -96,7 +96,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   const activeFilterCount = (country !== "all" ? 1 : 0) + (topic !== "all" ? 1 : 0);
 
   const chipActiveStyle: React.CSSProperties = {
-    background: "#E07B39",
+    background: "#C8001F",
     color: "#fff",
     fontFamily: "'Inter', sans-serif",
     fontWeight: 500,
@@ -107,9 +107,9 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   };
 
   const chipInactiveStyle: React.CSSProperties = {
-    background: "#F2F0EB",
-    color: "#555",
-    border: "1px solid #E0DDD8",
+    background: "#F9FAFB",
+    color: "#374151",
+    border: "1px solid #E5E7EB",
     fontFamily: "'Inter', sans-serif",
     fontWeight: 500,
     fontSize: 12,
@@ -121,8 +121,19 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   return (
     <main style={{ background: "#fff", minHeight: "100vh" }}>
       {/* Page Header */}
-      <section style={{ background: "#0C2046", padding: "80px 32px" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+      <section style={{ position: "relative", overflow: "hidden", background: "#fff", padding: "118px 32px 72px", borderBottom: "1px solid #E5E7EB" }}>
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage:
+              "linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+          }}
+        />
+        <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 4, height: 420, background: "#C8001F", transform: "rotate(18deg)", opacity: 0.9 }} />
+        <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto" }}>
           <p
             style={{
               fontFamily: "'Inter', sans-serif",
@@ -130,7 +141,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               fontSize: 11,
               textTransform: "uppercase",
               letterSpacing: "0.2em",
-              color: "#E07B39",
+              color: "#C8001F",
               marginBottom: 16,
               margin: "0 0 16px 0",
             }}
@@ -144,19 +155,19 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               fontSize: "clamp(48px, 7vw, 88px)",
               lineHeight: 0.92,
               textTransform: "uppercase",
-              color: "#fff",
+              color: "#111111",
               letterSpacing: "0.01em",
               margin: 0,
             }}
           >
-            DATA CENTER <span style={{ color: "#E07B39" }}>INTELLIGENCE</span> HUB
+            MARKET <span style={{ color: "#C8001F" }}>INTELLIGENCE</span> FEED
           </h1>
           <p
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: 16,
               lineHeight: 1.6,
-              color: "rgba(255,255,255,0.55)",
+              color: "#6B7280",
               maxWidth: 560,
               marginTop: 16,
               marginBottom: 0,
@@ -171,7 +182,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
       <section
         style={{
           background: "#fff",
-          borderBottom: "1px solid #E0DDD8",
+          borderBottom: "1px solid #E5E7EB",
           padding: "24px 32px",
         }}
       >
@@ -272,9 +283,9 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
       {/* Meta Bar */}
       <div
         style={{
-          background: "#F2F0EB",
+          background: "#F9FAFB",
           padding: "12px 32px",
-          borderBottom: "1px solid #E0DDD8",
+          borderBottom: "1px solid #E5E7EB",
         }}
       >
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
@@ -330,7 +341,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                 key={item.id}
                 style={{
                   padding: "24px 0",
-                  borderBottom: "1px solid #E0DDD8",
+                  borderBottom: "1px solid #E5E7EB",
                   display: "flex",
                   flexDirection: "row" as const,
                   gap: 32,
@@ -368,7 +379,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                         fontSize: 10,
                         textTransform: "uppercase" as const,
                         letterSpacing: "0.12em",
-                        background: "#E07B39",
+                        background: "#C8001F",
                         color: "#fff",
                         padding: "2px 8px",
                       }}
@@ -465,7 +476,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   style={
                     isCurrentPage
                       ? {
-                          background: "#E07B39",
+                          background: "#C8001F",
                           color: "#fff",
                           padding: "8px 14px",
                           fontFamily: "'Inter', sans-serif",
@@ -474,9 +485,9 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                           display: "inline-block",
                         }
                       : {
-                          background: "#F2F0EB",
-                          color: "#555",
-                          border: "1px solid #E0DDD8",
+                          background: "#F9FAFB",
+                          color: "#374151",
+                          border: "1px solid #E5E7EB",
                           padding: "8px 14px",
                           fontFamily: "'Inter', sans-serif",
                           fontSize: 12,

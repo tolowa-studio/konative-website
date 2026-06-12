@@ -16,9 +16,9 @@ export default function WhoWeServe({ content }: { content: HomeConnectivityConte
           display: 'flex', alignItems: 'center', gap: 12,
           fontFamily: 'Inter, sans-serif', fontWeight: 600,
           fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
-          color: '#E07B39', marginBottom: 20,
+          color: '#C8001F', marginBottom: 20,
         }}>
-          <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+          <span style={{ display: 'block', width: 28, height: 1, background: '#C8001F' }} />
           {content.wedgeEyebrow}
         </div>
 
@@ -28,7 +28,7 @@ export default function WhoWeServe({ content }: { content: HomeConnectivityConte
           textTransform: 'uppercase', letterSpacing: '0.01em',
           color: '#fff', marginBottom: 60,
         }}>
-          {content.wedgeHeadingTop}<br /><span style={{ color: '#E07B39' }}>{content.wedgeHeadingBottom}</span>
+          {content.wedgeHeadingTop}<br /><span style={{ color: '#C8001F' }}>{content.wedgeHeadingBottom}</span>
         </h2>
 
         <div style={{
@@ -44,7 +44,7 @@ export default function WhoWeServe({ content }: { content: HomeConnectivityConte
                 background: '#08142D',
                 padding: '48px 40px',
                 borderTop: panel.primary
-                  ? '3px solid #E07B39'
+                  ? '3px solid #C8001F'
                   : hovered === i ? '3px solid rgba(255,255,255,0.3)' : '3px solid transparent',
                 transition: 'border-color 0.2s',
                 cursor: 'default',
@@ -61,7 +61,7 @@ export default function WhoWeServe({ content }: { content: HomeConnectivityConte
               <div style={{
                 fontFamily: 'Inter, sans-serif', fontWeight: 600,
                 fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase',
-                color: panel.primary ? '#E07B39' : 'rgba(255,255,255,0.35)',
+                color: panel.primary ? '#C8001F' : 'rgba(255,255,255,0.35)',
                 marginBottom: 12,
               }}>
                 {panel.eyebrow}
@@ -82,9 +82,9 @@ export default function WhoWeServe({ content }: { content: HomeConnectivityConte
               <Link href={panel.href} style={{
                 fontFamily: 'Inter, sans-serif', fontWeight: 600,
                 fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase',
-                color: panel.primary ? '#E07B39' : 'rgba(255,255,255,0.6)',
+                color: panel.primary ? '#C8001F' : 'rgba(255,255,255,0.6)',
                 textDecoration: 'none',
-                borderBottom: `1px solid ${panel.primary ? '#E07B39' : 'rgba(255,255,255,0.25)'}`,
+                borderBottom: `1px solid ${panel.primary ? '#C8001F' : 'rgba(255,255,255,0.25)'}`,
                 paddingBottom: 2,
                 alignSelf: 'flex-start',
               }}>

@@ -11,7 +11,7 @@ export type AudienceIdentity = {
 
 export const AUDIENCE_IDENTITY: Record<AudienceSlug, AudienceIdentity> = {
   tribes: {
-    color: "#E07B39",
+    color: "#C8001F",
     mark: "01",
     qualifier:
       "You represent a tribal nation or Indigenous development corporation evaluating what data center development could mean for your land base and energy assets.",
@@ -57,7 +57,7 @@ export const AUDIENCE_IDENTITY: Record<AudienceSlug, AudienceIdentity> = {
 export function getAudienceIdentity(slug: string): AudienceIdentity {
   return (
     AUDIENCE_IDENTITY[slug as AudienceSlug] ?? {
-      color: "#E07B39",
+      color: "#C8001F",
       mark: "—",
       qualifier: "",
     }

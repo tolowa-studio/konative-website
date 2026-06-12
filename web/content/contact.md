@@ -1,38 +1,29 @@
 # Contact Page Content
 
 ## Page Intro
-Tell us where you want to grow in the Pacific Northwest, and we will follow up with a focused partnership conversation. Konative works with manufacturers seeking stronger territory coverage, dealer network performance, and market execution.
+Bring the site, market, route, renewal, or enterprise connectivity requirement. Konative will review the need, identify the right supplier path, and follow up with a practical next step.
 
 ## Form Fields
-- **Field label:** First Name  
-  **Placeholder:** Enter your first name
-- **Field label:** Last Name  
-  **Placeholder:** Enter your last name
-- **Field label:** Work Email  
+- **Field label:** Full Name
+  **Placeholder:** Your name
+- **Field label:** Work Email
   **Placeholder:** name@company.com
-- **Field label:** Company  
-  **Placeholder:** Enter your company name
-- **Field label:** Title  
-  **Placeholder:** Your role
-- **Field label:** Phone  
-  **Placeholder:** (###) ###-####
-- **Field label:** Company Website  
-  **Placeholder:** https://
-- **Field label:** You Are  
-  **Placeholder/options:** Manufacturer, Dealer/Retailer, Distributor, Other
-- **Field label:** Product Category  
-  **Placeholder/options:** Outdoor Living, Hardscape, Surfaces, Fabrication, Other
-- **Field label:** Primary Territory Interest  
-  **Placeholder:** WA, OR, ID, or multi-state coverage details
-- **Field label:** Current Dealer Network Status  
-  **Placeholder:** Briefly describe your existing dealer footprint
-- **Field label:** Partnership Goals  
-  **Placeholder:** What outcomes are you targeting in the next 12 months
-- **Field label:** Message  
-  **Placeholder:** Share context on your products, channel strategy, and timeline
+- **Field label:** Organization
+  **Placeholder:** Company, nation, utility, developer, or fund
+- **Field label:** Phone
+  **Placeholder:** Optional
+- **Field label:** Requirement Type
+  **Options:** Datacenter connectivity, dark fiber/transport/wavelengths, enterprise internet or SD-WAN, cloud/voice/security, market intelligence, partnership/referral, other
+- **Field label:** Stage
+  **Options:** Exploring options, ready for quotes, renewal, new site coming online, urgent active project
+- **Field label:** Message
+  **Placeholder:** Share locations, sites, bandwidth, carrier constraints, timeline, and decision context
 
 ## Submit Button
-- **Label:** Submit Partnership Inquiry
+- **Label:** Send Requirement
+
+## Booking CTA
+Warm-intent booking uses https://cal.com/jeramey-james.
 
 ## Thank You / Confirmation Message
-Thank you for reaching out to Konative. We have received your partnership inquiry and will respond within two business days to schedule a conversation about your territory goals, dealer network priorities, and next steps.
+Your inquiry has been submitted. A Konative advisor will review the requirement and follow up with the best next step.

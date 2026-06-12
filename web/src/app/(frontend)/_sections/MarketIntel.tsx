@@ -67,9 +67,9 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
               display: 'flex', alignItems: 'center', gap: 12,
               fontFamily: 'Inter, sans-serif', fontWeight: 600,
               fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
-              color: '#E07B39', marginBottom: 20,
+              color: '#C8001F', marginBottom: 20,
             }}>
-              <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+              <span style={{ display: 'block', width: 28, height: 1, background: '#C8001F' }} />
               Market Intelligence
             </div>
             <h2 style={{
@@ -77,7 +77,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
               fontSize: 'clamp(44px, 5.5vw, 80px)', lineHeight: 0.9,
               textTransform: 'uppercase', letterSpacing: '0.01em', color: '#fff',
             }}>
-              WHAT&apos;S MOVING<br /><span style={{ color: '#E07B39' }}>THE MARKET.</span>
+              WHAT&apos;S MOVING<br /><span style={{ color: '#C8001F' }}>THE MARKET.</span>
             </h2>
           </div>
           <p style={{
@@ -99,7 +99,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
                 }}>
                   <span style={{
                     position: 'absolute', bottom: 12, left: 12,
-                    background: '#C86428', color: '#fff',
+                    background: '#A8001A', color: '#fff',
                     fontFamily: 'Inter, sans-serif', fontWeight: 600,
                     fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase',
                     padding: '3px 8px',
@@ -119,7 +119,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
                     <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>
                       {featured.source} · {featured.published_at}
                     </span>
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 11, color: '#E07B39' }}>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 11, color: '#C8001F' }}>
                       Read →
                     </span>
                   </div>
@@ -137,7 +137,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
                     }}>
                       <span style={{
                         position: 'absolute', bottom: 8, left: 8,
-                        background: '#C86428', color: '#fff',
+                        background: '#A8001A', color: '#fff',
                         fontFamily: 'Inter, sans-serif', fontWeight: 600,
                         fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase',
                         padding: '2px 6px',
@@ -157,7 +157,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
                         <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>
                           {article.source}
                         </span>
-                        <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 10, color: '#E07B39' }}>
+                        <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 10, color: '#C8001F' }}>
                           Read →
                         </span>
                       </div>
@@ -214,7 +214,7 @@ export default function MarketIntel({ articles }: MarketIntelProps) {
                 border: '1px solid rgba(224,123,57,0.3)',
                 fontFamily: 'Inter, sans-serif', fontWeight: 600,
                 fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: '#E07B39', textDecoration: 'none',
+                color: '#C8001F', textDecoration: 'none',
               }}>
                 View All Intelligence →
               </a>

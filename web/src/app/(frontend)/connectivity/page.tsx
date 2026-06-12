@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import PitchLayout, { PitchSection } from "@/components/marketing/PitchLayout";
 import { HOME_CONNECTIVITY_DEFAULT } from "@/content/homeConnectivity";
 
@@ -10,6 +11,10 @@ export const metadata: Metadata = {
 };
 
 const c = HOME_CONNECTIVITY_DEFAULT;
+const cardStyle: CSSProperties = { background: "#fff", padding: "30px 28px", border: "1px solid #E5E7EB", borderTop: "3px solid #C8001F" };
+const numberStyle: CSSProperties = { fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: "0.18em", color: "#C8001F", marginBottom: 12 };
+const headingStyle: CSSProperties = { fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 22, textTransform: "uppercase", color: "#111111", lineHeight: 1.05, marginBottom: 10 };
+const bodyStyle: CSSProperties = { fontFamily: "Inter, sans-serif", fontSize: 13, lineHeight: 1.7, color: "#6B7280" };
 
 export default function ConnectivityPage() {
   return (
@@ -26,16 +31,16 @@ export default function ConnectivityPage() {
       ctaSub="Tell us what you need across any site — we'll quote it across the portfolio and recommend the best fit."
     >
       <PitchSection eyebrow="The Portfolio" heading="What we source & manage">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 1, background: "rgba(255,255,255,0.08)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
           {c.portfolioItems.map((item, i) => (
-            <div key={i} style={{ background: "#08142D", padding: "30px 28px" }}>
-              <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: "0.18em", color: "rgba(224,123,57,0.7)", marginBottom: 12 }}>
+            <div key={i} style={cardStyle}>
+              <div style={numberStyle}>
                 {String(i + 1).padStart(2, "0")}
               </div>
-              <h3 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 22, textTransform: "uppercase", color: "#fff", lineHeight: 1.05, marginBottom: 10 }}>
+              <h3 style={headingStyle}>
                 {item.name}
               </h3>
-              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, lineHeight: 1.7, color: "rgba(255,255,255,0.45)" }}>
+              <p style={bodyStyle}>
                 {item.blurb}
               </p>
             </div>
@@ -43,17 +48,17 @@ export default function ConnectivityPage() {
         </div>
       </PitchSection>
 
-      <PitchSection eyebrow="Why a Broker" heading="We work for you. Not the carrier." background="#0C2046">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 1, background: "rgba(255,255,255,0.08)" }}>
+      <PitchSection eyebrow="Why a Broker" heading="We work for you. Not the carrier." background="#F9FAFB">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
           {c.capabilities.map((cap, i) => (
-            <div key={i} style={{ background: "#0C2046", padding: "30px 28px" }}>
-              <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: "#E07B39", marginBottom: 14 }}>
+            <div key={i} style={cardStyle}>
+              <div style={numberStyle}>
                 {cap.num}
               </div>
-              <h3 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 22, textTransform: "uppercase", color: "#fff", lineHeight: 1.05, marginBottom: 10 }}>
+              <h3 style={headingStyle}>
                 {cap.title}
               </h3>
-              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, lineHeight: 1.7, color: "rgba(255,255,255,0.45)" }}>
+              <p style={bodyStyle}>
                 {cap.body}
               </p>
             </div>

@@ -1,102 +1,33 @@
-siteContent:
-  about:
-    missionStatement: "Konative helps manufacturers in outdoor living, surfaces, and fabrication build stronger Pacific Northwest market position through accountable representation, channel development, and measurable territory performance."
-    companyStory:
-      - "Konative was built to serve manufacturers who need more than transactional coverage in the Pacific Northwest. As a woman-owned firm rooted in manufacturer representation and strategic marketing, we bring a deliberate approach to territory management across outdoor living, hardscape, surfaces, and fabrication categories. Our work starts with listening to how a brand wants to compete, then translating that into dealer-facing execution that holds up in real markets."
-      - "We focus on the parts of growth that are hard to fake: disciplined account planning, consistent field presence, and stronger channel communication from showroom floor to regional decision makers. That means supporting the right dealers, protecting pricing and positioning conversations, and helping manufacturer teams move from reactive updates to intentional momentum. Every territory strategy is built to support durable relationships, not short-term noise."
-      - "Konative operates with the standards expected by premium brands and the responsiveness required by local partners. We know the Pacific Northwest market is relationship-driven, detail-sensitive, and operationally demanding. Our clients trust us because we show up prepared, execute with clarity, and represent their brand as if it were our own."
-    values:
-      - title: "Market Stewardship"
-        description: "We represent each brand with long-term discipline, protecting positioning while driving practical growth inside every territory."
-      - title: "Operational Clarity"
-        description: "We communicate early, directly, and with context so manufacturers and dealer partners can make confident decisions."
-      - title: "Partnership Accountability"
-        description: "We set clear priorities, track progress, and own outcomes across dealer network and showroom execution."
-      - title: "Respect for Craft"
-        description: "We value the people who build, specify, fabricate, and sell these products, and we shape strategy around how they actually work."
-    teamPlaceholders:
-      sectionHeadline: "Meet the Konative Team"
-      sectionIntro: "[PLACEHOLDER] Add short positioning copy for team credibility and service mindset."
-      fields:
-        - "Name: [PLACEHOLDER]"
-        - "Role/Title: [PLACEHOLDER]"
-        - "Specialty: [PLACEHOLDER]"
-        - "Bio (2-3 sentences): [PLACEHOLDER]"
-        - "Territory focus: [PLACEHOLDER]"
-        - "Headshot: [PLACEHOLDER]"
+site:
+  brand:
+    name: "Konative"
+    positioning: "AI-native connectivity intelligence and brokerage"
+    palette:
+      primary: "#C8001F"
+      primaryHover: "#A8001A"
+      text: "#111111"
+      steel: "#374151"
+      muted: "#6B7280"
+      divider: "#E5E7EB"
+      surface: "#F9FAFB"
 
-  contact:
-    intro: "Tell us where you want to grow in the Pacific Northwest, and we will follow up with a focused partnership conversation. Konative works with manufacturers seeking stronger territory coverage, dealer network performance, and market execution."
-    form:
-      submitLabel: "Submit Partnership Inquiry"
-      fields:
-        - label: "First Name"
-          placeholder: "Enter your first name"
-        - label: "Last Name"
-          placeholder: "Enter your last name"
-        - label: "Work Email"
-          placeholder: "name@company.com"
-        - label: "Company"
-          placeholder: "Enter your company name"
-        - label: "Title"
-          placeholder: "Your role"
-        - label: "Phone"
-          placeholder: "(###) ###-####"
-        - label: "Company Website"
-          placeholder: "https://"
-        - label: "You Are"
-          placeholder: "Manufacturer, Dealer/Retailer, Distributor, Other"
-        - label: "Product Category"
-          placeholder: "Outdoor Living, Hardscape, Surfaces, Fabrication, Other"
-        - label: "Primary Territory Interest"
-          placeholder: "WA, OR, ID, or multi-state coverage details"
-        - label: "Current Dealer Network Status"
-          placeholder: "Briefly describe your existing dealer footprint"
-        - label: "Partnership Goals"
-          placeholder: "What outcomes are you targeting in the next 12 months"
-        - label: "Message"
-          placeholder: "Share context on your products, channel strategy, and timeline"
-    confirmationMessage: "Thank you for reaching out to Konative. We have received your partnership inquiry and will respond within two business days to schedule a conversation about your territory goals, dealer network priorities, and next steps."
+  missionStatement: "Konative helps organizations source and manage critical connectivity with better intelligence, broader supplier access, and one accountable advisory relationship."
+
+  primaryAudiences:
+    - "Enterprise connectivity buyers"
+    - "Datacenter developers and operators"
+    - "AI compute infrastructure teams"
+    - "Tribal and sovereign enterprise networks"
+    - "Investors, advisors, and partners tracking infrastructure demand"
+
+  ctaStandard:
+    primary:
+      label: "Request Platform Access"
+      href: "/contact"
+    booking:
+      label: "Book a Working Session"
+      href: "https://cal.com/jeramey-james"
 
   seo:
-    defaults:
-      title: "Konative | Manufacturer Representation in the Pacific Northwest"
-      description: "Konative is a woman-owned manufacturer rep and marketing firm helping outdoor living, hardscape, surfaces, and fabrication brands grow through stronger territory coverage and dealer network performance across the Pacific Northwest."
-    pages:
-      home:
-        title: "Expect More | Konative Pacific Northwest Manufacturer Representation"
-        description: "Expect more from your Pacific Northwest manufacturer rep partner. Konative helps outdoor living, surfaces, and fabrication brands improve dealer network performance, territory coverage, and market execution."
-      about:
-        title: "About Konative | Woman-Owned Manufacturer Rep Firm in the PNW"
-        description: "Learn how Konative combines premium brand stewardship, accountable territory management, and channel expertise to represent manufacturers across outdoor living, hardscape, surfaces, and fabrication."
-      services:
-        title: "Services | Territory Representation and Dealer Network Development"
-        description: "Explore Konative services including territory representation, dealer network development, showroom positioning, fabrication channel support, and market activation for Pacific Northwest manufacturers."
-      contact:
-        title: "Partnership Inquiry | Contact Konative"
-        description: "Start a partnership inquiry with Konative to discuss Pacific Northwest territory coverage, dealer network growth, and manufacturer representation strategy for outdoor living, surfaces, and fabrication products."
-    ogImageAltSuggestions:
-      - "Konative team meeting with manufacturer partners to plan Pacific Northwest territory strategy"
-      - "Outdoor living and surface product samples in a premium showroom with dealer network context"
-      - "Manufacturer rep field visit with dealer partner in Pacific Northwest market"
-      - "Strategic planning workspace showing territory maps, channel priorities, and partnership goals"
-
-  testimonials:
-    notes: "All entries are placeholders and should be replaced with approved references before publishing."
-    items:
-      - quote: "[PLACEHOLDER] Konative gave us disciplined territory coverage from day one. Within two quarters, we had stronger dealer engagement across Washington and clearer visibility into where our line was gaining traction in outdoor living and hardscape channels."
-        authorName: "[PLACEHOLDER] Dana Mitchell"
-        authorTitle: "[PLACEHOLDER] Vice President of Sales"
-        company: "[PLACEHOLDER] Summit Outdoor Surfaces"
-      - quote: "[PLACEHOLDER] We needed a manufacturer rep partner who could balance premium brand positioning with real channel execution. Konative helped us improve showroom presentation, tighten dealer communication, and create a more reliable regional sales rhythm."
-        authorName: "[PLACEHOLDER] Alex Romero"
-        authorTitle: "[PLACEHOLDER] Director of Channel Development"
-        company: "[PLACEHOLDER] Northline Fabrication Systems"
-      - quote: "[PLACEHOLDER] Konative understands how dealer relationships actually work in the Pacific Northwest. Their follow-through, field presence, and practical market guidance helped us align our branch teams with a manufacturer line we wanted to grow."
-        authorName: "[PLACEHOLDER] Erin Caldwell"
-        authorTitle: "[PLACEHOLDER] Regional Dealer Principal"
-        company: "[PLACEHOLDER] Cascade Stone and Patio Supply"
-      - quote: "[PLACEHOLDER] The difference with Konative is operational clarity. They represent the brand professionally, communicate with precision, and bring actionable insight from showroom, fabricator, and dealer conversations that we can use immediately."
-        authorName: "[PLACEHOLDER] Michael Tran"
-        authorTitle: "[PLACEHOLDER] Senior Channel Manager"
-        company: "[PLACEHOLDER] Meridian Architectural Surfaces"
+    defaultTitle: "Konative | Connectivity Intelligence and Brokerage"
+    defaultDescription: "Konative helps enterprise buyers and datacenter teams source fiber, dark fiber, transport, cloud connectivity, colocation, and managed network services across North America."

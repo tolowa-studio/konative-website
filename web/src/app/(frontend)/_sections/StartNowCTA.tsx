@@ -56,11 +56,11 @@ export default function StartNowCTA() {
             display: 'inline-flex', alignItems: 'center', gap: 12,
             fontFamily: 'Inter, sans-serif', fontWeight: 600,
             fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase',
-            color: '#E07B39', marginBottom: 20,
+            color: '#C8001F', marginBottom: 20,
           }}>
-            <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+            <span style={{ display: 'block', width: 28, height: 1, background: '#C8001F' }} />
             Get Started
-            <span style={{ display: 'block', width: 28, height: 1, background: '#E07B39' }} />
+            <span style={{ display: 'block', width: 28, height: 1, background: '#C8001F' }} />
           </div>
           <h2 style={{
             fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
@@ -68,7 +68,7 @@ export default function StartNowCTA() {
             textTransform: 'uppercase', letterSpacing: '0.01em',
             color: '#fff', marginBottom: 20,
           }}>
-            TELL US WHERE<br />YOU <span style={{ color: '#E07B39' }}>STAND.</span>
+            TELL US WHERE<br />YOU <span style={{ color: '#C8001F' }}>STAND.</span>
           </h2>
           <p style={{
             fontFamily: 'Inter, sans-serif', fontSize: 16, lineHeight: 1.7,
@@ -87,7 +87,7 @@ export default function StartNowCTA() {
             <div key={i} style={{
               background: '#0C2046',
               padding: '44px 40px',
-              borderTop: door.primary ? '3px solid #E07B39' : '3px solid transparent',
+              borderTop: door.primary ? '3px solid #C8001F' : '3px solid transparent',
               display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
             }}>
               <h3 style={{
@@ -106,7 +106,7 @@ export default function StartNowCTA() {
               <Link href={door.href} style={{
                 fontFamily: 'Inter, sans-serif', fontWeight: 600,
                 fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase',
-                background: door.primary ? '#E07B39' : 'transparent',
+                background: door.primary ? '#C8001F' : 'transparent',
                 color: door.primary ? '#fff' : 'rgba(255,255,255,0.7)',
                 padding: door.primary ? '14px 28px' : '13px 28px',
                 border: door.primary ? 'none' : '1px solid rgba(255,255,255,0.25)',

@@ -14,6 +14,9 @@ const value: { title: string; body: string }[] = [
   { title: "Cloud on-ramps", body: "Private, low-latency Direct Connect / ExpressRoute / Interconnect into AWS, Azure, Google Cloud, and Oracle." },
   { title: "Diverse & redundant", body: "Carrier-diverse, path-diverse design so a single cut never takes the facility — sourced across the whole market." },
 ];
+const cardStyle = { background: "#fff", padding: "32px 28px", border: "1px solid #E5E7EB", borderTop: "3px solid #C8001F" };
+const h3Style = { fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 24, textTransform: "uppercase" as const, color: "#111111", lineHeight: 1.05, marginBottom: 12 };
+const pStyle = { fontFamily: "Inter, sans-serif", fontSize: 14, lineHeight: 1.7, color: "#6B7280" };
 
 export default function DataCenterConnectivityPage() {
   return (
@@ -31,26 +34,26 @@ export default function DataCenterConnectivityPage() {
       ctaSub="Bring us the site. We'll design carrier-diverse connectivity, run the market, and manage the install."
     >
       <PitchSection eyebrow="What We Source" heading="Connectivity into the facility">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 1, background: "rgba(255,255,255,0.08)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
           {value.map((v, i) => (
-            <div key={i} style={{ background: "#08142D", padding: "32px 28px" }}>
-              <h3 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 24, textTransform: "uppercase", color: "#fff", lineHeight: 1.05, marginBottom: 12 }}>{v.title}</h3>
-              <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.5)" }}>{v.body}</p>
+            <div key={i} style={cardStyle}>
+              <h3 style={h3Style}>{v.title}</h3>
+              <p style={pStyle}>{v.body}</p>
             </div>
           ))}
         </div>
       </PitchSection>
 
-      <PitchSection eyebrow="Our Edge" heading="Data is our unfair advantage" background="#0C2046">
-        <p style={{ fontFamily: "Inter, sans-serif", fontSize: 16, lineHeight: 1.75, color: "rgba(255,255,255,0.55)", maxWidth: 720, marginBottom: 28 }}>
+      <PitchSection eyebrow="Our Edge" heading="Data is our unfair advantage" background="#F9FAFB">
+        <p style={{ fontFamily: "Inter, sans-serif", fontSize: 16, lineHeight: 1.75, color: "#6B7280", maxWidth: 720, marginBottom: 28 }}>
           Konative already maps data-center projects, capacity, status, and geography across the United States and
           Canada — including First Nations projects. That dataset is a live picture of where connectivity demand is
           forming, often before the network is even ordered. We use it to advise developers, target the right
           suppliers, and move first.
         </p>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-          <a href="/map" style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: "#E07B39", textDecoration: "none", borderBottom: "1px solid #E07B39", paddingBottom: 3 }}>Explore the map →</a>
-          <a href="/intelligence" style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,0.25)", paddingBottom: 3 }}>Market intelligence →</a>
+          <a href="/map" style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: "#C8001F", textDecoration: "none", borderBottom: "1px solid #C8001F", paddingBottom: 3 }}>Explore the map →</a>
+          <a href="/intelligence" style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: "#374151", textDecoration: "none", borderBottom: "1px solid #D1D5DB", paddingBottom: 3 }}>Market intelligence →</a>
         </div>
       </PitchSection>
     </PitchLayout>

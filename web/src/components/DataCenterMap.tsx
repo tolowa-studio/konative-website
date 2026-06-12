@@ -25,7 +25,7 @@ export type CountryFilter = 'all' | 'CA' | 'US'
 
 export const STATUS_COLORS: Record<Status, string> = {
   operational: '#22d3ee',
-  construction: '#E07B39',
+  construction: '#C8001F',
   announced: '#a78bfa',
   stalled: '#f59e0b',
   blocked: '#ef4444',
@@ -431,7 +431,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                   0, 'rgba(0,0,0,0)',
                   0.2, '#0C2046',
                   0.4, '#22d3ee',
-                  0.6, '#E07B39',
+                  0.6, '#C8001F',
                   0.8, '#fff',
                   1, '#fff',
                 ],
@@ -658,9 +658,9 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
           display: 'flex', alignItems: 'center', gap: 16,
           boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
         }}>
-          <span style={{ color: '#E07B39', fontSize: 20, lineHeight: 1 }}>↑</span>
+          <span style={{ color: '#C8001F', fontSize: 20, lineHeight: 1 }}>↑</span>
           <div>
-            <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#E07B39', marginBottom: 4 }}>
+            <div style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C8001F', marginBottom: 4 }}>
               Zoom in to see this layer
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -672,7 +672,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
               </div>
               <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.2)' }}>→</div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 22, fontWeight: 700, color: '#E07B39', lineHeight: 1, fontFamily: '"Barlow Condensed", sans-serif' }}>
+                <div style={{ fontSize: 22, fontWeight: 700, color: '#C8001F', lineHeight: 1, fontFamily: '"Barlow Condensed", sans-serif' }}>
                   {infraMinZoomNeeded}+
                 </div>
                 <div style={{ fontSize: 9, color: 'rgba(224,123,57,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 2 }}>Required</div>
@@ -764,7 +764,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
           border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)',
           fontFamily: 'Inter, sans-serif',
         }}>
-          <div style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#E07B39', marginBottom: 10 }}>
+          <div style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8001F', marginBottom: 10 }}>
             Data Layers · US + CA
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5, fontSize: 12 }}>
@@ -823,7 +823,7 @@ function QueuePanel({
     display: 'flex', flexDirection: 'column',
   }
   const labelStyle: React.CSSProperties = {
-    fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#E07B39',
+    fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8001F',
   }
 
   return (
@@ -939,7 +939,7 @@ function QueuePanel({
                             <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>{icon} {row.resourceType}</span>
                             <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{row.studyPhase.replace(/_/g, ' ')}</span>
                             {distKm !== undefined && (
-                              <span style={{ fontSize: 10, color: '#E07B39', marginLeft: 'auto' }}>{distKm.toFixed(0)} km</span>
+                              <span style={{ fontSize: 10, color: '#C8001F', marginLeft: 'auto' }}>{distKm.toFixed(0)} km</span>
                             )}
                           </div>
                         </div>

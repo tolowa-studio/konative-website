@@ -1,29 +1,33 @@
 # SEO Content
 
 ## Default SEO
-- **Default meta title:** Konative | Manufacturer Representation in the Pacific Northwest
-- **Default meta description:** Konative is a woman-owned manufacturer rep and marketing firm helping outdoor living, hardscape, surfaces, and fabrication brands grow through stronger territory coverage and dealer network performance across the Pacific Northwest.
+- **Default meta title:** Konative | Connectivity Intelligence and Brokerage
+- **Default meta description:** Konative is an AI-native connectivity intelligence and brokerage platform helping enterprise buyers and datacenter teams source fiber, dark fiber, transport, cloud connectivity, colocation, and managed network services across North America.
 
 ## Per-Page Meta
 
 ### Home
-- **Meta title:** Expect More | Konative Pacific Northwest Manufacturer Representation
-- **Meta description:** Expect more from your Pacific Northwest manufacturer rep partner. Konative helps outdoor living, surfaces, and fabrication brands improve dealer network performance, territory coverage, and market execution.
+- **Meta title:** Connectivity Intelligence. Brokered. | Konative
+- **Meta description:** Find, price, and transact on fiber, dark fiber, wireless backhaul, colocation, and enterprise connectivity with Konative's AI-native brokerage and market intelligence layer.
 
-### About
-- **Meta title:** About Konative | Woman-Owned Manufacturer Rep Firm in the PNW
-- **Meta description:** Learn how Konative combines premium brand stewardship, accountable territory management, and channel expertise to represent manufacturers across outdoor living, hardscape, surfaces, and fabrication.
+### Connectivity
+- **Meta title:** What We Broker | Konative Connectivity Portfolio
+- **Meta description:** Source internet, fiber, dark fiber, wavelengths, SD-WAN, UCaaS, cloud on-ramps, cybersecurity, and managed network services through Konative.
 
-### Services
-- **Meta title:** Services | Territory Representation and Dealer Network Development
-- **Meta description:** Explore Konative services including territory representation, dealer network development, showroom positioning, fabrication channel support, and market activation for Pacific Northwest manufacturers.
+### Datacenters
+- **Meta title:** Datacenter Connectivity | Konative
+- **Meta description:** Connectivity advisory for greenfield datacenter developers, hyperscalers, and AI compute operators, including route analysis, dark fiber sourcing, and carrier-neutral procurement.
+
+### Intelligence
+- **Meta title:** Connectivity Intelligence | Konative
+- **Meta description:** Public market intelligence for connectivity buyers: live markets, datacenter demand signals, route analysis, power constraints, and site methodology.
 
 ### Contact
-- **Meta title:** Partnership Inquiry | Contact Konative
-- **Meta description:** Start a partnership inquiry with Konative to discuss Pacific Northwest territory coverage, dealer network growth, and manufacturer representation strategy for outdoor living, surfaces, and fabrication products.
+- **Meta title:** Request Platform Access | Konative
+- **Meta description:** Contact Konative to source connectivity, request a market brief, review datacenter network options, or book a working session.
 
 ## OG Image Alt Text Suggestions
-- Konative team meeting with manufacturer partners to plan Pacific Northwest territory strategy
-- Outdoor living and surface product samples in a premium showroom with dealer network context
-- Manufacturer rep field visit with dealer partner in Pacific Northwest market
-- Strategic planning workspace showing territory maps, channel priorities, and partnership goals
+- Konative connectivity market dashboard showing route, carrier, and market intelligence
+- North American network route map with datacenter and fiber availability overlays
+- Datacenter connectivity analysis with supplier comparison and route options
+- Enterprise network procurement workspace showing quote comparison and market signals

@@ -10,7 +10,7 @@ import type { QueueRadiusResponse } from '@/types/queue'
 
 const STATUS_COLORS: Record<string, string> = {
   operational: '#22d3ee',
-  construction: '#E07B39',
+  construction: '#C8001F',
   announced: '#a78bfa',
   stalled: '#f59e0b',
   blocked: '#ef4444',
@@ -54,7 +54,7 @@ const LABEL_STYLE: React.CSSProperties = {
   fontSize: 9,
   letterSpacing: '0.2em',
   textTransform: 'uppercase',
-  color: '#E07B39',
+  color: '#C8001F',
   fontFamily: 'Inter, sans-serif',
 }
 
@@ -211,7 +211,7 @@ function SiteModePanel({ feature: p, lat, lng, onClose }: SiteProps) {
                 padding: '1px 6px',
                 background: 'rgba(224,123,57,0.15)',
                 border: '1px solid rgba(224,123,57,0.4)',
-                color: '#E07B39',
+                color: '#C8001F',
               }}>
                 {sourceLabel}
               </span>
@@ -377,7 +377,7 @@ function SiteModePanel({ feature: p, lat, lng, onClose }: SiteProps) {
                     </div>
                     <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>
                       out of 100
-                      {r.metadata.province && <div style={{ color: '#E07B39', letterSpacing: '0.08em' }}>{r.metadata.province}</div>}
+                      {r.metadata.province && <div style={{ color: '#C8001F', letterSpacing: '0.08em' }}>{r.metadata.province}</div>}
                     </div>
                   </div>
                   {dims.map(({ key, label, d }, i) => (
@@ -487,7 +487,7 @@ function IdentifyModePanel({ lat, lng, onClose }: IdentifyProps) {
           </div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontVariantNumeric: 'tabular-nums' }}>
             {lat.toFixed(4)}, {lng.toFixed(4)}
-            {isCanadian && <span style={{ marginLeft: 8, color: '#E07B39', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Canada</span>}
+            {isCanadian && <span style={{ marginLeft: 8, color: '#C8001F', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Canada</span>}
           </div>
         </div>
         <button
@@ -601,7 +601,7 @@ function IdentifyModePanel({ lat, lng, onClose }: IdentifyProps) {
                     </div>
                     <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)' }}>
                       out of 100
-                      {r.metadata.province && <div style={{ color: '#E07B39', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>{r.metadata.province}</div>}
+                      {r.metadata.province && <div style={{ color: '#C8001F', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>{r.metadata.province}</div>}
                     </div>
                   </div>
                   {dims.map(({ key, label, d }, i) => (

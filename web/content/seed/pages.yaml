@@ -1,114 +1,38 @@
 pages:
-  - title: Home
-    slug: home
-    meta:
-      title: "Expect More | Konative Pacific Northwest Manufacturer Representation"
-      description: "Expect more from your Pacific Northwest manufacturer rep partner. Konative helps outdoor living, surfaces, and fabrication brands improve dealer network performance, territory coverage, and market execution."
-    layout:
-      - blockType: hero-rotating
-        headline: "Expect More"
-        rotatingWords:
-          - word: "Results"
-          - word: "Reach"
-          - word: "Revenue"
-          - word: "Representation"
-        subtitle: "Konative helps outdoor living, surface, and fabrication manufacturers win stronger territory coverage, grow dealer relationships, and convert market presence into measurable performance across the Pacific Northwest."
-        ctaLabel: "Start Partnership Inquiry"
-        ctaLink: "/contact"
-      - blockType: stat-bar
-        stats:
-          - value: "12+"
-            label: "Brands Represented"
-          - value: "3"
-            label: "Territories Covered (WA, OR, ID)"
-          - value: "18+"
-            label: "Years in Manufacturer Representation"
-          - value: "250+"
-            label: "Dealer and Showroom Relationships"
-      - blockType: three-card-grid
-        sectionTitle: "How We Drive Territory Performance"
-        cards:
-          - title: "Territory Representation"
-            description: "Konative acts as an extension of your sales organization in the Pacific Northwest, bringing disciplined field coverage and consistent market visibility. We turn scattered opportunities into focused territory momentum through structured dealer engagement and account planning."
-            linkLabel: "Explore Territory Representation"
-            linkUrl: "/services"
-          - title: "Channel Development"
-            description: "We build and strengthen the dealer network with intentional onboarding, showroom strategy, and clear performance accountability. The result is better product placement, cleaner communication, and stronger sell-through across priority accounts."
-            linkLabel: "Explore Channel Development"
-            linkUrl: "/services"
-          - title: "Market Activation"
-            description: "Konative aligns manufacturer goals with local market execution through coordinated launches, education, and partner-facing messaging. We help hardscape, surfaces, and fabrication brands show up with clarity where buying decisions are made."
-            linkLabel: "Explore Market Activation"
-            linkUrl: "/services"
-      - blockType: split-image-text
-        heading: "Why Konative"
-        body: "Konative combines senior manufacturer rep discipline with practical market intelligence specific to outdoor living, surfaces, and fabrication in the Pacific Northwest. We do more than open doors across a dealer network: we protect brand position, improve channel alignment, and create repeatable sales motion across each territory. Our clients value clear communication, accountable execution, and representation that treats every showroom, fabricator, and dealer relationship as long-term brand equity. That is why partners come to Konative when they expect more than coverage and need performance."
-        ctaLabel: "Submit Partnership Inquiry"
-        ctaLink: "/contact"
-        imagePosition: "right"
-        image: "[PLACEHOLDER_MEDIA_ID]"
-      - blockType: cta-band
-        heading: "Ready to expand your Pacific Northwest representation with a partner built for measurable channel growth"
-        ctaLabel: "Start Partnership Inquiry"
-        ctaLink: "/contact"
-        style: "warm"
+  - slug: home
+    title: "Connectivity Intelligence. Brokered."
+    description: "Konative helps infrastructure buyers source connectivity with market intelligence, carrier-neutral brokerage, and one accountable advisory relationship."
+    primaryCta:
+      label: "Request Platform Access"
+      href: "/contact"
+    secondaryCta:
+      label: "Explore Live Markets"
+      href: "/markets"
 
-  - title: About
-    slug: about
-    meta:
-      title: "About Konative | Woman-Owned Manufacturer Rep Firm in the PNW"
-      description: "Learn how Konative combines premium brand stewardship, accountable territory management, and channel expertise to represent manufacturers across outdoor living, hardscape, surfaces, and fabrication."
-    layout:
-      - blockType: split-image-text
-        heading: "Built for Brands That Expect More from Representation"
-        body: "Konative was built to serve manufacturers who need more than transactional coverage in the Pacific Northwest. As a woman-owned firm rooted in manufacturer representation and strategic marketing, we bring a deliberate approach to territory management across outdoor living, hardscape, surfaces, and fabrication categories. We focus on disciplined account planning, consistent field presence, and stronger channel communication from showroom floor to regional decision makers. Our clients trust us because we show up prepared, execute with clarity, and represent their brand as if it were our own."
-        ctaLabel: "Start Partnership Inquiry"
-        ctaLink: "/contact"
-        imagePosition: "left"
-        image: "[PLACEHOLDER_MEDIA_ID]"
-      - blockType: cta-band
-        heading: "Partner with a Pacific Northwest rep team that treats your brand like a long-term asset"
-        ctaLabel: "Submit Partnership Inquiry"
-        ctaLink: "/contact"
-        style: "primary"
+  - slug: connectivity
+    title: "One broker. Every network."
+    description: "Internet, fiber, dark fiber, wavelengths, SD-WAN, voice, cloud connectivity, cybersecurity, and managed services sourced through a vendor-neutral market process."
+    primaryCta:
+      label: "Get a Connectivity Quote"
+      href: "/contact"
 
-  - title: Services
-    slug: services
-    meta:
-      title: "Services | Territory Representation and Dealer Network Development"
-      description: "Explore Konative services including territory representation, dealer network development, showroom positioning, fabrication channel support, and market activation for Pacific Northwest manufacturers."
-    layout:
-      - blockType: three-card-grid
-        sectionTitle: "Core Service Areas"
-        cards:
-          - title: "Territory Representation"
-            description: "Dedicated Pacific Northwest manufacturer rep coverage with structured account planning, field execution, and performance visibility across priority territories."
-            linkLabel: "Partnership Inquiry"
-            linkUrl: "/contact"
-          - title: "Dealer Network Development"
-            description: "Dealer prospecting, onboarding, training support, and channel alignment to improve product placement, consistency, and sell-through."
-            linkLabel: "Partnership Inquiry"
-            linkUrl: "/contact"
-          - title: "Market Activation and Enablement"
-            description: "Regional launch support, showroom messaging alignment, and partner-facing activation built to strengthen market traction and long-term channel growth."
-            linkLabel: "Partnership Inquiry"
-            linkUrl: "/contact"
-      - blockType: cta-band
-        heading: "Need deeper territory coverage and stronger dealer execution"
-        ctaLabel: "Start Partnership Inquiry"
-        ctaLink: "/contact"
-        style: "warm"
+  - slug: datacenters
+    title: "The right fiber before the concrete pours."
+    description: "Early connectivity analysis for datacenter developers, AI compute operators, and large-load infrastructure teams."
+    primaryCta:
+      label: "Get Site Analysis"
+      href: "/contact"
 
-  - title: Contact
-    slug: contact
-    meta:
-      title: "Partnership Inquiry | Contact Konative"
-      description: "Start a partnership inquiry with Konative to discuss Pacific Northwest territory coverage, dealer network growth, and manufacturer representation strategy for outdoor living, surfaces, and fabrication products."
-    layout:
-      - blockType: split-image-text
-        heading: "Start a Partnership Conversation"
-        body: "Tell us where you want to grow in the Pacific Northwest, and we will follow up with a focused partnership conversation. Konative works with manufacturers seeking stronger territory coverage, dealer network performance, and market execution."
-        ctaLabel: "Submit Partnership Inquiry"
-        ctaLink: "/contact"
-        imagePosition: "right"
-        image: "[PLACEHOLDER_MEDIA_ID]"
+  - slug: intelligence
+    title: "The signal layer behind brokerage."
+    description: "Public market intelligence across routes, suppliers, datacenter demand, power constraints, and live connectivity markets."
+    primaryCta:
+      label: "Read the Feed"
+      href: "/news"
+
+  - slug: contact
+    title: "Let's source the network."
+    description: "Bring the site, market, route, renewal, or connectivity requirement. Konative will review it and recommend the best next step."
+    primaryCta:
+      label: "Send Requirement"
+      href: "/contact"

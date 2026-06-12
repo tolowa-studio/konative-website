@@ -160,7 +160,7 @@ function Hero() {
       </div>
 
       <div style={{ position: 'relative', zIndex: 2, borderTop: `1px solid ${DIVIDER}`, background: '#fff' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))' }}>
           {statsData.map((s, i) => (
             <div key={i} ref={s.ref ?? undefined} style={{ padding: '32px', borderRight: i < 3 ? `1px solid ${DIVIDER}` : 'none', borderTop: `2px solid ${RED}` }}>
               <div style={{ fontFamily: MONO, fontWeight: 600, fontSize: 40, color: TEXT, lineHeight: 1, letterSpacing: '-0.02em' }}>{s.display}</div>
@@ -194,7 +194,7 @@ function Ticker() {
   }, [])
   const row = [...items, ...items]
   return (
-    <div style={{ position: 'relative', zIndex: 2, background: DARK, borderTop: `1px solid ${RED}`, overflow: 'hidden' }}>
+    <div style={{ position: 'relative', zIndex: 2, background: DARK, borderTop: `1px solid ${RED}`, overflow: 'hidden', maxWidth: '100vw', contain: 'paint layout' }}>
       <style>{`
         @keyframes kn-ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
         .kn-ticker-track{display:inline-flex;white-space:nowrap;animation:kn-ticker 38s linear infinite;}
@@ -293,7 +293,7 @@ function FeatureCards() {
             One platform. The entire <span style={{ color: RED }}>connectivity</span> stack.
           </h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 24 }}>
           {CARDS.map((c, i) => <FeatureCard key={i} card={c} />)}
         </div>
       </div>
@@ -314,7 +314,7 @@ function SignalRow({ s, last }: { s: Signal; last: boolean }) {
   const [hov, setHov] = useState(false)
   return (
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{ display: 'grid', gridTemplateColumns: '120px 1fr auto', gap: 20, alignItems: 'center', padding: '22px 26px', borderBottom: last ? 'none' : `1px solid ${DIVIDER}`, borderLeft: hov ? `3px solid ${RED}` : '3px solid transparent', background: hov ? '#FAFAFA' : '#fff', transition: 'background 0.15s, border-color 0.15s', cursor: 'pointer' }}>
+      style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: 20, alignItems: 'center', padding: '22px 26px', borderBottom: last ? 'none' : `1px solid ${DIVIDER}`, borderLeft: hov ? `3px solid ${RED}` : '3px solid transparent', background: hov ? '#FAFAFA' : '#fff', transition: 'background 0.15s, border-color 0.15s', cursor: 'pointer' }}>
       <span style={{ fontFamily: BODY, fontWeight: 600, fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: RED, border: `1px solid ${RED}33`, background: RED_TINT, padding: '4px 8px', borderRadius: 2 }}>{s.tag}</span>
       <div>
         <div style={{ fontFamily: BODY, fontWeight: 600, fontSize: 15.5, color: TEXT, lineHeight: 1.4, marginBottom: 5 }}>{s.title}</div>
@@ -357,7 +357,7 @@ function MarketIntel() {
   }, [])
   return (
     <section style={{ background: SURFACE, padding: '100px 32px', borderTop: `1px solid ${DIVIDER}`, borderBottom: `1px solid ${DIVIDER}` }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 360px', gap: 72 }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: 72 }}>
         <div>
           <div className="kn-fade-up" style={{ marginBottom: 40 }}>
             <Eyebrow>Live Intelligence</Eyebrow>
@@ -466,7 +466,7 @@ function MarketRow({ r, last }: { r: MarketRowData; last: boolean }) {
   const isUp = r.index7d.startsWith('+') || r.index7d === 'NEW'
   return (
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.6fr 1fr 1fr', padding: '20px 28px', borderBottom: last ? 'none' : `1px solid ${DIVIDER}`, alignItems: 'center', borderLeft: hov ? `3px solid ${RED}` : '3px solid transparent', background: hov ? '#FAFAFA' : '#fff', transition: 'background 0.15s, border-color 0.15s', cursor: 'pointer' }}>
+      style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 135px), 1fr))', gap: 12, padding: '20px 28px', borderBottom: last ? 'none' : `1px solid ${DIVIDER}`, alignItems: 'center', borderLeft: hov ? `3px solid ${RED}` : '3px solid transparent', background: hov ? '#FAFAFA' : '#fff', transition: 'background 0.15s, border-color 0.15s', cursor: 'pointer' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 600, color: RED, background: RED_TINT, padding: '4px 7px', borderRadius: 2 }}>{r.code}</span>
         <span style={{ fontFamily: BODY, fontWeight: 600, fontSize: 15, color: TEXT }}>{r.market}</span>
@@ -500,7 +500,7 @@ function MarketsTable() {
           <div style={{ fontFamily: MONO, fontSize: 13, color: MUTED }}>508 active routes · updated 14m ago</div>
         </div>
         <div className="kn-fade-up" style={{ background: '#fff', border: `1px solid ${DIVIDER}` }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1.6fr 1fr 1fr', padding: '14px 28px', borderBottom: `1px solid ${DIVIDER}`, background: SURFACE }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 135px), 1fr))', gap: 12, padding: '14px 28px', borderBottom: `1px solid ${DIVIDER}`, background: SURFACE }}>
             {['Market', 'Routes', 'Inventory Type', 'Index 7d', 'Status'].map(h => (
               <div key={h} style={{ fontFamily: BODY, fontWeight: 600, fontSize: 10.5, letterSpacing: '0.12em', textTransform: 'uppercase', color: MUTED }}>{h}</div>
             ))}
@@ -543,7 +543,7 @@ function WhoWeServe() {
             Built for both sides of the <span style={{ color: RED }}>transaction</span>.
           </h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', border: `1px solid ${DIVIDER}` }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', border: `1px solid ${DIVIDER}` }}>
           {SEGMENTS.map((s, i) => <SegmentPanel key={i} s={s} last={i === SEGMENTS.length - 1} />)}
         </div>
       </div>
@@ -555,7 +555,7 @@ function WhoWeServe() {
 function StatsBand() {
   return (
     <section style={{ background: SURFACE, borderTop: `1px solid ${DIVIDER}`, borderBottom: `1px solid ${DIVIDER}` }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))' }}>
         {[
           { v: '847', l: 'Routes Indexed' },
           { v: '$2.4B', l: 'Capacity Brokered' },
@@ -579,7 +579,7 @@ function CTASection() {
       <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', border: `1px solid ${DIVIDER}`, overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, rgba(55,65,81,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.04) 1px, transparent 1px)', backgroundSize: '56px 56px' }} />
         <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 4, background: RED }} />
-        <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 60, alignItems: 'center', padding: '64px 56px' }}>
+        <div style={{ position: 'relative', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 60, alignItems: 'center', padding: '64px 56px' }}>
           <div className="kn-fade-up">
             <Eyebrow>Request Access</Eyebrow>
             <h2 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 'clamp(40px,5.5vw,72px)', lineHeight: 0.9, textTransform: 'uppercase', color: TEXT, marginBottom: 20 }}>

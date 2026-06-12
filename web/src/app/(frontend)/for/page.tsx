@@ -4,7 +4,7 @@ import { listAudiencePages } from "@/lib/audiences/fetch";
 import { getAudienceIdentity } from "@/components/audience/audienceIdentity";
 
 const NAVY = "#08142D";
-const ORANGE = "#E07B39";
+const ORANGE = "#C8001F";
 const BORDER = "rgba(255,255,255,0.07)";
 const BORDER_MED = "rgba(255,255,255,0.12)";
 const TEXT_DIM = "rgba(255,255,255,0.55)";

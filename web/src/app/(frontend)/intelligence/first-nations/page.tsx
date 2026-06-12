@@ -146,7 +146,7 @@ export default function FirstNationsPage() {
       {/* Hero */}
       <section style={{ padding: '4rem 2rem 3rem', borderBottom: '1px solid #1e293b', background: 'linear-gradient(180deg, #0f1728 0%, #0b1020 100%)' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#E07B39', marginBottom: '0.75rem' }}>
+          <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8001F', marginBottom: '0.75rem' }}>
             Intelligence · First Nations + Tribal Data Centers
           </p>
           <h1 style={{ fontSize: 'clamp(2.25rem, 5.5vw, 3.5rem)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-0.01em', lineHeight: 1.05 }}>
@@ -155,11 +155,11 @@ export default function FirstNationsPage() {
           <p style={{ color: '#94a3b8', maxWidth: 760, lineHeight: 1.65, margin: '0 0 1.25rem', fontSize: '1.0625rem' }}>
             The next phase of North American data center development runs through Indian Country and First Nations land. This is not a soft observation — it is the structural reality of where transmission, water, available generation capacity, and federal preference now align. Konative covers both Canada and the United States, and our default partnership frame is majority Indigenous equity, not lease-only.
           </p>
-          <p style={{ color: '#cbd5e1', maxWidth: 760, lineHeight: 1.65, margin: '0 0 1.5rem', fontSize: '0.95rem', borderLeft: '2px solid #E07B39', paddingLeft: '0.875rem' }}>
+          <p style={{ color: '#cbd5e1', maxWidth: 760, lineHeight: 1.65, margin: '0 0 1.5rem', fontSize: '0.95rem', borderLeft: '2px solid #C8001F', paddingLeft: '0.875rem' }}>
             We also acknowledge the asymmetry. Indigenous communities have been on the wrong end of every previous extraction cycle — fur, timber, mining, oil, hydro. The data center cycle is different only if it is structured to be different. Konative&apos;s thesis is that the deals worth doing are the ones where the host Nation owns the asset, controls the data jurisdiction, and shapes the workforce pathway.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#E07B39', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#C8001F', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
               Discuss a Partnership →
             </a>
             <Link href="/methodology" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
@@ -179,7 +179,7 @@ export default function FirstNationsPage() {
             { v: '~100+', l: 'DC proposals tracked on/near US tribal land' },
           ].map(s => (
             <div key={s.l} style={{ background: '#0f1728', border: '1px solid #1e293b', borderRadius: 8, padding: '1.25rem' }}>
-              <div style={{ fontSize: '1.875rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#E07B39', lineHeight: 1, marginBottom: '0.4rem' }}>{s.v}</div>
+              <div style={{ fontSize: '1.875rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, color: '#C8001F', lineHeight: 1, marginBottom: '0.4rem' }}>{s.v}</div>
               <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.l}</div>
             </div>
           ))}
@@ -198,7 +198,7 @@ export default function FirstNationsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
             {PRINCIPLES.map((p, i) => (
               <div key={p.label} style={{ background: '#0f1728', border: '1px solid #1e293b', borderRadius: 8, padding: '1.5rem' }}>
-                <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#E07B39', marginBottom: '0.75rem', fontWeight: 600 }}>0{i + 1}</div>
+                <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#C8001F', marginBottom: '0.75rem', fontWeight: 600 }}>0{i + 1}</div>
                 <h3 style={{ fontSize: '1.125rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: '0 0 0.5rem', color: '#f6f7fb' }}>
                   {p.label}
                 </h3>
@@ -224,7 +224,7 @@ export default function FirstNationsPage() {
               <div key={fn.nation} style={{ background: '#0b1020', border: '1px solid #1e293b', borderLeft: `3px solid ${fn.accent}`, borderRadius: 8, padding: '1.5rem' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '0.75rem', alignItems: 'baseline', marginBottom: '0.5rem' }}>
                   <div>
-                    <h3 style={{ fontSize: '1.25rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: 0, color: '#E07B39', letterSpacing: '0.01em' }}>
+                    <h3 style={{ fontSize: '1.25rem', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, margin: 0, color: '#C8001F', letterSpacing: '0.01em' }}>
                       {fn.nation.toUpperCase()}
                     </h3>
                     <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{fn.location} · {fn.country}</span>
@@ -309,7 +309,7 @@ export default function FirstNationsPage() {
             Whether you&apos;re an Indigenous Development Corp evaluating a DC opportunity, a hyperscaler looking to host on Indigenous land with the right structure, or a capital partner seeking sovereign-aligned infra exposure — Konative starts every conversation with the host Nation&apos;s priorities.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#E07B39', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
+            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#C8001F', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
               Book a Call →
             </a>
             <Link href="/canada" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.9375rem', border: '1px solid #334155' }}>

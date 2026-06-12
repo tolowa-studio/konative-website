@@ -158,14 +158,14 @@ function PresetRow({ preset, index, isActive, onSelect }: {
           fontFamily: '"Barlow Condensed", sans-serif',
           fontSize: 13,
           fontWeight: 700,
-          color: isActive ? '#E07B39' : '#fff',
+          color: isActive ? '#C8001F' : '#fff',
           textTransform: 'uppercase',
           letterSpacing: '0.04em',
           flex: 1,
         }}>
           {preset.name}
         </span>
-        {isActive && <span style={{ color: '#E07B39', fontSize: 10, flexShrink: 0 }}>●</span>}
+        {isActive && <span style={{ color: '#C8001F', fontSize: 10, flexShrink: 0 }}>●</span>}
       </div>
       <div style={{
         fontFamily: 'Inter, sans-serif',
@@ -186,7 +186,7 @@ function PresetRow({ preset, index, isActive, onSelect }: {
               fontWeight: 700,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              color: '#E07B39',
+              color: '#C8001F',
               background: 'rgba(224,123,57,0.12)',
               border: '1px solid rgba(224,123,57,0.25)',
               padding: '1px 5px',
@@ -267,7 +267,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
         }}
       >
         {activePreset ? (
-          <span style={{ color: '#E07B39' }}>◉</span>
+          <span style={{ color: '#C8001F' }}>◉</span>
         ) : (
           <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>◈</span>
         )}
@@ -304,7 +304,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
               fontSize: 9,
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: '#E07B39',
+              color: '#C8001F',
               fontFamily: 'Inter, sans-serif',
               marginBottom: 1,
             }}>
@@ -361,7 +361,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
                 fontSize: 9,
                 letterSpacing: '0.10em',
                 textTransform: 'uppercase',
-                color: '#E07B39',
+                color: '#C8001F',
                 textDecoration: 'none',
                 whiteSpace: 'nowrap',
                 flexShrink: 0,

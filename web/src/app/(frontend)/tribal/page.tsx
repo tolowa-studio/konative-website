@@ -45,7 +45,7 @@ export default function TribalPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 1, background: "rgba(255,255,255,0.08)" }}>
           {facts.map((f, i) => (
             <div key={i} style={{ background: "#08142D", padding: "32px 28px" }}>
-              <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 44, color: "#E07B39", lineHeight: 1, marginBottom: 10 }}>{f.value}</div>
+              <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 700, fontSize: 44, color: "#C8001F", lineHeight: 1, marginBottom: 10 }}>{f.value}</div>
               <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 12, color: "#fff", marginBottom: 8 }}>{f.label}</div>
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.4)" }}>{f.note}</p>
             </div>

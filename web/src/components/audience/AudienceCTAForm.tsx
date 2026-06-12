@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-const ORANGE = "#E07B39";
+const ORANGE = "#C8001F";
 const BODY_FONT = "Inter, sans-serif";
 const BORDER = "rgba(255,255,255,0.15)";
 

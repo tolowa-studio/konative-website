@@ -9,11 +9,12 @@ const navLinks: { label: string; url: string }[] = [
   { label: "Markets", url: "/markets" },
   { label: "Coverage", url: "/map" },
   { label: "Brokerage", url: "/connectivity" },
+  { label: "Datacenters", url: "/datacenters" },
   { label: "Insights", url: "/news" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
-const DARK_HERO_PAGES = new Set(["/connectivity", "/tribal", "/data-center-connectivity", "/land", "/invest", "/capacity", "/map", "/projects", "/markets", "/canada", "/methodology", "/intelligence", "/intelligence/saudi", "/intelligence/first-nations", "/news", "/market-intel", "/contact", "/assessment"]);
+const DARK_HERO_PAGES = new Set(["/tribal", "/land", "/invest", "/capacity", "/map", "/projects", "/canada", "/methodology", "/intelligence/saudi", "/intelligence/first-nations", "/market-intel", "/assessment"]);
 
 function isDarkHeroPath(pathname: string): boolean {
   if (DARK_HERO_PAGES.has(pathname)) return true;
@@ -108,17 +109,10 @@ export default function Header() {
 
   const navStyle: React.CSSProperties = {
     display: "flex",
-    gap: 22,
+    gap: 16,
     flex: 1,
     justifyContent: "center",
     minWidth: 0,
-  };
-
-  const actionsStyle: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    flexShrink: 0,
   };
 
   const ctaStyle: React.CSSProperties = {
@@ -198,7 +192,7 @@ export default function Header() {
                 const navLinkStyle: React.CSSProperties = {
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 500,
-                  fontSize: 12,
+                  fontSize: 11,
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
                   textDecoration: "none",
@@ -223,29 +217,14 @@ export default function Header() {
 
           {/* Desktop CTA */}
           {!isMobile && (
-            <div style={actionsStyle}>
-              <Link
-                href="/contact"
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontWeight: 600,
-                  fontSize: 12.5,
-                  color: scrolled ? "#374151" : "#fff",
-                  textDecoration: "none",
-                  transition: "color 0.3s",
-                }}
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/contact"
-                style={ctaStyle}
-                onMouseEnter={() => setCtaHovered(true)}
-                onMouseLeave={() => setCtaHovered(false)}
-              >
-                Request Access
-              </Link>
-            </div>
+            <Link
+              href="/contact"
+              style={ctaStyle}
+              onMouseEnter={() => setCtaHovered(true)}
+              onMouseLeave={() => setCtaHovered(false)}
+            >
+              Request Access
+            </Link>
           )}
 
           {/* Hamburger */}
