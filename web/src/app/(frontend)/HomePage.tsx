@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const DataCenterMap = dynamic(() => import('@/components/DataCenterMap'), { ssr: false })
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const RED = '#C8001F'
@@ -119,42 +122,50 @@ function Hero() {
   const routeCount = health?.routeCount ?? 847
   const marketCount = health?.marketCount ?? 12
   const [, r1] = useCountUp(routeCount)
-  const [, r2] = useCountUp(marketCount)
+  const [, r2] = useCountUp(2)
   const statsData = [
-    { ref: r1, display: String(routeCount), label: 'Routes Analyzed' },
-    { ref: r2, display: String(marketCount), label: 'Active Markets' },
-    { ref: null, display: health?.capacityBrokered ?? '$2.4B', label: 'Capacity Brokered' },
-    { ref: null, display: health?.latency ?? '38ms', label: 'Median Quote Latency' },
+    { ref: r1, display: String(routeCount), label: 'Signals + Routes Analyzed' },
+    { ref: r2, display: '2', label: 'Core Verticals' },
+    { ref: null, display: '100+', label: 'Supplier Portfolio' },
+    { ref: null, display: '$0', label: 'Buyer Advisory Cost' },
   ]
 
   return (
-    <section style={{ position: 'relative', background: '#fff', paddingTop: 66 }}>
+    <section style={{ position: 'relative', background: '#fff', paddingTop: 66, minHeight: '100vh', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0.9 }}>
+        <DataCenterMap backgroundMode />
+      </div>
       <div style={{
-        position: 'absolute', inset: 0, zIndex: 0,
-        backgroundImage: 'linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)',
-        backgroundSize: '56px 56px',
+        position: 'absolute', inset: 0, zIndex: 1,
+        background: 'linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.91) 34%, rgba(255,255,255,0.58) 62%, rgba(255,255,255,0.20) 100%)',
       }} />
-      <div style={{ position: 'absolute', top: 0, right: 0, width: '42%', height: '100%', zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-        <div style={{ position: 'absolute', top: '-10%', right: '-30%', width: 4, height: '130%', background: RED, transform: 'rotate(18deg)', opacity: 0.9 }} />
-        <div style={{ position: 'absolute', top: '-10%', right: '-22%', width: 1, height: '130%', background: RED, transform: 'rotate(18deg)', opacity: 0.4 }} />
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 1,
+        backgroundImage: 'linear-gradient(to right, rgba(55,65,81,0.045) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.045) 1px, transparent 1px)',
+        backgroundSize: '56px 56px',
+        pointerEvents: 'none',
+      }} />
+      <div style={{ position: 'absolute', top: 0, right: 0, width: '42%', height: '100%', zIndex: 1, overflow: 'hidden', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', top: '-10%', right: '-30%', width: 4, height: '130%', background: RED, transform: 'rotate(18deg)', opacity: 0.74 }} />
+        <div style={{ position: 'absolute', top: '-10%', right: '-22%', width: 1, height: '130%', background: RED, transform: 'rotate(18deg)', opacity: 0.28 }} />
       </div>
 
       <div style={{ position: 'relative', zIndex: 2, maxWidth: 1280, margin: '0 auto', padding: '110px 32px 0' }}>
         <div style={{ maxWidth: 880 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 9, border: `1px solid ${DIVIDER}`, background: '#fff', padding: '7px 14px', borderRadius: 2, marginBottom: 30 }}>
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: RED, boxShadow: `0 0 0 3px ${RED}22` }} />
-            <span style={{ fontFamily: BODY, fontWeight: 600, fontSize: 11.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: STEEL }}>Velocity Intelligence for Connectivity Markets</span>
+            <span style={{ fontFamily: BODY, fontWeight: 600, fontSize: 11.5, letterSpacing: '0.08em', textTransform: 'uppercase', color: STEEL }}>Sovereignty-first connectivity intelligence</span>
           </div>
           <h1 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 'clamp(56px, 8.5vw, 116px)', lineHeight: 0.92, textTransform: 'uppercase', color: TEXT, letterSpacing: '0.005em', marginBottom: 36 }}>
-            CONNECTIVITY<br />INTELLIGENCE.{' '}
+            TRIBAL + DATA CENTER<br />CONNECTIVITY.{' '}
             <span style={{ color: RED }}>BROKERED.</span>
           </h1>
           <p style={{ fontFamily: BODY, fontSize: 19, lineHeight: 1.6, color: MUTED, maxWidth: 640, marginBottom: 38 }}>
-            Konative is the AI-native brokerage for large-scale connectivity. Find, price, and transact on fiber, dark fiber, wireless backhaul, and colocation across North America — with the intelligence layer enterprise buyers actually trust.
+            Konative is the connectivity intelligence brokerage for Tribal enterprises and the data centers powering AI. We combine sovereignty-aware advisory, Avant&apos;s supplier portfolio, and a live infrastructure map to source fiber, transport, internet, cloud on-ramps, and resilient networks before the market sees the RFP.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 64 }}>
-            <PrimaryBtn href="/contact" large>Request Platform Access</PrimaryBtn>
-            <GhostBtn href="/markets" large>Explore Live Markets →</GhostBtn>
+            <PrimaryBtn href="/contact" large>Request Connectivity Strategy</PrimaryBtn>
+            <GhostBtn href="/tribal" large>Explore Tribal Enterprise →</GhostBtn>
           </div>
         </div>
       </div>
@@ -230,13 +241,13 @@ function TrustStrip() {
     <section style={{ background: '#fff', borderBottom: `1px solid ${DIVIDER}` }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '36px 32px', display: 'flex', alignItems: 'center', gap: 48, flexWrap: 'wrap', justifyContent: 'space-between' }}>
         <div style={{ fontFamily: BODY, fontWeight: 600, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#9CA3AF', maxWidth: 180, lineHeight: 1.5 }}>
-          Trusted infrastructure for connectivity buyers
+          Trusted infrastructure for Tribal enterprise and AI data-center connectivity
         </div>
         <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
           {[
-            { v: '99.99%', l: 'Quote Accuracy SLA' },
-            { v: '14 Tier-1', l: 'Carrier Networks Indexed' },
-            { v: '<48h', l: 'Median Time to Term Sheet' },
+            { v: 'Sovereign', l: 'First Advisory' },
+            { v: '100+', l: 'Supplier Portfolio' },
+            { v: '18–36mo', l: 'Early Signal Window' },
             { v: '$0', l: 'Cost to Buyers' },
           ].map((m, i) => (
             <div key={i} style={{ padding: '0 36px', borderLeft: i > 0 ? `1px solid ${DIVIDER}` : 'none' }}>
@@ -252,9 +263,9 @@ function TrustStrip() {
 
 // ─── FEATURE CARDS ────────────────────────────────────────────────────────────
 const CARDS = [
-  { n: '01', title: 'Intelligence', body: 'Real-time route availability, capacity, and pricing intelligence across 14 Tier-1 carrier networks. Know the market before you negotiate it.', cta: 'Explore Intelligence', href: '/intelligence', icon: 'intel' },
-  { n: '02', title: 'Brokerage', body: 'Source, price, and transact fiber, dark fiber, wavelengths, backhaul, and colocation. From RFQ to executed term sheet in under 48 hours.', cta: 'Start a Transaction', href: '/contact', icon: 'broker' },
-  { n: '03', title: 'Coverage', body: 'Continental visibility across 12 active metro markets in the US and Canada — with route-level mapping and cross-border interconnection.', cta: 'View Coverage Map', href: '/map', icon: 'globe' },
+  { n: '01', title: 'Tribal Enterprise', body: 'Sovereignty-aware advisory for casinos, government, health, education, broadband authorities, and Tribal EDCs sourcing resilient connectivity.', cta: 'Explore Tribal', href: '/tribal', icon: 'intel' },
+  { n: '02', title: 'Brokerage', body: 'A supplier-paid connectivity desk for internet, transport, SD-WAN, voice, cloud on-ramps, dark fiber, wavelengths, and colocation.', cta: 'Start a Transaction', href: '/contact', icon: 'broker' },
+  { n: '03', title: 'Map Intelligence', body: 'A live infrastructure map that turns datacenter demand, power, fiber, water, and Tribal-market context into deal-ready signal.', cta: 'View Map', href: '/map', icon: 'globe' },
 ]
 
 function CardIcon({ type }: { type: string }) {
@@ -288,9 +299,9 @@ function FeatureCards() {
     <section style={{ background: '#fff', padding: '100px 32px' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div className="kn-fade-up" style={{ marginBottom: 56, maxWidth: 720 }}>
-          <Eyebrow>The Platform</Eyebrow>
+          <Eyebrow>The Brokerage</Eyebrow>
           <h2 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 'clamp(40px,5vw,66px)', lineHeight: 0.92, textTransform: 'uppercase', color: TEXT }}>
-            One platform. The entire <span style={{ color: RED }}>connectivity</span> stack.
+            One brokerage. Two wedges. A live <span style={{ color: RED }}>intelligence</span> layer.
           </h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 24 }}>
@@ -362,7 +373,7 @@ function MarketIntel() {
           <div className="kn-fade-up" style={{ marginBottom: 40 }}>
             <Eyebrow>Live Intelligence</Eyebrow>
             <h2 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 'clamp(40px,5vw,66px)', lineHeight: 0.92, textTransform: 'uppercase', color: TEXT }}>
-              What&apos;s moving the <span style={{ color: RED }}>market</span> right now.
+              Signals before the <span style={{ color: RED }}>RFP</span> hits the market.
             </h2>
           </div>
           <div style={{ background: '#fff', border: `1px solid ${DIVIDER}` }}>
@@ -373,8 +384,8 @@ function MarketIntel() {
         <div className="kn-fade-up">
           <div style={{ background: DARK, padding: '34px 30px', position: 'sticky', top: 90 }}>
             <div style={{ fontFamily: BODY, fontWeight: 600, fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', color: RED, marginBottom: 16 }}>The Konative Brief</div>
-            <h3 style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 28, textTransform: 'uppercase', color: '#fff', marginBottom: 14, lineHeight: 1.02 }}>Connectivity intelligence, in your inbox</h3>
-            <p style={{ fontFamily: BODY, fontSize: 13.5, lineHeight: 1.6, color: 'rgba(255,255,255,0.55)', marginBottom: 22 }}>Weekly market signals, pricing movements, and route intelligence for connectivity buyers.</p>
+            <h3 style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 28, textTransform: 'uppercase', color: '#fff', marginBottom: 14, lineHeight: 1.02 }}>Connectivity demand, in your inbox</h3>
+            <p style={{ fontFamily: BODY, fontSize: 13.5, lineHeight: 1.6, color: 'rgba(255,255,255,0.55)', marginBottom: 22 }}>Weekly signals on Tribal enterprise needs, datacenter demand, supplier movement, and infrastructure corridors worth acting on.</p>
             <NewsletterForm />
             <div style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 14 }}>12 markets · 14 carriers · updated live</div>
           </div>
@@ -384,19 +395,6 @@ function MarketIntel() {
   )
 }
 
-// ─── COVERAGE MAP ─────────────────────────────────────────────────────────────
-const NODES = [
-  { x: 16, y: 64, l: 'SJC', major: true }, { x: 12, y: 44, l: 'SEA' },
-  { x: 22, y: 78, l: 'LAX', major: true }, { x: 30, y: 70, l: 'PHX' },
-  { x: 40, y: 80, l: 'DAL', major: true }, { x: 34, y: 50, l: 'DEN' },
-  { x: 56, y: 58, l: 'CHI', major: true }, { x: 62, y: 80, l: 'ATL', major: true },
-  { x: 74, y: 86, l: 'MIA' }, { x: 82, y: 50, l: 'NYC', major: true },
-  { x: 86, y: 42, l: 'BOS' }, { x: 78, y: 36, l: 'TOR' },
-  { x: 70, y: 30, l: 'YYZ' }, { x: 88, y: 60, l: 'ASH', major: true },
-]
-const ROUTES = [[0,1],[0,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[7,9],[9,10],[9,13],[6,9],[6,12],[12,11],[4,7],[3,5],[9,11],[8,9]]
-const LIT = new Set(['6-9','4-7','9-13','6-7'])
-
 function CoverageMapSection() {
   return (
     <section style={{ background: '#fff', padding: '100px 32px' }}>
@@ -405,40 +403,26 @@ function CoverageMapSection() {
           <div style={{ maxWidth: 620 }}>
             <Eyebrow>Coverage</Eyebrow>
             <h2 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 'clamp(40px,5vw,66px)', lineHeight: 0.92, textTransform: 'uppercase', color: TEXT }}>
-              The continent, <span style={{ color: RED }}>mapped</span> route by route.
+              The map is the <span style={{ color: RED }}>trust</span> artifact.
             </h2>
           </div>
           <p style={{ fontFamily: BODY, fontSize: 15, lineHeight: 1.6, color: MUTED, maxWidth: 320 }}>
-            12 active metro markets. 14 Tier-1 networks. Cross-border interconnection across the US and Canada.
+            Datacenter demand, Tribal and First Nations context, power, fiber, water, and network adjacency in one brokerage-grade intelligence view.
           </p>
         </div>
 
-        <div className="kn-fade-up" style={{ background: DARK, border: `1px solid ${DIVIDER}`, height: 540, position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.035) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-            {ROUTES.map((r, i) => {
-              const a = NODES[r[0]], b = NODES[r[1]]
-              const lit = LIT.has(r.join('-'))
-              return <line key={i} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={lit ? RED : 'rgba(255,255,255,0.16)'} strokeWidth={lit ? 0.5 : 0.3} vectorEffect="non-scaling-stroke" />
-            })}
-          </svg>
-          {NODES.map((n, i) => (
-            <div key={i} style={{ position: 'absolute', left: `${n.x}%`, top: `${n.y}%`, transform: 'translate(-50%,-50%)', zIndex: 2 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-                <div style={{ width: n.major ? 10 : 6, height: n.major ? 10 : 6, borderRadius: '50%', background: n.major ? RED : '#fff', boxShadow: n.major ? `0 0 0 4px ${RED}33` : '0 0 0 3px rgba(255,255,255,0.12)' }} />
-                <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 600, color: n.major ? '#fff' : 'rgba(255,255,255,0.45)', letterSpacing: '0.05em' }}>{n.l}</span>
-              </div>
-            </div>
-          ))}
-          <div style={{ position: 'absolute', bottom: 20, left: 20, display: 'flex', gap: 22, zIndex: 3 }}>
-            {[{ c: RED, l: 'Active routes' }, { c: 'rgba(255,255,255,0.2)', l: 'Indexed inventory' }].map((x, i) => (
+        <div className="kn-fade-up" style={{ background: '#F8FAFC', border: `1px solid ${DIVIDER}`, height: 540, position: 'relative', overflow: 'hidden' }}>
+          <DataCenterMap backgroundMode />
+          <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.24))' }} />
+          <div style={{ position: 'absolute', bottom: 20, left: 20, display: 'flex', gap: 22, zIndex: 3, background: 'rgba(255,255,255,0.88)', border: `1px solid ${DIVIDER}`, padding: '10px 14px', backdropFilter: 'blur(8px)' }}>
+            {[{ c: RED, l: 'Data-center demand' }, { c: '#2563eb', l: 'Facilities + network' }].map((x, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ width: 16, height: 2, background: x.c, display: 'inline-block' }} />
-                <span style={{ fontFamily: BODY, fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>{x.l}</span>
+                <span style={{ fontFamily: BODY, fontSize: 11, color: 'rgba(17,17,17,0.62)' }}>{x.l}</span>
               </div>
             ))}
           </div>
-          <div style={{ fontFamily: MONO, position: 'absolute', top: 18, right: 22, fontSize: 11, color: 'rgba(255,255,255,0.4)', zIndex: 3 }}>847 routes · 12 metros · live</div>
+          <div style={{ fontFamily: MONO, position: 'absolute', top: 18, right: 22, fontSize: 11, color: 'rgba(17,17,17,0.48)', background: 'rgba(255,255,255,0.86)', border: `1px solid ${DIVIDER}`, padding: '8px 12px', zIndex: 3 }}>US + Canada · live data product</div>
           <div style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 3 }}>
             <Link href="/map" style={{ fontFamily: BODY, fontWeight: 600, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', background: 'rgba(200,0,31,0.85)', color: '#fff', padding: '10px 18px', textDecoration: 'none', display: 'inline-block', borderRadius: 2 }}>
               Open Full Map →
@@ -515,9 +499,9 @@ function MarketsTable() {
 
 // ─── WHO WE SERVE ─────────────────────────────────────────────────────────────
 const SEGMENTS = [
-  { n: '01', title: 'Enterprises', body: 'Multi-site enterprises sourcing connectivity at scale — procurement teams who need price discovery, not a sales rep.' },
-  { n: '02', title: 'Carriers & ISPs', body: 'Networks monetizing spare capacity and acquiring routes to fill coverage gaps without months of bilateral negotiation.' },
-  { n: '03', title: 'Data Center Operators', body: 'Colocation and hyperscale operators matching tenant demand to interconnection and cross-connect inventory in real time.' },
+  { n: '01', title: 'Tribal Councils, EDCs & CIOs', body: 'Sovereign enterprises sourcing connectivity for government, gaming, health, education, public safety, and economic development.' },
+  { n: '02', title: 'Broadband Authorities & Enterprise IT', body: 'Teams turning funded infrastructure into operating networks with resilient internet, transport, voice, security, and managed services.' },
+  { n: '03', title: 'Data Center Developers, Operators & Tenants', body: 'AI and colocation teams matching site demand to fiber, power, cloud access, transport, and interconnection options before constraints harden.' },
 ]
 
 function SegmentPanel({ s, last }: { s: typeof SEGMENTS[0]; last: boolean }) {
@@ -540,7 +524,7 @@ function WhoWeServe() {
         <div className="kn-fade-up" style={{ marginBottom: 52, maxWidth: 760 }}>
           <Eyebrow>Who We Serve</Eyebrow>
           <h2 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 'clamp(40px,5vw,66px)', lineHeight: 0.92, textTransform: 'uppercase', color: TEXT }}>
-            Built for both sides of the <span style={{ color: RED }}>transaction</span>.
+            Built for the buyers generic advisors <span style={{ color: RED }}>miss</span>.
           </h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', border: `1px solid ${DIVIDER}` }}>
@@ -557,10 +541,10 @@ function StatsBand() {
     <section style={{ background: SURFACE, borderTop: `1px solid ${DIVIDER}`, borderBottom: `1px solid ${DIVIDER}` }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))' }}>
         {[
-          { v: '847', l: 'Routes Indexed' },
-          { v: '$2.4B', l: 'Capacity Brokered' },
-          { v: '<48h', l: 'RFQ to Term Sheet' },
-          { v: '14', l: 'Tier-1 Networks' },
+          { v: '100+', l: 'Supplier Portfolio' },
+          { v: '2', l: 'Primary Wedges' },
+          { v: '18–36mo', l: 'Early Signals' },
+          { v: '$0', l: 'Buyer Advisory Cost' },
         ].map((s, i) => (
           <div key={i} className="kn-fade-up" style={{ padding: '52px 32px', borderRight: i < 3 ? `1px solid ${DIVIDER}` : 'none', textAlign: 'center' }}>
             <div style={{ fontFamily: MONO, fontWeight: 600, fontSize: 52, color: RED, lineHeight: 1, letterSpacing: '-0.02em' }}>{s.v}</div>
@@ -583,25 +567,25 @@ function CTASection() {
           <div className="kn-fade-up">
             <Eyebrow>Request Access</Eyebrow>
             <h2 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 'clamp(40px,5.5vw,72px)', lineHeight: 0.9, textTransform: 'uppercase', color: TEXT, marginBottom: 20 }}>
-              Stop negotiating blind. Start with the <span style={{ color: RED }}>market</span>.
+              Bring the tribe, site, or network <span style={{ color: RED }}>requirement</span>.
             </h2>
             <p style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.6, color: MUTED, maxWidth: 520 }}>
-              Get platform access to live route intelligence, transparent pricing, and a brokerage desk that moves at the speed of your business.
+              Konative turns sovereign context, infrastructure signals, supplier options, and transaction execution into a clear path from need to signed connectivity order.
             </p>
           </div>
           <div className="kn-fade-up" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', gap: 40, marginBottom: 14 }}>
               <div>
                 <div style={{ fontFamily: MONO, fontSize: 40, fontWeight: 600, color: TEXT }}>24h</div>
-                <div style={{ fontFamily: BODY, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9CA3AF', marginTop: 4 }}>Onboarding</div>
+                <div style={{ fontFamily: BODY, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9CA3AF', marginTop: 4 }}>First Readout</div>
               </div>
               <div>
                 <div style={{ fontFamily: MONO, fontSize: 40, fontWeight: 600, color: TEXT }}>$0</div>
                 <div style={{ fontFamily: BODY, fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9CA3AF', marginTop: 4 }}>Cost to Buyers</div>
               </div>
             </div>
-            <PrimaryBtn href="/contact" large style={{ width: '100%', textAlign: 'center' }}>Request Platform Access</PrimaryBtn>
-            <GhostBtn href="/contact" large style={{ width: '100%', textAlign: 'center' }}>Talk to the Brokerage Desk</GhostBtn>
+            <PrimaryBtn href="/contact" large style={{ width: '100%', textAlign: 'center' }}>Request Connectivity Strategy</PrimaryBtn>
+            <GhostBtn href="/tribal" large style={{ width: '100%', textAlign: 'center' }}>Explore Tribal Enterprise</GhostBtn>
           </div>
         </div>
       </div>

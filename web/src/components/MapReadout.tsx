@@ -59,8 +59,8 @@ export default function MapReadout({ lat, lng, zoom }: Props) {
       zIndex: 10,
       bottom: 40,
       left: 304,
-      background: 'rgba(8,20,45,0.92)',
-      border: '1px solid rgba(255,255,255,0.10)',
+      background: 'rgba(255,255,255,0.92)',
+      border: '1px solid rgba(17,24,39,0.12)',
       backdropFilter: 'blur(8px)',
       padding: '8px 12px',
       fontFamily: 'Inter, sans-serif',
@@ -68,19 +68,20 @@ export default function MapReadout({ lat, lng, zoom }: Props) {
       flexDirection: 'column',
       gap: 6,
       minWidth: 200,
+      boxShadow: '0 12px 32px rgba(17,24,39,0.10)',
     }}>
       {/* Row 1: Coordinate */}
       <div style={{
         fontFamily: '"Roboto Mono", "Courier New", monospace',
         fontSize: 11,
         fontWeight: 400,
-        color: 'rgba(255,255,255,0.7)',
+        color: 'rgba(17,17,17,0.64)',
         letterSpacing: '0.04em',
         fontVariantNumeric: 'tabular-nums',
         whiteSpace: 'nowrap',
       }}>
         {lat === 0 && lng === 0
-          ? <span style={{ color: 'rgba(255,255,255,0.3)' }}>Move cursor on map</span>
+          ? <span style={{ color: 'rgba(17,17,17,0.34)' }}>Move cursor on map</span>
           : coordStr
         }
       </div>
@@ -109,7 +110,7 @@ export default function MapReadout({ lat, lng, zoom }: Props) {
               top: 3,
               height: 1,
               width: '100%',
-              background: 'rgba(255,255,255,0.15)',
+              background: 'rgba(17,24,39,0.16)',
             }} />
             {/* Filled bar */}
             <div style={{
@@ -119,9 +120,9 @@ export default function MapReadout({ lat, lng, zoom }: Props) {
               width: `${Math.min(scale.px, 120)}px`,
               maxWidth: '100%',
               height: 5,
-              background: 'rgba(255,255,255,0.6)',
-              borderLeft: '2px solid rgba(255,255,255,0.7)',
-              borderRight: '2px solid rgba(255,255,255,0.7)',
+              background: 'rgba(17,24,39,0.52)',
+              borderLeft: '2px solid rgba(17,24,39,0.62)',
+              borderRight: '2px solid rgba(17,24,39,0.62)',
               borderTop: 'none',
               borderBottom: 'none',
             }} />
@@ -129,13 +130,13 @@ export default function MapReadout({ lat, lng, zoom }: Props) {
           <div style={{
             fontFamily: 'Inter, sans-serif',
             fontSize: 9,
-            color: 'rgba(255,255,255,0.4)',
+            color: 'rgba(17,17,17,0.44)',
             letterSpacing: '0.06em',
             display: 'flex',
             gap: 6,
           }}>
             <span>{scaleLabel}</span>
-            <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+            <span style={{ color: 'rgba(17,17,17,0.24)' }}>·</span>
             <span>{scaleLabelMi}</span>
           </div>
         </div>

@@ -5,16 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "Intelligence", url: "/intelligence" },
-  { label: "Markets", url: "/markets" },
-  { label: "Coverage", url: "/map" },
-  { label: "Brokerage", url: "/connectivity" },
+  { label: "Tribal", url: "/tribal" },
   { label: "Datacenters", url: "/datacenters" },
+  { label: "Map", url: "/map" },
+  { label: "Intelligence", url: "/intelligence" },
+  { label: "Brokerage", url: "/connectivity" },
   { label: "Insights", url: "/news" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
-const DARK_HERO_PAGES = new Set(["/tribal", "/land", "/invest", "/capacity", "/map", "/projects", "/canada", "/methodology", "/intelligence/saudi", "/intelligence/first-nations", "/market-intel", "/assessment"]);
+const DARK_HERO_PAGES = new Set(["/tribal", "/land", "/invest", "/capacity", "/projects", "/canada", "/methodology", "/intelligence/saudi", "/intelligence/first-nations", "/market-intel", "/assessment"]);
 
 function isDarkHeroPath(pathname: string): boolean {
   if (DARK_HERO_PAGES.has(pathname)) return true;

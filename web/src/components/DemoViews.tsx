@@ -138,16 +138,16 @@ function PresetRow({ preset, index, isActive, onSelect }: {
         alignItems: 'flex-start',
         gap: 3,
         width: '100%',
-        background: isActive ? 'rgba(224,123,57,0.10)' : 'none',
+        background: isActive ? 'rgba(200,0,31,0.08)' : 'none',
         border: 'none',
-        borderTop: index > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+        borderTop: index > 0 ? '1px solid rgba(17,24,39,0.08)' : 'none',
         cursor: 'pointer',
         padding: '10px 14px',
         textAlign: 'left',
         transition: 'background 0.12s',
       }}
       onMouseEnter={e => {
-        if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'
+          if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(17,24,39,0.04)'
       }}
       onMouseLeave={e => {
         if (!isActive) (e.currentTarget as HTMLButtonElement).style.background = 'none'
@@ -158,7 +158,7 @@ function PresetRow({ preset, index, isActive, onSelect }: {
           fontFamily: '"Barlow Condensed", sans-serif',
           fontSize: 13,
           fontWeight: 700,
-          color: isActive ? '#C8001F' : '#fff',
+          color: isActive ? '#C8001F' : '#111111',
           textTransform: 'uppercase',
           letterSpacing: '0.04em',
           flex: 1,
@@ -170,7 +170,7 @@ function PresetRow({ preset, index, isActive, onSelect }: {
       <div style={{
         fontFamily: 'Inter, sans-serif',
         fontSize: 10,
-        color: 'rgba(255,255,255,0.4)',
+        color: 'rgba(17,17,17,0.50)',
         lineHeight: 1.4,
         letterSpacing: '0.02em',
       }}>
@@ -187,8 +187,8 @@ function PresetRow({ preset, index, isActive, onSelect }: {
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               color: '#C8001F',
-              background: 'rgba(224,123,57,0.12)',
-              border: '1px solid rgba(224,123,57,0.25)',
+              background: 'rgba(200,0,31,0.08)',
+              border: '1px solid rgba(200,0,31,0.22)',
               padding: '1px 5px',
             }}>
               {k}
@@ -251,12 +251,12 @@ export default function DemoViews({ mapRef, onApply }: Props) {
           display: 'flex',
           alignItems: 'center',
           gap: 6,
-          background: open ? 'rgba(224,123,57,0.15)' : 'rgba(8,20,45,0.92)',
-          border: `1px solid ${open ? 'rgba(224,123,57,0.5)' : 'rgba(255,255,255,0.12)'}`,
+          background: open ? 'rgba(200,0,31,0.08)' : 'rgba(255,255,255,0.94)',
+          border: `1px solid ${open ? 'rgba(200,0,31,0.36)' : 'rgba(17,24,39,0.12)'}`,
           backdropFilter: 'blur(8px)',
           cursor: 'pointer',
           padding: '8px 14px',
-          color: '#fff',
+          color: '#111111',
           fontFamily: 'Inter, sans-serif',
           fontSize: 11,
           fontWeight: 600,
@@ -269,10 +269,10 @@ export default function DemoViews({ mapRef, onApply }: Props) {
         {activePreset ? (
           <span style={{ color: '#C8001F' }}>◉</span>
         ) : (
-          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>◈</span>
+          <span style={{ color: 'rgba(17,17,17,0.42)', fontSize: 13 }}>◈</span>
         )}
         Demo Views
-        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>
+        <span style={{ color: 'rgba(17,17,17,0.42)', fontSize: 10 }}>
           {open ? '▲' : '▾'}
         </span>
       </button>
@@ -285,11 +285,11 @@ export default function DemoViews({ mapRef, onApply }: Props) {
           position: 'absolute',
           top: 'calc(100% + 4px)',
           right: 0,
-          background: 'rgba(8,20,45,0.98)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          background: 'rgba(255,255,255,0.98)',
+          border: '1px solid rgba(17,24,39,0.12)',
           backdropFilter: 'blur(8px)',
           width: 300,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+          boxShadow: '0 16px 36px rgba(17,24,39,0.16)',
           maxHeight: 520,
           overflowY: 'auto',
           display: 'flex',
@@ -298,7 +298,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
           {/* Header */}
           <div style={{
             padding: '10px 14px 8px',
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            borderBottom: '1px solid rgba(17,24,39,0.10)',
           }}>
             <div style={{
               fontSize: 9,
@@ -314,7 +314,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
               fontFamily: '"Barlow Condensed", sans-serif',
               fontSize: 13,
               fontWeight: 700,
-              color: 'rgba(255,255,255,0.7)',
+              color: 'rgba(17,17,17,0.66)',
               textTransform: 'uppercase',
               letterSpacing: '0.06em',
             }}>
@@ -336,7 +336,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
           {/* Footer */}
           <div style={{
             padding: '8px 14px',
-            borderTop: '1px solid rgba(255,255,255,0.06)',
+            borderTop: '1px solid rgba(17,24,39,0.08)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -347,7 +347,7 @@ export default function DemoViews({ mapRef, onApply }: Props) {
             <span style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 9,
-              color: 'rgba(255,255,255,0.2)',
+              color: 'rgba(17,17,17,0.36)',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
             }}>
