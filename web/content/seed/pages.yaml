@@ -3,10 +3,10 @@ pages:
     title: "Connectivity Intelligence. Brokered."
     description: "Konative helps infrastructure buyers source connectivity with market intelligence, carrier-neutral brokerage, and one accountable advisory relationship."
     primaryCta:
-      label: "Request Platform Access"
+      label: "Get Connectivity Options"
       href: "/contact"
     secondaryCta:
-      label: "Explore Live Markets"
+      label: "Explore Tribal Enterprise"
       href: "/markets"
 
   - slug: connectivity

@@ -7,8 +7,8 @@ import { LAYER_COLORS, LAYER_LABELS } from './DataCenterMap'
 
 // ── style constants ───────────────────────────────────────────────────────────
 
-const PANEL_BG = 'rgba(8,20,45,0.92)'
-const PANEL_BORDER = '1px solid rgba(255,255,255,0.10)'
+const PANEL_BG = 'rgba(255,255,255,0.94)'
+const PANEL_BORDER = '1px solid rgba(17,24,39,0.12)'
 const BLUR = 'blur(8px)'
 
 const labelStyle: React.CSSProperties = {
@@ -88,10 +88,10 @@ function SectionHeader({
       }}>
         {label}
         {count !== undefined && (
-          <span style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 400, marginLeft: 6 }}>({count})</span>
+          <span style={{ color: 'rgba(17,17,17,0.36)', fontWeight: 400, marginLeft: 6 }}>({count})</span>
         )}
       </span>
-      <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10 }}>{expanded ? '▾' : '▸'}</span>
+      <span style={{ color: 'rgba(17,17,17,0.40)', fontSize: 10 }}>{expanded ? '▾' : '▸'}</span>
     </button>
   )
 }
@@ -147,7 +147,7 @@ function InfraRow({
           fontFamily: 'Inter, sans-serif',
           fontSize: 11,
           fontWeight: 600,
-          color: disabled ? 'rgba(255,255,255,0.2)' : enabled ? '#fff' : 'rgba(255,255,255,0.7)',
+          color: disabled ? 'rgba(17,17,17,0.25)' : enabled ? '#111111' : 'rgba(17,17,17,0.66)',
           flex: 1,
           letterSpacing: '0.04em',
           textTransform: 'uppercase',
@@ -159,7 +159,7 @@ function InfraRow({
         <span style={{
           fontFamily: 'Inter, sans-serif',
           fontSize: 10,
-          color: 'rgba(255,255,255,0.3)',
+          color: 'rgba(17,17,17,0.34)',
           flexShrink: 0,
         }}>
           {layers.length}
@@ -174,7 +174,7 @@ function InfraRow({
             border: 'none',
             cursor: disabled ? 'not-allowed' : 'pointer',
             padding: 2,
-            color: enabled ? cat.color : 'rgba(255,255,255,0.3)',
+            color: enabled ? cat.color : 'rgba(17,17,17,0.34)',
             fontSize: 13,
             lineHeight: 1,
             flexShrink: 0,
@@ -208,7 +208,7 @@ function InfraRow({
           <div style={{
             fontSize: 10,
             fontFamily: 'Inter, sans-serif',
-            color: 'rgba(255,255,255,0.65)',
+            color: 'rgba(17,17,17,0.64)',
             lineHeight: 1.5,
           }}>
             {insight}
@@ -235,7 +235,7 @@ function InfraRow({
             <div style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 10,
-              color: 'rgba(255,255,255,0.6)',
+              color: 'rgba(17,17,17,0.58)',
               lineHeight: 1.3,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
@@ -243,7 +243,7 @@ function InfraRow({
             }}>
               {layer.title}
             </div>
-            <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.25)', marginTop: 1, letterSpacing: '0.04em' }}>
+            <div style={{ fontSize: 9, color: 'rgba(17,17,17,0.34)', marginTop: 1, letterSpacing: '0.04em' }}>
               {layer.attribution}
             </div>
           </div>
@@ -255,7 +255,7 @@ function InfraRow({
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              color: 'rgba(255,255,255,0.3)',
+              color: 'rgba(17,17,17,0.34)',
               fontSize: 11,
               padding: 2,
               lineHeight: 1,
@@ -273,14 +273,14 @@ function InfraRow({
               top: '100%',
               right: 0,
               zIndex: 50,
-              background: 'rgba(8,20,45,0.98)',
-              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'rgba(255,255,255,0.98)',
+              border: '1px solid rgba(17,24,39,0.14)',
               padding: '10px 12px',
               width: 230,
-              boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+              boxShadow: '0 12px 28px rgba(17,24,39,0.14)',
             }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{layer.title}</div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 6, lineHeight: 1.5 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#111111', marginBottom: 4 }}>{layer.title}</div>
+              <div style={{ fontSize: 10, color: 'rgba(17,17,17,0.52)', marginBottom: 6, lineHeight: 1.5 }}>
                 {layer.attribution} · {layer.license}
               </div>
               <a
@@ -336,7 +336,7 @@ function DcLayerRow({
       }}
       onMouseEnter={e => {
         if (!active && !disabled) {
-          ;(e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'
+          ;(e.currentTarget as HTMLButtonElement).style.background = 'rgba(17,24,39,0.04)'
         }
       }}
       onMouseLeave={e => {
@@ -370,7 +370,7 @@ function DcLayerRow({
         fontWeight: 600,
         letterSpacing: '0.05em',
         textTransform: 'uppercase',
-        color: disabled ? 'rgba(255,255,255,0.2)' : active ? '#fff' : 'rgba(255,255,255,0.7)',
+        color: disabled ? 'rgba(17,17,17,0.24)' : active ? '#111111' : 'rgba(17,17,17,0.66)',
         flex: 1,
         textAlign: 'left',
       }}>
@@ -379,7 +379,7 @@ function DcLayerRow({
       <span style={{
         fontFamily: 'Inter, sans-serif',
         fontSize: 10,
-        color: disabled ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.35)',
+        color: disabled ? 'rgba(17,17,17,0.18)' : 'rgba(17,17,17,0.38)',
         flexShrink: 0,
       }}>
         {count.toLocaleString()}
@@ -456,7 +456,7 @@ export default function LayerControlPanel({
           fontSize: 9,
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.3)',
+          color: 'rgba(17,17,17,0.38)',
           marginTop: 4,
         }}>
           Layers
@@ -489,7 +489,7 @@ export default function LayerControlPanel({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '10px 12px 8px',
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
+        borderBottom: '1px solid rgba(17,24,39,0.10)',
         flexShrink: 0,
       }}>
         <div>
@@ -498,7 +498,7 @@ export default function LayerControlPanel({
             fontFamily: '"Barlow Condensed", sans-serif',
             fontSize: 14,
             fontWeight: 700,
-            color: '#fff',
+            color: '#111111',
             letterSpacing: '0.04em',
             textTransform: 'uppercase',
             marginTop: 2,
@@ -513,7 +513,7 @@ export default function LayerControlPanel({
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            color: 'rgba(255,255,255,0.4)',
+            color: 'rgba(17,17,17,0.42)',
             fontSize: 16,
             padding: 4,
             lineHeight: 1,
@@ -527,7 +527,7 @@ export default function LayerControlPanel({
       <div style={{ overflowY: 'auto', flex: 1, padding: '0 12px 12px' }}>
 
         {/* ── DATA CENTERS ────────────────────────────────── */}
-        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: 8 }}>
+        <div style={{ borderBottom: '1px solid rgba(17,24,39,0.08)', paddingBottom: 8 }}>
           <SectionHeader
             label="Data Centers"
             expanded={dcExpanded}
@@ -566,13 +566,13 @@ export default function LayerControlPanel({
                   fontWeight: 600,
                   letterSpacing: '0.05em',
                   textTransform: 'uppercase',
-                  color: showHeatmap ? '#fff' : 'rgba(255,255,255,0.6)',
+                  color: showHeatmap ? '#111111' : 'rgba(17,17,17,0.58)',
                   flex: 1,
                   textAlign: 'left',
                 }}>
                   DC Heatmap
                 </span>
-                <span style={{ fontSize: 10, color: showHeatmap ? '#22d3ee' : 'rgba(255,255,255,0.25)' }}>
+                <span style={{ fontSize: 10, color: showHeatmap ? '#0891b2' : 'rgba(17,17,17,0.32)' }}>
                   {showHeatmap ? 'ON' : 'OFF'}
                 </span>
               </button>
@@ -587,9 +587,9 @@ export default function LayerControlPanel({
                       minWidth: 52,
                       padding: '4px 6px',
                       borderRadius: 3,
-                      border: countryFilter === code ? '1px solid rgba(224,123,57,0.6)' : '1px solid rgba(255,255,255,0.12)',
-                      background: countryFilter === code ? 'rgba(224,123,57,0.15)' : 'transparent',
-                      color: countryFilter === code ? '#fff' : 'rgba(255,255,255,0.55)',
+                      border: countryFilter === code ? '1px solid rgba(200,0,31,0.44)' : '1px solid rgba(17,24,39,0.12)',
+                      background: countryFilter === code ? 'rgba(200,0,31,0.08)' : 'transparent',
+                      color: countryFilter === code ? '#111111' : 'rgba(17,17,17,0.56)',
                       fontSize: 10,
                       fontWeight: 700,
                       letterSpacing: '0.08em',
@@ -617,10 +617,10 @@ export default function LayerControlPanel({
                 }}
               >
                 <span style={{ width: 8, height: 8, borderRadius: 2, background: '#f59e0b', flexShrink: 0, opacity: showStalled ? 1 : 0.5 }} />
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: showStalled ? '#fff' : 'rgba(255,255,255,0.6)', flex: 1, textAlign: 'left' }}>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: showStalled ? '#111111' : 'rgba(17,17,17,0.58)', flex: 1, textAlign: 'left' }}>
                   Pipeline Issues (CA)
                 </span>
-                <span style={{ fontSize: 10, color: showStalled ? '#f59e0b' : 'rgba(255,255,255,0.25)' }}>
+                <span style={{ fontSize: 10, color: showStalled ? '#d97706' : 'rgba(17,17,17,0.32)' }}>
                   {(counts?.projects_stalled ?? 0).toLocaleString()}
                 </span>
               </button>
@@ -643,7 +643,7 @@ export default function LayerControlPanel({
 
         {/* ── INFRASTRUCTURE ──────────────────────────────── */}
         {hasInfra && (
-          <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: 8 }}>
+          <div style={{ borderBottom: '1px solid rgba(17,24,39,0.08)', paddingBottom: 8 }}>
             <SectionHeader
               label="Overlay Layers"
               expanded={infraExpanded}
@@ -686,22 +686,22 @@ export default function LayerControlPanel({
             alignItems: 'center',
             gap: 8,
             padding: '6px 8px',
-            background: 'rgba(255,255,255,0.02)',
-            border: '1px solid rgba(255,255,255,0.05)',
+            background: 'rgba(17,24,39,0.03)',
+            border: '1px solid rgba(17,24,39,0.08)',
             borderRadius: 3,
           }}>
             <span style={{ width: 8, height: 8, borderRadius: 2, background: '#C8001F', opacity: 0.3, flexShrink: 0 }} />
             <span style={{
               fontFamily: 'Inter, sans-serif',
               fontSize: 11,
-              color: 'rgba(255,255,255,0.25)',
+              color: 'rgba(17,17,17,0.36)',
               letterSpacing: '0.04em',
               textTransform: 'uppercase',
               fontWeight: 600,
             }}>
               Coming soon
             </span>
-            <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.15)', marginLeft: 'auto', letterSpacing: '0.1em' }}>
+            <span style={{ fontSize: 9, color: 'rgba(17,17,17,0.24)', marginLeft: 'auto', letterSpacing: '0.1em' }}>
               WAVE 2
             </span>
           </div>
@@ -710,7 +710,7 @@ export default function LayerControlPanel({
 
       {/* Footer brand line */}
       <div style={{
-        borderTop: '1px solid rgba(255,255,255,0.06)',
+        borderTop: '1px solid rgba(17,24,39,0.08)',
         padding: '7px 12px',
         display: 'flex',
         alignItems: 'center',
@@ -728,8 +728,8 @@ export default function LayerControlPanel({
         }}>
           Konative
         </span>
-        <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 10 }}>·</span>
-        <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        <span style={{ color: 'rgba(17,17,17,0.22)', fontSize: 10 }}>·</span>
+        <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, color: 'rgba(17,17,17,0.38)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           GIS Platform
         </span>
       </div>

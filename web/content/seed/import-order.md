@@ -11,5 +11,5 @@ This repository now treats the in-code Next.js pages as the production source fo
 ## Guardrails
 - Do not reintroduce legacy manufacturer-representation positioning.
 - Do not route warm-intent booking to Calendly, HubSpot Meetings, or Microsoft Bookings.
-- Use `/contact` for platform access and requirement intake.
+- Use `/contact` for connectivity requirements and qualified buyer intake.
 - Use `https://cal.com/jeramey-james` for direct booking.

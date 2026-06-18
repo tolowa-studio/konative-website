@@ -165,13 +165,14 @@ export default function MapSearchBar({ mapRef }: Props) {
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        background: 'rgba(8,20,45,0.92)',
-        border: '1px solid rgba(255,255,255,0.12)',
+        background: 'rgba(255,255,255,0.94)',
+        border: '1px solid rgba(17,24,39,0.12)',
         backdropFilter: 'blur(8px)',
         padding: '0 12px',
         gap: 8,
+        boxShadow: '0 12px 32px rgba(17,24,39,0.10)',
       }}>
-        <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14, flexShrink: 0 }}>⌕</span>
+        <span style={{ color: 'rgba(17,17,17,0.42)', fontSize: 14, flexShrink: 0 }}>⌕</span>
         <input
           type="text"
           value={query}
@@ -182,7 +183,7 @@ export default function MapSearchBar({ mapRef }: Props) {
             background: 'none',
             border: 'none',
             outline: 'none',
-            color: '#fff',
+            color: '#111111',
             fontFamily: 'Inter, sans-serif',
             fontSize: 13,
             fontWeight: 400,
@@ -201,7 +202,7 @@ export default function MapSearchBar({ mapRef }: Props) {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
-              color: 'rgba(255,255,255,0.35)',
+              color: 'rgba(17,17,17,0.42)',
               fontSize: 16,
               padding: 2,
               lineHeight: 1,
@@ -216,8 +217,8 @@ export default function MapSearchBar({ mapRef }: Props) {
       {/* Dropdown */}
       {open && results.length > 0 && (
         <div style={{
-          background: 'rgba(8,20,45,0.98)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          background: 'rgba(255,255,255,0.98)',
+          border: '1px solid rgba(17,24,39,0.12)',
           borderTop: 'none',
           backdropFilter: 'blur(8px)',
           maxHeight: 320,
@@ -234,12 +235,12 @@ export default function MapSearchBar({ mapRef }: Props) {
                 width: '100%',
                 background: 'none',
                 border: 'none',
-                borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                borderTop: i > 0 ? '1px solid rgba(17,24,39,0.08)' : 'none',
                 cursor: 'pointer',
                 padding: '9px 14px',
                 textAlign: 'left',
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(224,123,57,0.08)')}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(200,0,31,0.06)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'none')}
             >
               <span style={{ fontSize: 14, flexShrink: 0, width: 20, textAlign: 'center' }}>
@@ -250,7 +251,7 @@ export default function MapSearchBar({ mapRef }: Props) {
                   fontFamily: 'Inter, sans-serif',
                   fontSize: 12,
                   fontWeight: 600,
-                  color: '#fff',
+                  color: '#111111',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -261,7 +262,7 @@ export default function MapSearchBar({ mapRef }: Props) {
                   <div style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: 10,
-                    color: 'rgba(255,255,255,0.4)',
+                    color: 'rgba(17,17,17,0.48)',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -274,7 +275,7 @@ export default function MapSearchBar({ mapRef }: Props) {
                 fontSize: 9,
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                color: r.type === 'project' ? '#22d3ee' : 'rgba(255,255,255,0.25)',
+                color: r.type === 'project' ? '#0ea5e9' : 'rgba(17,17,17,0.36)',
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: 600,
                 flexShrink: 0,

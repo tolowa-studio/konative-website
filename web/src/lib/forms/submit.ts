@@ -14,7 +14,7 @@ export interface SubmitOptions<T> {
   emailHtml?: string;
 }
 
-/** Validate → persist to Sanity (source of truth) → notify via Resend. */
+/** Validate → persist to Sanity → notify the owner and CRM automation. */
 export async function submitForm<T extends Record<string, unknown>>(
   options: SubmitOptions<T>,
 ): Promise<SubmitResult> {
@@ -68,6 +68,36 @@ export async function submitForm<T extends Record<string, unknown>>(
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({ from, to, subject: emailSubject, html }),
     }).catch(err => console.error(`[submitForm] Resend error for ${schemaType}:`, err));
+  }
+
+  // 4. Forward to Twenty/n8n when configured. Keep the public form successful
+  // when the automation layer is temporarily unavailable; Sanity remains the
+  // durable intake record and the webhook can be replayed from there.
+  const crmWebhookUrl =
+    process.env.TWENTY_INTAKE_WEBHOOK_URL || process.env.INQUIRY_WEBHOOK_URL;
+  if (!crmWebhookUrl) {
+    console.warn(
+      `[submitForm] CRM intake webhook not set — ${schemaType} remains in Sanity (doc ${docId})`,
+    );
+  } else {
+    fetch(crmWebhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(process.env.TWENTY_INTAKE_WEBHOOK_TOKEN
+          ? { Authorization: `Bearer ${process.env.TWENTY_INTAKE_WEBHOOK_TOKEN}` }
+          : {}),
+      },
+      body: JSON.stringify({
+        source: "konative.com",
+        schemaType,
+        sanityDocumentId: docId,
+        submittedAt: new Date().toISOString(),
+        data: parsed.data,
+      }),
+    }).catch(err =>
+      console.error(`[submitForm] CRM webhook error for ${schemaType}:`, err),
+    );
   }
 
   return { ok: true, id: docId };

@@ -20,10 +20,10 @@ export default function Footer() {
               <span style={{ color: RED }}>NATIVE</span>
             </Link>
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, lineHeight: 1.7, color: MUTED, maxWidth: 330 }}>
-              AI-native connectivity intelligence and brokerage for enterprise networks, datacenter connectivity, dark fiber, transport, cloud on-ramps, and market decisions.
+              Vendor-neutral connectivity brokerage for enterprise networks, Tribal and rural organizations, and data-center infrastructure across North America.
             </p>
             <Link href="/contact" style={{ display: "inline-block", marginTop: 18, background: RED, color: "#fff", padding: "12px 18px", textDecoration: "none", fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-              Request access
+              Get connectivity options
             </Link>
           </div>
 
@@ -40,7 +40,7 @@ export default function Footer() {
             title="Intelligence"
             links={[
               ["Intelligence Hub", "/intelligence"],
-              ["Live Markets", "/markets"],
+              ["Market Coverage", "/markets"],
               ["Market Intel Feed", "/news"],
               ["Methodology", "/methodology"],
             ]}
@@ -51,13 +51,13 @@ export default function Footer() {
               ["Team", "/#team"],
               ["Contact", "/contact"],
               ["Data Sources", "/licenses"],
-              ["Book on Cal.com", "https://cal.com/jeramey-james"],
+              ["Book a call", "https://cal.com/konative/discovery"],
             ]}
           />
         </div>
 
         <div style={{ borderTop: `1px solid ${DIVIDER}`, paddingTop: 24, display: "flex", justifyContent: "space-between", gap: 20, flexWrap: "wrap", fontFamily: "Inter, sans-serif", fontSize: 11, color: MUTED }}>
-          <span>© 2026 Konative · Tolowa Studio</span>
+          <span>© 2026 Konative · a trade name of Total Pacific LLC</span>
           <span style={{ color: STEEL, fontWeight: 700 }}>Connectivity brokerage · Market intelligence · Avant partner</span>
         </div>
       </div>

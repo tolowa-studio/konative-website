@@ -57,7 +57,7 @@ const sections = [
 
 const metrics = [
   ["12", "Active markets"],
-  ["847", "Routes analyzed"],
+  ["US + CA", "Markets covered"],
   ["14", "Tier-1 networks indexed"],
   ["48h", "Target brief turnaround"],
 ];

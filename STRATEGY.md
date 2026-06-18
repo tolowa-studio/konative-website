@@ -10,21 +10,25 @@
 
 ## The goal
 
-Make **konative.com the recognized intelligence hub for powered land and stalled
-data center projects in North America** — a content-and-data flywheel that builds
-a qualified audience of energy-infrastructure principals and proprietary deal
-flow, which in turn feeds the brokerage.
+Make **Konative a focused Avant sub-agent and vendor-neutral connectivity
+brokerage with a durable book of monthly recurring revenue.** Konative sources
+and manages internet, fiber, transport, cloud, voice, security, mobility,
+colocation, and data-center interconnection for buyers across North America.
 
-Konative is a three-sided data center / powered-land brokerage: it connects
-**landowners** (powered land), **investors** (capital), and **occupiers**
-(hyperscalers and operators who need capacity), and manages the transaction from
-first call to close. The website is not a brochure. It is the **marketing engine
-and proprietary deal-flow source** for that brokerage — and a media/intelligence
-property that monetizes in its own right.
+The two primary wedges are **Tribal and rural enterprise connectivity** and
+**data-center connectivity**. The existing map, powered-land research,
+interconnection data, funding intelligence, award records, and data-center
+database remain strategic assets. They now function primarily as the lead and
+trust engine behind the connectivity brokerage.
 
-Monetization model (decided 2026-05-22): **media + brokerage flywheel.** Run the
-newsletter and intelligence hub as their own revenue surfaces *and* as the top of
-the brokerage funnel. Audience and deal flow come first; revenue follows them.
+Monetization model (updated 2026-06-18): **residual brokerage first, supported by
+paid advisory, lifecycle management, intelligence subscriptions, and media.**
+The website is the qualification and conversion engine; Twenty is the CRM source
+of truth; Avant/Pathfinder is the supplier-sourcing and transaction layer.
+
+The previous three-sided powered-land brokerage strategy remains a secondary
+data-center lane, not the company-wide primary message. See
+`docs/strategy/2026-06-18-brokerage-launch-plan.md`.
 
 ---
 

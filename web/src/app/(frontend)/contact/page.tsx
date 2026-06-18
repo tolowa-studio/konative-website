@@ -91,7 +91,7 @@ export default function ContactPage() {
             Bring the site, market, route, or enterprise connectivity requirement. Konative runs the carrier-neutral market, frames the options, and manages the path from quote to install.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 32 }}>
-            <a href="#request" style={primaryLinkStyle}>Request platform access</a>
+            <a href="#request" style={primaryLinkStyle}>Get connectivity options</a>
             <a href="https://cal.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={outlineLinkStyle}>Book a working session</a>
           </div>
         </div>

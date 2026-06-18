@@ -43,7 +43,7 @@ export default function MapPageClient() {
         top: 0, left: 0,
         width: '100vw', height: '100dvh',
         zIndex: 1001,
-        background: '#08142D',
+        background: '#F8FAFC',
         display: 'flex',
         flexDirection: 'column',
       }}>
@@ -51,8 +51,8 @@ export default function MapPageClient() {
         <div style={{
           height: 36,
           flexShrink: 0,
-          background: 'rgba(4,12,28,0.96)',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          background: 'rgba(255,255,255,0.96)',
+          borderBottom: '1px solid rgba(17,24,39,0.10)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -65,9 +65,10 @@ export default function MapPageClient() {
             fontSize: 9,
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.25)',
+            color: 'rgba(17,17,17,0.45)',
           }}>
-            GIS Tool Mode
+            <strong style={{ color: '#111111', fontWeight: 800 }}>KO<span style={{ color: '#C8001F' }}>NATIVE</span></strong>
+            <span style={{ marginLeft: 10 }}>GIS Tool Mode</span>
           </span>
 
           {/* Right — exit button (no submit land link here — lives in Demo Views) */}
@@ -78,11 +79,11 @@ export default function MapPageClient() {
               display: 'flex',
               alignItems: 'center',
               gap: 6,
-              background: 'rgba(34,197,94,0.12)',
-              border: '1px solid rgba(34,197,94,0.45)',
+              background: 'rgba(200,0,31,0.06)',
+              border: '1px solid rgba(200,0,31,0.28)',
               cursor: 'pointer',
               padding: '4px 12px',
-              color: '#22c55e',
+              color: '#C8001F',
               fontFamily: 'Inter, sans-serif',
               fontSize: 10,
               fontWeight: 700,
@@ -92,15 +93,15 @@ export default function MapPageClient() {
             }}
             onMouseEnter={e => {
               const btn = e.currentTarget
-              btn.style.background = 'rgba(34,197,94,0.22)'
-              btn.style.borderColor = 'rgba(34,197,94,0.8)'
-              btn.style.color = '#4ade80'
+              btn.style.background = 'rgba(200,0,31,0.12)'
+              btn.style.borderColor = 'rgba(200,0,31,0.5)'
+              btn.style.color = '#A8001A'
             }}
             onMouseLeave={e => {
               const btn = e.currentTarget
-              btn.style.background = 'rgba(34,197,94,0.12)'
-              btn.style.borderColor = 'rgba(34,197,94,0.45)'
-              btn.style.color = '#22c55e'
+              btn.style.background = 'rgba(200,0,31,0.06)'
+              btn.style.borderColor = 'rgba(200,0,31,0.28)'
+              btn.style.color = '#C8001F'
             }}
           >
             <span style={{ fontSize: 11, lineHeight: 1 }}>✕</span>
@@ -119,32 +120,32 @@ export default function MapPageClient() {
 
   // ── Editorial Mode — page with header + map + footer ─────────────────────
   return (
-    <div style={{ background: '#08142D', height: 'calc(100dvh - 64px)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{ background: '#F8FAFC', height: 'calc(100dvh - 64px)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
       {/* Compact toolbar */}
       <div style={{
         height: 44,
         flexShrink: 0,
         padding: '0 20px',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        borderBottom: '1px solid rgba(17,24,39,0.10)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 16,
-        background: 'rgba(4,12,28,0.96)',
+        background: 'rgba(255,255,255,0.96)',
       }}>
         {/* Left — title + count */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <h1 style={{
             fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800,
             fontSize: 15, lineHeight: 1, textTransform: 'uppercase',
-            color: '#fff', margin: 0, whiteSpace: 'nowrap',
+            color: '#111111', margin: 0, whiteSpace: 'nowrap',
           }}>
             US + Canada&nbsp;<span style={{ color: '#C8001F' }}>Data Center Map</span>
           </h1>
           {total > 0 && (
-            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.25)', whiteSpace: 'nowrap' }}>
-              <strong style={{ color: 'rgba(255,140,60,0.6)' }}>{total.toLocaleString()}</strong> records
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(17,17,17,0.42)', whiteSpace: 'nowrap' }}>
+              <strong style={{ color: '#C8001F' }}>{total.toLocaleString()}</strong> records
             </span>
           )}
         </div>
@@ -159,7 +160,7 @@ export default function MapPageClient() {
                 <a key={key} href={url} target="_blank" rel="noopener noreferrer" style={{
                   display: 'flex', alignItems: 'center', gap: 4,
                   fontFamily: 'Inter, sans-serif', fontSize: 9,
-                  color: active ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.12)',
+                  color: active ? 'rgba(17,17,17,0.54)' : 'rgba(17,17,17,0.18)',
                   textDecoration: 'none', whiteSpace: 'nowrap',
                 }}>
                   <span style={{
@@ -168,7 +169,7 @@ export default function MapPageClient() {
                     opacity: active ? 0.9 : 0.2, flexShrink: 0,
                   }} />
                   {label}
-                  {active && <span style={{ color: 'rgba(255,255,255,0.18)' }}>({count.toLocaleString()})</span>}
+                  {active && <span style={{ color: 'rgba(17,17,17,0.30)' }}>({count.toLocaleString()})</span>}
                 </a>
               )
             })}
@@ -177,16 +178,16 @@ export default function MapPageClient() {
             onClick={() => setToolMode(true)}
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
-              background: 'rgba(224,123,57,0.08)',
-              border: '1px solid rgba(224,123,57,0.35)',
+              background: 'rgba(200,0,31,0.06)',
+              border: '1px solid rgba(200,0,31,0.28)',
               cursor: 'pointer', padding: '5px 12px',
               color: '#C8001F', fontFamily: 'Inter, sans-serif',
               fontSize: 9, fontWeight: 700,
               letterSpacing: '0.12em', textTransform: 'uppercase',
               transition: 'background 0.15s, border-color 0.15s', whiteSpace: 'nowrap',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(224,123,57,0.18)'; e.currentTarget.style.borderColor = 'rgba(224,123,57,0.65)' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(224,123,57,0.08)'; e.currentTarget.style.borderColor = 'rgba(224,123,57,0.35)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(200,0,31,0.12)'; e.currentTarget.style.borderColor = 'rgba(200,0,31,0.50)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(200,0,31,0.06)'; e.currentTarget.style.borderColor = 'rgba(200,0,31,0.28)' }}
           >
             <span style={{ fontSize: 11, lineHeight: 1 }}>⛶</span>
             Launch Tool Mode
@@ -203,18 +204,18 @@ export default function MapPageClient() {
       <div style={{
         padding: '0 20px',
         height: 28,
-        borderTop: '1px solid rgba(255,255,255,0.06)',
+        borderTop: '1px solid rgba(17,24,39,0.10)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexShrink: 0,
         gap: 16,
       }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.18)', letterSpacing: '0.04em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, color: 'rgba(17,17,17,0.38)', letterSpacing: '0.04em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           IM3/PeeringDB · EIA-860M · OSM/Wikidata · News: daily
         </p>
         <Link href="/capacity" style={{
           fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 9,
           letterSpacing: '0.10em', textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.25)', textDecoration: 'none', whiteSpace: 'nowrap',
+          color: '#C8001F', textDecoration: 'none', whiteSpace: 'nowrap',
           flexShrink: 0,
         }}>
           Find Capacity →

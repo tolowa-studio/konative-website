@@ -22,7 +22,7 @@ site:
 
   ctaStandard:
     primary:
-      label: "Request Platform Access"
+      label: "Get Connectivity Options"
       href: "/contact"
     booking:
       label: "Book a Working Session"

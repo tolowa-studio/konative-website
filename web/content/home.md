@@ -3,19 +3,19 @@
 ## Hero
 - **Headline:** Connectivity Intelligence. Brokered.
 - **Subtitle:** Konative is the AI-native brokerage for large-scale connectivity. We help enterprise buyers, datacenter operators, and infrastructure teams find, price, and transact on fiber, dark fiber, transport, wireless backhaul, colocation, cloud on-ramps, and managed network services across North America.
-- **Primary CTA:** Request Platform Access
-- **Secondary CTA:** Explore Live Markets
+- **Primary CTA:** Get Connectivity Options
+- **Secondary CTA:** Explore Tribal Enterprise
 
 ## Proof Points
-- **Routes analyzed:** 847+
-- **Active markets:** 12
-- **Carrier networks indexed:** 14 Tier-1 networks
-- **Buyer cost:** $0, supplier-compensated through Avant
+- **Supplier portfolio:** 100+ through Avant
+- **Core specialties:** Tribal and rural enterprise; data-center connectivity
+- **Market coverage:** United States and Canada
+- **Buyer advisory cost:** $0 for supplier-compensated brokerage services
 
 ## Core Surfaces
 
 ### 1) Intelligence
-Real-time route, capacity, price, supplier, and market signals that show where connectivity demand is forming before the buying process gets noisy.
+Source-backed infrastructure, funding, supplier, and market signals that show where connectivity demand is forming before the buying process gets noisy.
 
 ### 2) Brokerage
 Carrier-neutral sourcing for internet, fiber, dark fiber, wavelengths, SD-WAN, UCaaS/CCaaS, cloud connectivity, cybersecurity, and datacenter interconnection.
@@ -28,4 +28,4 @@ Konative combines market intelligence, carrier-neutral procurement, and hands-on
 
 ## CTA Band
 - **Headline:** One requirement. The whole market.
-- **Button label:** Request Platform Access
+- **Button label:** Get Connectivity Options

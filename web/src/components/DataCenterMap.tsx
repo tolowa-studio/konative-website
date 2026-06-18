@@ -24,20 +24,20 @@ export type LayerKey = 'projects' | 'facilities' | 'network' | 'power'
 export type CountryFilter = 'all' | 'CA' | 'US'
 
 export const STATUS_COLORS: Record<Status, string> = {
-  operational: '#22d3ee',
+  operational: '#0ea5e9',
   construction: '#C8001F',
-  announced: '#a78bfa',
-  stalled: '#f59e0b',
-  blocked: '#ef4444',
-  paused: '#fb923c',
-  canceled: '#64748b',
+  announced: '#2563eb',
+  stalled: '#d97706',
+  blocked: '#dc2626',
+  paused: '#ea580c',
+  canceled: '#475569',
 }
 
 export const LAYER_COLORS: Record<LayerKey, string> = {
-  projects:   '#22d3ee',  // cyan  — status-driven but default
-  facilities: '#3b82f6',  // blue  — IM3 verified facilities
-  network:    '#a855f7',  // purple — PeeringDB colocation
-  power:      '#eab308',  // yellow — EIA planned generation
+  projects:   '#0ea5e9',  // blue — status-driven but default
+  facilities: '#2563eb',  // blue — IM3 verified facilities
+  network:    '#7c3aed',  // violet — PeeringDB colocation
+  power:      '#b45309',  // amber — EIA planned generation
 }
 
 export const LAYER_LABELS: Record<LayerKey, string> = {
@@ -75,12 +75,12 @@ const INFRA_CATEGORIES: { key: LayerCategory; label: string; color: string }[] =
   { key: 'indigenous',  label: 'Indigenous Lands',  color: '#2d7a4f' },
   { key: 'exclusions',  label: 'Exclusion Zones',   color: '#dc2626' },
   { key: 'land-use',    label: 'Industrial Land Use', color: '#b45309' },
-  { key: 'power',       label: 'Power',              color: '#eab308' },
-  { key: 'gas',         label: 'Gas',                color: '#f97316' },
-  { key: 'fiber',       label: 'Fiber',              color: '#2dd4bf' },
-  { key: 'water',       label: 'Water',              color: '#38bdf8' },
-  { key: 'climate',     label: 'Climate',            color: '#94a3b8' },
-  { key: 'rail',        label: 'Rail',               color: '#22c55e' },
+  { key: 'power',       label: 'Power',              color: '#b45309' },
+  { key: 'gas',         label: 'Gas',                color: '#ea580c' },
+  { key: 'fiber',       label: 'Fiber',              color: '#0891b2' },
+  { key: 'water',       label: 'Water',              color: '#0284c7' },
+  { key: 'climate',     label: 'Climate',            color: '#64748b' },
+  { key: 'rail',        label: 'Rail',               color: '#16a34a' },
 ]
 
 export interface MapCounts {
@@ -333,9 +333,9 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         0, 6, 50, 10, 250, 16, 1000, 26, 5000, 42,
       ],
       'circle-color': ['get', '_color'],
-      'circle-opacity': 0.75,
-      'circle-stroke-width': 1.5,
-      'circle-stroke-color': 'rgba(12,32,70,0.8)',
+      'circle-opacity': backgroundMode ? 0.58 : 0.78,
+      'circle-stroke-width': backgroundMode ? 1 : 1.5,
+      'circle-stroke-color': backgroundMode ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.92)',
     },
   }
 
@@ -397,7 +397,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
       <Map
         ref={mapRef}
         initialViewState={{ longitude: -96, latitude: 45, zoom: 3.2 }}
-        mapStyle="https://tiles.openfreemap.org/styles/dark"
+        mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         interactiveLayerIds={backgroundMode ? [] : [
           'dc-bubbles',
           ...((['indigenous', 'exclusions', 'land-use'] as LayerCategory[]).flatMap(cat =>
@@ -499,7 +499,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                           type="line"
                           minzoom={layer.minZoom}
                           paint={{
-                            'line-color': 'rgba(8,20,45,0.85)',
+                            'line-color': 'rgba(255,255,255,0.88)',
                             'line-width': lineWidthCasing,
                             'line-opacity': 0.7,
                           }}
@@ -530,7 +530,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                           id={`infra-${layer.id}-point`}
                           type="circle"
                           minzoom={layer.minZoom}
-                          paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
+                          paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(255,255,255,0.9)' }}
                         />
                       )}
                     </Source>
@@ -556,16 +556,16 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                       />
                     )}
                     {showLine && hint === 'line' && (
-                      <Layer
-                        id={`infra-${layer.id}-line-casing`}
-                        type="line"
-                        source-layer={layer.sourceLayer}
-                        minzoom={layer.minZoom}
-                        paint={{
-                          'line-color': 'rgba(8,20,45,0.85)',
-                          'line-width': lineWidthCasing,
-                          'line-opacity': 0.7,
-                        }}
+                        <Layer
+                          id={`infra-${layer.id}-line-casing`}
+                          type="line"
+                          source-layer={layer.sourceLayer}
+                          minzoom={layer.minZoom}
+                          paint={{
+                            'line-color': 'rgba(255,255,255,0.88)',
+                            'line-width': lineWidthCasing,
+                            'line-opacity': 0.7,
+                          }}
                       />
                     )}
                     {showLine && (
@@ -591,12 +591,12 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
                     )}
                     {showCircle && (
                       <Layer
-                        id={`infra-${layer.id}-point`}
-                        type="circle"
-                        source-layer={layer.sourceLayer}
-                        minzoom={layer.minZoom}
-                        paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(8,20,45,0.7)' }}
-                      />
+                          id={`infra-${layer.id}-point`}
+                          type="circle"
+                          source-layer={layer.sourceLayer}
+                          minzoom={layer.minZoom}
+                          paint={{ 'circle-color': cat.color, 'circle-radius': 6, 'circle-opacity': 0.9, 'circle-stroke-width': 1.5, 'circle-stroke-color': 'rgba(255,255,255,0.9)' }}
+                        />
                     )}
                   </Source>
                 )
@@ -652,11 +652,11 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         <div style={{
           position: 'absolute', zIndex: 10, bottom: 80, left: '50%',
           transform: 'translateX(-50%)',
-          background: 'rgba(8,20,45,0.97)', border: '1px solid rgba(224,123,57,0.5)',
+          background: 'rgba(255,255,255,0.97)', border: '1px solid rgba(200,0,31,0.22)',
           padding: '12px 20px', backdropFilter: 'blur(10px)',
           fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap',
           display: 'flex', alignItems: 'center', gap: 16,
-          boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
+          boxShadow: '0 12px 32px rgba(17,24,39,0.14)',
         }}>
           <span style={{ color: '#C8001F', fontSize: 20, lineHeight: 1 }}>↑</span>
           <div>
@@ -665,17 +665,17 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 22, fontWeight: 700, color: 'rgba(255,255,255,0.45)', lineHeight: 1, fontFamily: '"Barlow Condensed", sans-serif' }}>
+                <div style={{ fontSize: 22, fontWeight: 700, color: 'rgba(17,17,17,0.55)', lineHeight: 1, fontFamily: '"Barlow Condensed", sans-serif' }}>
                   {mapZoom.toFixed(1)}
                 </div>
-                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 2 }}>Current</div>
+                <div style={{ fontSize: 9, color: 'rgba(17,17,17,0.35)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 2 }}>Current</div>
               </div>
-              <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.2)' }}>→</div>
+              <div style={{ fontSize: 14, color: 'rgba(17,17,17,0.2)' }}>→</div>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 22, fontWeight: 700, color: '#C8001F', lineHeight: 1, fontFamily: '"Barlow Condensed", sans-serif' }}>
                   {infraMinZoomNeeded}+
                 </div>
-                <div style={{ fontSize: 9, color: 'rgba(224,123,57,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 2 }}>Required</div>
+                <div style={{ fontSize: 9, color: 'rgba(200,0,31,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 2 }}>Required</div>
               </div>
             </div>
           </div>
@@ -687,13 +687,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         <div style={{
           position: 'absolute', zIndex: 10, bottom: 112, left: '50%',
           transform: 'translateX(-50%)',
-          background: 'rgba(8,20,45,0.95)', border: '1px solid rgba(168,85,247,0.4)',
+          background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(124,58,237,0.26)',
           padding: '8px 16px', backdropFilter: 'blur(10px)',
           fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap',
           display: 'flex', alignItems: 'center', gap: 10,
         }}>
-          <span style={{ color: '#a855f7', fontSize: 15, animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</span>
-          <span style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)' }}>
+          <span style={{ color: '#7c3aed', fontSize: 15, animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</span>
+          <span style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(17,17,17,0.62)' }}>
             Loading live layer data…
           </span>
         </div>
@@ -704,13 +704,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         <div style={{
           position: 'absolute', zIndex: 10, top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
-          background: 'rgba(8,20,45,0.9)', border: '1px solid rgba(255,255,255,0.1)',
+          background: 'rgba(255,255,255,0.94)', border: '1px solid rgba(17,24,39,0.12)',
           padding: '20px 28px', textAlign: 'center', backdropFilter: 'blur(8px)',
         }}>
-          <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontSize: 18, fontWeight: 700, color: '#fff', textTransform: 'uppercase', marginBottom: 6 }}>
+          <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontSize: 18, fontWeight: 700, color: '#111111', textTransform: 'uppercase', marginBottom: 6 }}>
             No data for this layer yet
           </div>
-          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>
+          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(17,17,17,0.52)' }}>
             Run the ingestion scripts to populate this layer
           </div>
         </div>
@@ -760,9 +760,10 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
       {counts && counts.total > 0 && (
         <div style={{
           position: 'absolute', zIndex: 10, bottom: 32, right: 16,
-          background: 'rgba(8,20,45,0.88)', padding: '14px 18px',
-          border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)',
+          background: 'rgba(255,255,255,0.92)', padding: '14px 18px',
+          border: '1px solid rgba(17,24,39,0.12)', backdropFilter: 'blur(8px)',
           fontFamily: 'Inter, sans-serif',
+          boxShadow: '0 12px 32px rgba(17,24,39,0.12)',
         }}>
           <div style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8001F', marginBottom: 10 }}>
             Data Layers · US + CA
@@ -771,13 +772,13 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
             {(['projects', 'facilities', 'network', 'power'] as LayerKey[]).map(k => (
               <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ width: 7, height: 7, borderRadius: '50%', background: LAYER_COLORS[k], display: 'inline-block', opacity: counts[k] > 0 ? 0.9 : 0.2 }} />
-                <span style={{ color: counts[k] > 0 ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.2)' }}>
-                  <strong style={{ color: counts[k] > 0 ? '#fff' : 'inherit' }}>{counts[k].toLocaleString()}</strong>
+                <span style={{ color: counts[k] > 0 ? 'rgba(17,17,17,0.68)' : 'rgba(17,17,17,0.25)' }}>
+                  <strong style={{ color: counts[k] > 0 ? '#111111' : 'inherit' }}>{counts[k].toLocaleString()}</strong>
                   {' '}{LAYER_LABELS[k]}
                 </span>
               </div>
             ))}
-            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, marginTop: 4, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 6 }}>
+            <div style={{ color: 'rgba(17,17,17,0.42)', fontSize: 11, marginTop: 4, borderTop: '1px solid rgba(17,24,39,0.08)', paddingTop: 6 }}>
               {counts.total.toLocaleString()} total records
             </div>
           </div>

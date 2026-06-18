@@ -22,6 +22,9 @@ export const metadata = {
   description:
     "Konative is a vendor-neutral connectivity brokerage. We source, design, and manage internet, fiber, transport, SD-WAN, voice, and cloud connectivity for Tribal enterprises and the data centers powering AI — backed by Avant's 100+ supplier portfolio, at no cost to you.",
   metadataBase: new URL("https://konative.com"),
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     siteName: "Konative",
     type: "website" as const,
