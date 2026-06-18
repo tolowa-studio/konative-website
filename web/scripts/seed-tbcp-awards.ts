@@ -12,46 +12,44 @@
  */
 
 import { createClient } from '@supabase/supabase-js'
+import { config } from 'dotenv'
+import path from 'path'
+
+// Load .env.local so the script works without manual env var export
+config({ path: path.join(__dirname, '../.env.local') })
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://tcbworxmlmxoyzcvdjhh.supabase.co'
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjYndvcnhtbG14b3l6Y3ZkamhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyODczMTksImV4cCI6MjA5MTg2MzMxOX0.bAU-JCOSEH5RuJZcpDR5WTSU7zTjOEQ4sn6kaY8UIYg'
+// Prefer service role key (bypasses RLS) for seeding; fall back to anon
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+if (!SUPABASE_KEY) {
+  throw new Error('Set SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local')
+}
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-// NTIA NBAM ArcGIS Feature Service — public, no auth required
+// NTIA TBCP dataset via ArcGIS Hub GeoJSON export
 // Item ID: af49f79f0f4b4d73b4e0de81aa5534eb
-// Org: NTIA ArcGIS Online (nbam.ntia.gov)
-const ARCGIS_ITEM_ID = 'af49f79f0f4b4d73b4e0de81aa5534eb'
+const ARCGIS_HUB_GEOJSON_URL = 'https://opendata.arcgis.com/datasets/af49f79f0f4b4d73b4e0de81aa5534eb_0.geojson'
 
-// Primary endpoint pattern for NBAM-hosted layers
-const FEATURE_SERVICE_URLS = [
-  // Try NBAM's hosted service first
-  `https://services.arcgis.com/aJ16ENn1AaqdFlqx/arcgis/rest/services/TBCP_Awards/FeatureServer/0/query`,
-  // Fallback: BroadbandUSA ArcGIS org
-  `https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/Tribal_Broadband_Connectivity_Program/FeatureServer/0/query`,
-  // NBAM direct
-  `https://nbam.ntia.gov/server/rest/services/Hosted/TBCP_Awards/FeatureServer/0/query`,
-]
-
-async function fetchArcGISLayer(baseUrl: string): Promise<GeoJSONFeature[]> {
-  const params = new URLSearchParams({
-    where: '1=1',
-    outFields: '*',
-    f: 'geojson',
-    resultRecordCount: '1000',
-    outSR: '4326',
+async function fetchWithRedirects(url: string): Promise<GeoJSONFeature[]> {
+  const res = await fetch(url, {
+    redirect: 'follow',
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; Konative/1.0)',
+      'Accept': 'application/json, application/geo+json, */*',
+    },
   })
-
-  const res = await fetch(`${baseUrl}?${params}`, {
-    headers: { 'User-Agent': 'Konative/1.0 (connectivity intelligence brokerage)' },
-  })
-
-  if (!res.ok) throw new Error(`HTTP ${res.status} from ${baseUrl}`)
-
+  if (!res.ok) throw new Error(`HTTP ${res.status} from ${res.url}`)
+  const contentType = res.headers.get('content-type') || ''
+  if (contentType.includes('html')) {
+    throw new Error(`Got HTML response (likely a login page) from ${res.url}`)
+  }
   const data = await res.json()
-  if (!data.features) throw new Error(`No features in response from ${baseUrl}`)
-  return data.features
+  if (data.features) return data.features
+  if (data.error) throw new Error(`API error: ${JSON.stringify(data.error)}`)
+  throw new Error(`No features in response (keys: ${Object.keys(data).join(', ')}) from ${res.url}`)
 }
 
 interface GeoJSONFeature {
@@ -80,11 +78,7 @@ interface TBCPAward {
 function normalizeFeature(feature: GeoJSONFeature): TBCPAward {
   const p = feature.properties || {}
 
-  // Field names vary by data source — try multiple keys
-  const grantee = (
-    p['Grantee_Name'] || p['grantee_name'] || p['GRANTEE'] ||
-    p['Awardee'] || p['AWARDEE_NAME'] || p['Name'] || 'Unknown'
-  ) as string
+  const grantee = ((p['APPLICANT_NAME'] || p['Grantee_Name'] || 'Unknown') as string).trim()
 
   const slug = grantee
     .toLowerCase()
@@ -92,19 +86,22 @@ function normalizeFeature(feature: GeoJSONFeature): TBCPAward {
     .replace(/^-|-$/g, '')
     .slice(0, 80)
 
+  const rawAmount = p['AMOUNT_FUNDED']
+  const awardAmount = rawAmount != null ? parseFloat(String(rawAmount)) : null
+
   return {
-    ntia_award_id: (p['Award_Number'] || p['award_number'] || p['GRANT_NUMBER'] || null) as string | null,
+    ntia_award_id: (p['OBJECTID'] ? String(p['OBJECTID']) : null),
     grantee_name: grantee,
-    tribe_name: (p['Tribe_Name'] || p['tribe_name'] || p['TRIBE'] || null) as string | null,
-    state: (p['State'] || p['state'] || p['STATE'] || null) as string | null,
-    award_amount_usd: (p['Award_Amount'] || p['award_amount'] || p['AMOUNT'] || null) as number | null,
-    award_date: (p['Award_Date'] || p['award_date'] || p['DATE'] || null) as string | null,
-    nofo_round: (p['NOFO_Round'] || p['nofo_round'] || p['Round'] || null) as string | null,
-    project_type: (p['Project_Type'] || p['project_type'] || p['TYPE'] || null) as string | null,
-    project_description: (p['Description'] || p['description'] || p['Project_Description'] || null) as string | null,
-    lat: feature.geometry?.coordinates?.[1] ?? null,
-    lng: feature.geometry?.coordinates?.[0] ?? null,
-    households_served: (p['Households_Served'] || p['households'] || null) as number | null,
+    tribe_name: null,
+    state: null,
+    award_amount_usd: awardAmount,
+    award_date: null,
+    nofo_round: (p['NOFO'] || null) as string | null,
+    project_type: (p['PROJECT_TYPE_DESC'] || null) as string | null,
+    project_description: null,
+    lat: p['LAT'] != null ? parseFloat(String(p['LAT'])) : (feature.geometry?.coordinates?.[1] ?? null),
+    lng: p['LON'] != null ? parseFloat(String(p['LON'])) : (feature.geometry?.coordinates?.[0] ?? null),
+    households_served: null,
     raw_properties: p,
     slug,
   }
@@ -154,31 +151,26 @@ async function main() {
 
   await ensureTable()
 
-  let features: GeoJSONFeature[] = []
+  console.log(`🔍 Fetching from ArcGIS Hub: ${ARCGIS_HUB_GEOJSON_URL}`)
+  const features = await fetchWithRedirects(ARCGIS_HUB_GEOJSON_URL)
+  console.log(`✓ Fetched ${features.length} features`)
 
-  // Try each endpoint until one works
-  for (const url of FEATURE_SERVICE_URLS) {
-    try {
-      console.log(`🔍 Trying ArcGIS endpoint: ${url}`)
-      features = await fetchArcGISLayer(url)
-      console.log(`✓ Fetched ${features.length} features`)
-      break
-    } catch (err) {
-      console.warn(`  ✗ Failed: ${(err as Error).message}`)
+  const rawAwards = features.map(normalizeFeature)
+  // Deduplicate by slug (some grantees appear in both NOFO rounds with same name)
+  const slugMap = new Map<string, TBCPAward>()
+  for (const a of rawAwards) {
+    if (slugMap.has(a.slug)) {
+      // Keep the one with higher award amount
+      const existing = slugMap.get(a.slug)!
+      if ((a.award_amount_usd ?? 0) > (existing.award_amount_usd ?? 0)) {
+        slugMap.set(a.slug, a)
+      }
+    } else {
+      slugMap.set(a.slug, a)
     }
   }
-
-  if (features.length === 0) {
-    console.error('')
-    console.error('❌ All ArcGIS endpoints failed. Manual fallback:')
-    console.error('   1. Go to: https://nbam.ntia.gov/datasets/af49f79f0f4b4d73b4e0de81aa5534eb_0/explore')
-    console.error('   2. Download as CSV or GeoJSON')
-    console.error('   3. Run: npx tsx scripts/seed-tbcp-from-file.ts path/to/download.geojson')
-    process.exit(1)
-  }
-
-  const awards = features.map(normalizeFeature)
-  console.log(`\n📊 Normalized ${awards.length} award records`)
+  const awards = Array.from(slugMap.values())
+  console.log(`\n📊 Normalized ${rawAwards.length} award records → ${awards.length} unique slugs`)
 
   // Sample a few for validation
   const sample = awards.slice(0, 3)

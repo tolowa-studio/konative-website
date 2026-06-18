@@ -72,11 +72,11 @@ https://cal.com/konative/discovery
 Install the Cal.com embed package first:
 
 ```bash
-cd /Users/jerameyjames/repos/konative/web
+cd /Users/jerameyjames/repos/konative-website/web
 npm install @calcom/embed-react
 ```
 
-Create `/Users/jerameyjames/repos/konative/web/src/app/(frontend)/call/page.tsx` with this embed:
+Create `/Users/jerameyjames/repos/konative-website/web/src/app/(frontend)/call/page.tsx` with this embed:
 
 ```tsx
 import Cal, { getCalApi } from "@calcom/embed-react";
@@ -320,7 +320,7 @@ Perplexity uses its own crawler called **PerplexityBot**. Steps to ensure it cra
 
 **Step 1: Check your robots.txt**
 
-Open `/Users/jerameyjames/repos/konative/web/public/robots.txt` and confirm it contains:
+Open `/Users/jerameyjames/repos/konative-website/web/public/robots.txt` and confirm it contains:
 
 ```
 User-agent: PerplexityBot

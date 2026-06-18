@@ -13,6 +13,10 @@
  */
 
 import { chromium } from 'playwright'
+import { config } from 'dotenv'
+import path from 'path'
+
+config({ path: path.join(__dirname, '../.env.local') })
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 

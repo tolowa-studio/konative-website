@@ -2,6 +2,14 @@
 **/.DS_Store
 .vercel
 
+# Local agent/runtime state
+.claude/scheduled_tasks.lock
+
+# Generated outreach and Builder artifacts
+web/.tribal-outreach-contacts.json
+web/dist/
+/tiles/
+
 # ETL build artifacts
 .tmp/
 .superpowers/

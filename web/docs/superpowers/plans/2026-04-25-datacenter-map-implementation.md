@@ -18,7 +18,7 @@
 
 ## Repository Context
 
-**Repo root:** `/Users/jerameyjames/repos/konative` (Next.js 16 + Sanity + Builder.io app in `web/`)
+**Repo root:** `/Users/jerameyjames/repos/konative-website` (Next.js 16 + Sanity + Builder.io app in `web/`)
 **Sanity project ID:** `zwk4buq7` | **Dataset:** `production`
 **Existing cron:** Daily 6am UTC at `/api/ingest-news` (see `web/vercel.json`)
 **Existing schemas:** `landSubmission`, `capacitySubmission`, `investorInquiry`, `newsItem`, `newsSource`, `newsIngestionRun` (in `web/src/sanity/schemaTypes/`)
