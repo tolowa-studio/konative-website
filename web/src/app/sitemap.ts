@@ -7,15 +7,7 @@ export const revalidate = 3600
 
 const BASE = 'https://konative.com'
 
-const AUDIENCE_SLUGS = [
-  'tribes',
-  'advisors',
-  'investors',
-  'landowners',
-  'utilities',
-  'developers-epcs',
-  'operators',
-] as const
+const AUDIENCE_SLUGS = ['tribes'] as const
 
 interface GhostPostSitemapItem {
   slug: string
@@ -56,36 +48,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // --- static, high-priority pages -----------------------------------------
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE,                          lastModified: now, changeFrequency: 'weekly',  priority: 1.0 },
+    { url: `${BASE}/connectivity`,       lastModified: now, changeFrequency: 'monthly', priority: 0.98 },
+    { url: `${BASE}/tribal`,             lastModified: now, changeFrequency: 'weekly', priority: 0.98 },
+    { url: `${BASE}/tribal/awards`,      lastModified: now, changeFrequency: 'weekly', priority: 0.95 },
+    { url: `${BASE}/data-center-connectivity`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
+    { url: `${BASE}/contact`,            lastModified: now, changeFrequency: 'monthly', priority: 0.98 },
     { url: `${BASE}/call`,               lastModified: now, changeFrequency: 'monthly', priority: 0.98 },
     { url: `${BASE}/answers`,            lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
     { url: `${BASE}/dispatch`,            lastModified: now, changeFrequency: 'daily',   priority: 0.95 },
     { url: `${BASE}/map`,                 lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
     { url: `${BASE}/markets`,             lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${BASE}/powered-land`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.95 },
-    { url: `${BASE}/readiness-audit`,     lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
-    { url: `${BASE}/governors`,           lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
     { url: `${BASE}/intelligence`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
     { url: `${BASE}/news`,                lastModified: now, changeFrequency: 'daily',   priority: 0.85 },
     { url: `${BASE}/market-intel`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
     { url: `${BASE}/projects`,            lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
-    { url: `${BASE}/deals`,               lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${BASE}/blog`,                lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/land`,                lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/land/what-its-worth`, lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
-    { url: `${BASE}/land/submit`,         lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/land/process`,        lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/capacity`,            lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/capacity/process`,    lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/invest`,              lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
-    { url: `${BASE}/assessment`,          lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/power-markets`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.75 },
     { url: `${BASE}/methodology`,         lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/reality-vs-press`,    lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
     { url: `${BASE}/partners`,            lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/canada`,              lastModified: now, changeFrequency: 'weekly',  priority: 0.7 },
     { url: `${BASE}/licenses`,            lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE}/for`,                 lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/contact`,             lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
   ]
 
   // --- per-state market pages ----------------------------------------------

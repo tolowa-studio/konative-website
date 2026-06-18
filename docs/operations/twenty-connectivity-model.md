@@ -74,3 +74,6 @@ The n8n workflow should:
 7. Create a follow-up task.
 8. Return a success response with the Twenty record IDs.
 
+An importable implementation is checked in at
+`docs/operations/n8n/konative-twenty-intake.workflow.json`. Deployment and
+safe activation instructions are in the adjacent `README.md`.

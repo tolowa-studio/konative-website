@@ -12,9 +12,9 @@ export const revalidate = 300; // 5 min ISR — fresh enough, light on Ghost
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Konative Dispatch — Powered land, stalled projects, and the data center brokerage market",
+  title: "Konative Dispatch — Connectivity procurement and infrastructure intelligence",
   description:
-    "Konative Dispatch — twice-weekly intelligence for energy infrastructure principals. Powered land, stalled data center projects, capacity, capital.",
+    "Konative Dispatch covers Tribal and rural connectivity, funded programs, fiber, carriers, interconnection, data-center networks, cloud, security, and procurement.",
   alternates: { canonical: "/dispatch" },
   openGraph: {
     title: "Konative Dispatch",

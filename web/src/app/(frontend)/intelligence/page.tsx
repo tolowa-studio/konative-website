@@ -27,31 +27,31 @@ const sections = [
   },
   {
     href: "/datacenters",
-    label: "Datacenter Signals",
+    label: "Demand Signals",
     eyebrow: "Early Warning",
-    headline: "Fiber decisions start before concrete pours",
-    summary: "FERC queues, large-load filings, permits, hiring signals, and carrier options that expose datacenter connectivity demand before the RFP.",
+    headline: "Data-center projects reveal where network demand is forming",
+    summary: "Projects, facilities, power filings, permits, and interconnection points help prioritize where connectivity checks should begin.",
   },
   {
-    href: "/canada",
-    label: "Canada Deep Dive",
+    href: "/tribal/awards",
+    label: "Tribal Awards",
     eyebrow: "Regional Intelligence",
-    headline: "Canada's pipeline, power regimes, and sovereign AI demand",
-    summary: "Quebec, Ontario, Alberta, and British Columbia each clear capacity differently. The market needs power, fiber, and credible development timing.",
+    headline: "Funded Tribal projects that need an operating connectivity plan",
+    summary: "Search TBCP awards and turn program context into address lists, requirements, supplier comparisons, and installation action.",
   },
   {
-    href: "/methodology",
-    label: "Scoring Methodology",
+    href: "/licenses",
+    label: "Data Sources",
     eyebrow: "How We Work",
-    headline: "A transparent rubric for power, fiber, site, and momentum",
-    summary: "The operating model behind Konative site assessment: no black box, just visible assumptions and weighted criteria.",
+    headline: "Know what the public map can—and cannot—prove",
+    summary: "Sources, confidence, dates, and limitations behind Konative's public infrastructure and demand intelligence.",
   },
   {
     href: "/news",
-    label: "Market Intel Feed",
+    label: "Connectivity Briefings",
     eyebrow: "News + Analysis",
-    headline: "Filtered infrastructure intelligence, updated daily",
-    summary: "Curated signal from open sources across datacenters, fiber, utilities, cloud, capital, and regulation.",
+    headline: "Research tied to a buying or sourcing decision",
+    summary: "Briefings on fiber, carrier supply, funded programs, interconnection, rural infrastructure, cloud, security, and network procurement.",
   },
 ];
 
@@ -101,14 +101,14 @@ export default function IntelligenceIndexPage() {
           <div>
             <p style={{ ...eyebrowStyle, color: RED, marginBottom: 12 }}>Featured tool</p>
             <h2 style={{ fontFamily: DISPLAY, fontSize: "clamp(34px, 5vw, 58px)", lineHeight: 0.95, margin: "0 0 14px", textTransform: "uppercase" }}>
-              Infrastructure site evaluator
+              Check a specific location
             </h2>
             <p style={{ color: "rgba(255,255,255,0.62)", lineHeight: 1.7, fontSize: 16, margin: 0, maxWidth: 660 }}>
-              Score a parcel across power, fiber, site characteristics, development readiness, and market positioning. The output is a practical readiness snapshot for buyers, lenders, or partners.
+              Public datasets create a starting hypothesis. Address-level supplier checks create a real connectivity answer. Send us the location, capacity, diversity, and timing requirements.
             </p>
           </div>
-          <Link href="/assessment" style={{ background: RED, color: "#fff", padding: "16px 28px", textDecoration: "none", fontSize: 12, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-            Launch evaluator
+          <Link href="/contact#request" style={{ background: RED, color: "#fff", padding: "16px 28px", textDecoration: "none", fontSize: 12, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+            Request a review
           </Link>
         </div>
       </section>

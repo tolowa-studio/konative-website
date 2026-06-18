@@ -27,11 +27,11 @@ export default function DataCenterConnectivityPage() {
         { text: "BEHIND THE", tone: "dim" },
         { text: "AI BUILDOUT.", tone: "rust" },
       ]}
-      subhead="Developers build the campus and the strategy — but someone has to source the network. Konative is the connectivity layer for data-center developers and operators: we broker the transport, dark fiber, wavelengths, cross-connects, and cloud on-ramps into the facility, and we use our proprietary data-center map to get ahead of where demand is landing."
+      subhead="Before a site can operate, it needs a credible network plan. Konative checks the location, structures capacity and diversity requirements, runs the supplier market, compares commercial terms, and manages transport, dark fiber, wavelengths, internet, cross-connects, and cloud access through installation."
       secondaryCta={{ label: "See the Data Center Map →", href: "/map" }}
       ctaHeadlineTop="BUILDING A CAMPUS?"
       ctaHeadlineBottom="WE'LL SOURCE THE NETWORK."
-      ctaSub="Bring us the site. We'll design carrier-diverse connectivity, run the market, and manage the install."
+      ctaSub="Bring us the address, capacity plan, diversity requirement, and ready-for-service date. We'll turn them into a sourcing plan."
     >
       <PitchSection eyebrow="What We Source" heading="Connectivity into the facility">
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
@@ -44,12 +44,22 @@ export default function DataCenterConnectivityPage() {
         </div>
       </PitchSection>
 
+      <PitchSection eyebrow="Site Feasibility" heading="What we need to answer">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
+          {[
+            ["Address + stage", "Site coordinates, development status, facility type, and required ready-for-service date."],
+            ["Capacity profile", "Initial and ultimate DIA, transit, transport, wavelength, dark-fiber, DCI, and cloud requirements."],
+            ["Physical resilience", "Carrier diversity, route diversity, building entrances, meet-me rooms, and failover assumptions."],
+            ["Commercial path", "Serviceability, construction exposure, contract structure, install milestones, and supplier comparison."],
+          ].map(([title, body]) => <div key={title} style={cardStyle}><h3 style={h3Style}>{title}</h3><p style={pStyle}>{body}</p></div>)}
+        </div>
+      </PitchSection>
+
       <PitchSection eyebrow="Our Edge" heading="Data is our unfair advantage" background="#F9FAFB">
         <p style={{ fontFamily: "Inter, sans-serif", fontSize: 16, lineHeight: 1.75, color: "#6B7280", maxWidth: 720, marginBottom: 28 }}>
-          Konative already maps data-center projects, capacity, status, and geography across the United States and
-          Canada — including First Nations projects. That dataset is a live picture of where connectivity demand is
-          forming, often before the network is even ordered. We use it to advise developers, target the right
-          suppliers, and move first.
+          Konative maps data-center demand, interconnection facilities, power and development signals across the
+          United States and Canada. Public map proximity is not a serviceability guarantee; it tells us where to
+          investigate. We combine that evidence with supplier checks and quoting to answer a specific site.
         </p>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
           <a href="/map" style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: "#C8001F", textDecoration: "none", borderBottom: "1px solid #C8001F", paddingBottom: 3 }}>Explore the map →</a>

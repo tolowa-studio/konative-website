@@ -83,12 +83,12 @@ export default function ContactPage() {
         />
         <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 4, height: 420, background: RED, transform: "rotate(18deg)", opacity: 0.9 }} />
         <div style={{ position: "relative", maxWidth: 1180, margin: "0 auto", padding: "150px 48px 72px" }}>
-          <p style={eyebrowStyle}>Platform access</p>
+          <p style={eyebrowStyle}>Connectivity request</p>
           <h1 style={titleStyle}>
             LET&apos;S SOURCE THE <span style={{ color: RED }}>NETWORK.</span>
           </h1>
           <p style={ledeStyle}>
-            Bring the site, market, route, or enterprise connectivity requirement. Konative runs the carrier-neutral market, frames the options, and manages the path from quote to install.
+            Give us the service addresses, timing, and business requirement. We will organize the request, identify supplier options, compare commercial terms, and manage the path from quote to installation.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 32 }}>
             <a href="#request" style={primaryLinkStyle}>Get connectivity options</a>
@@ -120,7 +120,8 @@ export default function ContactPage() {
           <Field label="Requirement type">
             <select name="projectType" style={inputStyle}>
               <option value="">Select...</option>
-              <option value="data_center">Datacenter connectivity</option>
+              <option value="tribal_funded">Tribal or grant-funded project</option>
+              <option value="data_center">Data-center site connectivity</option>
               <option value="dark_fiber_transport">Dark fiber, transport, or wavelengths</option>
               <option value="business_connectivity">Enterprise internet, SD-WAN, or voice</option>
               <option value="cloud_security">Cloud connectivity, UCaaS/CCaaS, or security</option>
@@ -128,6 +129,23 @@ export default function ContactPage() {
               <option value="partnership">Partnership or referral</option>
               <option value="other">Other</option>
             </select>
+          </Field>
+
+          <Field label="Service address(es) or coordinates">
+            <textarea name="serviceAddresses" rows={4} placeholder="One address per line. Approximate locations are fine for an initial review." style={{ ...inputStyle, resize: "vertical" }} />
+          </Field>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))", gap: 16 }}>
+            <Field label="Bandwidth or service need">
+              <input name="bandwidth" placeholder="Example: 1G DIA, diverse 100G waves" style={inputStyle} />
+            </Field>
+            <Field label="Required service date">
+              <input type="date" name="readyForService" style={inputStyle} />
+            </Field>
+          </div>
+
+          <Field label="Funding program, award, or procurement context">
+            <input name="fundingProgram" placeholder="Example: TBCP award, RFP, renewal, new construction" style={inputStyle} />
           </Field>
 
           <Field label="Stage">
@@ -182,7 +200,7 @@ export default function ContactPage() {
 
         <aside style={{ background: SURFACE, border: `1px solid ${DIVIDER}`, padding: 32, alignSelf: "start" }}>
           <InfoBlock label="Response time" title="Advisor reviewed" body="Every request is reviewed by a principal or Konative advisor, then routed to the right next action." />
-          <InfoBlock label="What happens next" title="Scope, source, recommend" body="We clarify locations, bandwidth, route constraints, carrier preferences, and timing before running the market." />
+          <InfoBlock label="What happens next" title="Scope, source, compare" body="We clarify locations, bandwidth, route constraints, funding or procurement requirements, and timing before running the supplier market." />
           <div style={{ borderTop: `1px solid ${DIVIDER}`, paddingTop: 26 }}>
             <p style={smallLabelStyle}>Prefer email?</p>
             <a href="mailto:deals@konative.com" style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 28, textTransform: "uppercase", color: TEXT, textDecoration: "none", letterSpacing: "0.01em" }}>

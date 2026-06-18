@@ -31,9 +31,9 @@ export default function Footer() {
             title="Brokerage"
             links={[
               ["Connectivity", "/connectivity"],
-              ["Datacenters", "/datacenters"],
+              ["Tribal Projects", "/tribal"],
               ["Data Center Connectivity", "/data-center-connectivity"],
-              ["Coverage Map", "/map"],
+              ["Check a Location", "/contact"],
             ]}
           />
           <FooterGroup
@@ -41,8 +41,8 @@ export default function Footer() {
             links={[
               ["Intelligence Hub", "/intelligence"],
               ["Market Coverage", "/markets"],
-              ["Market Intel Feed", "/news"],
-              ["Methodology", "/methodology"],
+              ["TBCP Awards", "/tribal/awards"],
+              ["Connectivity Map", "/map"],
             ]}
           />
           <FooterGroup

@@ -5,12 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "Brokerage", url: "/connectivity" },
-  { label: "Data Centers", url: "/data-center-connectivity" },
-  { label: "Tribal & Rural", url: "/tribal" },
+  { label: "What We Source", url: "/connectivity" },
+  { label: "Tribal Projects", url: "/tribal" },
+  { label: "Data Center Sites", url: "/data-center-connectivity" },
   { label: "Intelligence", url: "/intelligence" },
   { label: "Map", url: "/map" },
-  { label: "Insights", url: "/news" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
@@ -223,7 +222,7 @@ export default function Header() {
               onMouseEnter={() => setCtaHovered(true)}
               onMouseLeave={() => setCtaHovered(false)}
             >
-              Get Options
+              Check a Location
             </Link>
           )}
 

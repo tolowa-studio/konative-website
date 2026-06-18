@@ -141,7 +141,7 @@ export default function MapPageClient() {
             fontSize: 15, lineHeight: 1, textTransform: 'uppercase',
             color: '#111111', margin: 0, whiteSpace: 'nowrap',
           }}>
-            US + Canada&nbsp;<span style={{ color: '#C8001F' }}>Data Center Map</span>
+            North America&nbsp;<span style={{ color: '#C8001F' }}>Connectivity Opportunity Map</span>
           </h1>
           {total > 0 && (
             <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(17,17,17,0.42)', whiteSpace: 'nowrap' }}>
@@ -212,13 +212,13 @@ export default function MapPageClient() {
         <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, color: 'rgba(17,17,17,0.38)', letterSpacing: '0.04em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           IM3/PeeringDB · EIA-860M · OSM/Wikidata · News: daily
         </p>
-        <Link href="/capacity" style={{
+        <Link href="/contact#request" style={{
           fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 9,
           letterSpacing: '0.10em', textTransform: 'uppercase',
           color: '#C8001F', textDecoration: 'none', whiteSpace: 'nowrap',
           flexShrink: 0,
         }}>
-          Find Capacity →
+          Check a Location →
         </Link>
       </div>
     </div>

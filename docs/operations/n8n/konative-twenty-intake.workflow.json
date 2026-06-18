@@ -1,0 +1,75 @@
+{
+  "name": "Konative website intake → Twenty CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "konative-intake",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "konative-webhook",
+      "name": "Konative Intake",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "konative-intake"
+    },
+    {
+      "parameters": {
+        "jsCode": "const req = $input.first().json;\nconst headers = req.headers || {};\nconst expected = $env.KONATIVE_INTAKE_TOKEN;\nconst supplied = String(headers.authorization || headers.Authorization || '').replace(/^Bearer\\s+/i, '');\nif (!expected || supplied !== expected) throw new Error('Unauthorized Konative intake');\nconst payload = req.body || req;\nif (payload.source !== 'konative.com' || !payload.sanityDocumentId || !payload.schemaType) throw new Error('Invalid intake envelope');\nconst d = payload.data || {};\nconst email = String(d.email || d.workEmail || '').trim().toLowerCase();\nif (!email) throw new Error('Email is required');\nconst fullName = String(d.name || d.fullName || d.contactName || '').trim();\nconst parts = fullName.split(/\\s+/).filter(Boolean);\nconst firstName = String(d.firstName || parts.shift() || 'Website').trim();\nconst lastName = String(d.lastName || parts.join(' ') || 'Inquiry').trim();\nconst organization = String(d.organization || d.company || d.companyName || d.tribe || d.nation || email.split('@')[1] || 'Website inquiry').trim();\nconst requirement = String(d.requirement || d.message || d.projectDescription || d.notes || d.serviceNeeded || '').trim();\nconst audience = String(d.audience || d.lane || d.projectType || '').toLowerCase();\nconst lane = audience.includes('trib') ? 'TRIBAL' : audience.includes('gaming') || audience.includes('casino') ? 'GAMING' : audience.includes('data') || audience.includes('colo') ? 'DATA_CENTER' : audience.includes('travel') ? 'TRAVEL' : 'ENTERPRISE';\nreturn [{json:{source:payload.source,schemaType:payload.schemaType,sanityDocumentId:payload.sanityDocumentId,submittedAt:payload.submittedAt || new Date().toISOString(),email,firstName,lastName,organization,phone:String(d.phone || '').trim(),requirement,lane,raw:d}}];"
+      },
+      "id": "validate-normalize",
+      "name": "Validate + Normalize",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const i = $input.first().json;\nconst api = String($env.TWENTY_API_URL || 'https://api.twenty.com').replace(/\\/$/, '');\nconst token = $env.TWENTY_API_KEY;\nif (!token) throw new Error('TWENTY_API_KEY is not configured');\nasync function gql(query, variables = {}) {\n  const res = await fetch(`${api}/graphql`, {method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({query,variables})});\n  const body = await res.json();\n  if (!res.ok || body.errors?.length) throw new Error(body.errors?.map(e=>e.message).join('; ') || `Twenty HTTP ${res.status}`);\n  return body.data;\n}\nlet company = (await gql(`query($filter: CompanyFilterInput){companies(filter:$filter,first:1){edges{node{id name}}}}`,{filter:{name:{eq:i.organization}}})).companies?.edges?.[0]?.node;\nif (!company) company = (await gql(`mutation($input: CompanyCreateInput!){createCompany(data:$input){id name}}`,{input:{name:i.organization}})).createCompany;\nlet person = (await gql(`query($filter: PersonFilterInput){people(filter:$filter,first:1){edges{node{id name{firstName lastName}}}}}`,{filter:{emails:{primaryEmail:{eq:i.email}}}})).people?.edges?.[0]?.node;\nif (!person) person = (await gql(`mutation($input: PersonCreateInput!){createPerson(data:$input){id name{firstName lastName}}}`,{input:{name:{firstName:i.firstName,lastName:i.lastName},emails:{primaryEmail:i.email,additionalEmails:[]},phones:i.phone?{primaryPhoneNumber:i.phone,primaryPhoneCallingCode:'',primaryPhoneCountryCode:'US',additionalPhones:[]}:undefined,companyId:company.id}})).createPerson;\nconst oppName = `${i.organization} — ${i.schemaType} — ${i.sanityDocumentId}`;\nlet opportunity = (await gql(`query($filter: OpportunityFilterInput){opportunities(filter:$filter,first:1){edges{node{id name}}}}`,{filter:{name:{eq:oppName}}})).opportunities?.edges?.[0]?.node;\nif (!opportunity) opportunity = (await gql(`mutation($input: OpportunityCreateInput!){createOpportunity(data:$input){id name}}`,{input:{name:oppName,stage:'NEW',lane:i.lane,signalSource:'website_inbound',companyId:company.id,notes:`Sanity: ${i.sanityDocumentId}\\nSubmitted: ${i.submittedAt}\\nRequirement: ${i.requirement || 'Not supplied'}`}})).createOpportunity;\nlet task = null;\ntry { task = (await gql(`mutation($input: TaskCreateInput!){createTask(data:$input){id title}}`,{input:{title:`Review Konative inquiry: ${i.organization}`,body:`Website intake ${i.sanityDocumentId}. ${i.requirement || ''}`.trim(),dueAt:new Date(Date.now()+86400000).toISOString(),status:'TODO'}})).createTask; } catch (error) { task = {id:null,warning:error.message}; }\nreturn [{json:{ok:true,companyId:company.id,personId:person.id,opportunityId:opportunity.id,taskId:task?.id || null,taskWarning:task?.warning || null,sanityDocumentId:i.sanityDocumentId}}];"
+      },
+      "id": "upsert-twenty",
+      "name": "Upsert Twenty Records",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond",
+      "name": "Return CRM IDs",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [760, 0]
+    }
+  ],
+  "connections": {
+    "Konative Intake": {
+      "main": [[{"node": "Validate + Normalize", "type": "main", "index": 0}]]
+    },
+    "Validate + Normalize": {
+      "main": [[{"node": "Upsert Twenty Records", "type": "main", "index": 0}]]
+    },
+    "Upsert Twenty Records": {
+      "main": [[{"node": "Return CRM IDs", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  },
+  "active": false,
+  "versionId": "konative-twenty-intake-v1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}
