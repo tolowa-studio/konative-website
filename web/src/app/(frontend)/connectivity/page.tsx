@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import PitchLayout, { PitchSection } from "@/components/marketing/PitchLayout";
+import MapEmbed from "@/components/MapEmbed";
 import { HOME_CONNECTIVITY_DEFAULT } from "@/content/homeConnectivity";
 import {
   JsonLd,
@@ -310,7 +311,39 @@ export default function ConnectivityPage() {
           </div>
         </PitchSection>
 
-        {/* Section 4: FAQ */}
+        {/* Section 4: Proof map */}
+        <PitchSection eyebrow="Infrastructure Data" heading="Backed by real infrastructure data">
+          <p style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 720, marginBottom: 36 }}>
+            Konative&apos;s brokerage is grounded in a proprietary infrastructure map — power, transmission,
+            interconnection, and indigenous-lands layers across the US and Canada. This is the data engine behind
+            how we assess carrier reach and infrastructure context for every engagement.
+          </p>
+          <MapEmbed
+            readout={false}
+            height={460}
+            caption="Power, transmission, interconnection and indigenous-lands layers — the data engine behind Konative's brokerage." /* VERIFY */
+          />
+          <div style={{ marginTop: 20 }}>
+            <Link
+              href="/map"
+              style={{
+                fontFamily: BODY,
+                fontWeight: 600,
+                fontSize: 12,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: RED,
+                textDecoration: "none",
+                borderBottom: `1px solid ${RED}`,
+                paddingBottom: 2,
+              }}
+            >
+              Explore the full interactive map →
+            </Link>
+          </div>
+        </PitchSection>
+
+        {/* Section 5: FAQ */}
         <PitchSection eyebrow="Common Questions" heading="FAQ" background="#F9FAFB">
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
             {FAQ_ITEMS.map((faq, i) => (

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import PitchLayout, { PitchSection } from "@/components/marketing/PitchLayout";
+import MapEmbed from "@/components/MapEmbed";
 import {
   JsonLd,
   faqSchema,
@@ -329,7 +330,58 @@ export default function TribalPage() {
           </div>
         </PitchSection>
 
-        {/* Section 4: FAQ */}
+        {/* Section 4: Proof map */}
+        <PitchSection eyebrow="Infrastructure Data" heading="Mapped to sovereign and rural ground">
+          <p style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 720, marginBottom: 36 }}>
+            Konative maintains a proprietary infrastructure map with indigenous-lands, broadband, power, and
+            transmission layers across the US and Canada — the geographic intelligence behind our Tribal
+            connectivity work. Explore the full interactive map to see sovereign lands and infrastructure context
+            in one view.
+          </p>
+          <MapEmbed
+            readout={false}
+            height={460}
+            caption="Indigenous lands, broadband, power and transmission layers across the US and Canada." /* VERIFY */
+          />
+          <div style={{ marginTop: 20 }}>
+            <Link
+              href="/map"
+              style={{
+                fontFamily: BODY,
+                fontWeight: 600,
+                fontSize: 12,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: RED,
+                textDecoration: "none",
+                borderBottom: `1px solid ${RED}`,
+                paddingBottom: 2,
+              }}
+            >
+              Explore the full interactive map →
+            </Link>
+          </div>
+          <div style={{ marginTop: 32 }}>
+            <Link
+              href="/tribal/awards"
+              style={{
+                fontFamily: BODY,
+                fontWeight: 600,
+                fontSize: 12,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: MUTED,
+                textDecoration: "none",
+                borderBottom: `1px solid ${DIVIDER}`,
+                paddingBottom: 2,
+              }}
+            >
+              Browse Tribal Broadband Awards →
+            </Link>
+          </div>
+        </PitchSection>
+
+        {/* Section 5: FAQ */}
         <PitchSection eyebrow="Common Questions" heading="FAQ" background="#F9FAFB">
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
             {FAQ_ITEMS.map((faq, i) => (
