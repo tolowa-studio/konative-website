@@ -44,7 +44,7 @@ const FAQ_ITEMS = [
   {
     question: "What is the NTIA Tribal Broadband Connectivity Program (TBCP)?",
     answer:
-      "The NTIA Tribal Broadband Connectivity Program (TBCP) is a federal grant program administered by the National Telecommunications and Information Administration that funds broadband infrastructure deployment, adoption, and capacity-building for Tribal nations and organizations. Konative does not administer TBCP awards, but we help Tribal connectivity buyers understand what carrier-grade services and infrastructure are available to complement or fulfill funded projects. Always confirm program terms and eligibility with your NTIA program officer.",
+      "NTIA's Tribal Broadband Connectivity Program (TBCP) is a $3 billion federal grant program (funded by the Infrastructure Investment and Jobs Act and the Consolidated Appropriations Act of 2021) for broadband infrastructure deployment, adoption, and capacity-building on Tribal lands. Prior rounds awarded approximately $2.2 billion across 275 projects serving 400+ Tribes. NTIA has now opened TBCP Round 3 together with the Native Entities Grant Program (NEGP), making ~$790 million available — the application window is open and closes September 17, 2026, with rolling awards expected beginning Spring 2027. Konative does not administer TBCP awards, but we help Tribal connectivity buyers align carrier-grade service requirements with funded project scopes. Always confirm eligibility and program terms with your NTIA program officer.",
   },
   {
     question: "Why does sovereignty matter in connectivity procurement?",
@@ -247,7 +247,7 @@ export default function TribalPage() {
               {
                 num: "08",
                 title: "TBCP / Federal Funding Navigation",
-                body: "Konative does not award or administer federal grants, but we help Tribal connectivity teams understand what carrier-grade services align with NTIA Tribal Broadband Connectivity Program (TBCP) and similar programs. We structure requirements so your supplier selection is defensible and program-aligned.", // VERIFY: Confirm TBCP is still active and accepting applications; program timelines change.
+                body: "NTIA has opened TBCP Round 3 alongside the Native Entities Grant Program (NEGP), making ~$790 million available for broadband on Tribal lands. The application window is open now and closes September 17, 2026 — awards expected on a rolling basis beginning Spring 2027. Konative does not administer grants, but we help Tribal connectivity teams structure carrier-grade service requirements that are defensible and program-aligned.",
               },
             ].map((item) => (
               <div key={item.num} style={cardStyle}>
