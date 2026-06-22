@@ -5,11 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks: { label: string; url: string }[] = [
-  { label: "What We Source", url: "/connectivity" },
-  { label: "Tribal Projects", url: "/tribal" },
-  { label: "Data Center Sites", url: "/data-center-connectivity" },
-  { label: "Intelligence", url: "/intelligence" },
-  { label: "Map", url: "/map" },
+  { label: "Connectivity", url: "/connectivity" },
+  { label: "Tribal & Rural", url: "/tribal" },
+  { label: "Data Center", url: "/data-center-connectivity" },
+  { label: "Map & Intelligence", url: "/map" },
+  { label: "Stalled Projects", url: "/governors" },
+  { label: "Dispatch", url: "/dispatch" },
 ];
 
 /** Pages that have a full-bleed dark hero under the header */
@@ -217,12 +218,12 @@ export default function Header() {
           {/* Desktop CTA */}
           {!isMobile && (
             <Link
-              href="/contact"
+              href="/call"
               style={ctaStyle}
               onMouseEnter={() => setCtaHovered(true)}
               onMouseLeave={() => setCtaHovered(false)}
             >
-              Check a Location
+              Book a call
             </Link>
           )}
 
@@ -262,7 +263,7 @@ export default function Header() {
           </Link>
         ))}
         <Link
-          href="/contact"
+          href="/call"
           style={{
             fontFamily: "'Inter', sans-serif",
             fontWeight: 600,
@@ -277,7 +278,7 @@ export default function Header() {
             textAlign: "center",
           }}
         >
-          Get a quote →
+          Book a call
         </Link>
       </nav>
     </>
