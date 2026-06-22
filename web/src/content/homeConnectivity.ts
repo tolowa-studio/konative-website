@@ -87,10 +87,10 @@ export const HOME_CONNECTIVITY_DEFAULT: HomeConnectivityContent = {
   ],
   heroSubhead:
     "Konative is a vendor-neutral internet & network connectivity brokerage. We source, design, and manage the fiber, transport, internet, and cloud connectivity that Tribal enterprises and the data centers powering AI depend on — backed by Avant's portfolio of 100+ suppliers, at no cost to you.",
-  heroPrimaryCta: { label: "Get a Connectivity Quote →", href: "/contact" },
+  heroPrimaryCta: { label: "Book a Discovery Call →", href: "/call" },
   heroSecondaryCtas: [
     { label: "What We Broker →", href: "/connectivity" },
-    { label: "Tribal Enterprise →", href: "/tribal" },
+    { label: "Contact Us →", href: "/contact" },
   ],
   heroStats: [
     { value: "100+", label: "Supplier Portfolio · via Avant", rust: true },
@@ -142,27 +142,30 @@ export const HOME_CONNECTIVITY_DEFAULT: HomeConnectivityContent = {
     },
     {
       num: "03",
-      eyebrow: "For Multi-Site Business",
-      title: "Business\nconnectivity.",
+      eyebrow: "For Rural & Multi-Site Enterprises",
+      title: "Rural &\nenterprise.",
       desc:
-        "Internet, SD-WAN, voice, and security across every location — sourced from the whole market, not one carrier. One advisor, many carriers, full lifecycle support at no cost to you.",
-      cta: "Talk to Us →",
-      href: "/contact",
+        "Multi-site businesses in rural and underserved markets need the same carrier-grade internet, SD-WAN, voice, and security as their urban counterparts — but the major carriers rarely show up. We source from the whole market, including regional and rural providers, at no cost to you.",
+      cta: "Explore Connectivity →",
+      href: "/connectivity",
       primary: false,
     },
   ],
 
-  howEyebrow: "Why a Broker",
-  howHeadingTop: "WE WORK FOR YOU.",
-  howHeadingBottom: "NOT THE CARRIER.",
+  howEyebrow: "What We Source",
+  howHeadingTop: "THE FULL",
+  howHeadingBottom: "CONNECTIVITY STACK.",
   howIntro:
-    "Going direct means one carrier's price and one carrier's answer. We bring the whole market, design the right network, and stay accountable for its life — and suppliers pay us, so our advice costs you nothing.",
+    "We broker every layer of the connectivity stack through Avant's 100+ supplier portfolio — from last-mile internet to long-haul dark fiber to cloud on-ramps and security. One brokerage, every network type, no carrier bias.",
   capabilities: [
-    { num: "01 — Neutral", title: "Vendor-Neutral Sourcing", body: "We're not a carrier. We quote the whole market through Avant's 100+ suppliers and recommend what's right for you — not what pays us most." },
-    { num: "02 — Design", title: "Network Design & Strategy", body: "DIA, fiber, waves, SD-WAN, voice, cloud on-ramps, and security — architected around your sites, workloads, and budget." },
-    { num: "03 — Source", title: "Competitive Procurement", body: "We run carriers against each other, surface real pricing and availability, and negotiate terms — so you get market, not list." },
-    { num: "04 — Project", title: "Install & Project Management", body: "We manage orders, provisioning, and installs across carriers so you have one point of contact instead of ten." },
-    { num: "05 — Manage", title: "Lifecycle Support", body: "Billing disputes, moves/adds/changes, escalations, and renewals. We stay in the account for its life — at no cost to you." },
-    { num: "06 — Data", title: "Demand Intelligence", body: "Our proprietary data-center and market dataset tells us where connectivity demand is landing — so our advice is grounded in the market, not guesswork." },
+    { num: "01 — Internet", title: "Internet & Broadband", body: "Dedicated internet access, fiber broadband, and fixed wireless — sourced across every carrier and regional provider for your market." },
+    { num: "02 — Fiber", title: "Lit & Dark Fiber", body: "Long-haul and metro fiber, IRUs, and dark fiber strands for private, high-capacity routes between sites, facilities, and markets." },
+    { num: "03 — Transport", title: "Transport & Wavelengths", body: "10G / 100G / 400G waves and Ethernet transport for data-center-to-data-center, site-to-site, and carrier interconnection." },
+    { num: "04 — Cloud", title: "Cloud Connectivity", body: "Private cloud on-ramps and direct connections into AWS, Azure, Google Cloud, and Oracle — low-latency and off the public internet." },
+    { num: "05 — Voice", title: "Voice & UCaaS", body: "Cloud voice, unified communications, contact-center platforms, and POTS replacement — sourced from the carrier-neutral market." },
+    { num: "06 — Security", title: "Security & SASE", body: "SASE, managed firewall, SD-WAN with integrated security, and managed security services layered onto the network we source." },
+    { num: "07 — Mobility", title: "Wireless & Mobility", body: "Fixed wireless access, cellular failover, and enterprise mobility for rural, Tribal, and edge sites with limited fiber options." },
+    { num: "08 — Colo", title: "Colocation", body: "Carrier-neutral colocation sourcing — power, space, cross-connects, and managed colo across major and secondary markets." },
+    { num: "09 — DCI", title: "Data Center Interconnection", body: "Cross-connects, DCI circuits, and neutral exchange access between facilities, carrier hotels, and cloud campuses." },
   ],
 };
