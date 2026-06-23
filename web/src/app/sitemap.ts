@@ -45,28 +45,28 @@ async function fetchGhostPosts(): Promise<GhostPostSitemapItem[]> {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
-  // --- static, high-priority pages -----------------------------------------
+  // --- static, high-priority pages (connectivity-first) ----------------------
+  // Canonical pages only — redirected routes (e.g., /powered-land, /land/*, /capacity/*,
+  // /invest, /deals, /for/tribes, /assessment, /readiness-audit) must NOT appear in sitemap.
   const staticRoutes: MetadataRoute.Sitemap = [
+    // Connectivity-first core pages
     { url: BASE,                          lastModified: now, changeFrequency: 'weekly',  priority: 1.0 },
-    { url: `${BASE}/connectivity`,       lastModified: now, changeFrequency: 'monthly', priority: 0.98 },
-    { url: `${BASE}/tribal`,             lastModified: now, changeFrequency: 'weekly', priority: 0.98 },
-    { url: `${BASE}/tribal/awards`,      lastModified: now, changeFrequency: 'weekly', priority: 0.95 },
-    { url: `${BASE}/tribal/index`,       lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${BASE}/data-center-connectivity`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
-    { url: `${BASE}/contact`,            lastModified: now, changeFrequency: 'monthly', priority: 0.98 },
-    { url: `${BASE}/call`,               lastModified: now, changeFrequency: 'monthly', priority: 0.98 },
-    { url: `${BASE}/answers`,            lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
-    { url: `${BASE}/dispatch`,            lastModified: now, changeFrequency: 'daily',   priority: 0.95 },
-    { url: `${BASE}/map`,                 lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${BASE}/markets`,             lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${BASE}/intelligence`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
-    { url: `${BASE}/news`,                lastModified: now, changeFrequency: 'daily',   priority: 0.85 },
-    { url: `${BASE}/market-intel`,        lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
-    { url: `${BASE}/projects`,            lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
-    { url: `${BASE}/blog`,                lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/methodology`,         lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/partners`,            lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/licenses`,            lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE}/connectivity`,       lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE}/data-center-connectivity`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE}/tribal`,             lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${BASE}/tribal/index`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${BASE}/call`,               lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/contact`,            lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE}/map`,                lastModified: now, changeFrequency: 'daily',   priority: 0.7 },
+    { url: `${BASE}/governors`,          lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+
+    // Secondary intelligence and dispatch
+    { url: `${BASE}/intelligence`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
+    { url: `${BASE}/answers`,            lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/dispatch`,           lastModified: now, changeFrequency: 'daily',   priority: 0.5 },
+
+    // Tertiary/supporting pages
+    { url: `${BASE}/markets`,            lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
   ]
 
   // --- per-state market pages ----------------------------------------------
@@ -78,49 +78,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // --- per-audience landing pages ------------------------------------------
-  const audienceRoutes: MetadataRoute.Sitemap = AUDIENCE_SLUGS.map(slug => ({
-    url: `${BASE}/for/${slug}`,
-    lastModified: now,
-    changeFrequency: 'monthly' as const,
-    priority: 0.7,
-  }))
+  // NOTE: /for/tribes redirects to /tribal; /for/* redirects to /connectivity.
+  // Do NOT include these in canonical sitemap.
+  const audienceRoutes: MetadataRoute.Sitemap = []
 
-  // --- intelligence sub-pages ----------------------------------------------
-  const intelligenceRoutes: MetadataRoute.Sitemap = [
-    { url: `${BASE}/intelligence/saudi`,        lastModified: now, changeFrequency: 'weekly', priority: 0.75 },
-    { url: `${BASE}/intelligence/first-nations`, lastModified: now, changeFrequency: 'weekly', priority: 0.75 },
-  ]
+  // --- intelligence sub-pages (if any canonical deep-links exist) ---------------
+  const intelligenceRoutes: MetadataRoute.Sitemap = []
 
-  // --- Ghost-backed dynamic posts (Konative Dispatch + blog) ---------------
+  // --- Ghost-backed dynamic posts (Konative Dispatch only) -------------------
+  // For connectivity-first, include /dispatch/* dynamically. Do NOT include /blog/*
+  // in canonical sitemap.
   const ghostPosts = await fetchGhostPosts()
   const dispatchRoutes: MetadataRoute.Sitemap = []
-  const blogRoutes: MetadataRoute.Sitemap = []
   for (const p of ghostPosts) {
-    if (!p.slug) continue
+    if (!p.slug || p.primary_tag?.slug !== 'konative-dispatch') continue
     const lm = p.updated_at ? new Date(p.updated_at) : now
-    if (p.primary_tag?.slug === 'konative-dispatch') {
-      dispatchRoutes.push({
-        url: `${BASE}/dispatch/${p.slug}`,
-        lastModified: lm,
-        changeFrequency: 'monthly' as const,
-        priority: 0.85,
-      })
-    } else {
-      blogRoutes.push({
-        url: `${BASE}/blog/${p.slug}`,
-        lastModified: lm,
-        changeFrequency: 'monthly' as const,
-        priority: 0.75,
-      })
-    }
+    dispatchRoutes.push({
+      url: `${BASE}/dispatch/${p.slug}`,
+      lastModified: lm,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    })
   }
 
   return [
     ...staticRoutes,
     ...marketRoutes,
-    ...audienceRoutes,
     ...intelligenceRoutes,
     ...dispatchRoutes,
-    ...blogRoutes,
   ]
 }
