@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { withSentryConfig } from "@sentry/nextjs";
 
 const webDir = path.dirname(fileURLToPath(import.meta.url));
 
@@ -37,11 +36,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  silent: !process.env.CI,
-  widenClientFileUpload: true,
-  sourcemaps: { disable: true },
-  disableLogger: true,
-});
+export default nextConfig;
