@@ -12,6 +12,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js'
+import { deriveState } from './lib/derive-state.js'
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://tcbworxmlmxoyzcvdjhh.supabase.co'
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
@@ -119,17 +120,21 @@ async function main() {
     const slug = extractSlug(p)
 
     return {
-      ntia_award_id: (p['Award_Number'] || p['award_number'] || null) as string | null,
-      grantee_name: (p['Grantee_Name'] || p['Awardee'] || p['Name'] || 'Unknown') as string,
+      // NOTE: the live NTIA/NBAM ArcGIS source uses APPLICANT_NAME / AMOUNT_FUNDED /
+      // PROJECT_TYPE_DESC / NOFO / ZIP / LAT / LON / BIA_REGION. It carries NO state
+      // field, so `state` is derived from ZIP (or lat/lng) below. The legacy
+      // capitalized keys are kept only as fallbacks for other possible sources.
+      ntia_award_id: (p['Award_Number'] || p['award_number'] || p['OBJECTID'] || null) as string | null,
+      grantee_name: (p['APPLICANT_NAME'] || p['Grantee_Name'] || p['Awardee'] || p['Name'] || 'Unknown') as string,
       tribe_name: (p['Tribe_Name'] || p['tribe_name'] || null) as string | null,
-      state: (p['State'] || p['state'] || null) as string | null,
-      award_amount_usd: (p['Award_Amount'] || p['award_amount'] || null) as number | null,
+      state: deriveState(p, feature.geometry?.coordinates),
+      award_amount_usd: (p['AMOUNT_FUNDED'] || p['Award_Amount'] || p['award_amount'] || null) as number | null,
       award_date: (p['Award_Date'] || p['award_date'] || null) as string | null,
-      nofo_round: (p['NOFO_Round'] || p['nofo_round'] || null) as string | null,
-      project_type: (p['Project_Type'] || p['project_type'] || null) as string | null,
+      nofo_round: (p['NOFO'] || p['NOFO_Round'] || p['nofo_round'] || null) as string | null,
+      project_type: (p['PROJECT_TYPE_DESC'] || p['Project_Type'] || p['project_type'] || null) as string | null,
       project_description: (p['Description'] || p['Project_Description'] || null) as string | null,
-      lat: feature.geometry?.coordinates?.[1] ?? null,
-      lng: feature.geometry?.coordinates?.[0] ?? null,
+      lat: feature.geometry?.coordinates?.[1] ?? (p['LAT'] as number | undefined) ?? null,
+      lng: feature.geometry?.coordinates?.[0] ?? (p['LON'] as number | undefined) ?? null,
       households_served: (p['Households_Served'] || p['households'] || null) as number | null,
       slug,
       raw_properties: p,

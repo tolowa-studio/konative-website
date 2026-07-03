@@ -65,11 +65,11 @@ export default async function CmsSystemPage() {
               <strong>Setup required</strong> — one or more integrations are
               missing API keys. Add the environment variables below in the{" "}
               <a
-                href="https://vercel.com/tolowastudioincubator/konative-site/settings/environment-variables"
+                href="https://dash.cloudflare.com/e2b6ede12b96c7be2fe252c4b1e74bcf/workers/services/view/konative/production/settings/variables"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Vercel dashboard
+                Cloudflare Worker settings
               </a>{" "}
               then redeploy.
             </div>
@@ -165,7 +165,7 @@ export default async function CmsSystemPage() {
                 <ol className="cms-hub__setup-list" style={{ marginTop: "1rem" }}>
                   <SetupStep num={1}>
                     In Builder → Models → <strong>page</strong> → set <strong>Preview URL</strong> to your deployment
-                    (e.g. <code className="cms-hub__code">https://konative.com</code> or a Vercel preview URL). Open{" "}
+                    (e.g. <code className="cms-hub__code">https://konative.com</code> or a preview build URL). Open{" "}
                     <code className="cms-hub__code">/builder</code> on the site to edit — not the root URL.
                   </SetupStep>
                   {!health.builder.privateKey ? (
@@ -195,7 +195,7 @@ export default async function CmsSystemPage() {
                   Settings → Space → copy <strong>Public API Key</strong>
                 </SetupStep>
                 <SetupStep num={3}>
-                  Set <EnvVar name="NEXT_PUBLIC_BUILDER_API_KEY" /> in Vercel
+                  Set <EnvVar name="NEXT_PUBLIC_BUILDER_API_KEY" /> in the Cloudflare Worker settings
                 </SetupStep>
               </ol>
             )}
@@ -275,16 +275,16 @@ export default async function CmsSystemPage() {
             </li>
             <li>
               <a
-                href="https://vercel.com/tolowastudioincubator/konative-site"
+                href="https://dash.cloudflare.com/e2b6ede12b96c7be2fe252c4b1e74bcf/workers/services/view/konative/production"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Vercel project ↗
+                Cloudflare Worker ↗
               </a>
             </li>
             <li>
               <a
-                href="https://github.com/jerameyjames/konative-website"
+                href="https://github.com/tolowa-studio/konative-website"
                 target="_blank"
                 rel="noopener noreferrer"
               >

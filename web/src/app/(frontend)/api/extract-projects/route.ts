@@ -24,8 +24,7 @@ async function geocode(city?: string, state?: string, country?: string): Promise
 
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization')
-  const isVercelCron = req.headers.get('user-agent')?.includes('vercel-cron')
-  if (!isVercelCron && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

@@ -33,6 +33,11 @@ export const landSubmission = defineType({
     defineField({ name: "utmSource", type: "string", title: "UTM Source" }),
     defineField({ name: "utmMedium", type: "string", title: "UTM Medium" }),
     defineField({ name: "submittedAt", type: "datetime", title: "Submitted At" }),
+    defineField({ name: "triageScore", type: "number", title: "Triage score (0-100)", readOnly: true }),
+    defineField({ name: "triageTier", type: "string", title: "Triage tier", options: { list: ["hot", "warm", "cold"] }, readOnly: true }),
+    defineField({ name: "lane", type: "string", title: "Triage lane", options: { list: ["tribal", "datacenter", "general"] }, readOnly: true }),
+    defineField({ name: "routeTo", type: "string", title: "Route to desk", readOnly: true }),
+    defineField({ name: "slaHours", type: "number", title: "Response SLA (hours)", readOnly: true }),
   ],
   preview: {
     select: { name: "name", county: "county", state: "state", status: "status" },

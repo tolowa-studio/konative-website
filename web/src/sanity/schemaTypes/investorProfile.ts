@@ -17,6 +17,11 @@ export const investorProfile = defineType({
     defineField({ name: "utmSource", type: "string" }),
     defineField({ name: "utmMedium", type: "string" }),
     defineField({ name: "submittedAt", type: "datetime" }),
+    defineField({ name: "triageScore", type: "number", title: "Triage score (0-100)", readOnly: true }),
+    defineField({ name: "triageTier", type: "string", title: "Triage tier", options: { list: ["hot", "warm", "cold"] }, readOnly: true }),
+    defineField({ name: "lane", type: "string", title: "Triage lane", options: { list: ["tribal", "datacenter", "general"] }, readOnly: true }),
+    defineField({ name: "routeTo", type: "string", title: "Route to desk", readOnly: true }),
+    defineField({ name: "slaHours", type: "number", title: "Response SLA (hours)", readOnly: true }),
   ],
   preview: {
     select: { name: "name", firm: "firm", status: "status" },

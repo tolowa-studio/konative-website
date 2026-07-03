@@ -1,35 +1,26 @@
-# DNS setup for konative.com on Vercel
+# DNS setup for konative.com on Cloudflare
 
-## Current status
-- Domain is added to Vercel project `konative-site`.
-- `konative.com` and `www.konative.com` are attached to the project.
-- Nameservers are currently not Vercel nameservers (`ns0.thescax.net`, `ns1.thescax.net`).
+**Superseded 2026-07-03.** This repo's platform is Cloudflare Workers (via OpenNext), not Vercel —
+see `CLAUDE.md` → Deploy Configuration. The Vercel nameserver/A-record instructions previously in
+this file are actively wrong: following them would point DNS away from the working Cloudflare setup.
 
-## Option A (recommended): delegate DNS to Vercel
-1. In your registrar DNS settings for `konative.com`, set nameservers to:
-   - `ns1.vercel-dns.com`
-   - `ns2.vercel-dns.com`
-2. Wait for propagation (usually minutes, up to 24-48 hours).
-3. Verify with:
-   - `vercel domains inspect konative.com`
-   - `vercel domains inspect www.konative.com`
+## Current status (verified against the live Cloudflare API, 2026-07-03)
 
-## Option B: keep external DNS and add records manually
-If you prefer not to move nameservers, create these records at your registrar:
+- `konative.com` and `www.konative.com` are both bound as Cloudflare Workers **Custom Domains** on
+  the `konative` Worker (account **Tolowa Studio**, `e2b6ede12b96c7be2fe252c4b1e74bcf`), production
+  environment, both `enabled: true`.
+- DNS for the `konative.com` zone (`zone_id 328a243ea23865d1113a519464970c89`) and TLS certificates
+  for both hostnames are fully managed by Cloudflare as part of the Custom Domain binding — there
+  are no manual A/CNAME records to create or maintain at an external registrar.
+- No action is needed here. If `konative.com` ever stops resolving, check (in order): the zone's
+  nameservers are still pointed at Cloudflare at the registrar, the Custom Domain bindings still show
+  `enabled: true` (Cloudflare dashboard → Workers & Pages → `konative` → Settings → Domains &
+  Routes, or `GET /accounts/{account_id}/workers/domains?service=konative` via the API), and the
+  Worker itself is deploying successfully (see Deploy Configuration in `CLAUDE.md`).
 
-- Root domain:
-  - Host: `@`
-  - Type: `A`
-  - Value: `76.76.21.21`
+## Verification
 
-- WWW:
-  - Host: `www`
-  - Type: `CNAME`
-  - Value: `cname.vercel-dns.com`
-
-Remove conflicting records, forwarding, parking, or masking.
-
-## Verification checklist
-1. `vercel domains inspect konative.com` shows valid config.
-2. `vercel domains inspect www.konative.com` shows valid config.
-3. `curl -sL https://konative.com/ | rg "<html|__NEXT_DATA__|next"` returns app HTML.
+```bash
+curl -sI https://konative.com | grep -i "^server:"   # expect: server: cloudflare
+curl -sL https://konative.com/ | head -c 400          # expect real app HTML, not a parked page
+```
