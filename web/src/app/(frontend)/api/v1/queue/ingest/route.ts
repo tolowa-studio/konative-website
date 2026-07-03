@@ -6,8 +6,6 @@ export const maxDuration = 300;
 
 function isAuthorized(req: NextRequest): boolean {
   const authHeader = req.headers.get("authorization");
-  const isVercelCron = req.headers.get("user-agent")?.includes("vercel-cron");
-  if (isVercelCron) return true;
   return authHeader === `Bearer ${process.env.CRON_SECRET}`;
 }
 

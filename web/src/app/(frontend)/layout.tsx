@@ -1,5 +1,4 @@
 import React from "react";
-import { Analytics } from "@vercel/analytics/react";
 import type { Viewport } from "next";
 
 import ConditionalFooter from "../../components/ConditionalFooter";
@@ -34,8 +33,8 @@ export const metadata = {
     card: "summary_large_image" as const,
     site: "@konative",
   },
-  // Google Search Console verification — set GOOGLE_SITE_VERIFICATION on Vercel
-  // (production) to emit the meta tag without redeploying code.
+  // Google Search Console verification — set GOOGLE_SITE_VERIFICATION on the
+  // Cloudflare Worker (production) to emit the meta tag without redeploying code.
   verification: process.env.GOOGLE_SITE_VERIFICATION
     ? { google: process.env.GOOGLE_SITE_VERIFICATION }
     : undefined,
@@ -59,7 +58,6 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
         <Header />
         <main className="site-main">{children}</main>
         <ConditionalFooter />
-        <Analytics />
       </body>
     </html>
   );

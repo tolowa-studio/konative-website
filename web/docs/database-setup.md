@@ -1,38 +1,22 @@
-# Postgres provisioning for Konative
+# Data layer for Konative
 
-## Priority order
-1. Vercel Postgres (preferred for deployment simplicity)
-2. Neon
-3. Supabase Postgres
+**Superseded 2026-07-03.** This entire document described a Payload CMS + Vercel Postgres/Neon
+architecture that no longer exists in this repo. There is no `DATABASE_URI`/`POSTGRES_*` Postgres
+connection to provision — following the steps below would set up infrastructure nothing reads.
 
-## Current status
-- A Neon Postgres resource (`konative-db`) may be provisioned and linked to Vercel project `konative-site` (or attach Postgres in the Vercel dashboard for that project).
-- Neon populated these environment variables in Vercel for Development/Preview/Production:
-  - `DATABASE_URL`
-  - `DATABASE_URL_UNPOOLED`
-  - `POSTGRES_*` and `PG*` variants
-- `DATABASE_URI` still needs to be aligned to `DATABASE_URL` if the application expects `DATABASE_URI` specifically.
+## Current data layer
 
-## Connection string format (required)
-Use this format for all providers:
+- **CMS / structured content:** [Sanity](https://sanity.io) — schemas under
+  `web/src/sanity/schemaTypes/`. Env vars: `NEXT_PUBLIC_SANITY_PROJECT_ID`,
+  `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_TOKEN` (write access).
+- **Application data / intelligence tables** (`tbcp_awards`, `connectivity_signals`,
+  `connectivity_briefs`, `interconnection_queue`, `commission_statements`, etc.):
+  [Supabase Postgres](https://supabase.com). Env vars: `NEXT_PUBLIC_SUPABASE_URL`,
+  `NEXT_PUBLIC_SUPABASE_ANON_KEY` (public/anon reads — most of these tables have public-read RLS
+  policies), `SUPABASE_SERVICE_ROLE_KEY` (server-side writes/ETL scripts only, never exposed to the
+  client). Migrations live in `web/scripts/migrations/`.
+- **Newsletter / blog:** Ghost (shared Tolowa Studio instance, self-hosted on Railway).
 
-`postgres://<user>:<password>@<host>:5432/<database>?sslmode=require`
-
-## Option A: Vercel Postgres (recommended)
-1. Vercel Dashboard -> `konative-site` -> **Storage** -> **Create Database** -> **Postgres**.
-2. Accept default region near deployment region (IAD recommended if app stays in US East).
-3. Link database to `konative-site`.
-4. Copy generated `POSTGRES_URL` or connection URI.
-5. Set `DATABASE_URI` to that value in Vercel env vars (Dev/Preview/Prod) and `.env.local`.
-
-## Option B: Neon
-1. (Already completed) Neon integration is installed and connected to the project.
-2. Pull vars locally with `vercel env pull .env.development.local`.
-3. Map `DATABASE_URI` to `DATABASE_URL` if your runtime expects `DATABASE_URI`.
-4. Keep SSL required for all production connections.
-
-## Option C: Supabase Postgres
-1. Create Supabase project at [https://supabase.com](https://supabase.com).
-2. Open Project Settings -> Database.
-3. Copy connection string (session/pooling URI) with SSL enabled.
-4. Set `DATABASE_URI` in Vercel + `.env.local`.
+Set these as Cloudflare Worker secrets/variables in production (Worker → Settings → Variables, or
+`wrangler secret put`) and in `web/.env.local` for local dev — not Vercel, which this repo no longer
+uses. See `CLAUDE.md` → Deploy Configuration for the full current env var list.

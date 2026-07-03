@@ -3,7 +3,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { withSentryConfig } from "@sentry/nextjs";
 
-/** Parent of `web/` — must match Vercel `outputFileTracingRoot` when Root Directory is `web`. */
 const webDir = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
@@ -43,5 +42,4 @@ export default withSentryConfig(nextConfig, {
   widenClientFileUpload: true,
   sourcemaps: { disable: true },
   disableLogger: true,
-  automaticVercelMonitors: true,
 });

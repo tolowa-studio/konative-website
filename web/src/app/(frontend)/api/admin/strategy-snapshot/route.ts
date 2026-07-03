@@ -116,13 +116,18 @@ export async function GET(req: NextRequest) {
   }
 
   // --- Site / deployment identity ------------------------------------------
+  // Platform is Cloudflare Workers Builds (not Vercel) — these are the env
+  // vars Cloudflare injects at build time. See:
+  // https://developers.cloudflare.com/workers/ci-cd/builds/configuration/#environment-variables
+  const workersBranch = process.env.WORKERS_CI_BRANCH ?? null;
   const site = {
-    commit_sha: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8) ?? null,
-    commit_ref: process.env.VERCEL_GIT_COMMIT_REF ?? null,
-    deployment_url: process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : null,
-    env: process.env.VERCEL_ENV ?? "local",
+    commit_sha: process.env.WORKERS_CI_COMMIT_SHA?.slice(0, 8) ?? null,
+    commit_ref: workersBranch,
+    deployment_url:
+      workersBranch === "main" && process.env.NEXT_PUBLIC_SITE_URL
+        ? process.env.NEXT_PUBLIC_SITE_URL
+        : null,
+    env: workersBranch ? (workersBranch === "main" ? "production" : "preview") : "local",
   };
 
   // --- Config presence (booleans only — never echo secrets) ----------------
