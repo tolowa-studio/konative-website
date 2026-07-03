@@ -41,7 +41,7 @@ export const LAYER_COLORS: Record<LayerKey, string> = {
 }
 
 export const LAYER_LABELS: Record<LayerKey, string> = {
-  projects:   'DC Projects',
+  projects:   'Data Center Demand',
   facilities: 'Facilities (IM3)',
   network:    'Network (PeeringDB)',
   power:      'Power Pipeline (EIA)',

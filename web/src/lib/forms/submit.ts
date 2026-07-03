@@ -1,5 +1,6 @@
 import { ZodSchema } from "zod";
 import { getSanityWriteClient } from "@/sanity/writeClient";
+import { scoreInquiry, type TriageResult } from "@/lib/forms/triage";
 
 export type SubmitResult =
   | { ok: true; id: string }
@@ -50,27 +51,57 @@ export async function submitForm<T extends Record<string, unknown>>(
     };
   }
 
-  // 3. Notify via Resend — non-blocking, loud-fail in logs only
+  // 3. Triage — pure, non-throwing scoring so the team can prioritize
+  // response order. Best-effort patch onto the Sanity doc; a triage or patch
+  // failure must never affect the user-facing submission result.
+  let triage: TriageResult | null = null;
+  try {
+    triage = scoreInquiry({ schemaType, fields: parsed.data as Record<string, unknown> });
+    const client = getSanityWriteClient();
+    await client
+      .patch(docId)
+      .set({
+        triageScore: triage.score,
+        triageTier: triage.tier,
+        lane: triage.lane,
+        routeTo: triage.routeTo,
+        slaHours: triage.slaHours,
+      })
+      .commit();
+  } catch (err) {
+    console.error(`[submitForm] Triage scoring/patch failed for ${schemaType} (doc ${docId}):`, err);
+  }
+
+  // 4. Notify via Resend — non-blocking, loud-fail in logs only
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.RESEND_TO || "jeramey.james@gmail.com";
   const from = process.env.RESEND_FROM || "Konative <team@konative.com>";
+
+  const triageHtml = triage
+    ? `<div style="margin:0 0 12px;padding:10px;background:#f5f5f5;font:13px monospace">` +
+      `<strong>[${triage.tier.toUpperCase()} · ${triage.lane} · SLA ${triage.slaHours}h]</strong> ` +
+      `score ${triage.score} · route <strong>${triage.routeTo}</strong>` +
+      `<ul style="margin:8px 0 0;padding-left:20px">${triage.reasons.map(r => `<li>${r}</li>`).join("")}</ul>` +
+      `</div>`
+    : "";
+  const finalSubject = triage ? `[${triage.tier.toUpperCase()} · ${triage.lane}] ${emailSubject}` : emailSubject;
 
   if (!apiKey) {
     console.warn(
       `[submitForm] RESEND_API_KEY not set — skipping email for ${schemaType} (doc ${docId})`,
     );
   } else {
-    const html =
+    const baseHtml =
       emailHtml ||
       `<h2>${emailSubject}</h2><pre>${JSON.stringify(parsed.data, null, 2)}</pre><p>Sanity doc: ${docId}</p>`;
     fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from, to, subject: emailSubject, html }),
+      body: JSON.stringify({ from, to, subject: finalSubject, html: `${triageHtml}${baseHtml}` }),
     }).catch(err => console.error(`[submitForm] Resend error for ${schemaType}:`, err));
   }
 
-  // 4. Forward to Twenty/n8n when configured. Keep the public form successful
+  // 5. Forward to Twenty/n8n when configured. Keep the public form successful
   // when the automation layer is temporarily unavailable; Sanity remains the
   // durable intake record and the webhook can be replayed from there.
   const crmWebhookUrl =
@@ -94,6 +125,7 @@ export async function submitForm<T extends Record<string, unknown>>(
         sanityDocumentId: docId,
         submittedAt: new Date().toISOString(),
         data: parsed.data,
+        triage,
       }),
     }).catch(err =>
       console.error(`[submitForm] CRM webhook error for ${schemaType}:`, err),

@@ -5,6 +5,10 @@ import { z } from "zod";
 vi.mock("@/sanity/writeClient", () => ({
   getSanityWriteClient: () => ({
     create: vi.fn().mockResolvedValue({ _id: "mock-id-123" }),
+    patch: vi.fn().mockReturnValue({
+      set: vi.fn().mockReturnThis(),
+      commit: vi.fn().mockResolvedValue({ _id: "mock-id-123" }),
+    }),
   }),
 }));
 

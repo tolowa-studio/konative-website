@@ -1,6 +1,7 @@
 import type { SchemaTypeDefinition } from "sanity";
 
 import { audiencePage } from "./audiencePage";
+import { auditInquiry } from "./auditInquiry";
 import { capacityRequest } from "./capacityRequest";
 import { dataCenterProject } from "./dataCenterProject";
 import { contactInquiry } from "./contactInquiry";
@@ -36,6 +37,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   investorProfile,
   capacityRequest,
   contactInquiry,
+  auditInquiry,
   newsletterSubscriber,
   // Intelligence
   newsSource,
