@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { RenderBlocks } from "../../../blocks/RenderBlocks";
 import { getSanityReadClient } from "../../../sanity/readClient";
 
+export const revalidate = 3600;
+
 export const dynamic = "force-dynamic";
 
 type Args = {

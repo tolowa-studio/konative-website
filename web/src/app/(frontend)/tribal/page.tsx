@@ -11,6 +11,8 @@ import {
   SITE_URL,
 } from "@/components/seo/JsonLd";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Tribal Enterprise Connectivity | Sovereignty-Aware Brokerage | Konative",
   description:

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PitchLayout, { PitchSection } from "@/components/marketing/PitchLayout";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Datacenter Connectivity | Konative",
   description:

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd, faqSchema, SITE_URL } from "@/components/seo/JsonLd";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Connectivity Broker & Tribal Data Center FAQ | Konative Answers",
   description:

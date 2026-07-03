@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: 'Methodology — How We Score Sites | Konative',
   description: 'Konative\'s Availability Score evaluates data center sites across six infrastructure dimensions: power, water, fiber, land, permitting, and momentum. Our scoring rubric is public.',

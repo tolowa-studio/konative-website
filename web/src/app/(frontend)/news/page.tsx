@@ -5,6 +5,8 @@ import {
   NEWS_TOPIC_OPTIONS,
   isNewsTopicValue,
 } from "../../../lib/newsConstants";
+
+export const revalidate = 3600;
 import { getSanityReadClient } from "../../../sanity/readClient";
 
 export const dynamic = "force-dynamic";

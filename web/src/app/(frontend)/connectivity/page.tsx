@@ -12,6 +12,8 @@ import {
   SITE_URL,
 } from "@/components/seo/JsonLd";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Connectivity Broker | Vendor-Neutral Internet, Fiber & Network Brokerage | Konative",
   description:

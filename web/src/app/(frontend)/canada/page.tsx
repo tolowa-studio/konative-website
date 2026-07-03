@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { createClient } from '@sanity/client'
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: 'Canada Data Center Market — Konative',
   description: 'Konative\'s Canadian data center intelligence: provincial power markets, hyperscaler builds, First Nations partnerships, and the federal $2B Sovereign AI Compute Strategy. Site selection across Quebec, Ontario, Alberta, and BC.',

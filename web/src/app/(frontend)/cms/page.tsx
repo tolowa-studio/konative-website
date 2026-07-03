@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { getGhostAdminUrl, getIntegrationHealth } from "@/lib/system-tools";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Systems | Konative",
   description: "CMS and publishing tools — Sanity, Builder.io, Ghost.",

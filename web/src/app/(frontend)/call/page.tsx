@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { JsonLd, serviceSchema, SITE_URL } from "@/components/seo/JsonLd";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Book a 15-Minute Discovery Call | Konative",
   description:

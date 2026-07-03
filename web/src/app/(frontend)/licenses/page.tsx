@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { loadLayerManifest } from "@/lib/loadLayerManifest";
 import type { LayerManifestEntry } from "@/types/map-layers";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Data Sources & Licenses · Konative",
   description:

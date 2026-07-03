@@ -11,6 +11,8 @@ import {
   SITE_URL,
 } from "@/components/seo/JsonLd";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Data Center Connectivity Broker | Transport, Dark Fiber & Interconnection | Konative",
   description:
