@@ -183,6 +183,13 @@ button {
   background: #fff;
 }
 
+/* Dark-hero pages render their hero full-bleed under the transparent header
+   (see Header.tsx) — main must not reserve nav space or paint white over it. */
+body.has-dark-hero .site-main {
+  padding-top: 0;
+  background: transparent;
+}
+
 /* ─── Market Intel Search & Pagination ─── */
 .market-intel__search {
   margin-bottom: var(--space-6);

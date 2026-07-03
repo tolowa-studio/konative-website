@@ -13,13 +13,19 @@ const navLinks: { label: string; url: string }[] = [
   { label: "Dispatch", url: "/dispatch" },
 ];
 
-/** Pages that have a full-bleed dark hero under the header */
-const DARK_HERO_PAGES = new Set(["/tribal", "/land", "/invest", "/capacity", "/projects", "/canada", "/methodology", "/intelligence/saudi", "/intelligence/first-nations", "/market-intel", "/assessment"]);
+/**
+ * Pages that render a full-bleed dark hero under the header (so the header
+ * starts transparent-with-white-text, then switches to white-bg/dark-text on
+ * scroll). Keep in sync with actual page designs — `/tribal`, `/land`,
+ * `/invest`, `/capacity`, `/assessment`, and `/for*` were removed 2026-07-03:
+ * `/tribal` now ships a light hero (was rendering an invisible white-on-white
+ * wordmark/nav), and the rest 308-redirect elsewhere per next.config.ts, so
+ * their page shells are unreachable and the entries were dead weight.
+ */
+const DARK_HERO_PAGES = new Set(["/projects", "/canada", "/methodology", "/intelligence/saudi", "/intelligence/first-nations", "/market-intel"]);
 
 function isDarkHeroPath(pathname: string): boolean {
-  if (DARK_HERO_PAGES.has(pathname)) return true;
-  if (pathname === "/for" || pathname.startsWith("/for/")) return true;
-  return false;
+  return DARK_HERO_PAGES.has(pathname);
 }
 
 export default function Header() {
@@ -43,6 +49,16 @@ export default function Header() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, [hasDarkHero]);
+
+  // <main> normally has padding-top to clear the fixed header. Dark-hero pages
+  // render their hero full-bleed behind the transparent header instead, so
+  // that padding (and <main>'s opaque white background) must be suppressed —
+  // otherwise a 64px white strip shows through exactly where the header's
+  // white text sits, making the wordmark and nav invisible until scroll.
+  useEffect(() => {
+    document.body.classList.toggle("has-dark-hero", hasDarkHero);
+    return () => document.body.classList.remove("has-dark-hero");
   }, [hasDarkHero]);
 
   useEffect(() => {
