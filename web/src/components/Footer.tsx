@@ -42,6 +42,8 @@ export default function Footer() {
               ["Market Coverage", "/markets"],
               ["TBCP Awards", "/tribal/awards"],
               ["Connectivity Map", "/map"],
+              ["Stalled Projects", "/governors"],
+              ["Dispatch", "/dispatch"],
             ]}
           />
           <FooterGroup

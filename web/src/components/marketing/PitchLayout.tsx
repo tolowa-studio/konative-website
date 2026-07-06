@@ -56,8 +56,6 @@ export default function PitchLayout({
             backgroundSize: "56px 56px",
           }}
         />
-        <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 4, height: 420, background: RED, transform: "rotate(18deg)", opacity: 0.9 }} />
-        <div aria-hidden="true" style={{ position: "absolute", top: -70, right: "14%", width: 1, height: 420, background: RED, transform: "rotate(18deg)", opacity: 0.35 }} />
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 48px" }}>
           <div style={{
             position: "relative",

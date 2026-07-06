@@ -1,52 +1,39 @@
 import { NextResponse } from "next/server";
-import fs from "node:fs/promises";
-import path from "node:path";
-import type { LayerManifest, LayerManifestEntry } from "@/types/map-layers";
+import type { LayerManifest } from "@/types/map-layers";
 
-const TILES_V1 = path.join(process.cwd(), "public", "tiles", "v1");
+// Statically imported rather than read via node:fs at request time — Cloudflare
+// Workers has no filesystem, so fs.readdir/fs.readFile silently threw on every
+// request in production (caught by the old blanket try/catch, which returned
+// an empty manifest) even though these files worked fine in local Next.js dev
+// with a real filesystem. Each ETL stream still owns its own manifest-{stream}
+// .json file; this just merges them at build time instead of at runtime.
+import bcer from "../../../../../../public/tiles/v1/manifest-bcer.json";
+import env from "../../../../../../public/tiles/v1/manifest-env.json";
+import indigenous from "../../../../../../public/tiles/v1/manifest-indigenous.json";
+import osm from "../../../../../../public/tiles/v1/manifest-osm.json";
+import p0 from "../../../../../../public/tiles/v1/manifest-p0.json";
+import politics from "../../../../../../public/tiles/v1/manifest-politics.json";
+import social from "../../../../../../public/tiles/v1/manifest-social.json";
+import vi from "../../../../../../public/tiles/v1/manifest-vi.json";
 
-const EMPTY: LayerManifest = {
-  version: 1,
-  generatedAt: new Date(0).toISOString(),
-  layers: [],
-};
+const MANIFESTS = [bcer, env, indigenous, osm, p0, politics, social, vi] as unknown as LayerManifest[];
 
-// Reads all manifest*.json files in tiles/v1/ and merges their layers.
-// This lets each ETL stream write its own manifest-{stream}.json without conflicts.
 export async function GET() {
-  try {
-    const files = await fs.readdir(TILES_V1);
-    const manifestFiles = files.filter(
-      (f) => f.startsWith("manifest") && f.endsWith(".json")
-    );
-
-    if (manifestFiles.length === 0) return NextResponse.json(EMPTY);
-
-    const manifests = await Promise.all(
-      manifestFiles.map(async (f) => {
-        const raw = await fs.readFile(path.join(TILES_V1, f), "utf8");
-        return JSON.parse(raw) as LayerManifest;
-      })
-    );
-
-    const seen = new Set<string>();
-    const layers: LayerManifestEntry[] = [];
-    for (const m of manifests) {
-      for (const layer of m.layers ?? []) {
-        if (!seen.has(layer.id)) {
-          seen.add(layer.id);
-          layers.push(layer);
-        }
+  const seen = new Set<string>();
+  const layers: LayerManifest["layers"] = [];
+  for (const m of MANIFESTS) {
+    for (const layer of m.layers ?? []) {
+      if (!seen.has(layer.id)) {
+        seen.add(layer.id);
+        layers.push(layer);
       }
     }
-
-    const merged: LayerManifest = {
-      version: 1,
-      generatedAt: new Date().toISOString(),
-      layers,
-    };
-    return NextResponse.json(merged);
-  } catch {
-    return NextResponse.json(EMPTY);
   }
+
+  const merged: LayerManifest = {
+    version: 1,
+    generatedAt: new Date().toISOString(),
+    layers,
+  };
+  return NextResponse.json(merged);
 }
