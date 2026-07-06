@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { submitForm } from "@/lib/forms/submit";
 import { newsletterSchema } from "@/lib/forms/schemas/newsletter";
 import {
@@ -57,18 +57,25 @@ export async function POST(request: NextRequest) {
         },
       ],
     };
-    ghostAdminFetch("/ghost/api/admin/members/", {
-      method: "POST",
-      body: JSON.stringify(memberPayload),
-    })
-      .then(async (res) => {
+    // `after()` extends the Worker's execution past the response (maps to
+    // Cloudflare's ctx.waitUntil() via OpenNext) — a plain un-awaited
+    // fetch().then() can be silently killed the instant the response is
+    // sent on Workers (see web/src/lib/forms/submit.ts for the same fix).
+    after(async () => {
+      try {
+        const res = await ghostAdminFetch("/ghost/api/admin/members/", {
+          method: "POST",
+          body: JSON.stringify(memberPayload),
+        });
         if (!res.ok && res.status !== 422) {
           // 422 = member already exists, which is fine.
           const text = await res.text().catch(() => "");
           console.warn(`[newsletter] Ghost member create ${res.status}:`, text.slice(0, 300));
         }
-      })
-      .catch((err) => console.error("[newsletter] Ghost member create error:", err));
+      } catch (err) {
+        console.error("[newsletter] Ghost member create error:", err);
+      }
+    });
   }
 
   return NextResponse.json({ success: true, message: "Subscribed!" });
