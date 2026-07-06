@@ -84,6 +84,21 @@ const FAQ_ITEMS = [
     answer:
       "Call Konative first. Post-installation, Konative remains the single point of contact across every carrier in your stack — that includes outage escalation, billing disputes, and moves/adds/changes. Rather than you managing a separate support relationship with each carrier, Konative works the escalation on your behalf and keeps pressure on the SLA. This ongoing role is part of the brokerage relationship, not a separate paid service.",
   },
+  {
+    question: "How much does a fiber lateral cost?",
+    answer:
+      "Per the Fiber Broadband Association's 2025 Deployment Cost Report, underground fiber construction runs a median of $18 per foot — roughly $95,000 per mile — versus a median of $8 per foot for aerial. Distance and terrain dominate the math: a short lateral across a business park and a five-mile bore under a highway are entirely different projects. That is why Konative scopes laterals parcel-by-parcel, using real construction quotes from the suppliers who would actually build the route, rather than quoting a universal per-mile figure.",
+  },
+  {
+    question: "Which data center markets are hardest to get connectivity in right now?",
+    answer:
+      "The growth moved to secondary markets — Columbus, Salt Lake City, San Antonio, Reno, and Alberta among them — and those are exactly the markets where carrier density is thinnest. Metro dark fiber remains concentrated in Northern Virginia, Silicon Valley, Chicago, and Dallas, so a site in a boom market often has far fewer suppliers who can actually serve it. In those markets the regional fiber providers matter most, and a broker who can quote them — not just the national names — is the difference between a competitive process and a single take-it-or-leave-it bid.",
+  },
+  {
+    question: "When in a data center build should connectivity be sourced?",
+    answer:
+      "Earlier than feels necessary, in three stages. At site selection, fiber proximity should be a go/no-go screen alongside power — a bad lateral can kill a site's economics before ground breaks. During construction, laterals and dark fiber should be ordered, because permitting and outside-plant construction commonly run 6 to 18 months and must land before ready-for-service. At commissioning, waves, transit, and cross-connects come online. Teams that start connectivity at commissioning instead of site selection are the ones who discover a multimillion-dollar lateral after construction milestones are locked.",
+  },
 ];
 
 const faqJsonLd = faqSchema(FAQ_ITEMS);
@@ -190,6 +205,104 @@ const bridgeCtaStyle: CSSProperties = {
   borderBottom: `1px solid ${RED}`,
   paddingBottom: 2,
   alignSelf: "flex-start",
+};
+
+// Market & pricing intelligence styles (dark stat band + benchmark table)
+const statTileStyle: CSSProperties = {
+  background: "rgba(255,255,255,0.04)",
+  border: "1px solid rgba(255,255,255,0.12)",
+  borderTop: `3px solid ${RED}`,
+  padding: "32px 28px",
+};
+const statNumberStyle: CSSProperties = {
+  fontFamily: DISPLAY,
+  fontWeight: 800,
+  fontSize: "clamp(40px, 4.5vw, 56px)",
+  lineHeight: 0.95,
+  color: "#fff",
+  marginBottom: 10,
+};
+const statLabelStyle: CSSProperties = {
+  fontFamily: BODY,
+  fontWeight: 600,
+  fontSize: 11,
+  letterSpacing: "0.18em",
+  textTransform: "uppercase",
+  color: "#FF526B",
+  marginBottom: 12,
+};
+const statBodyStyle: CSSProperties = {
+  fontFamily: BODY,
+  fontSize: 13,
+  lineHeight: 1.65,
+  color: "rgba(255,255,255,0.6)",
+  margin: 0,
+};
+const marketCardStyle: CSSProperties = {
+  background: "rgba(255,255,255,0.04)",
+  border: "1px solid rgba(255,255,255,0.12)",
+  borderTop: `3px solid ${RED}`,
+  padding: "30px 28px",
+};
+const marketTitleStyle: CSSProperties = {
+  fontFamily: DISPLAY,
+  fontWeight: 700,
+  fontSize: 22,
+  textTransform: "uppercase",
+  color: "#fff",
+  lineHeight: 1.05,
+  marginBottom: 10,
+};
+const marketBodyStyle: CSSProperties = {
+  fontFamily: BODY,
+  fontSize: 13,
+  lineHeight: 1.7,
+  color: "rgba(255,255,255,0.6)",
+  margin: 0,
+};
+const thStyle: CSSProperties = {
+  fontFamily: DISPLAY,
+  fontWeight: 700,
+  fontSize: 14,
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  color: TEXT,
+  textAlign: "left",
+  padding: "14px 20px",
+  borderBottom: `2px solid ${TEXT}`,
+  whiteSpace: "nowrap",
+};
+const tdServiceStyle: CSSProperties = {
+  fontFamily: BODY,
+  fontWeight: 600,
+  fontSize: 14,
+  lineHeight: 1.5,
+  color: TEXT,
+  padding: "18px 20px",
+  borderBottom: `1px solid ${DIVIDER}`,
+  verticalAlign: "top",
+  minWidth: 190,
+};
+const tdBenchmarkStyle: CSSProperties = {
+  fontFamily: BODY,
+  fontWeight: 600,
+  fontSize: 14,
+  lineHeight: 1.5,
+  color: RED,
+  padding: "18px 20px",
+  borderBottom: `1px solid ${DIVIDER}`,
+  verticalAlign: "top",
+  minWidth: 200,
+};
+const tdNotesStyle: CSSProperties = {
+  fontFamily: BODY,
+  fontSize: 13,
+  lineHeight: 1.65,
+  color: MUTED,
+  padding: "18px 20px",
+  borderBottom: `1px solid ${DIVIDER}`,
+  verticalAlign: "top",
+  minWidth: 280,
 };
 
 export default function DataCenterConnectivityPage() {
@@ -398,7 +511,174 @@ export default function DataCenterConnectivityPage() {
           </div>
         </PitchSection>
 
-        {/* Section 6: FAQ */}
+        {/* Section 6: 2026 market & pricing intelligence — the fiber bottleneck + where the boom moved */}
+        <PitchSection eyebrow="2026 Market & Pricing Intelligence" heading="The fiber bottleneck, in four numbers" background="#0A0F1E">
+          <p style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.75, color: "rgba(255,255,255,0.6)", maxWidth: 720, marginBottom: 36 }}>
+            North American data-center capacity is booming and fragile at the same time. Construction pipelines are
+            at record scale while the physical inputs — fiber, power equipment, construction crews — are the tightest
+            they have been in a decade. Connectivity procurement is where build schedules are saved or lost.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 16, marginBottom: 64 }}>
+            {[
+              {
+                number: "~35 GW",
+                label: "Under construction",
+                body: "Data-center capacity under construction in North America — a record pipeline, all of it needing network before it can serve a single workload. (JLL)",
+              },
+              {
+                number: "20 wks–1 yr",
+                label: "Fiber cable lead times",
+                body: "Current lead times for fiber cable — roughly 20 weeks for the largest buyers, stretching to a year for smaller ones. Order timing is now a schedule risk.",
+              },
+              {
+                number: "2.3x",
+                label: "US fiber miles needed by 2029",
+                body: "Growth in US fiber miles required by 2029 — from 159.6M to 372.9M. (Fiber Broadband Association / Cartesian)",
+              },
+              {
+                number: "~50%",
+                label: "2026 builds facing delay",
+                body: "Share of planned 2026 US data-center builds facing delay or cancellation on power equipment shortages. (TD Cowen / Bloomberg reporting)",
+              },
+            ].map((stat) => (
+              <div key={stat.label} style={statTileStyle}>
+                <div style={statNumberStyle}>{stat.number}</div>
+                <div style={statLabelStyle}>{stat.label}</div>
+                <p style={statBodyStyle}>{stat.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Where the boom moved */}
+          <h3 style={{
+            fontFamily: DISPLAY, fontWeight: 800,
+            fontSize: "clamp(28px, 3vw, 40px)", lineHeight: 0.95,
+            textTransform: "uppercase", color: "#fff", marginBottom: 20,
+          }}>
+            Where the boom moved
+          </h3>
+          <p style={{ fontFamily: BODY, fontSize: 15, lineHeight: 1.75, color: "rgba(255,255,255,0.6)", maxWidth: 720, marginBottom: 32 }}>
+            The 2026 deal map does not look like the 2020 deal map. Growth left the legacy hubs — and landed in
+            markets where the carrier infrastructure hasn&apos;t caught up.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16, marginBottom: 32 }}>
+            <div style={marketCardStyle}>
+              <div style={statLabelStyle}>The 2026 leaders</div>
+              <h4 style={marketTitleStyle}>Secondary markets lead</h4>
+              <p style={marketBodyStyle}>
+                Columbus, Salt Lake City, San Antonio, Indianapolis, and Reno lead 2026 deal activity — land,
+                power, and permitting economics pulled the buildout out of the legacy hubs.
+              </p>
+            </div>
+            <div style={marketCardStyle}>
+              <div style={statLabelStyle}>The next wave</div>
+              <h4 style={marketTitleStyle}>Tertiary &amp; Canada</h4>
+              <p style={marketBodyStyle}>
+                Central Washington, Iowa, and Kansas City form the tertiary wave, while Alberta and Montreal
+                anchor the Canadian market — active sourcing geographies for cross-border capacity.
+              </p>
+            </div>
+            <div style={marketCardStyle}>
+              <div style={statLabelStyle}>The catch</div>
+              <h4 style={marketTitleStyle}>Fiber didn&apos;t follow</h4>
+              <p style={marketBodyStyle}>
+                Metro dark fiber density is still concentrated in Northern Virginia, Silicon Valley, Chicago, and
+                Dallas. The boom moved to exactly the markets with the thinnest carrier density — which is where
+                a lateral makes or breaks the project.
+              </p>
+            </div>
+          </div>
+          <p style={{ fontFamily: BODY, fontSize: 15, lineHeight: 1.75, color: "rgba(255,255,255,0.75)", maxWidth: 720, margin: 0 }}>
+            We work these markets through 100+ suppliers — regional fiber included, not just the national names.
+          </p>
+        </PitchSection>
+
+        {/* Section 7: Published benchmarks + the lateral warning */}
+        <PitchSection eyebrow="Published Benchmarks" heading="What connectivity actually costs in 2026">
+          <p style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 720, marginBottom: 36 }}>
+            Most brokers won&apos;t publish numbers. We will — because a developer who walks in knowing the market
+            is a better client, and because the ranges below are only the starting point of what a real sourcing
+            process beats.
+          </p>
+          <div style={{ overflowX: "auto", border: `1px solid ${DIVIDER}`, borderTop: `3px solid ${RED}`, background: "#fff" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  <th style={thStyle}>What you&apos;re buying</th>
+                  <th style={thStyle}>Published benchmark</th>
+                  <th style={thStyle}>What moves it</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={tdServiceStyle}>Underground fiber construction</td>
+                  <td style={tdBenchmarkStyle}>Median $18/ft (~$95K/mile)</td>
+                  <td style={tdNotesStyle}>
+                    Aerial runs a median of $8/ft (Fiber Broadband Association 2025 Deployment Cost Report). 92% of
+                    builders reported cost increases in 2025 — these figures are moving up, not down.
+                  </td>
+                </tr>
+                <tr>
+                  <td style={tdServiceStyle}>Dedicated Internet Access (1G)</td>
+                  <td style={tdBenchmarkStyle}>Typically $700&ndash;1,500/mo</td>
+                  <td style={tdNotesStyle}>Market and building status — a lit building quotes very differently from one that needs construction.</td>
+                </tr>
+                <tr>
+                  <td style={tdServiceStyle}>Dedicated Internet Access (10G)</td>
+                  <td style={tdBenchmarkStyle}>Typically $4,000&ndash;7,500/mo</td>
+                  <td style={tdNotesStyle}>Same drivers as 1G — plus carrier density at the address, which is why secondary markets quote wider.</td>
+                </tr>
+                <tr>
+                  <td style={tdServiceStyle}>Metro wavelengths (10G&ndash;100G)</td>
+                  <td style={tdBenchmarkStyle}>Few hundred to low thousands/mo</td>
+                  <td style={tdNotesStyle}>100G wave pricing has fallen roughly 11% per year — one of the few line items trending in the buyer&apos;s favor.</td>
+                </tr>
+                <tr>
+                  <td style={tdServiceStyle}>Dark fiber IRUs</td>
+                  <td style={tdBenchmarkStyle}>Custom-quoted</td>
+                  <td style={tdNotesStyle}>
+                    Published metro quotes span roughly $750&ndash;$3,000 per strand-mile plus annual maintenance;
+                    long-haul is negotiated route-by-route. Anyone quoting you a universal IRU price is guessing.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontFamily: BODY, fontSize: 13, lineHeight: 1.7, color: MUTED, maxWidth: 720, marginTop: 20, marginBottom: 56 }}>
+            Methodology: ranges reflect published industry sources and live market quoting as of mid-2026. Your
+            parcel, lateral distance, and diversity requirements move these materially — that&apos;s exactly what
+            we scope.
+          </p>
+
+          {/* The lateral warning */}
+          <div style={{ background: "#FFF0F2", borderLeft: `4px solid ${RED}`, padding: "36px 32px" }}>
+            <div style={{
+              fontFamily: BODY, fontWeight: 600,
+              fontSize: 10, letterSpacing: "0.24em", textTransform: "uppercase",
+              color: RED, marginBottom: 12,
+            }}>
+              The Lateral Warning
+            </div>
+            <h3 style={{
+              fontFamily: DISPLAY, fontWeight: 800,
+              fontSize: "clamp(26px, 3vw, 38px)", lineHeight: 1.0,
+              textTransform: "uppercase", color: TEXT, marginBottom: 16,
+            }}>
+              A five-mile lateral can kill a site.
+            </h3>
+            <p style={{ fontFamily: BODY, fontSize: 15, lineHeight: 1.75, color: "#374151", maxWidth: 760, marginBottom: 20 }}>
+              A five-mile lateral to the nearest backbone can add millions to a project and kill a site&apos;s
+              economics before ground breaks. Fiber proximity is now a go/no-go site-selection screen alongside
+              power. Validate power and fiber before you lock construction milestones — we run that diligence
+              with stamped-letter rigor through our supplier bench and proprietary market map.
+            </p>
+            <Link href="/map" style={bridgeCtaStyle}>
+              Check your site on the map →
+            </Link>
+          </div>
+        </PitchSection>
+
+        {/* Section 8: FAQ */}
         <PitchSection eyebrow="Common Questions" heading="FAQ" background="#F9FAFB">
           <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.7, color: MUTED, maxWidth: 720, marginBottom: 32 }}>
             More on brokerage pricing, contract structure, and response times in the{" "}

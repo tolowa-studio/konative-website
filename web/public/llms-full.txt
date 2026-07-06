@@ -1,0 +1,101 @@
+# Konative — Full Reference
+
+> Konative (konative.com) is a vendor-neutral connectivity brokerage — an Avant sub-agent —
+> serving Tribal Nations, tribal enterprises, rural broadband authorities, and data-center
+> operators across the US and Canada. Suppliers pay Konative's fee when they win business;
+> buyers pay nothing. Konative does not write grants and federal money never flows through it.
+
+## Services brokered
+
+Dedicated internet access (DIA), lit and dark fiber, middle-mile and last-mile transport,
+SD-WAN and managed network, UCaaS and hosted voice, cloud connectivity (AWS Direct Connect,
+Azure ExpressRoute, Google Cloud Interconnect), managed security and SASE, mobility and fixed
+wireless, and colocation access — sourced through Avant's portfolio of 100+ suppliers.
+
+Buyer segments: Tribal gaming enterprises, Tribal governments and councils, Tribal economic
+development corporations, Tribal healthcare and education, Tribal broadband authorities,
+rural enterprises, and data-center operators.
+
+## Tribal Broadband Funding Navigator (/tribal/funding-navigator)
+
+Free resource, no signup. Verified against NTIA primary sources.
+
+On June 17, 2026, NTIA opened two funding opportunities for Tribal Nations. Applications for
+both are due September 17, 2026 at 11:59 p.m. ET via the NTIA grants portal. Awards roll out
+on a rolling basis beginning Spring 2027.
+
+### TBCP Round 3 (Tribal Broadband Connectivity Program)
+- Total: $540 million. Run by NTIA BroadbandUSA.
+- Eligible entities: Tribal governments, Tribal organizations, Tribal colleges and
+  universities, the Department of Hawaiian Home Lands, and Alaska Native entities.
+- Eligible uses: broadband infrastructure deployment AND broadband use/adoption projects,
+  including affordability subsidies (free or reduced-cost service), devices, digital skills,
+  telehealth, and distance learning.
+- Cost share: no match highlighted in program materials — confirm in the NOFO.
+
+### NEGP (Native Entities Grant Program)
+- Total: $250 million, under the Digital Equity Act.
+- Awards: $500,000 to $2.5 million each.
+- Match: 10%, waivable.
+- Purpose: Native entities' digital equity and inclusion activities.
+
+### Context
+- TBCP to date: 275 awards, $2.2 billion obligated of the $3 billion program.
+- TBCP Round 1 requests exceeded $5 billion — oversubscription is the norm.
+- FY2026 E-Rate: Tribal library Category Two funding floor is $66,385 with a 90% maximum
+  discount. The FCC's T-LEAP (Tribal Library E-Rate Advocacy Program) offers free help.
+- USDA ReConnect currently has no open application window.
+
+### Primary sources
+- https://www.ntia.gov/press-release/2026/ntia-announces-two-new-funding-opportunities-expand-broadband-connectivity-tribal-lands
+- https://broadbandusa.ntia.gov/sites/default/files/2026-06/NTIA_TBCP3_NOFO.pdf
+- https://broadbandusa.ntia.gov/sites/default/files/2026-06/NTIA_NEGP_NOFO_2026.pdf
+
+### Konative's role
+Konative doesn't write grants — and the money never flows through Konative. It is a
+vendor-neutral connectivity brokerage that helps Tribes scope the network an application
+promises, pressure-test carrier costs in the budget, and — post-award — make carriers compete
+for the build and the circuits. Grant writers and Native-owned advisors (AMERIND Critical
+Infrastructure, Tribal Ready, MuralNet) are partners Konative works alongside, not against.
+
+## Sovereignty Commitment (/tribal/sovereignty)
+
+Six commitments Konative puts in writing for every Tribal engagement:
+
+1. You own the contracts — every carrier agreement is between the carrier and the Tribe or
+   tribal enterprise; Konative is agent-of-record working for the Tribe, not the carrier.
+2. You own the data — network documentation, quotes, and inventory live in the Tribe's
+   systems; Konative keeps copies only with permission; data stays under Tribal jurisdiction.
+3. You can walk away anytime — no exclusivity, no lock-in, no termination fees.
+4. Transparent economics — suppliers pay Konative a commission, typically 15-20% of monthly
+   recurring charges (industry standard); the Tribe pays nothing; commission disclosed on
+   any deal upon request.
+5. No grant-farming — no percentages of grant awards, no grants written for fees, federal
+   money never touches Konative's hands.
+6. We show up — in person, at TribalNet and regional convenings, before and after the deal.
+
+Partner ecosystem: Konative works alongside — never against — AMERIND Critical
+Infrastructure, Tribal Ready, MuralNet, and tribally-owned telecoms like NTUA (Navajo Tribal
+Utility Authority), whose 550+ mile fiber backbone and Shiprock data center show what tribal
+ownership builds. They do funding, builds, and advocacy; Konative does multi-carrier
+procurement and lifecycle management.
+
+## Site map
+
+- / — Home
+- /connectivity — Enterprise connectivity brokerage
+- /data-center-connectivity — Data-center connectivity brokerage
+- /tribal — Tribal & rural enterprise connectivity (pillar)
+- /tribal/funding-navigator — $790M Tribal broadband funding navigator (TBCP R3 + NEGP)
+- /tribal/sovereignty — Sovereignty commitment
+- /tribal/awards — NTIA TBCP award records
+- /map — Interactive infrastructure map
+- /markets — Per-state market pages
+- /intelligence, /answers, /dispatch — Intelligence and knowledge base
+- /call — Book a call (https://cal.com/jeramey-james/15min)
+- /contact — Contact form
+
+## Contact
+
+- Discovery call (15 min): https://cal.com/jeramey-james/15min
+- Contact form: https://konative.com/contact

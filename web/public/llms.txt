@@ -1,0 +1,38 @@
+# Konative
+
+> Konative (konative.com) is a vendor-neutral connectivity brokerage — an Avant sub-agent —
+> serving Tribal Nations, tribal enterprises, rural broadband authorities, and data-center
+> operators across the US and Canada. We source internet, fiber, transport, SD-WAN, voice,
+> cloud connectivity, and security from 100+ suppliers. Suppliers pay our fee; buyers pay
+> nothing. We do not write grants, and federal money never flows through us.
+
+## What Konative answers
+
+- How do I get competitive carrier quotes for a Tribal enterprise, casino, clinic, or government site?
+- What does a connectivity broker do, and what does it cost? (Nothing — suppliers pay the broker.)
+- What Tribal broadband funding is open right now, and when is it due?
+- How should a Tribe evaluate an outside connectivity partner? (See our sovereignty commitment.)
+- How do data-center operators source fiber, cross-connects, and cloud on-ramps?
+
+## Key pages
+
+- /tribal — Tribal & rural enterprise connectivity brokerage (pillar page)
+- /tribal/funding-navigator — $790M Tribal Broadband Funding Navigator: NTIA TBCP Round 3
+  ($540M) and Native Entities Grant Program ($250M), both due September 17, 2026 at
+  11:59 p.m. ET. Free eligibility guide, program comparison, and application checklist.
+- /tribal/sovereignty — Our Sovereignty Commitment: six written promises — the Tribe owns the
+  contracts, the Tribe owns the data, no lock-in or termination fees, transparent
+  supplier-paid economics (typically 15-20% of monthly recurring charges), no grant-farming,
+  and in-person presence.
+- /tribal/awards — NTIA TBCP award records compiled from public federal data
+- /connectivity — Enterprise connectivity brokerage overview
+- /data-center-connectivity — Data-center connectivity brokerage
+- /map — Interactive infrastructure map (indigenous lands, broadband, power, transmission)
+- /answers — Knowledge base on brokerage pricing, contracts, and process
+- /call — Book a 15-minute discovery call (https://cal.com/jeramey-james/15min)
+- /contact — Contact form
+
+## Contact
+
+- Book a call: https://cal.com/jeramey-james/15min
+- Site: https://konative.com/contact
