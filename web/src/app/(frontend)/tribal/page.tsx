@@ -213,6 +213,78 @@ export default function TribalPage() {
         ctaHeadlineBottom="THE WHOLE MARKET."
         ctaSub="Tell us what your nation or enterprise needs — we'll quote it across the full supplier portfolio, sovereignty-aware, at no cost to you."
       >
+        {/* Funding Navigator promo band */}
+        <section style={{ background: "#08142D", borderTop: `3px solid ${RED}`, padding: "44px 0" }}>
+          <div
+            style={{
+              maxWidth: 1100,
+              margin: "0 auto",
+              padding: "0 48px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 32,
+              flexWrap: "wrap",
+            }}
+          >
+            <div style={{ flex: "1 1 480px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  fontFamily: BODY,
+                  fontWeight: 600,
+                  fontSize: 10,
+                  letterSpacing: "0.24em",
+                  textTransform: "uppercase",
+                  color: "#FF526B",
+                  marginBottom: 14,
+                }}
+              >
+                <span style={{ display: "block", width: 28, height: 2, background: RED }} />
+                Free Navigator · No Signup Required
+              </div>
+              <div
+                style={{
+                  fontFamily: DISPLAY,
+                  fontWeight: 800,
+                  fontSize: "clamp(26px, 3.2vw, 40px)",
+                  lineHeight: 1.0,
+                  textTransform: "uppercase",
+                  color: "#fff",
+                  marginBottom: 10,
+                }}
+              >
+                $790M · Applications due <span style={{ color: "#FF526B" }}>Sept 17, 2026</span>
+              </div>
+              <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.6)", margin: 0, maxWidth: 620 }}>
+                NTIA opened TBCP Round 3 ($540M) and the Native Entities Grant Program ($250M) on
+                June 17, 2026. Our free navigator covers eligibility, eligible uses, and the
+                application checklist — with a live countdown to the deadline.
+              </p>
+            </div>
+            <Link
+              href="/tribal/funding-navigator"
+              style={{
+                fontFamily: BODY,
+                fontWeight: 600,
+                fontSize: 12,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                background: RED,
+                color: "#fff",
+                padding: "18px 36px",
+                textDecoration: "none",
+                borderRadius: 2,
+                whiteSpace: "nowrap",
+              }}
+            >
+              Open the Funding Navigator →
+            </Link>
+          </div>
+        </section>
+
         {/* Section 1: What we broker for Tribal & Rural */}
         <PitchSection eyebrow="The Portfolio" heading="What we broker for Tribal &amp; rural enterprises">
           <p style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 720, marginBottom: 36 }}>
@@ -306,6 +378,24 @@ export default function TribalPage() {
                 <p style={bodyStyle}>{item.body}</p>
               </div>
             ))}
+          </div>
+          <div style={{ marginTop: 28 }}>
+            <Link
+              href="/tribal/sovereignty"
+              style={{
+                fontFamily: BODY,
+                fontWeight: 600,
+                fontSize: 12,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: RED,
+                textDecoration: "none",
+                borderBottom: `1px solid ${RED}`,
+                paddingBottom: 2,
+              }}
+            >
+              Read our sovereignty commitment — six promises, in writing →
+            </Link>
           </div>
         </PitchSection>
 
