@@ -120,6 +120,10 @@ async function getLiveStats() {
       // matters more than CDN latency here, and useCdn:true was serving
       // stale zeroed counts well after real project data existed.
       useCdn: false,
+      // dataCenterProject documents are not readable by an anonymous/public
+      // query (confirmed: unauthenticated queries return 0 for this type
+      // even though 1,670+ real documents exist) — a token is required.
+      token: process.env.SANITY_API_TOKEN,
     })
     const stats = await sanity.fetch(`{
       "operational": count(*[_type == "dataCenterProject" && country == "CA" && status == "operational"]),

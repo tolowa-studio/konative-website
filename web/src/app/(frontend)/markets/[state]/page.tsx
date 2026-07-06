@@ -211,6 +211,10 @@ const sanity = createSanity({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
+  // dataCenterProject documents are not readable by an anonymous/public
+  // query (confirmed: unauthenticated queries return 0 for this type even
+  // though 1,670+ real documents exist) — a token is required.
+  token: process.env.SANITY_API_TOKEN,
 })
 
 async function getMarketData(abbr: string, name: string, country: string) {
