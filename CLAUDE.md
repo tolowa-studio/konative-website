@@ -18,14 +18,17 @@ is stale — fix it, don't work around it.
 
 - **Worker:** `konative` (account **Tolowa Studio**, `e2b6ede12b96c7be2fe252c4b1e74bcf`). Build config
   lives in `web/wrangler.jsonc` (`"name": "konative"`, OpenNext `.open-next/worker.js` + assets).
-- **Git integration:** Cloudflare **Workers Builds** — connected directly to
-  `tolowa-studio/konative-website`, **production branch `main`**, since **2026-05-17**. This is native
-  Cloudflare git integration (dashboard-configured; there is no public REST API to create this
-  connection — verified 2026-07-03 against Cloudflare's own docs). Push to `main` → Cloudflare builds
-  and deploys automatically via `npx wrangler deploy` (confirmed from the Worker's Settings → Build
-  page: Build command: none, Deploy command: `npx wrangler deploy`, Version command:
-  `npx wrangler versions upload`, Build watch paths: `*`). **No GitHub Actions deploy workflow is
-  needed or present for this** — do not add one; it would be redundant with Workers Builds.
+- **Git integration:** **GitHub Actions** (`.github/workflows/deploy.yml`) is the actual live deploy
+  pipeline, confirmed 2026-07-06 — this corrects an earlier (2026-07-03) claim in this file that
+  Cloudflare Workers Builds native git integration was the deploy mechanism. That claim was wrong (or
+  became wrong): the workflow was added 2026-06-22 and every single deployment in the Cloudflare API's
+  `/workers/scripts/konative/deployments` list (`source: "wrangler"`) lines up 1-for-1 in timestamp
+  with a GH Actions run completion, with zero unexplained extras — there is no separate/parallel
+  Workers Builds trigger actually firing. Push to `main` → GitHub Actions runs `npx
+  opennextjs-cloudflare build && npx opennextjs-cloudflare deploy` using the `CLOUDFLARE_API_TOKEN`
+  repo secret. **Do not delete `deploy.yml` assuming it's redundant** — it is the only working deploy
+  path. Typical push-to-live latency is ~2–2.5 minutes (npm ci + build + deploy); don't conclude a
+  deploy failed until you've waited that long and checked `gh run list --workflow=deploy.yml`.
 - **Custom domains:** `konative.com` and `www.konative.com` are both bound as Cloudflare Workers
   **Custom Domains** on the `konative` Worker (production environment, TLS auto-managed by
   Cloudflare) — confirmed via the Cloudflare API 2026-07-03. DNS is fully Cloudflare-managed for this
@@ -52,12 +55,18 @@ is stale — fix it, don't work around it.
 ### Environment variables (Cloudflare Worker secrets/bindings)
 
 Set via the Cloudflare dashboard (Worker → Settings → Variables) or `wrangler secret put`, not
-Vercel env vars. Confirmed bindings on the live `konative` Worker (2026-07-03): `ANTHROPIC_API_KEY`,
-`BEEHIIV_API_KEY`, `BEEHIIV_PUBLICATION_ID`, `BEEHIIV_WEBHOOK_SECRET`, `CRON_SECRET`,
-`NEWS_INGEST_TOKEN`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_SANITY_PROJECT_ID`,
-`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SUPABASE_URL`,
-`RESEND_API_KEY`, `RESEND_TO`, `SANITY_API_TOKEN`, `SUPABASE_ANON_KEY`,
-`SUPABASE_SERVICE_ROLE_KEY`. For local dev, copy from `web/.env.local.example`.
+Vercel env vars. Confirmed bindings on the live `konative` Worker (2026-07-06): `ANTHROPIC_API_KEY`,
+`BEEHIIV_API_KEY`, `BEEHIIV_PUBLICATION_ID`, `BEEHIIV_WEBHOOK_SECRET`, `CLOUDFLARE_ACCOUNT_ID`,
+`CLOUDFLARE_EMAIL_API_TOKEN`, `CRON_SECRET`, `NEWS_INGEST_TOKEN`, `NEXT_PUBLIC_SANITY_DATASET`,
+`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`NEXT_PUBLIC_SUPABASE_URL`, `RESEND_FROM`, `RESEND_TO`, `SANITY_API_TOKEN`, `SUPABASE_ANON_KEY`,
+`SUPABASE_SERVICE_ROLE_KEY`, `TWENTY_INTAKE_WEBHOOK_TOKEN`, `TWENTY_INTAKE_WEBHOOK_URL`. Transactional
+email is Cloudflare Email Sending (`CLOUDFLARE_ACCOUNT_ID`/`CLOUDFLARE_EMAIL_API_TOKEN`); `RESEND_FROM`/
+`RESEND_TO` are legacy-named env vars that now just hold the from/to addresses for that Cloudflare
+call (Resend itself was retired for this path 2026-07-06) — set them with `printf` into `wrangler
+secret put`, never `echo`, which appends a trailing `\n` that Cloudflare Email's validation rejects
+outright (`email.sending.error.email.invalid`) rather than silently trimming; the app also `.trim()`s
+both as defense-in-depth. For local dev, copy from `web/.env.local.example`.
 
 ### Notion
 

@@ -1,12 +1,12 @@
 # Pending manual actions
 
-Updated 2026-07-06 (second pass). The first version of this doc declared 4 things "blocked, needs
-Jeramey" without properly exhausting the credential probe checklist first — Stash, the Notion AI
-Router, GCP under the real account, and Railway/Cloudflare secrets directly. Real, working
-credentials existed for 3 of the 4. Corrected below; only what's genuinely dashboard/interactive-
-login-only remains blocked.
+Updated 2026-07-06 (third pass). The first version of this doc declared 4 things "blocked, needs
+Jeramey" without properly exhausting the credential probe checklist first. Real, working
+credentials existed for 3 of the 4. This pass closes out Cloudflare Email fully: domain onboarding
+was completed by Jeramey directly in the Cloudflare dashboard, and a real production bug found
+during end-to-end verification (not just "credentials wired up") is now fixed and proven.
 
-## ✅ Done and proven this pass (not just "coded and waiting")
+## ✅ Done and proven (not just "coded and waiting")
 
 ### Twenty CRM intake — fully working, verified end-to-end in production
 Found `motion-twenty-crm-api-token` (GCP) and `KONATIVE_INTAKE_TOKEN` (Railway, `n8n` service env —
@@ -15,32 +15,40 @@ not GCP). Set `TWENTY_INTAKE_WEBHOOK_URL=https://n8n.tolowastudio.com/webhook/ko
 
 **Also found and fixed a second, more important bug the credentials alone wouldn't have solved:**
 Cloudflare Workers can terminate a Worker's execution the instant its Response is returned — an
-un-awaited `fetch().catch()` (the "fire and forget" pattern `submit.ts` used for both the Resend
-email and the Twenty webhook) has no guarantee of completing. Proved this with a real production
-canary: the `await`ed triage Sanity patch persisted, the un-awaited CRM webhook never reached n8n
-even with correct secrets set. Fixed by wrapping both in Next.js's `after()` (from `next/server`,
-which OpenNext maps to Cloudflare's `ctx.waitUntil()`). Re-tested end-to-end after the fix: real
-Person/Company/Opportunity created in Twenty CRM, confirmed via direct GraphQL query, then cleaned
-up (test data deleted from Twenty, test docs discarded from Sanity).
+un-awaited `fetch().catch()` (the "fire and forget" pattern `submit.ts` used for both the email
+notification and the Twenty webhook) has no guarantee of completing. Proved this with a real
+production canary: the `await`ed triage Sanity patch persisted, the un-awaited CRM webhook never
+reached n8n even with correct secrets set. Fixed by wrapping both in Next.js's `after()` (from
+`next/server`, which OpenNext maps to Cloudflare's `ctx.waitUntil()`).
 
-**This also means the Resend transactional email notification had the exact same silent-failure
-bug** — same fire-and-forget pattern, same fix. Not independently re-verified by receiving a real
-email (no inbox access in this session), but the code path and root cause are identical.
+### Cloudflare Email transactional migration — fully working, verified end-to-end in production
+Domain onboarding for `konative.com` was completed by Jeramey directly in the Cloudflare dashboard
+2026-07-06. Code switched from Resend to the Cloudflare Email Sending API
+(`CLOUDFLARE_ACCOUNT_ID`/`CLOUDFLARE_EMAIL_API_TOKEN`, found via `tolowastudio-cf-email-sending-token`
+in GCP). A direct API test send succeeded immediately, but the real `/api/contact` form path kept
+returning `{"success":true}` while no email ever arrived — the response only proves the Sanity write
+succeeded, not that the fire-and-forget email step ran.
 
-### Cloudflare Email Sending token — found and proven to work (domain onboarding still needed)
-Found `tolowastudio-cf-email-sending-token` (GCP). Proved it works with a real send (200, real
-`message_id`) from an already-onboarded `tolowastudio.com` address. Tried the same from a
-`konative.com` address: fails (Cloudflare's `internal_server` error, its response for a
-non-onboarded domain). Confirmed via Cloudflare's own docs that domain onboarding for Email Sending
-is dashboard-only ("Compute → Email Service → Email Sending → Onboard Domain") — no API endpoint
-exists for it, so this genuinely isn't a probing gap.
+**Root-caused via `wrangler tail` with temporary trace logging, not guessing:** the `RESEND_TO`
+Worker secret held a literal trailing newline (`"deals@konative.com\n"`), because it had been set
+with `echo` piped into `wrangler secret put` instead of `printf`. Cloudflare Email's validation
+rejects a `\n`-containing address outright (`400 email.sending.error.email.invalid`, a sane
+anti-header-injection check) rather than silently trimming it — so every real submission failed
+loudly in the API response but that failure was only visible in Worker logs, which the "coded and
+deployed" state never surfaced. Fixed by re-setting `RESEND_TO`/`RESEND_FROM` with `printf` and
+adding `.trim()` in `submit.ts` as defense-in-depth against the same mistake recurring. Re-verified
+end-to-end: real triage-tagged notification emails (`[COLD · tribal] New Konative Contact: ...`)
+arrived in the inbox, confirmed via direct Gmail search, not just an API response. All test
+Sanity docs, Twenty CRM people/companies/opportunities/tasks created during verification were
+cleaned up afterward, and the dead `RESEND_API_KEY` secret (Resend is no longer called anywhere in
+the code) was removed from the Worker.
 
-**Next step (needs you, ~2 minutes):** in the Cloudflare dashboard, onboard `konative.com` for
-Email Sending (adds `cf-bounce` MX/SPF/DKIM/DMARC records automatically — DNS is already
-Cloudflare-managed for this zone, so this should be near-instant, not the up-to-24h general case).
-Once done, tell me — I can cherry-pick the migration code (`resend-to-cloudflare` worktree commit
-`d30e818`), set `tolowastudio-cf-email-sending-token` as the Worker's `CLOUDFLARE_EMAIL_API_TOKEN`
-secret, and prove a real canary send myself, no further access needed from you.
+**Also corrected a documentation bug found while diagnosing this:** `CLAUDE.md` claimed Cloudflare
+Workers Builds native git integration was the deploy mechanism for this repo. It wasn't (or stopped
+being) — `.github/workflows/deploy.yml` (added 2026-06-22) is the actual live pipeline; every
+deployment timestamp in Cloudflare's API lines up 1-for-1 with a GitHub Actions run completion.
+Corrected in `CLAUDE.md` so a future session doesn't delete the only working deploy path on the
+mistaken belief it's redundant.
 
 ## ⛔ Genuinely blocked — confirmed dashboard/interactive-only, not a probing miss
 
