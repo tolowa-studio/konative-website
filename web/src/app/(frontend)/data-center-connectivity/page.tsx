@@ -74,6 +74,16 @@ const FAQ_ITEMS = [
     answer:
       "Yes. Early engagement is better — carrier serviceability, route diversity, and construction lead times can affect site selection decisions. Konative can assess connectivity feasibility at the address or parcel level and give you a frank picture of what exists, what needs to be built, and what that costs before you are locked into a location.",
   },
+  {
+    question: "Who holds the contract — Konative or the carrier?",
+    answer:
+      "The carrier does. Konative runs the sourcing process — collecting bids, comparing serviceability and pricing across suppliers, and negotiating terms — but the facility owner or developer signs directly with the winning carrier. Konative is not a party to that agreement and does not take on carrier service-delivery liability. What Konative does take on is the ongoing relationship: staying in the account after signing to manage installation, escalations, and renewals.",
+  },
+  {
+    question: "What happens after installation if there's an outage or a service issue?",
+    answer:
+      "Call Konative first. Post-installation, Konative remains the single point of contact across every carrier in your stack — that includes outage escalation, billing disputes, and moves/adds/changes. Rather than you managing a separate support relationship with each carrier, Konative works the escalation on your behalf and keeps pressure on the SLA. This ongoing role is part of the brokerage relationship, not a separate paid service.",
+  },
 ];
 
 const faqJsonLd = faqSchema(FAQ_ITEMS);
@@ -199,6 +209,11 @@ export default function DataCenterConnectivityPage() {
         subhead="Konative is a vendor-neutral data-center connectivity broker — an Avant sub-agent that sources transport, dark fiber, cross-connects, colocation, and cloud on-ramps into your facility from 100+ carriers across North America. We work for you, not the supplier, and because carriers pay our fee, there is no cost to you."
         primaryCta={{ label: "Book a Discovery Call →", href: "/call" }}
         secondaryCta={{ label: "Contact Us →", href: "/contact" }}
+        heroImage={{
+          src: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=70",
+          alt: "Dense cable management and network cabling running along a data center server aisle",
+          credit: { name: "Taylor Vick", url: "https://unsplash.com/@tvick" },
+        }}
         ctaHeadlineTop="BUILDING A CAMPUS?"
         ctaHeadlineBottom="WE'LL SOURCE THE NETWORK."
         ctaSub="Bring us the address, capacity plan, diversity requirement, and ready-for-service date. We'll turn them into a sourcing plan across the full supplier market."
@@ -385,6 +400,10 @@ export default function DataCenterConnectivityPage() {
 
         {/* Section 6: FAQ */}
         <PitchSection eyebrow="Common Questions" heading="FAQ" background="#F9FAFB">
+          <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.7, color: MUTED, maxWidth: 720, marginBottom: 32 }}>
+            More on brokerage pricing, contract structure, and response times in the{" "}
+            <Link href="/answers" style={{ color: RED, textDecoration: "underline" }}>full Answers knowledge base</Link>.
+          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
             {FAQ_ITEMS.map((faq, i) => (
               <div

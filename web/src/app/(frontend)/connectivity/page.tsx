@@ -84,6 +84,16 @@ const FAQ_ITEMS = [
     answer:
       "Both are connectivity brokerage services, just optimized for different buyers. The Tribal page (/tribal) is focused on Tribal enterprises, sovereignty-aware procurement, and federally funded broadband projects. The data-center connectivity page (/data-center-connectivity) is focused on the network layer into data center facilities — transport, dark fiber, cross-connects, cloud on-ramps, and interconnection for developers and operators.",
   },
+  {
+    question: "Do I contract with Konative or with the carrier that wins the business?",
+    answer:
+      "You contract directly with the winning carrier. Konative runs the sourcing process — collecting quotes, comparing terms, and negotiating on your behalf — but is not a party to the resulting service agreement. This is the standard brokerage structure: Konative represents you in the market, the carrier delivers and is contractually accountable for the service, and Konative stays engaged after signing to manage escalations, billing, and renewals.",
+  },
+  {
+    question: "What happens after I submit a requirement — how fast do you respond?",
+    answer:
+      "Every submission is reviewed and triaged immediately, not queued for a batch response. Inquiries with clear signals — a named organization, a business email, a specific bandwidth or timeline — are prioritized for same-business-day follow-up. Less-defined or exploratory inquiries are still answered, typically within one to a few business days. A principal or advisor reviews every request personally before it's routed, so the reply you get is scoped to your actual situation, not a generic auto-response.",
+  },
 ];
 
 const faqJsonLd = faqSchema(FAQ_ITEMS);
@@ -219,6 +229,11 @@ export default function ConnectivityPage() {
         subhead="Konative is a vendor-neutral connectivity broker — a certified Avant sub-agent that sources, designs, and manages internet, fiber, transport, cloud on-ramps, colocation, and interconnection from 100+ suppliers across the United States and Canada. We work for you, not the carrier, and because suppliers pay our fee, it costs you nothing."
         primaryCta={{ label: "Book a Discovery Call →", href: "/call" }}
         secondaryCta={{ label: "Contact Us →", href: "/contact" }}
+        heroImage={{
+          src: "https://images.unsplash.com/photo-1604869515882-4d10fa4b0492?auto=format&fit=crop&w=2000&q=70",
+          alt: "Illuminated bundle of optical fibers glowing white and blue in a dark network room",
+          credit: { name: "Denny Müller", url: "https://unsplash.com/@redaquamedia" },
+        }}
         ctaHeadlineTop="ONE REQUIREMENT."
         ctaHeadlineBottom="THE WHOLE MARKET."
         ctaSub="Tell us what you need — we'll quote it across the full supplier portfolio and recommend the best fit. No cost to you."
@@ -347,6 +362,12 @@ export default function ConnectivityPage() {
 
         {/* Section 5: FAQ */}
         <PitchSection eyebrow="Common Questions" heading="FAQ" background="#F9FAFB">
+          <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.7, color: MUTED, maxWidth: 720, marginBottom: 32 }}>
+            For Tribal-specific procurement and NTIA funding questions, see the{" "}
+            <Link href="/tribal" style={{ color: RED, textDecoration: "underline" }}>Tribal Connectivity FAQ</Link>{" "}
+            or the full{" "}
+            <Link href="/answers" style={{ color: RED, textDecoration: "underline" }}>Answers knowledge base</Link>.
+          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
             {FAQ_ITEMS.map((faq, i) => (
               <div

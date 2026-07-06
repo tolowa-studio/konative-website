@@ -14,13 +14,36 @@ export interface SubmitOptions<T> {
   payload: unknown;
   emailSubject: string;
   emailHtml?: string;
+  /** Optional receipt email sent to the submitter themselves, alongside the internal notification. */
+  confirmationEmail?: { to: string; subject: string; html: string };
+}
+
+async function sendCloudflareEmail(args: { to: string; from: string; subject: string; html: string; logLabel: string }) {
+  const cfAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const cfEmailToken = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
+  if (!cfAccountId || !cfEmailToken) {
+    console.warn(`[submitForm] CLOUDFLARE_ACCOUNT_ID/CLOUDFLARE_EMAIL_API_TOKEN not set — skipping ${args.logLabel}`);
+    return;
+  }
+  try {
+    const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/email/sending/send`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${cfEmailToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: args.from, to: args.to, subject: args.subject, html: args.html }),
+    });
+    if (!res.ok) {
+      console.error(`[submitForm] Cloudflare Email non-OK response for ${args.logLabel}: ${res.status} ${await res.text()}`);
+    }
+  } catch (err) {
+    console.error(`[submitForm] Cloudflare Email error for ${args.logLabel}:`, err);
+  }
 }
 
 /** Validate → persist to Sanity → notify the owner and CRM automation. */
 export async function submitForm<T extends Record<string, unknown>>(
   options: SubmitOptions<T>,
 ): Promise<SubmitResult> {
-  const { schemaType, zodSchema, payload, emailSubject, emailHtml } = options;
+  const { schemaType, zodSchema, payload, emailSubject, emailHtml, confirmationEmail } = options;
 
   // 1. Validate
   const parsed = zodSchema.safeParse(payload);
@@ -77,8 +100,6 @@ export async function submitForm<T extends Record<string, unknown>>(
   // only. Cloudflare Email is the org-wide default for transactional email
   // (Resend is being retired for this purpose; Mailgun is bulk/campaign-only
   // and not provisioned for Konative).
-  const cfAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-  const cfEmailToken = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
   // .trim() guards against secrets set with a trailing newline (e.g. `echo`
   // instead of `printf` into `wrangler secret put`) — Cloudflare Email
   // rejects the whole address as invalid rather than silently trimming it.
@@ -93,32 +114,23 @@ export async function submitForm<T extends Record<string, unknown>>(
       `</div>`
     : "";
   const finalSubject = triage ? `[${triage.tier.toUpperCase()} · ${triage.lane}] ${emailSubject}` : emailSubject;
+  const baseHtml =
+    emailHtml ||
+    `<h2>${emailSubject}</h2><pre>${JSON.stringify(parsed.data, null, 2)}</pre><p>Sanity doc: ${docId}</p>`;
 
-  if (!cfAccountId || !cfEmailToken) {
-    console.warn(
-      `[submitForm] CLOUDFLARE_ACCOUNT_ID/CLOUDFLARE_EMAIL_API_TOKEN not set — skipping email for ${schemaType} (doc ${docId})`,
-    );
-  } else {
-    const baseHtml =
-      emailHtml ||
-      `<h2>${emailSubject}</h2><pre>${JSON.stringify(parsed.data, null, 2)}</pre><p>Sanity doc: ${docId}</p>`;
-    // `after()` extends the Worker's execution past the response (maps to
-    // Cloudflare's ctx.waitUntil() via OpenNext) — a plain un-awaited fetch()
-    // can be silently killed the instant the response is sent on Workers.
-    after(async () => {
-      try {
-        const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/email/sending/send`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${cfEmailToken}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ from, to, subject: finalSubject, html: `${triageHtml}${baseHtml}` }),
-        });
-        if (!res.ok) {
-          console.error(`[submitForm] Cloudflare Email non-OK response for ${schemaType} (doc ${docId}): ${res.status} ${await res.text()}`);
-        }
-      } catch (err) {
-        console.error(`[submitForm] Cloudflare Email error for ${schemaType}:`, err);
-      }
-    });
+  // `after()` extends the Worker's execution past the response (maps to
+  // Cloudflare's ctx.waitUntil() via OpenNext) — a plain un-awaited fetch()
+  // can be silently killed the instant the response is sent on Workers.
+  after(() => sendCloudflareEmail({
+    to, from, subject: finalSubject, html: `${triageHtml}${baseHtml}`,
+    logLabel: `internal notification for ${schemaType} (doc ${docId})`,
+  }));
+
+  if (confirmationEmail) {
+    after(() => sendCloudflareEmail({
+      to: confirmationEmail.to, from, subject: confirmationEmail.subject, html: confirmationEmail.html,
+      logLabel: `confirmation email for ${schemaType} (doc ${docId})`,
+    }));
   }
 
   // 5. Forward to Twenty/n8n when configured. Keep the public form successful

@@ -7,7 +7,7 @@ export const contactInquiry = defineType({
   fields: [
     defineField({ name: "name", type: "string", validation: r => r.required() }),
     defineField({ name: "email", type: "string", validation: r => r.required().email() }),
-    defineField({ name: "organization", type: "string", validation: r => r.required() }),
+    defineField({ name: "organization", type: "string" }),
     defineField({ name: "role", type: "string" }),
     defineField({ name: "phone", type: "string" }),
     defineField({ name: "serviceAddresses", type: "text" }),
@@ -34,6 +34,21 @@ export const contactInquiry = defineType({
           { title: "Operators", value: "operators" },
         ],
       },
+    }),
+    defineField({ name: "context", type: "string", title: "Submission context", description: "e.g. 'Voice intake' for homepage voice widget submissions; empty for the generic /contact form." }),
+    defineField({ name: "voiceMarkdown", type: "text", title: "Voice intake summary (Markdown)" }),
+    defineField({
+      name: "voiceAnswers",
+      title: "Voice intake answers",
+      type: "array",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "id", type: "string" }),
+          defineField({ name: "label", type: "string" }),
+          defineField({ name: "value", type: "text" }),
+        ],
+      }],
     }),
     defineField({ name: "status", type: "string", options: { list: ["new", "contacted", "qualified", "dead"] }, initialValue: "new" }),
     defineField({ name: "utmSource", type: "string" }),

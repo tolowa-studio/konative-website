@@ -74,6 +74,11 @@ const FAQ_ITEMS = [
     answer:
       "Book a 15-minute discovery call at konative.com/call or fill out the contact form at konative.com/contact. Konative will ask about your locations, current services, bandwidth and resilience requirements, and any funding context (TBCP awards, other federal programs). From there we run the supplier market and return a structured comparison — usually within a few business days for straightforward requirements.",
   },
+  {
+    question: "Are you applying for NTIA TBCP Round 3 funding — should you engage before or after award?",
+    answer:
+      "Before, if possible. TBCP Round 3 and the Native Entities Grant Program fund the physical infrastructure — fiber, middle-mile, last-mile — but not the operational connectivity layer that runs on top of it once that infrastructure is built. Engaging pre-award lets Konative help specify carrier-grade operational connectivity into the proposal itself and line up carrier terms in advance, so the connectivity is ready to execute the moment funding lands rather than starting from zero post-award. Full Round 3 eligibility, deadlines, and program details are on the NTIA Round 3 page.",
+  },
 ];
 
 const faqJsonLd = faqSchema(FAQ_ITEMS);
@@ -199,6 +204,11 @@ export default function TribalPage() {
         subhead="Konative is a sovereignty-aware, vendor-neutral connectivity broker serving tribal nations, tribal enterprises, and rural broadband authorities across the US and Canada. We source internet, fiber, transport, voice, cloud, and security from 100+ suppliers at no cost — and help you navigate NTIA Tribal Broadband Connectivity Program funding."
         primaryCta={{ label: "Book a Discovery Call →", href: "/call" }}
         secondaryCta={{ label: "Contact Us →", href: "/contact" }}
+        heroImage={{
+          src: "https://images.unsplash.com/photo-1771179909412-813719cfca69?auto=format&fit=crop&w=2000&q=70",
+          alt: "High-voltage transmission towers and power lines crossing a misty open rural landscape",
+          credit: { name: "Felipe", url: "https://unsplash.com/@fecxst" },
+        }}
         ctaHeadlineTop="ONE REQUIREMENT."
         ctaHeadlineBottom="THE WHOLE MARKET."
         ctaSub="Tell us what your nation or enterprise needs — we'll quote it across the full supplier portfolio, sovereignty-aware, at no cost to you."
@@ -208,7 +218,10 @@ export default function TribalPage() {
           <p style={{ fontFamily: BODY, fontSize: 16, lineHeight: 1.75, color: MUTED, maxWidth: 720, marginBottom: 36 }}>
             Tribal enterprises — gaming, government, healthcare, education, and public safety — need the same
             carrier-grade connectivity as any enterprise, plus an advisor who understands sovereignty, federal
-            funding programs, and right-of-way on Tribal lands. Konative brokers the full stack.
+            funding programs, and right-of-way on Tribal lands. Konative brokers the full stack. If your nation
+            is applying for <Link href="/ntia" style={{ color: RED, textDecoration: "underline" }}>NTIA TBCP Round 3 funding</Link>,
+            engaging on the operational connectivity layer before award — not after — is what makes funded
+            infrastructure usable on day one.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
             {[
@@ -385,6 +398,10 @@ export default function TribalPage() {
 
         {/* Section 5: FAQ */}
         <PitchSection eyebrow="Common Questions" heading="FAQ" background="#F9FAFB">
+          <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.7, color: MUTED, maxWidth: 720, marginBottom: 32 }}>
+            More on how brokerage pricing, contracts, and post-submission response times actually work in the{" "}
+            <Link href="/answers" style={{ color: RED, textDecoration: "underline" }}>full Answers knowledge base</Link>.
+          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
             {FAQ_ITEMS.map((faq, i) => (
               <div

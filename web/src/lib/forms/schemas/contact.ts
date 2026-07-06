@@ -1,9 +1,15 @@
 import { z } from "zod";
 
+const voiceAnswerSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  value: z.string(),
+});
+
 export const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Valid email required"),
-  organization: z.string().min(1, "Organization is required"),
+  organization: z.string().optional(),
   phone: z.string().optional(),
   serviceAddresses: z.string().optional(),
   bandwidth: z.string().optional(),
@@ -15,6 +21,10 @@ export const contactSchema = z.object({
   message: z.string().optional(),
   referralSource: z.string().optional(),
   audience: z.string().optional(),
+  // Voice intake widget (homepage) — see VoiceIntakeWidget.tsx
+  context: z.string().optional(),
+  voiceMarkdown: z.string().optional(),
+  voiceAnswers: z.array(voiceAnswerSchema).optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;

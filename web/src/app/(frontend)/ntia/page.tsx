@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PitchLayout, { PitchSection } from "@/components/marketing/PitchLayout";
 import TbcpIntelligence from "@/components/TbcpIntelligence";
 import { getTbcpSummary } from "@/lib/data/tbcp";
@@ -136,6 +137,11 @@ const faqs: { question: string; answer: string }[] = [
     answer:
       "Yes. Konative is not a carrier. We source across Avant's portfolio of 100+ suppliers and recommend what fits your requirement, not what pays us most. On low-density Tribal lands, that neutrality — including fixed wireless and satellite where fiber doesn't reach — is what makes a workable route possible.",
   },
+  {
+    question: "Does a Round 3 award come with a specific connectivity contract, or does Konative sign anything on our behalf?",
+    answer:
+      "Neither the grant nor Konative puts the Tribe into a connectivity contract automatically. NTIA's award funds the infrastructure build; the operational connectivity contract — internet, SD-WAN, voice, security — is a separate agreement between the Tribe (or Tribal entity) and the winning carrier once that carrier is selected. Konative runs the sourcing and negotiation process and stays engaged through the life of the contract, but the Tribe contracts directly with the carrier. Pre-negotiating those terms during the pre-award window is what lets execution happen quickly once funding is confirmed, rather than starting the carrier search from scratch in Spring 2027.",
+  },
 ];
 
 export default async function NtiaPage() {
@@ -216,7 +222,12 @@ export default async function NtiaPage() {
             <strong style={{ color: "#111111" }}>operational connectivity</strong> that runs on top of it: the
             enterprise internet, SD-WAN, voice, cybersecurity, redundancy, and cloud on-ramps that keep a gaming
             floor, clinic, government office, or school actually running. That recurring operational layer is the
-            gap — and it is exactly what Konative sources, designs, and manages.
+            gap — and it is exactly what Konative sources, designs, and manages. See the full picture of what a
+            Tribal connectivity broker does across gaming, government, healthcare, and education on the{" "}
+            <Link href="/tribal" style={{ color: "#C8001F", textDecoration: "underline" }}>
+              Tribal Enterprise Connectivity
+            </Link>{" "}
+            page.
           </p>
           <div
             style={{

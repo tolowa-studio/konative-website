@@ -2,6 +2,9 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import Image from "next/image";
+import { VoiceIntakeWidget } from "@/components/forms/VoiceIntakeWidget";
+import { CalEmbed } from "@/components/CalEmbed";
 
 const DataCenterMap = dynamic(() => import("@/components/DataCenterMap"), { ssr: false });
 
@@ -23,8 +26,27 @@ export default function HomePage() {
   return (
     <main style={{ color: TEXT, background: "#fff" }}>
       <section style={{ minHeight: "92dvh", position: "relative", overflow: "hidden", background: DARK }}>
-        <div style={{ position: "absolute", inset: 0, opacity: .38 }}><DataCenterMap backgroundMode /></div>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,#08111F 0%,rgba(8,17,31,.96) 46%,rgba(8,17,31,.55) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, opacity: .5 }}>
+          <Image
+            src="https://images.unsplash.com/photo-1506606401543-2e73709cebb4?auto=format&fit=crop&w=2400&q=70"
+            alt="Aerial view of a metropolitan grid glowing at night, conveying continental-scale connectivity"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        </div>
+        <div style={{ position: "absolute", inset: 0, opacity: .32 }}><DataCenterMap backgroundMode /></div>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,#08111F 0%,rgba(8,17,31,.94) 46%,rgba(8,17,31,.62) 100%)" }} />
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(8,17,31,.35) 0%, rgba(8,17,31,0) 30%, rgba(8,17,31,.72) 100%)" }} />
+        <a
+          href="https://unsplash.com/@zacong?utm_source=konative&utm_medium=referral"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          style={{ position: "absolute", right: 16, bottom: 12, zIndex: 2, fontFamily: "Inter, sans-serif", fontSize: 10, letterSpacing: ".04em", color: "rgba(255,255,255,.5)", textDecoration: "none" }}
+        >
+          Photo: Zac Ong / Unsplash
+        </a>
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "150px 32px 72px" }}>
           <p style={eyebrow}>Vendor-neutral connectivity brokerage · AVANT partner</p>
           <h1 style={{ fontFamily: DISPLAY, fontSize: "clamp(58px,9vw,118px)", lineHeight: .86, letterSpacing: "-.025em", textTransform: "uppercase", color: "#fff", maxWidth: 960, margin: "0 0 28px" }}>
@@ -39,6 +61,24 @@ export default function HomePage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", maxWidth: 880, marginTop: 54, border: "1px solid rgba(255,255,255,.15)" }}>
             {["100+ supplier portfolio", "One market comparison", "Supplier-paid advisory", "Lifecycle support"].map(x => <div key={x} style={{ padding: "18px 20px", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: ".11em", textTransform: "uppercase", borderRight: "1px solid rgba(255,255,255,.12)" }}>{x}</div>)}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "88px 32px 0" }}>
+        <p style={{ ...eyebrow, color: RED }}>Describe it — we&apos;ll take it from there</p>
+        <h2 style={sectionTitle}>Talk to us. Literally.</h2>
+        <p style={{ color: MUTED, maxWidth: 640, lineHeight: 1.7, marginTop: 16, marginBottom: 42 }}>
+          Click the mic and describe what you need in your own words. We transcribe it, organize it into
+          a real brief, and get it to our team — no form to fill out. Or just book a time yourself below.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 24, alignItems: "start" }} className="voice-intake-page-grid">
+          <VoiceIntakeWidget />
+          <div>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: RED, marginBottom: 12 }}>
+              Prefer to just pick a time?
+            </p>
+            <CalEmbed height={520} />
           </div>
         </div>
       </section>

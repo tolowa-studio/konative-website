@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 export type Tone = "white" | "rust" | "dim";
@@ -15,8 +16,17 @@ const DARK = "#0A0F1E";
 const DISPLAY = '"Barlow Condensed", sans-serif';
 const BODY = "Inter, sans-serif";
 
-const toneColor = (tone: Tone): string =>
-  tone === "rust" ? RED : tone === "dim" ? "rgba(17,17,17,0.32)" : TEXT;
+const toneColor = (tone: Tone, onImage: boolean): string => {
+  if (tone === "rust") return RED;
+  if (tone === "dim") return onImage ? "rgba(255,255,255,0.5)" : "rgba(17,17,17,0.32)";
+  return onImage ? "#fff" : TEXT;
+};
+
+export interface HeroImage {
+  src: string;
+  alt: string;
+  credit?: { name: string; url: string };
+}
 
 export interface PitchLayoutProps {
   eyebrow: string;
@@ -28,6 +38,7 @@ export interface PitchLayoutProps {
   ctaHeadlineTop: string;
   ctaHeadlineBottom: string;
   ctaSub: string;
+  heroImage?: HeroImage;
 }
 
 /** Shared server-rendered layout for connectivity wedge/landing pages. */
@@ -41,28 +52,62 @@ export default function PitchLayout({
   ctaHeadlineTop,
   ctaHeadlineBottom,
   ctaSub,
+  heroImage,
 }: PitchLayoutProps) {
+  const onImage = Boolean(heroImage);
   return (
     <div style={{ background: "#fff", color: TEXT }}>
       {/* Hero */}
-      <section style={{ position: "relative", background: "#fff", padding: "160px 0 96px", overflow: "hidden", borderBottom: `1px solid ${DIVIDER}` }}>
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
-        />
+      <section style={{ position: "relative", background: onImage ? DARK : "#fff", padding: "160px 0 96px", overflow: "hidden", borderBottom: `1px solid ${onImage ? "rgba(255,255,255,0.08)" : DIVIDER}` }}>
+        {heroImage ? (
+          <>
+            <Image
+              src={heroImage.src}
+              alt={heroImage.alt}
+              fill
+              priority
+              sizes="100vw"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+            {/* Cinematic overlay — dark gradient keeps light text legible */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(90deg, rgba(10,15,30,0.94) 0%, rgba(10,15,30,0.86) 42%, rgba(10,15,30,0.55) 100%)",
+              }}
+            />
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to bottom, rgba(10,15,30,0.4) 0%, rgba(10,15,30,0) 32%, rgba(10,15,30,0.65) 100%)",
+              }}
+            />
+          </>
+        ) : (
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                "linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)",
+              backgroundSize: "56px 56px",
+            }}
+          />
+        )}
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 48px" }}>
           <div style={{
             position: "relative",
             display: "flex", alignItems: "center", gap: 12,
             fontFamily: BODY, fontWeight: 600,
             fontSize: 10, letterSpacing: "0.24em", textTransform: "uppercase",
-            color: RED, marginBottom: 28,
+            color: onImage ? "#FF526B" : RED, marginBottom: 28,
           }}>
             <span style={{ display: "block", width: 36, height: 2, background: RED }} />
             {eyebrow}
@@ -71,17 +116,17 @@ export default function PitchLayout({
             position: "relative",
             fontFamily: DISPLAY, fontWeight: 800,
             fontSize: "clamp(48px, 6.5vw, 92px)", lineHeight: 0.9,
-            textTransform: "uppercase", letterSpacing: "0.01em", color: TEXT,
+            textTransform: "uppercase", letterSpacing: "0.01em", color: onImage ? "#fff" : TEXT,
             marginBottom: 28, maxWidth: 900,
           }}>
             {titleLines.map((line, i) => (
-              <span key={i} style={{ color: toneColor(line.tone), display: "block" }}>{line.text}</span>
+              <span key={i} style={{ color: toneColor(line.tone, onImage), display: "block" }}>{line.text}</span>
             ))}
           </h1>
           <p style={{
             position: "relative",
             fontFamily: BODY, fontSize: 17, lineHeight: 1.7,
-            color: MUTED, maxWidth: 660, marginBottom: 40,
+            color: onImage ? "rgba(255,255,255,0.72)" : MUTED, maxWidth: 660, marginBottom: 40,
           }}>
             {subhead}
           </p>
@@ -98,8 +143,8 @@ export default function PitchLayout({
               <Link href={secondaryCta.href} style={{
                 fontFamily: BODY, fontWeight: 600,
                 fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase",
-                background: "#fff", color: STEEL,
-                padding: "17px 32px", border: `1px solid ${DIVIDER}`, textDecoration: "none",
+                background: onImage ? "rgba(255,255,255,0.08)" : "#fff", color: onImage ? "#fff" : STEEL,
+                padding: "17px 32px", border: `1px solid ${onImage ? "rgba(255,255,255,0.35)" : DIVIDER}`, textDecoration: "none",
                 borderRadius: 2,
               }}>
                 {secondaryCta.label}
@@ -107,6 +152,26 @@ export default function PitchLayout({
             )}
           </div>
         </div>
+        {heroImage?.credit && (
+          <a
+            href={`${heroImage.credit.url}?utm_source=konative&utm_medium=referral`}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            style={{
+              position: "absolute",
+              right: 16,
+              bottom: 12,
+              zIndex: 2,
+              fontFamily: BODY,
+              fontSize: 10,
+              letterSpacing: "0.04em",
+              color: "rgba(255,255,255,0.55)",
+              textDecoration: "none",
+            }}
+          >
+            Photo: {heroImage.credit.name} / Unsplash
+          </a>
+        )}
       </section>
 
       {children}

@@ -190,6 +190,48 @@ const FAQ_ITEMS: FAQItem[] = [
       "Several Canadian federal programs support Indigenous data center and connectivity infrastructure development. Indigenous Services Canada provides capital funding for on-reserve infrastructure through the First Nations Infrastructure Fund, which covers community buildings, connectivity, and energy systems. The CRTC Broadband Fund allocates funding for last-mile and backbone connectivity in underserved areas with Indigenous eligibility preferences. The Canada Infrastructure Bank has a dedicated Indigenous Infrastructure program that provides low-cost financing for projects above twenty-five million dollars, including energy, broadband, and community infrastructure. Natural Resources Canada's Indigenous Off-Diesel Initiative funds renewable energy projects on Indigenous lands that can supply data center power. The Strategic Innovation Fund and Regional Development Agencies provide economic development grants applicable to Indigenous-owned technology facilities. Provincial programs vary significantly by province, with BC, Ontario, and Quebec offering the most robust Indigenous economic development finance vehicles. Konative maps applicable Canadian federal and provincial programs to each First Nation's specific project.",
     category: "Canada / First Nations",
   },
+  {
+    question: "What happens after I submit an inquiry to Konative?",
+    answer:
+      "Every inquiry is reviewed and triaged the moment it comes in — scored on factors like organization, funding context, deal size, and urgency, and routed to either the Tribal desk, the data-center desk, or general advisory. Higher-priority inquiries (a named organization, a specific capacity or timeline, or an active NTIA/TBCP grant window) get faster turnaround than a general information request. A principal or Konative advisor reviews every submission personally — there is no auto-responder standing in for a human. You'll hear back with either a direct answer or a request to schedule a short call, not a form letter.",
+    category: "Working With Konative",
+  },
+  {
+    question: "How fast will Konative respond to my inquiry?",
+    answer:
+      "Response time depends on how the inquiry is triaged, not a flat SLA for everyone. Priority inquiries — a named organization or entity, a business email, a specific capacity/timeline, or an active grant campaign like NTIA TBCP — are routed for a same-business-day response. Inquiries with clear intent but less detail are typically answered within one business day. General or exploratory inquiries are still answered, usually within a few business days. If your situation is time-sensitive — a grant deadline, a capital raise milestone, a contract renewal — say so explicitly in your message; it moves you to a faster lane.",
+    category: "Working With Konative",
+  },
+  {
+    question: "What does the first call with Konative actually cover?",
+    answer:
+      "The first call is a working session, not a sales pitch. For connectivity inquiries, expect questions on site locations, current carriers and contract end dates, bandwidth and resilience requirements, and timeline. For Tribal data center or land inquiries, expect questions on land status (trust vs. fee), power capacity, existing fiber access, and where you are in tribal council or IDC decision-making. For NTIA/TBCP applicants, expect questions on award status, application timeline, and what connectivity is already specified in your proposal. The call ends with a clear next step — either a proposal timeline, a request for additional documentation, or a referral if Konative is not the right fit.",
+    category: "Working With Konative",
+  },
+  {
+    question: "What should I have ready before the first call?",
+    answer:
+      "Come with whatever you already have — Konative will work with partial information and fill gaps together. Useful things to have on hand: current carrier contracts or bills (for connectivity engagements), site address or parcel information (for land/data-center engagements), power capacity figures or interconnection queue status, your grant award letter or application timeline (for TBCP/NTIA-funded projects), and a rough sense of your timeline and any hard deadlines. None of this is required to get started — a first call with no documentation in hand is still a productive use of everyone's time.",
+    category: "Working With Konative",
+  },
+  {
+    question: "Does using a broker change the price I pay?",
+    answer:
+      "No — in the standard connectivity brokerage model, the carrier pays Konative's commission out of its own sales and channel budget, the same budget it would spend on a direct sales rep working the same deal. The list price and negotiated terms you get are the carrier's price, not a marked-up price with a broker fee layered on top. In practice, buyers often do better than going direct, because Konative is comparing your requirement against the whole supplier market rather than one rep's quota-driven quote. There is no scenario in this model where using Konative costs more than approaching a carrier alone.",
+    category: "Working With Konative",
+  },
+  {
+    question: "Who do I call if there's a problem after installation — Konative or the carrier?",
+    answer:
+      "Call Konative first. Even after a service is installed and billing, Konative remains the single point of contact for the life of the account — that includes outages, billing disputes, moves/adds/changes, and renewals. Konative works the escalation with the carrier on your behalf rather than handing you a support ticket number and stepping away. The value of a broker relationship is exactly this: one accountable advisor across every carrier you use, instead of a separate support relationship to manage with each one.",
+    category: "Working With Konative",
+  },
+  {
+    question: "Does Konative sign the contract, or do I contract directly with the carrier?",
+    answer:
+      "In the standard connectivity brokerage model, the buyer contracts directly with the winning carrier — Konative is the intermediary that runs the sourcing process, negotiates terms, and stays involved through the life of the account, but is not itself a party to the service contract. This is the same structure used in insurance and travel brokerage: the broker represents you in the market, but your legal agreement is with the carrier that actually provides the service. If your situation requires a different structure, raise it on the first call — but do not assume Konative holds contractual liability for carrier service delivery unless that has been explicitly confirmed for your engagement.",
+    category: "Working With Konative",
+  },
 ];
 
 const CATEGORIES = [
@@ -199,6 +241,7 @@ const CATEGORIES = [
   "Deal Structure & Sovereignty",
   "Konative Services",
   "Canada / First Nations",
+  "Working With Konative",
 ] as const;
 
 export default function AnswersPage() {
@@ -261,6 +304,7 @@ export default function AnswersPage() {
             }}
           >
             What does a connectivity broker do? How Konative sources fiber, internet, colocation, and interconnection from 100+ suppliers at no cost. Tribal data center development, federal funding, and sovereignty-preserving infrastructure deals.
+            Applying for NTIA TBCP Round 3 funding? See the <Link href="/ntia" style={{ color: ORANGE, textDecoration: "underline" }}>NTIA Round 3 page</Link> for eligibility, deadlines, and how connectivity fits into a funded proposal.
           </p>
 
           {/* Category jump links */}
