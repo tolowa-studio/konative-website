@@ -116,7 +116,10 @@ async function getLiveStats() {
       projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
       dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
       apiVersion: '2024-01-01',
-      useCdn: true,
+      // Small aggregate count query, not heavy content — real-time accuracy
+      // matters more than CDN latency here, and useCdn:true was serving
+      // stale zeroed counts well after real project data existed.
+      useCdn: false,
     })
     const stats = await sanity.fetch(`{
       "operational": count(*[_type == "dataCenterProject" && country == "CA" && status == "operational"]),

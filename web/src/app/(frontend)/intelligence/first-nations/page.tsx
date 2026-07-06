@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: 'First Nations + Tribal Data Centers — Konative',
   description: 'Cross-border intelligence on Indigenous-led data center development across Canada and the United States. Sovereignty-first partnership structures, federal funding programs, and the projects shaping 2026–2030.',

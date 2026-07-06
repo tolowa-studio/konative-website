@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 import { createClient as createSanity } from '@sanity/client'
 
+export const revalidate = 3600;
+
 // ── Market definitions ────────────────────────────────────────────────────────
 
 export const MARKETS: Record<string, {
@@ -208,15 +210,15 @@ const sanity = createSanity({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01',
-  useCdn: true,
+  useCdn: false,
 })
 
-async function getMarketData(abbr: string, name: string) {
+async function getMarketData(abbr: string, name: string, country: string) {
   const [projects, facilities, network, power, news] = await Promise.allSettled([
     // DC projects from Sanity
-    sanity.fetch(`*[_type == "dataCenterProject" && country == "CA" && (provinceCode == $abbr || state == $name || state == $abbr)] | order(capacityMw desc) {
+    sanity.fetch(`*[_type == "dataCenterProject" && country == $country && (provinceCode == $abbr || state == $name || state == $abbr)] | order(capacityMw desc) {
       _id, name, operator, city, state, provinceCode, status, capacityMw, source, blockReason
-    }[0...50]`, { abbr, name }),
+    }[0...50]`, { abbr, name, country }),
 
     // IM3 facilities
     supabase.from('dc_facilities').select('id,name,operator,city,state,status,capacity_mw,facility_type')
@@ -270,7 +272,7 @@ export default async function MarketPage({ params }: { params: Promise<{ state: 
   const market = MARKETS[state]
   if (!market) notFound()
 
-  const data = await getMarketData(market.abbr, market.name)
+  const data = await getMarketData(market.abbr, market.name, market.country)
 
   const totalMw = (data.projects as Project[]).reduce((s, p) => s + (p.capacityMw ?? 0), 0)
     + (data.power as PowerPlant[]).reduce((s, p) => s + (p.capacity_mw ?? 0), 0)

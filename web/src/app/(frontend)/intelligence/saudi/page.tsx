@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: 'Gulf Capital Tracker — Saudi & UAE AI Infrastructure | Konative',
   description: 'Konative\'s tracker on Gulf sovereign capital flowing into AI data center infrastructure: HUMAIN, MGX, G42, DataVolt, QIA. Site selection, capital flows, and partnership pipelines.',
