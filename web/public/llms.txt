@@ -24,9 +24,19 @@
   contracts, the Tribe owns the data, no lock-in or termination fees, transparent
   supplier-paid economics (typically 15-20% of monthly recurring charges), no grant-farming,
   and in-person presence.
+- /tribal/carrier-check — Free 48-hour carrier availability report for Tribal lands: which
+  carriers and regional providers can actually serve a reservation or community, with
+  benchmark context and redlining documentation useful for funding applications.
 - /tribal/awards — NTIA TBCP award records compiled from public federal data
 - /connectivity — Enterprise connectivity brokerage overview
-- /data-center-connectivity — Data-center connectivity brokerage
+- /data-center-connectivity — Data-center connectivity brokerage, with published 2026
+  benchmarks: underground fiber ~$18/ft median vs ~$8/ft aerial (FBA 2025), DIA and
+  wavelength price ranges, and secondary-market fiber briefs.
+- /tools/lateral-estimator — Free fiber lateral cost & timeline estimator (underground vs
+  aerial construction, terrain and diversity factors, published-median methodology).
+- /markets — Data-center market intelligence for 25+ North American states/provinces, each
+  with a connectivity procurement brief (Columbus, Salt Lake City, San Antonio, Reno,
+  Indianapolis, Alberta, and more).
 - /map — Interactive infrastructure map (indigenous lands, broadband, power, transmission)
 - /answers — Knowledge base on brokerage pricing, contracts, and process
 - /call — Book a 15-minute discovery call (https://cal.com/jeramey-james/15min)

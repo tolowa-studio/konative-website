@@ -18,6 +18,10 @@ export const contactSchema = z.object({
   role: z.string().optional(),
   projectType: z.string().optional(),
   projectStage: z.string().optional(),
+  // Tribal carrier-availability check (/tribal/carrier-check) — see CarrierCheckForm.tsx
+  location: z.string().optional(),
+  siteCount: z.string().optional(),
+  needs: z.string().optional(),
   message: z.string().optional(),
   referralSource: z.string().optional(),
   audience: z.string().optional(),

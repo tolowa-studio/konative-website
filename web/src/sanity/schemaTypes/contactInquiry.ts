@@ -16,6 +16,9 @@ export const contactInquiry = defineType({
     defineField({ name: "fundingProgram", type: "string" }),
     defineField({ name: "projectType", type: "string" }),
     defineField({ name: "projectStage", type: "string" }),
+    defineField({ name: "location", type: "string", title: "Location (carrier check)", description: "Reservation/community + state, from /tribal/carrier-check." }),
+    defineField({ name: "siteCount", type: "string", title: "Number of sites (carrier check)" }),
+    defineField({ name: "needs", type: "string", title: "Services needed (carrier check)" }),
     defineField({ name: "message", type: "text" }),
     defineField({ name: "referralSource", type: "string" }),
     defineField({
