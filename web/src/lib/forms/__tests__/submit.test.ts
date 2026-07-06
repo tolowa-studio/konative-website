@@ -12,7 +12,7 @@ vi.mock("@/sanity/writeClient", () => ({
   }),
 }));
 
-// Mock fetch for Resend calls
+// Mock fetch for Cloudflare Email / CRM webhook calls
 const mockFetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
 vi.stubGlobal("fetch", mockFetch);
 
@@ -32,7 +32,8 @@ const testSchema = z.object({
 describe("submitForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.RESEND_API_KEY = "test-key";
+    process.env.CLOUDFLARE_ACCOUNT_ID = "test-account-id";
+    process.env.CLOUDFLARE_EMAIL_API_TOKEN = "test-key";
     process.env.RESEND_FROM = "test@example.com";
     process.env.RESEND_TO = "owner@example.com";
   });
@@ -63,8 +64,8 @@ describe("submitForm", () => {
     }
   });
 
-  it("still returns ok:true if RESEND_API_KEY is missing (no crash)", async () => {
-    delete process.env.RESEND_API_KEY;
+  it("still returns ok:true if CLOUDFLARE_EMAIL_API_TOKEN is missing (no crash)", async () => {
+    delete process.env.CLOUDFLARE_EMAIL_API_TOKEN;
     const result = await submitForm({
       schemaType: "contactInquiry",
       zodSchema: testSchema,

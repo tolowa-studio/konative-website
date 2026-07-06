@@ -73,8 +73,12 @@ export async function submitForm<T extends Record<string, unknown>>(
     console.error(`[submitForm] Triage scoring/patch failed for ${schemaType} (doc ${docId}):`, err);
   }
 
-  // 4. Notify via Resend — non-blocking, loud-fail in logs only
-  const apiKey = process.env.RESEND_API_KEY;
+  // 4. Notify via Cloudflare Email Service — non-blocking, loud-fail in logs
+  // only. Cloudflare Email is the org-wide default for transactional email
+  // (Resend is being retired for this purpose; Mailgun is bulk/campaign-only
+  // and not provisioned for Konative).
+  const cfAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const cfEmailToken = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
   const to = process.env.RESEND_TO || "jeramey.james@gmail.com";
   const from = process.env.RESEND_FROM || "Konative <team@konative.com>";
 
@@ -87,9 +91,9 @@ export async function submitForm<T extends Record<string, unknown>>(
     : "";
   const finalSubject = triage ? `[${triage.tier.toUpperCase()} · ${triage.lane}] ${emailSubject}` : emailSubject;
 
-  if (!apiKey) {
+  if (!cfAccountId || !cfEmailToken) {
     console.warn(
-      `[submitForm] RESEND_API_KEY not set — skipping email for ${schemaType} (doc ${docId})`,
+      `[submitForm] CLOUDFLARE_ACCOUNT_ID/CLOUDFLARE_EMAIL_API_TOKEN not set — skipping email for ${schemaType} (doc ${docId})`,
     );
   } else {
     const baseHtml =
@@ -99,11 +103,11 @@ export async function submitForm<T extends Record<string, unknown>>(
     // Cloudflare's ctx.waitUntil() via OpenNext) — a plain un-awaited fetch()
     // can be silently killed the instant the response is sent on Workers.
     after(() =>
-      fetch("https://api.resend.com/emails", {
+      fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/email/sending/send`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        headers: { Authorization: `Bearer ${cfEmailToken}`, "Content-Type": "application/json" },
         body: JSON.stringify({ from, to, subject: finalSubject, html: `${triageHtml}${baseHtml}` }),
-      }).catch(err => console.error(`[submitForm] Resend error for ${schemaType}:`, err)),
+      }).catch(err => console.error(`[submitForm] Cloudflare Email error for ${schemaType}:`, err)),
     );
   }
 
