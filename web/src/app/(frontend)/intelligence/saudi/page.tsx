@@ -106,7 +106,7 @@ export default function SaudiTrackerPage() {
             Saudi PIF (HUMAIN), Abu Dhabi sovereign capital (MGX, Mubadala, G42), and Saudi state holdings (Vision Invest / DataVolt) have collectively committed $70–80B to data center infrastructure with material US exposure. The MGX/AIP/GIP acquisition of Aligned Data Centers alone is the largest DC transaction in history at $40B. This is Konative&apos;s tracker on what they&apos;re building, where, and with whom.
           </p>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: '#C8001F', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+            <a href="https://cal.com/jeramey-james/15min" target="_blank" rel="noopener noreferrer" style={{ background: '#C8001F', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
               Discuss a Site for a Gulf-Funded Build →
             </a>
             <Link href="/methodology" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
@@ -226,7 +226,7 @@ export default function SaudiTrackerPage() {
             <Link href="/news" style={{ background: '#C8001F', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem' }}>
               Subscribe →
             </Link>
-            <a href="https://meetings-na2.hubspot.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.9375rem', border: '1px solid #334155' }}>
+            <a href="https://cal.com/jeramey-james/15min" target="_blank" rel="noopener noreferrer" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.875rem 1.75rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.9375rem', border: '1px solid #334155' }}>
               Book a Call
             </a>
           </div>

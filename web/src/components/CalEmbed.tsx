@@ -4,7 +4,7 @@
 export function CalEmbed({ height = 480 }: { height?: number }) {
   return (
     <div style={{ border: "1px solid #E5E7EB", overflow: "hidden", minHeight: height }}>
-      <div data-cal-link="konative/discovery" data-cal-config='{"layout":"month_view"}' style={{ width: "100%", height: "100%", minHeight: height }} />
+      <div data-cal-link="jeramey-james/15min" data-cal-config='{"layout":"month_view"}' style={{ width: "100%", height: "100%", minHeight: height }} />
       <script
         dangerouslySetInnerHTML={{
           __html: `
@@ -33,7 +33,7 @@ export function CalEmbed({ height = 480 }: { height?: number }) {
             Cal("init", { origin: "https://cal.com" });
             Cal("inline", {
               elementOrSelector: "[data-cal-link]",
-              calLink: "konative/discovery",
+              calLink: "jeramey-james/15min",
               layout: "month_view",
             });
             Cal("ui", { styles: { branding: { brandColor: "#C8001F" } }, hideEventTypeDetails: false });

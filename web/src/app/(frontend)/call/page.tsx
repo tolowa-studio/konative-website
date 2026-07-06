@@ -23,9 +23,9 @@ const TEXT_FAINT = "rgba(255,255,255,0.35)";
 const DISPLAY_FONT = '"Barlow Condensed", sans-serif';
 const BODY_FONT = "Inter, sans-serif";
 
-// Replace this URL with your actual Cal.com booking link once configured.
-// Format: https://cal.com/YOUR_USERNAME/discovery
-const CAL_EMBED_URL = "https://cal.com/konative/discovery";
+// Canonical Cal.com booking link for Jeramey James (Tolowa Studio / Konative).
+// The prior `konative/discovery` slug never existed as a real Cal.com event.
+const CAL_EMBED_URL = "https://cal.com/jeramey-james/15min";
 
 const WHAT_HAPPENS = [
   {
@@ -153,7 +153,7 @@ export default function CallPage() {
               {/* Cal.com inline embed — replace data-cal-link with your booking slug */}
               {/* To activate: add the Cal.com embed script to layout.tsx or use @calcom/embed-react */}
               <div
-                data-cal-link="konative/discovery"
+                data-cal-link="jeramey-james/15min"
                 data-cal-config='{"layout":"month_view"}'
                 style={{ width: "100%", height: "100%", minHeight: 600 }}
               />
@@ -185,7 +185,7 @@ export default function CallPage() {
                     Cal("init", { origin: "https://cal.com" });
                     Cal("inline", {
                       elementOrSelector: "[data-cal-link]",
-                      calLink: "konative/discovery",
+                      calLink: "jeramey-james/15min",
                       layout: "month_view",
                     });
                     Cal("ui", { styles: { branding: { brandColor: "#E07B39" } }, hideEventTypeDetails: false });

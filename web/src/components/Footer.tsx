@@ -52,7 +52,7 @@ export default function Footer() {
               ["Team", "/#team"],
               ["Contact", "/contact"],
               ["Data Sources", "/licenses"],
-              ["Book a call", "https://cal.com/konative/discovery"],
+              ["Book a call", "https://cal.com/jeramey-james/15min"],
             ]}
           />
         </div>

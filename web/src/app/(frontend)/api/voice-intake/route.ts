@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     <h2>Thanks, ${escapeHtml(contact.name || "there")} — we've got your request.</h2>
     <p>${escapeHtml(summary.paragraph)}</p>
     <p>A Konative advisor will review this and follow up shortly. If you'd rather pick a time
-    yourself, you can book a call directly: <a href="https://cal.com/konative/discovery">cal.com/konative/discovery</a>.</p>
+    yourself, you can book a call directly: <a href="https://cal.com/jeramey-james/15min">cal.com/jeramey-james</a>.</p>
     <p style="color:#6b7280;font-size:13px">What we captured:</p>
     <ul style="color:#6b7280;font-size:13px">${summary.requirements.map(r => `<li>${escapeHtml(r)}</li>`).join("")}</ul>
   `;
