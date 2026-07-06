@@ -50,27 +50,18 @@ deployment timestamp in Cloudflare's API lines up 1-for-1 with a GitHub Actions 
 Corrected in `CLAUDE.md` so a future session doesn't delete the only working deploy path on the
 mistaken belief it's redundant.
 
-## ⛔ Genuinely blocked — confirmed dashboard/interactive-only, not a probing miss
+## ✅ `/studio` (Sanity Studio) 500 — FIXED 2026-07-06
 
-### 1. `/studio` (Sanity Studio) 500 error in production
-Confirmed pre-existing (only one commit has ever touched `src/app/studio/*`), works fine locally,
-fails only on Cloudflare Workers — a known `next-sanity` + Next.js 16 + `@opennextjs/cloudflare`
-compatibility gap (see
-[cloudflare/workers-sdk#13755](https://github.com/cloudflare/workers-sdk/issues/13755)). Tried
-`force-static` — made it worse (baked the crash into a permanently-cached static response),
-reverted immediately.
-
-Tried the clean workaround (a decoupled Sanity-hosted Studio via `npx sanity deploy`, which would
-bypass the Workers/OpenNext problem entirely) — blocked: the Sanity CLI needs its own interactive
-browser login (`npx sanity login`), and the existing content-API `SANITY_API_TOKEN` is not accepted
-for CLI/deploy auth. Re-confirmed via the Notion AI Router's Canonical Tool Stack table: there is no
-tracked Sanity CI-deploy token anywhere in the org — this really is a one-time interactive step,
-not a secret I failed to find.
-
-**Next step (needs you):** either (a) run `npx sanity login` once from `web/` on a machine with
-browser access, then `npx sanity deploy` to stand up the decoupled Studio (fastest real fix), or
-(b) run `wrangler login` / open the Cloudflare dashboard's real-time Worker logs and hit `/studio`
-to get the actual stack trace for a proper in-place fix.
+Root-caused via `wrangler tail` (hit `/studio` while tailing): the real error was
+`ReferenceError: FinalizationRegistry is not defined`. Sanity Studio uses `FinalizationRegistry`,
+which the Cloudflare Workers runtime does not expose by default — so it works locally (Node has it)
+and 500s only in production. **Not** the `next-sanity` + OpenNext compatibility gap it was
+originally assumed to be. Cloudflare added `FinalizationRegistry`/`WeakRef` behind the
+`enable_weak_ref` compatibility flag (2025-05-08). Fix was a one-line addition to
+`web/wrangler.jsonc` (`"compatibility_flags": ["nodejs_compat", "enable_weak_ref"]`) — no code
+change. Verified live: `/studio` returns HTTP 200 and renders the real Sanity login screen. The
+earlier `force-static` attempt (which made it worse) has stayed reverted; the decoupled-Studio /
+`sanity login` workaround was never needed.
 
 ### 2. Mailgun bulk outreach
 Confirmed genuinely absent — no row in the Notion AI Router's Canonical Tool Stack, no GCP secret,
