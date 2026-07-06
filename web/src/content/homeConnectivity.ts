@@ -86,7 +86,7 @@ export const HOME_CONNECTIVITY_DEFAULT: HomeConnectivityContent = {
     { text: "RUNS ON.", tone: "white" },
   ],
   heroSubhead:
-    "Konative is a vendor-neutral internet & network connectivity brokerage. We source, design, and manage the fiber, transport, internet, and cloud connectivity that Tribal enterprises and the data centers powering AI depend on — backed by Avant's portfolio of 100+ suppliers, at no cost to you.",
+    "Konative is a vendor-neutral internet & network connectivity brokerage. We make 100+ carriers compete for the fiber, transport, internet, and cloud connectivity that Tribal Nations and the data centers powering AI depend on — one point of contact for the life of the account, at no cost to you. The suppliers pay us; you get the whole market.",
   heroPrimaryCta: { label: "Book a Discovery Call →", href: "/call" },
   heroSecondaryCtas: [
     { label: "What We Broker →", href: "/connectivity" },
@@ -95,7 +95,7 @@ export const HOME_CONNECTIVITY_DEFAULT: HomeConnectivityContent = {
   heroStats: [
     { value: "100+", label: "Supplier Portfolio · via Avant", rust: true },
     { value: "$0", label: "Cost to You — Suppliers Pay Us" },
-    { value: "2", label: "Verticals: Tribal + Data Center" },
+    { value: "$790M", label: "Tribal Broadband Funding Open — Applications Due Sept 17" },
     { value: "1 POINT", label: "Of Contact, for the Life of the Account", highlight: true },
   ],
 
@@ -125,7 +125,7 @@ export const HOME_CONNECTIVITY_DEFAULT: HomeConnectivityContent = {
       eyebrow: "For Tribal Enterprises",
       title: "Tribal\nconnectivity.",
       desc:
-        "Casinos, government, healthcare, and education on Tribal lands need carrier-grade connectivity, redundancy, and security — but rarely have a neutral advisor who understands sovereignty and federal funding. We're that advisor: vendor-neutral, sovereignty-aware, and built for this market.",
+        "Casinos, government, healthcare, and education on Tribal lands need carrier-grade connectivity — and a neutral advisor who puts sovereignty in writing. Start with our free tools: the $790M funding navigator (TBCP Round 3 + NEGP, due Sept 17) and a 48-hour carrier availability report for your land.",
       cta: "Explore Tribal →",
       href: "/tribal",
       primary: true,
@@ -135,7 +135,7 @@ export const HOME_CONNECTIVITY_DEFAULT: HomeConnectivityContent = {
       eyebrow: "For Data Centers & Developers",
       title: "Data center\nconnectivity.",
       desc:
-        "Developers build the campus and strategy — but someone has to source the network. We broker transport, dark fiber, wavelengths, cross-connects, and cloud on-ramps into the facility, using our proprietary data-center map to get ahead of demand.",
+        "Developers build the campus — someone has to source the network. We broker dark fiber, wavelengths, transport, cross-connects, and cloud on-ramps into the facility, and we publish the numbers nobody else will: lateral construction benchmarks, market fiber briefs, and a free lateral cost estimator.",
       cta: "Data Center Connectivity →",
       href: "/data-center-connectivity",
       primary: false,

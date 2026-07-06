@@ -672,9 +672,14 @@ export default function DataCenterConnectivityPage() {
               power. Validate power and fiber before you lock construction milestones — we run that diligence
               with stamped-letter rigor through our supplier bench and proprietary market map.
             </p>
-            <Link href="/map" style={bridgeCtaStyle}>
-              Check your site on the map →
-            </Link>
+            <div style={{ display: "flex", gap: 24, flexWrap: "wrap", alignItems: "center" }}>
+              <Link href="/map" style={bridgeCtaStyle}>
+                Check your site on the map →
+              </Link>
+              <Link href="/tools/lateral-estimator" style={bridgeCtaStyle}>
+                Estimate your lateral →
+              </Link>
+            </div>
           </div>
         </PitchSection>
 

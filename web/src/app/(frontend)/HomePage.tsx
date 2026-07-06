@@ -59,6 +59,12 @@ export default function HomePage() {
             <Link href="/contact#request" style={primary}>Check a location</Link>
             <Link href="/contact?projectType=tribal_funded#request" style={secondary}>Bring us an RFP or funded project</Link>
           </div>
+          <Link
+            href="/tribal/funding-navigator"
+            style={{ display: "inline-block", marginTop: 22, color: "#fff", fontSize: 13, fontWeight: 600, letterSpacing: ".04em", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,.4)", paddingBottom: 2 }}
+          >
+            $790M in Tribal broadband funding is open — applications due Sept 17, 2026. Free navigator →
+          </Link>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", maxWidth: 880, marginTop: 54, border: "1px solid rgba(255,255,255,.15)" }}>
             {["100+ supplier portfolio", "One market comparison", "Supplier-paid advisory", "Lifecycle support"].map(x => <div key={x} style={{ padding: "18px 20px", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: ".11em", textTransform: "uppercase", borderRight: "1px solid rgba(255,255,255,.12)" }}>{x}</div>)}
           </div>
@@ -87,8 +93,8 @@ export default function HomePage() {
         <p style={{ ...eyebrow, color: RED }}>Start with your situation</p>
         <h2 style={sectionTitle}>Two urgent markets. One sourcing desk.</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,430px),1fr))", gap: 18, marginTop: 42 }}>
-          <Door href="/tribal" number="01" title="Tribal or grant-funded project" body="Turn program dollars and operating requirements into serviceable locations, competitive options, defensible procurement, and installed connectivity." cta="Plan funded connectivity" />
-          <Door href="/data-center-connectivity" number="02" title="Data-center site" body="Determine whether a site can obtain the internet, transport, dark fiber, wavelengths, cloud access, and physical diversity its operating plan requires." cta="Evaluate site connectivity" />
+          <Door href="/tribal" number="01" title="Tribal or grant-funded project" body="Turn program dollars and operating requirements into serviceable locations, competitive options, defensible procurement, and installed connectivity. Free tools: the $790M funding navigator and a 48-hour carrier availability report." cta="Plan funded connectivity" />
+          <Door href="/data-center-connectivity" number="02" title="Data-center site" body="Determine whether a site can obtain the internet, transport, dark fiber, wavelengths, cloud access, and physical diversity its operating plan requires. We publish the benchmarks nobody else will — plus a free lateral cost estimator." cta="Evaluate site connectivity" />
         </div>
         <p style={{ color: MUTED, marginTop: 22, lineHeight: 1.7 }}>Also sourcing multi-site enterprise, gaming and hospitality, healthcare, public safety, UCaaS/CCaaS, managed networks, cloud, mobility, and cybersecurity.</p>
       </section>

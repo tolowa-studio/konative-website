@@ -56,6 +56,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/tribal`,             lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
     { url: `${BASE}/tribal/funding-navigator`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/tribal/sovereignty`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/tribal/carrier-check`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/tools/lateral-estimator`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/tribal/index`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${BASE}/call`,               lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/contact`,            lastModified: now, changeFrequency: 'monthly', priority: 0.7 },

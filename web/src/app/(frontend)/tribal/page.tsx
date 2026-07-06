@@ -283,6 +283,24 @@ export default function TribalPage() {
               Open the Funding Navigator →
             </Link>
           </div>
+          <div style={{ maxWidth: 1320, margin: "14px auto 0", padding: "0 4px" }}>
+            <Link
+              href="/tribal/carrier-check"
+              style={{
+                fontFamily: BODY,
+                fontWeight: 600,
+                fontSize: 12,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.75)",
+                textDecoration: "none",
+                borderBottom: "1px solid rgba(255,255,255,0.3)",
+                paddingBottom: 2,
+              }}
+            >
+              Also free: a 48-hour carrier availability report for your land →
+            </Link>
+          </div>
         </section>
 
         {/* Section 1: What we broker for Tribal & Rural */}

@@ -80,6 +80,38 @@ Utility Authority), whose 550+ mile fiber backbone and Shiprock data center show
 ownership builds. They do funding, builds, and advocacy; Konative does multi-carrier
 procurement and lifecycle management.
 
+## Tribal Carrier Availability Check (/tribal/carrier-check)
+
+Free concierge report, 48-hour turnaround, no cost and no obligation. A Tribe or tribal
+enterprise submits location (reservation/community + state), number of sites, and needed
+services (dedicated internet, WAN, middle-mile/transport, voice/UCaaS, security). Konative
+returns a written report covering: which national and regional carriers can actually serve
+the land (provider-reported FCC data frequently overstates real availability on tribal
+lands), wholesale transport options, benchmark pricing context, and documentation of any
+coverage claims that don't hold up — useful evidence for funding applications. Suppliers pay
+broker commissions; the report is free regardless of engagement.
+
+## Fiber Lateral Cost & Timeline Estimator (/tools/lateral-estimator)
+
+Free calculator using published industry medians (Fiber Broadband Association 2025
+Deployment Cost Report): underground construction median $18/ft (~$95K/mile), aerial median
+$8/ft. Inputs: lateral distance, construction type (underground/aerial/mixed), terrain
+factor, and single vs dual diverse entries (~1.8x). Outputs a cost range (±35% — terrain,
+permitting, and make-ready dominate variance) and timeline bands: design 1–3 months,
+permitting 3–6 months (longer on federal/tribal land), construction 3–12 months. A real
+quote requires route engineering — the estimator sets expectations, Konative scopes the
+actual route.
+
+## Data-center market briefs (/markets)
+
+25+ state/province market pages, each with live project data and a Connectivity Procurement
+brief. 2026 deal-activity leaders: Columbus (OH), Salt Lake City (UT), San Antonio (TX),
+Indianapolis (IN), Reno (NV); tertiary wave: Central Washington, Iowa, Kansas City; Canada:
+Alberta (Calgary/Wonder Valley) and Montreal (Bell 500 MW AI Fabric). Metro dark fiber
+remains concentrated in Northern Virginia, Silicon Valley, Chicago, and Dallas — the boom
+moved to markets with the thinnest carrier density, which is where vendor-neutral sourcing
+matters most. Fiber cable lead times run 20 weeks to a year (mid-2026).
+
 ## Site map
 
 - / — Home
@@ -87,6 +119,9 @@ procurement and lifecycle management.
 - /data-center-connectivity — Data-center connectivity brokerage
 - /tribal — Tribal & rural enterprise connectivity (pillar)
 - /tribal/funding-navigator — $790M Tribal broadband funding navigator (TBCP R3 + NEGP)
+- /tribal/carrier-check — Free 48-hour tribal carrier availability report
+- /tools/lateral-estimator — Fiber lateral cost & timeline estimator
+- /markets — Data-center market intelligence with connectivity briefs (25+ markets)
 - /tribal/sovereignty — Sovereignty commitment
 - /tribal/awards — NTIA TBCP award records
 - /map — Interactive infrastructure map
