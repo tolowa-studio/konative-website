@@ -79,9 +79,11 @@ export async function submitForm<T extends Record<string, unknown>>(
   // and not provisioned for Konative).
   const cfAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
   const cfEmailToken = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
-  const to = process.env.RESEND_TO || "jeramey.james@gmail.com";
-  const from = process.env.RESEND_FROM || "Konative <team@konative.com>";
-  console.log(`[submitForm] resolved email to="${to}" from="${from}"`);
+  // .trim() guards against secrets set with a trailing newline (e.g. `echo`
+  // instead of `printf` into `wrangler secret put`) — Cloudflare Email
+  // rejects the whole address as invalid rather than silently trimming it.
+  const to = (process.env.RESEND_TO || "jeramey.james@gmail.com").trim();
+  const from = (process.env.RESEND_FROM || "Konative <team@konative.com>").trim();
 
   const triageHtml = triage
     ? `<div style="margin:0 0 12px;padding:10px;background:#f5f5f5;font:13px monospace">` +
@@ -103,17 +105,16 @@ export async function submitForm<T extends Record<string, unknown>>(
     // `after()` extends the Worker's execution past the response (maps to
     // Cloudflare's ctx.waitUntil() via OpenNext) — a plain un-awaited fetch()
     // can be silently killed the instant the response is sent on Workers.
-    console.log(`[submitForm] registering after() email callback for ${schemaType} (doc ${docId})`);
     after(async () => {
-      console.log(`[submitForm] after() email callback firing for ${schemaType} (doc ${docId})`);
       try {
         const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/email/sending/send`, {
           method: "POST",
           headers: { Authorization: `Bearer ${cfEmailToken}`, "Content-Type": "application/json" },
           body: JSON.stringify({ from, to, subject: finalSubject, html: `${triageHtml}${baseHtml}` }),
         });
-        const bodyText = await res.text();
-        console.log(`[submitForm] Cloudflare Email response for ${schemaType} (doc ${docId}): ${res.status} ${bodyText}`);
+        if (!res.ok) {
+          console.error(`[submitForm] Cloudflare Email non-OK response for ${schemaType} (doc ${docId}): ${res.status} ${await res.text()}`);
+        }
       } catch (err) {
         console.error(`[submitForm] Cloudflare Email error for ${schemaType}:`, err);
       }
@@ -130,9 +131,7 @@ export async function submitForm<T extends Record<string, unknown>>(
       `[submitForm] CRM intake webhook not set — ${schemaType} remains in Sanity (doc ${docId})`,
     );
   } else {
-    console.log(`[submitForm] registering after() CRM webhook callback for ${schemaType} (doc ${docId})`);
     after(async () => {
-      console.log(`[submitForm] after() CRM webhook callback firing for ${schemaType} (doc ${docId})`);
       try {
         const res = await fetch(crmWebhookUrl, {
           method: "POST",
@@ -151,8 +150,9 @@ export async function submitForm<T extends Record<string, unknown>>(
             triage,
           }),
         });
-        const bodyText = await res.text();
-        console.log(`[submitForm] CRM webhook response for ${schemaType} (doc ${docId}): ${res.status} ${bodyText}`);
+        if (!res.ok) {
+          console.error(`[submitForm] CRM webhook non-OK response for ${schemaType} (doc ${docId}): ${res.status} ${await res.text()}`);
+        }
       } catch (err) {
         console.error(`[submitForm] CRM webhook error for ${schemaType}:`, err);
       }
