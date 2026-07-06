@@ -81,6 +81,7 @@ export async function submitForm<T extends Record<string, unknown>>(
   const cfEmailToken = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
   const to = process.env.RESEND_TO || "jeramey.james@gmail.com";
   const from = process.env.RESEND_FROM || "Konative <team@konative.com>";
+  console.log(`[submitForm] resolved email to="${to}" from="${from}"`);
 
   const triageHtml = triage
     ? `<div style="margin:0 0 12px;padding:10px;background:#f5f5f5;font:13px monospace">` +
