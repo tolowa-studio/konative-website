@@ -102,13 +102,21 @@ export async function submitForm<T extends Record<string, unknown>>(
     // `after()` extends the Worker's execution past the response (maps to
     // Cloudflare's ctx.waitUntil() via OpenNext) — a plain un-awaited fetch()
     // can be silently killed the instant the response is sent on Workers.
-    after(() =>
-      fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/email/sending/send`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${cfEmailToken}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ from, to, subject: finalSubject, html: `${triageHtml}${baseHtml}` }),
-      }).catch(err => console.error(`[submitForm] Cloudflare Email error for ${schemaType}:`, err)),
-    );
+    console.log(`[submitForm] registering after() email callback for ${schemaType} (doc ${docId})`);
+    after(async () => {
+      console.log(`[submitForm] after() email callback firing for ${schemaType} (doc ${docId})`);
+      try {
+        const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/email/sending/send`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${cfEmailToken}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ from, to, subject: finalSubject, html: `${triageHtml}${baseHtml}` }),
+        });
+        const bodyText = await res.text();
+        console.log(`[submitForm] Cloudflare Email response for ${schemaType} (doc ${docId}): ${res.status} ${bodyText}`);
+      } catch (err) {
+        console.error(`[submitForm] Cloudflare Email error for ${schemaType}:`, err);
+      }
+    });
   }
 
   // 5. Forward to Twenty/n8n when configured. Keep the public form successful
@@ -121,25 +129,33 @@ export async function submitForm<T extends Record<string, unknown>>(
       `[submitForm] CRM intake webhook not set — ${schemaType} remains in Sanity (doc ${docId})`,
     );
   } else {
-    after(() =>
-      fetch(crmWebhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(process.env.TWENTY_INTAKE_WEBHOOK_TOKEN
-            ? { Authorization: `Bearer ${process.env.TWENTY_INTAKE_WEBHOOK_TOKEN}` }
-            : {}),
-        },
-        body: JSON.stringify({
-          source: "konative.com",
-          schemaType,
-          sanityDocumentId: docId,
-          submittedAt: new Date().toISOString(),
-          data: parsed.data,
-          triage,
-        }),
-      }).catch(err => console.error(`[submitForm] CRM webhook error for ${schemaType}:`, err)),
-    );
+    console.log(`[submitForm] registering after() CRM webhook callback for ${schemaType} (doc ${docId})`);
+    after(async () => {
+      console.log(`[submitForm] after() CRM webhook callback firing for ${schemaType} (doc ${docId})`);
+      try {
+        const res = await fetch(crmWebhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(process.env.TWENTY_INTAKE_WEBHOOK_TOKEN
+              ? { Authorization: `Bearer ${process.env.TWENTY_INTAKE_WEBHOOK_TOKEN}` }
+              : {}),
+          },
+          body: JSON.stringify({
+            source: "konative.com",
+            schemaType,
+            sanityDocumentId: docId,
+            submittedAt: new Date().toISOString(),
+            data: parsed.data,
+            triage,
+          }),
+        });
+        const bodyText = await res.text();
+        console.log(`[submitForm] CRM webhook response for ${schemaType} (doc ${docId}): ${res.status} ${bodyText}`);
+      } catch (err) {
+        console.error(`[submitForm] CRM webhook error for ${schemaType}:`, err);
+      }
+    });
   }
 
   return { ok: true, id: docId };
