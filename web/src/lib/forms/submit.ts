@@ -1,4 +1,5 @@
 import { ZodSchema } from "zod";
+import { after } from "next/server";
 import { getSanityWriteClient } from "@/sanity/writeClient";
 import { scoreInquiry, type TriageResult } from "@/lib/forms/triage";
 
@@ -94,11 +95,16 @@ export async function submitForm<T extends Record<string, unknown>>(
     const baseHtml =
       emailHtml ||
       `<h2>${emailSubject}</h2><pre>${JSON.stringify(parsed.data, null, 2)}</pre><p>Sanity doc: ${docId}</p>`;
-    fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from, to, subject: finalSubject, html: `${triageHtml}${baseHtml}` }),
-    }).catch(err => console.error(`[submitForm] Resend error for ${schemaType}:`, err));
+    // `after()` extends the Worker's execution past the response (maps to
+    // Cloudflare's ctx.waitUntil() via OpenNext) — a plain un-awaited fetch()
+    // can be silently killed the instant the response is sent on Workers.
+    after(() =>
+      fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ from, to, subject: finalSubject, html: `${triageHtml}${baseHtml}` }),
+      }).catch(err => console.error(`[submitForm] Resend error for ${schemaType}:`, err)),
+    );
   }
 
   // 5. Forward to Twenty/n8n when configured. Keep the public form successful
@@ -111,24 +117,24 @@ export async function submitForm<T extends Record<string, unknown>>(
       `[submitForm] CRM intake webhook not set — ${schemaType} remains in Sanity (doc ${docId})`,
     );
   } else {
-    fetch(crmWebhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(process.env.TWENTY_INTAKE_WEBHOOK_TOKEN
-          ? { Authorization: `Bearer ${process.env.TWENTY_INTAKE_WEBHOOK_TOKEN}` }
-          : {}),
-      },
-      body: JSON.stringify({
-        source: "konative.com",
-        schemaType,
-        sanityDocumentId: docId,
-        submittedAt: new Date().toISOString(),
-        data: parsed.data,
-        triage,
-      }),
-    }).catch(err =>
-      console.error(`[submitForm] CRM webhook error for ${schemaType}:`, err),
+    after(() =>
+      fetch(crmWebhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(process.env.TWENTY_INTAKE_WEBHOOK_TOKEN
+            ? { Authorization: `Bearer ${process.env.TWENTY_INTAKE_WEBHOOK_TOKEN}` }
+            : {}),
+        },
+        body: JSON.stringify({
+          source: "konative.com",
+          schemaType,
+          sanityDocumentId: docId,
+          submittedAt: new Date().toISOString(),
+          data: parsed.data,
+          triage,
+        }),
+      }).catch(err => console.error(`[submitForm] CRM webhook error for ${schemaType}:`, err)),
     );
   }
 

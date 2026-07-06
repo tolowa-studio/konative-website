@@ -16,6 +16,12 @@ vi.mock("@/sanity/writeClient", () => ({
 const mockFetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
 vi.stubGlobal("fetch", mockFetch);
 
+// Mock next/server's after() — outside a real request scope (as in tests),
+// it throws; run the callback immediately instead so behavior stays testable.
+vi.mock("next/server", () => ({
+  after: (cb: () => unknown) => cb(),
+}));
+
 const { submitForm } = await import("@/lib/forms/submit");
 
 const testSchema = z.object({
