@@ -2,6 +2,11 @@
   "name": "konative",
   "main": ".open-next/worker.js",
   "compatibility_date": "2024-12-30",
-  "compatibility_flags": ["nodejs_compat"],
+  // enable_weak_ref exposes FinalizationRegistry/WeakRef in the Workers runtime.
+  // Sanity Studio (rendered at /studio) uses FinalizationRegistry; without this
+  // flag it threw "ReferenceError: FinalizationRegistry is not defined" and 500'd
+  // in production while working locally (Node has it natively). Confirmed root
+  // cause via `wrangler tail` 2026-07-06.
+  "compatibility_flags": ["nodejs_compat", "enable_weak_ref"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" }
 }
