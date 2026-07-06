@@ -46,7 +46,9 @@ export async function summarizeVoiceIntake(answers: VoiceAnswer[]): Promise<Voic
       messages: [{ role: "user", content: userMsg }],
     });
     const text = response.content[0].type === "text" ? response.content[0].text : "";
-    const parsed = JSON.parse(text) as Partial<VoiceIntakeSummary>;
+    // Haiku sometimes wraps JSON in ```json fences despite being told not to — strip them.
+    const jsonText = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
+    const parsed = JSON.parse(jsonText) as Partial<VoiceIntakeSummary>;
     return {
       headline: parsed.headline || fallback.headline,
       paragraph: parsed.paragraph || fallback.paragraph,
