@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
+import {
+  JsonLd,
+  breadcrumbSchema,
+  SITE_URL,
+} from "@/components/seo/JsonLd";
 
 export const revalidate = 3600;
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 const RED = "#C8001F";
 const DISPLAY = "'Barlow Condensed', sans-serif";
@@ -28,6 +28,13 @@ interface Award {
 }
 
 async function getAward(slug: string): Promise<Award | null> {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return null;
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
   const { data } = await supabase
     .from("tbcp_awards")
     .select("*")
@@ -51,6 +58,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export async function generateStaticParams() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return [];
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
   const { data } = await supabase.from("tbcp_awards").select("slug");
   return (data || []).map((r: { slug: string }) => ({ slug: r.slug }));
 }
@@ -75,9 +89,45 @@ export default async function AwardDetailPage({ params }: { params: Promise<{ sl
   const p = award.raw_properties || {};
   const region = p["BIA_REGION"] as string | undefined;
   const pageLink = p["PAGE_LINK"] as string | undefined;
+  const awardUrl = `${SITE_URL}/tribal/awards/${award.slug}`;
+  const breadcrumbJsonLd = breadcrumbSchema([
+    { name: "Home", url: SITE_URL },
+    { name: "Tribal Connectivity", url: `${SITE_URL}/tribal` },
+    { name: "TBCP Awards", url: `${SITE_URL}/tribal/awards` },
+    { name: award.grantee_name, url: awardUrl },
+  ]);
+  const awardJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "MonetaryGrant",
+    name: `${award.grantee_name} NTIA TBCP Award`,
+    description: `${award.grantee_name} received a public NTIA Tribal Broadband Connectivity Program award record tracked by Konative for tribal connectivity planning.`,
+    url: awardUrl,
+    amount: award.award_amount_usd
+      ? {
+          "@type": "MonetaryAmount",
+          currency: "USD",
+          value: award.award_amount_usd,
+        }
+      : undefined,
+    funder: {
+      "@type": "GovernmentOrganization",
+      name: "National Telecommunications and Information Administration",
+      url: "https://www.ntia.gov/",
+    },
+    recipient: {
+      "@type": "Organization",
+      name: award.grantee_name,
+    },
+    isPartOf: {
+      "@type": "Dataset",
+      name: "NTIA Tribal Broadband Connectivity Program Award Database",
+      url: `${SITE_URL}/tribal/awards`,
+    },
+  };
 
   return (
     <main style={{ background: "#fff", minHeight: "100vh", paddingTop: 64 }}>
+      <JsonLd data={[breadcrumbJsonLd, awardJsonLd]} />
       {/* Hero */}
       <section style={{ background: "#0B1929", padding: "72px 24px 56px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>

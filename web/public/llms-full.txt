@@ -123,7 +123,8 @@ matters most. Fiber cable lead times run 20 weeks to a year (mid-2026).
 - /tools/lateral-estimator — Fiber lateral cost & timeline estimator
 - /markets — Data-center market intelligence with connectivity briefs (25+ markets)
 - /tribal/sovereignty — Sovereignty commitment
-- /tribal/awards — NTIA TBCP award records
+- /tribal/index — Tribal Connectivity Index: searchable NTIA TBCP award database
+- /tribal/awards — Interactive NTIA TBCP award explorer compiled from public federal data
 - /map — Interactive infrastructure map
 - /markets — Per-state market pages
 - /intelligence, /answers, /dispatch — Intelligence and knowledge base

@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
       { source: "/invest", destination: "/intelligence", permanent: true },
       { source: "/deals", destination: "/intelligence", permanent: true },
       { source: "/assessment", destination: "/contact", permanent: true },
+      { source: "/tribal/grants", destination: "/tribal/funding-navigator", permanent: true },
+      { source: "/tribal/grant", destination: "/tribal/funding-navigator", permanent: true },
       { source: "/for", destination: "/", permanent: true },
       { source: "/for/tribes", destination: "/tribal", permanent: true },
       { source: "/for/:path*", destination: "/connectivity", permanent: true },

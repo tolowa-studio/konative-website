@@ -27,7 +27,8 @@
 - /tribal/carrier-check — Free 48-hour carrier availability report for Tribal lands: which
   carriers and regional providers can actually serve a reservation or community, with
   benchmark context and redlining documentation useful for funding applications.
-- /tribal/awards — NTIA TBCP award records compiled from public federal data
+- /tribal/index — Tribal Connectivity Index: searchable NTIA TBCP award database
+- /tribal/awards — Interactive NTIA TBCP award explorer compiled from public federal data
 - /connectivity — Enterprise connectivity brokerage overview
 - /data-center-connectivity — Data-center connectivity brokerage, with published 2026
   benchmarks: underground fiber ~$18/ft median vs ~$8/ft aerial (FBA 2025), DIA and
