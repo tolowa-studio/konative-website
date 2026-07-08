@@ -49,6 +49,7 @@ export default function Footer() {
           <FooterGroup
             title="Company"
             links={[
+              ["About — Native-owned", "/about"],
               ["Team", "/#team"],
               ["Contact", "/contact"],
               ["Data Sources", "/licenses"],

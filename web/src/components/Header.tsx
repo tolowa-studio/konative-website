@@ -9,6 +9,7 @@ const navLinks: { label: string; url: string }[] = [
   { label: "Tribal & Rural", url: "/tribal" },
   { label: "Data Center", url: "/data-center-connectivity" },
   { label: "Map & Intelligence", url: "/map" },
+  { label: "About", url: "/about" },
 ];
 
 /**

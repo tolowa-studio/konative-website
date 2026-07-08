@@ -2243,3 +2243,7 @@ body.has-dark-hero .site-main {
 @media (max-width: 960px) {
   .voice-intake-page-grid { grid-template-columns: 1fr !important; }
 }
+@media (max-width: 820px) {
+  .about-founder-grid { grid-template-columns: 1fr !important; }
+  .about-founder-grid > div:first-child { max-width: 320px; }
+}
