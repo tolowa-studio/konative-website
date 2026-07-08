@@ -84,7 +84,7 @@ export default function HomePage() {
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: RED, marginBottom: 12 }}>
               Prefer to just pick a time?
             </p>
-            <CalEmbed height={520} />
+            <CalEmbed />
           </div>
         </div>
       </section>
