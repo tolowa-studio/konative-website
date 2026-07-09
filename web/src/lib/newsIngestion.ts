@@ -16,6 +16,7 @@ type SourceDoc = {
 type ParsedItem = {
   title: string;
   url: string;
+  imageUrl?: string;
   summary?: string;
   publishedAt: string;
   rawFingerprint: string;
@@ -65,6 +66,18 @@ const normalizeDate = (value: unknown) => {
   return parsed.toISOString();
 };
 
+const pickImageUrl = (item: any): string | undefined => {
+  const candidates = [
+    item?.image?.url,
+    item?.enclosure?.type?.startsWith?.("image/") ? item?.enclosure?.url : undefined,
+    item?.["media:content"]?.url,
+    item?.["media:thumbnail"]?.url,
+    item?.thumbnail?.url,
+  ];
+
+  return candidates.find((value) => typeof value === "string" && /^https?:\/\//.test(value));
+};
+
 const fingerprintFor = (sourceId: string, rawFingerprint: string, publishedAt: string) =>
   createHash("sha256").update(`${sourceId}::${rawFingerprint}::${publishedAt}`).digest("hex");
 
@@ -85,6 +98,7 @@ function parseFeed(xmlText: string): ParsedItem[] {
     return {
       title: String(item?.title || "").trim(),
       url: String(linkValue || "").trim(),
+      imageUrl: pickImageUrl(item),
       summary: stripHtml(String(item?.description || item?.["content:encoded"] || "").trim()),
       publishedAt: normalizeDate(item?.pubDate || item?.published || item?.updated),
       rawFingerprint: String(item?.guid || linkValue || item?.title || "").trim(),
@@ -98,6 +112,7 @@ function parseFeed(xmlText: string): ParsedItem[] {
     return {
       title: String(entry?.title || "").trim(),
       url: String(primaryLink || "").trim(),
+      imageUrl: pickImageUrl(entry),
       summary: stripHtml(String(summary || "").trim()),
       publishedAt: normalizeDate(entry?.published || entry?.updated),
       rawFingerprint: String(entry?.id || primaryLink || entry?.title || "").trim(),
@@ -181,6 +196,7 @@ async function ingestSource(sanity: SanityClient, source: SourceDoc): Promise<Pe
           slug: { _type: "slug", current: itemSlug },
           status: "published",
           url: item.url,
+          imageUrl: item.imageUrl,
           summary: item.summary?.slice(0, 350),
           contentType: "news",
           source: { _type: "reference", _ref: source._id },

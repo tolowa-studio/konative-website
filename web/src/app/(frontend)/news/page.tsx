@@ -20,8 +20,20 @@ import { getSanityReadClient } from "../../../sanity/readClient";
 export const dynamic = "force-dynamic";
 
 const THUMBNAIL_PLACEHOLDER =
-  "repeating-linear-gradient(-55deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 18px), " +
-  "linear-gradient(160deg, #111111 0%, #374151 100%)";
+  "linear-gradient(135deg, rgba(200,0,31,0.72), rgba(17,17,17,0.92)), " +
+  "repeating-linear-gradient(-35deg, rgba(255,255,255,0.16) 0px, rgba(255,255,255,0.16) 1px, transparent 1px, transparent 18px)";
+
+type NewsDoc = {
+  id: string;
+  title?: string;
+  url?: string;
+  imageUrl?: string;
+  summary?: string;
+  sourceName?: string;
+  publishedAt?: string;
+  countries?: string[];
+  topics?: string[];
+};
 
 type NewsPageProps = {
   searchParams: Promise<{
@@ -62,8 +74,8 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
 
   let isDataUnavailable = false;
   let news: {
-    docs: any[];
-    featured?: any[];
+    docs: NewsDoc[];
+    featured?: NewsDoc[];
     page?: number;
     totalPages?: number;
   } = {
@@ -89,11 +101,12 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
     const total = await client.fetch<number>(`count(*[${filter}])`, {});
-    const docs = await client.fetch<any[]>(
+    const docs = await client.fetch<NewsDoc[]>(
       `*[${filter}] | order(publishedAt desc)[${start}...${end}]{
         "id": _id,
         title,
         url,
+        imageUrl,
         summary,
         sourceName,
         publishedAt,
@@ -104,11 +117,12 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     );
     const featured =
       topic === "all" && currentPage === 1
-        ? await client.fetch<any[]>(
+        ? await client.fetch<NewsDoc[]>(
             `*[${featuredFilter}] | order(publishedAt desc)[0...6]{
               "id": _id,
               title,
               url,
+              imageUrl,
               summary,
               sourceName,
               publishedAt,
@@ -154,7 +168,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   };
 
   return (
-    <main style={{ background: "#fff", minHeight: "100vh" }}>
+    <main className="news-page" style={{ background: "#fff", minHeight: "100vh" }}>
       {/* Page Header */}
       <section style={{ position: "relative", overflow: "hidden", background: "#fff", padding: "118px 32px 72px", borderBottom: "1px solid #E5E7EB" }}>
         <div
@@ -167,8 +181,8 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
             backgroundSize: "56px 56px",
           }}
         />
-        <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 4, height: 420, background: "#C8001F", transform: "rotate(18deg)", opacity: 0.9 }} />
-        <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto" }}>
+        <div className="news-page__hero-grid" style={{ position: "relative", maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(280px, 420px)", gap: 48, alignItems: "end" }}>
+          <div>
           <p
             style={{
               fontFamily: "'Inter', sans-serif",
@@ -211,6 +225,31 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
             Curated coverage of tribal data centers, energy sovereignty, broadband grants, and connectivity
             infrastructure across the US and Canada — from DOE and NTIA program updates to on-the-ground project news.
           </p>
+          </div>
+          <div
+            aria-hidden="true"
+            style={{
+              borderLeft: "4px solid #C8001F",
+              background: "#111111",
+              color: "#fff",
+              padding: 28,
+              minHeight: 210,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxShadow: "0 22px 60px rgba(17,17,17,0.16)",
+            }}
+          >
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.58)" }}>
+              North America Desk
+            </span>
+            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 42, fontWeight: 800, lineHeight: 0.95, textTransform: "uppercase" }}>
+              Policy, Power, Fiber, Capital
+            </span>
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.72)" }}>
+              Signals for tribal, rural, and indigenous infrastructure markets.
+            </span>
+          </div>
         </div>
       </section>
 
@@ -365,7 +404,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                 marginBottom: 8,
               }}
             >
-              {news.featured!.map((item: any) => (
+              {news.featured!.map((item) => (
                 <a
                   key={item.id}
                   href={item.url}
@@ -373,12 +412,22 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   rel="noreferrer"
                   style={{
                     display: "block",
-                    padding: 20,
+                    overflow: "hidden",
                     border: "1px solid #E5E7EB",
-                    background: "#F9FAFB",
+                    background: "#fff",
                     textDecoration: "none",
                   }}
                 >
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      display: "block",
+                      height: 150,
+                      background: item.imageUrl ? `url('${item.imageUrl}') center/cover no-repeat` : THUMBNAIL_PLACEHOLDER,
+                      borderBottom: "1px solid #E5E7EB",
+                    }}
+                  />
+                  <span style={{ display: "block", padding: 20 }}>
                   <span
                     style={{
                       fontFamily: "'Inter', sans-serif",
@@ -420,6 +469,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                       {item.summary.length > 140 ? "…" : ""}
                     </span>
                   )}
+                  </span>
                 </a>
               ))}
             </div>
@@ -459,24 +509,33 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               </p>
             </div>
           ) : (
-            news.docs.map((item: any) => (
+            <div
+              className="news-page__article-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: 24,
+              }}
+            >
+              {news.docs.map((item, index) => (
               <article
                 key={item.id}
+                className={index === 0 ? "news-page__article-card news-page__article-card--lead" : "news-page__article-card"}
                 style={{
-                  padding: "24px 0",
-                  borderBottom: "1px solid #E5E7EB",
+                  border: "1px solid #E5E7EB",
+                  background: "#fff",
                   display: "flex",
-                  flexDirection: "row" as const,
-                  gap: 32,
-                  alignItems: "flex-start",
+                  flexDirection: "column" as const,
+                  minHeight: index === 0 ? 470 : 390,
+                  gridColumn: index === 0 ? "span 2" : undefined,
+                  boxShadow: index === 0 ? "0 18px 48px rgba(17,17,17,0.08)" : "none",
                 }}
               >
                 {/* Thumbnail */}
                 <div
                   style={{
-                    width: 120,
-                    height: 80,
-                    flexShrink: 0,
+                    width: "100%",
+                    minHeight: index === 0 ? 260 : 170,
                     background: item.imageUrl
                       ? `url('${item.imageUrl}') center/cover no-repeat`
                       : THUMBNAIL_PLACEHOLDER,
@@ -484,7 +543,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                 />
 
                 {/* Article content */}
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, padding: index === 0 ? 28 : 22, display: "flex", flexDirection: "column" }}>
                   {/* Meta row */}
                   <div
                     style={{
@@ -539,7 +598,8 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                     style={{
                       fontFamily: "'Barlow Condensed', sans-serif",
                       fontWeight: 700,
-                      fontSize: 20,
+                      fontSize: index === 0 ? 34 : 24,
+                      lineHeight: 1.02,
                       textTransform: "uppercase" as const,
                       color: "#111",
                       letterSpacing: "0.01em",
@@ -559,15 +619,20 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                         lineHeight: 1.6,
                         color: "#555",
                         marginTop: 8,
-                        marginBottom: 0,
+                        marginBottom: 18,
                       }}
                     >
-                      {item.summary}
+                      {index === 0 ? item.summary : item.summary.slice(0, 180)}
+                      {index !== 0 && item.summary.length > 180 ? "…" : ""}
                     </p>
                   )}
+                  <span style={{ marginTop: "auto", fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "#C8001F" }}>
+                    Read source
+                  </span>
                 </div>
               </article>
-            ))
+              ))}
+            </div>
           )}
         </div>
       </section>

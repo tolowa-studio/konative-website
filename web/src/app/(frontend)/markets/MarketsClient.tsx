@@ -17,34 +17,67 @@ const TIER_LABELS = { primary: 'PRIMARY', emerging: 'EMERGING', developing: 'DEV
 export default function MarketsClient({ markets }: { markets: MarketsMap }) {
   const primary = Object.entries(markets).filter(([, m]) => m.tier === 'primary')
   const emerging = Object.entries(markets).filter(([, m]) => m.tier === 'emerging')
+  const developing = Object.entries(markets).filter(([, m]) => m.tier === 'developing')
+  const countryCount = new Set(Object.values(markets).map((m) => m.country)).size
 
   return (
-    <div style={{ background: '#fff', minHeight: '100vh', fontFamily: 'Inter, sans-serif', color: TEXT }}>
+    <div className="markets-page" style={{ background: '#fff', minHeight: '100vh', fontFamily: 'Inter, sans-serif', color: TEXT }}>
       <div style={{ position: 'relative', overflow: 'hidden', paddingTop: 142, paddingBottom: 56, paddingLeft: 48, paddingRight: 48, borderBottom: `1px solid ${DIVIDER}` }}>
         <div aria-hidden="true" style={{
           position: 'absolute', inset: 0,
           backgroundImage: 'linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)',
           backgroundSize: '56px 56px',
         }} />
-        <div aria-hidden="true" style={{ position: 'absolute', top: -80, right: '10%', width: 4, height: 420, background: RED, transform: 'rotate(18deg)', opacity: 0.9 }} />
-        <div style={{ position: 'relative', maxWidth: 1320, margin: '0 auto' }}>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: RED, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ display: 'block', width: 28, height: 2, background: RED }} />
-            Intelligence by Market
-          </p>
-          <h1 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800, fontSize: 'clamp(50px, 7vw, 96px)', lineHeight: 0.9, textTransform: 'uppercase', color: TEXT, margin: '0 0 22px', maxWidth: 860 }}>
-            NORTH AMERICAN<br /><span style={{ color: RED }}>CONNECTIVITY MARKETS</span>
-          </h1>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, lineHeight: 1.65, color: MUTED, maxWidth: 650, margin: '0 0 28px' }}>
-            Power pipeline, network infrastructure, route pressure, and project data for {Object.keys(markets).length} key markets. Built to help buyers and developers understand where connectivity demand is forming.
-          </p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link href="/canada" style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: RED, textDecoration: 'none', padding: '12px 20px', borderRadius: 2 }}>
-              Canada Deep Dive
-            </Link>
-            <Link href="/map" style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: STEEL, background: '#fff', textDecoration: 'none', padding: '11px 20px', border: `1px solid ${DIVIDER}`, borderRadius: 2 }}>
-              Open Map View
-            </Link>
+        <div className="markets-page__hero-grid" style={{ position: 'relative', maxWidth: 1320, margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(300px, 430px)', gap: 48, alignItems: 'end' }}>
+          <div>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: RED, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ display: 'block', width: 28, height: 2, background: RED }} />
+              Intelligence by Market
+            </p>
+            <h1 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800, fontSize: 'clamp(50px, 7vw, 96px)', lineHeight: 0.9, textTransform: 'uppercase', color: TEXT, margin: '0 0 22px', maxWidth: 860 }}>
+              NORTH AMERICAN<br /><span style={{ color: RED }}>CONNECTIVITY MARKETS</span>
+            </h1>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, lineHeight: 1.65, color: MUTED, maxWidth: 650, margin: '0 0 28px' }}>
+              Power pipeline, network infrastructure, route pressure, and project data for {Object.keys(markets).length} key markets. Built to help buyers and developers understand where connectivity demand is forming.
+            </p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <Link href="/canada" style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff', background: RED, textDecoration: 'none', padding: '12px 20px', borderRadius: 2 }}>
+                Canada Deep Dive
+              </Link>
+              <Link href="/map" style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: STEEL, background: '#fff', textDecoration: 'none', padding: '11px 20px', border: `1px solid ${DIVIDER}`, borderRadius: 2 }}>
+                Open Map View
+              </Link>
+            </div>
+          </div>
+          <div style={{ background: '#111', color: '#fff', borderTop: `4px solid ${RED}`, padding: 28, boxShadow: '0 22px 60px rgba(17,17,17,0.16)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 26 }}>
+              {[
+                { label: 'Markets', value: Object.keys(markets).length },
+                { label: 'Countries', value: countryCount },
+                { label: 'Primary', value: primary.length },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div style={{ fontFamily: '"Barlow Condensed", sans-serif', fontSize: 42, fontWeight: 800, lineHeight: 1, color: '#fff' }}>{stat.value}</div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 9, fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.52)' }}>{stat.label}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'grid', gap: 10 }}>
+              {[
+                { label: 'Power pipeline', width: '84%' },
+                { label: 'Fiber density', width: '68%' },
+                { label: 'Site pressure', width: '76%' },
+              ].map((row) => (
+                <div key={row.label}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'Inter, sans-serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.64)', marginBottom: 6 }}>
+                    <span>{row.label}</span>
+                  </div>
+                  <div style={{ height: 6, background: 'rgba(255,255,255,0.12)' }}>
+                    <div style={{ width: row.width, height: '100%', background: RED }} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -53,6 +86,9 @@ export default function MarketsClient({ markets }: { markets: MarketsMap }) {
         <MarketGroup label="Primary Markets" markets={primary} />
         <div style={{ marginTop: 48 }}>
           <MarketGroup label="Emerging Markets" markets={emerging} />
+        </div>
+        <div style={{ marginTop: 48 }}>
+          <MarketGroup label="Developing Markets" markets={developing} />
         </div>
       </div>
     </div>

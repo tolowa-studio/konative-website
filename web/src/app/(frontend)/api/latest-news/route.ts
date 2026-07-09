@@ -23,6 +23,7 @@ export async function GET(request: Request) {
         id: string;
         title?: string;
         url?: string;
+        imageUrl?: string;
         summary?: string;
         sourceName?: string;
         publishedAt?: string;
@@ -33,6 +34,7 @@ export async function GET(request: Request) {
         "id": _id,
         title,
         url,
+        imageUrl,
         summary,
         sourceName,
         publishedAt,

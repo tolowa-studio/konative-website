@@ -230,6 +230,31 @@ body.has-dark-hero .site-main {
   background: var(--color-primary-hover);
 }
 
+/* News and markets editorial surfaces */
+@media (max-width: 860px) {
+  .news-page__hero-grid,
+  .markets-page__hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .news-page__article-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .news-page__article-card--lead {
+    grid-column: auto !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .news-page section,
+  .markets-page > div {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
 /* ─── Newsletter Signup ─── */
 .newsletter-signup--inline {
   margin-bottom: var(--space-6);

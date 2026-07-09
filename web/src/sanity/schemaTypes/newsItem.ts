@@ -26,6 +26,7 @@ export const newsItem = defineType({
       validation: (r) => r.required(),
     }),
     defineField({ name: "url", type: "url", validation: (r) => r.required() }),
+    defineField({ name: "imageUrl", type: "url" }),
     defineField({ name: "summary", type: "text" }),
     defineField({
       name: "contentType",
