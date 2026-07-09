@@ -5,6 +5,7 @@ name: Refresh static PMTiles
 #   NRCAN power/transmission – quarterly 04:00 on the 1st of Jan/Apr/Jul/Oct
 #   CPCAD + CIRNAC/TIGER    – annually 04:00 / 05:00 on 1 Nov (post-summer update)
 #   WRI Aqueduct            – manual only (new versions every 2–3 years)
+#   BCER pipelines          – monthly 06:00 on the 1st (permits change throughout year)
 #
 # Manual trigger: Actions → "Refresh static PMTiles" → Run workflow → pick a layer.
 #
@@ -23,6 +24,7 @@ on:
     - cron: '0 4 1 1,4,7,10 *'   # NRCAN – quarterly
     - cron: '0 4 1 11 *'         # CPCAD – annually Nov
     - cron: '0 5 1 11 *'         # CIRNAC + TIGER – annually Nov
+    - cron: '0 6 1 * *'          # BCER – monthly
   workflow_dispatch:
     inputs:
       layer:
@@ -36,6 +38,7 @@ on:
           - cpcad
           - indigenous
           - wri-aqueduct
+          - bcer
           - all
 
 # Allow workflow jobs to push manifest updates back to main
@@ -597,4 +600,70 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add web/public/tiles/v1/manifest-env.json
           git diff --staged --quiet || git commit -m "chore(tiles): refresh WRI Aqueduct water risk [skip ci]"
+          git push
+
+  # ── 6. BCER pipeline tiles ───────────────────────────────────────────────────
+  bcer:
+    name: BCER pipeline tiles (BC Energy Regulator)
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 6 1 * *') ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.layer == 'bcer' || github.event.inputs.layer == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tippecanoe
+          npm install -g wrangler
+
+      - name: Install npm deps
+        run: cd web && npm ci --no-audit --no-fund
+
+      - name: Fetch BCER data and build PMTiles
+        run: cd web && npx tsx scripts/etl/bc-er/run.ts
+
+      - name: Upload PMTiles to R2
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          for layer in bc_er_pipelines_permitted bc_er_pipeline_installations_permitted; do
+            wrangler r2 object put \
+              "$R2_BUCKET/$TILES_PREFIX/${layer}.pmtiles" \
+              --file "web/public/tiles/v1/${layer}.pmtiles" \
+              --content-type application/octet-stream
+            echo "Uploaded ${layer}.pmtiles"
+          done
+
+      - name: Update manifest tilesUrl to R2
+        run: |
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          node -e "
+            const fs = require('fs');
+            const p = 'web/public/tiles/v1/manifest-bcer.json';
+            const m = JSON.parse(fs.readFileSync(p, 'utf8'));
+            for (const l of m.layers) {
+              l.tilesUrl = \`${R2_PUBLIC_URL}/${TILES_PREFIX}/\${l.id}.pmtiles\`;
+              l.lastUpdated = '${NOW}';
+            }
+            m.generatedAt = '${NOW}';
+            fs.writeFileSync(p, JSON.stringify(m, null, 2) + '\n');
+            console.log('manifest-bcer.json updated');
+          "
+
+      - name: Commit manifest update
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add web/public/tiles/v1/manifest-bcer.json
+          git diff --staged --quiet || git commit -m "chore(tiles): refresh BCER pipeline tiles [skip ci]"
           git push
