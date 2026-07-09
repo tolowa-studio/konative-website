@@ -60,6 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/tribal/carrier-check`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/tools/lateral-estimator`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/tribal/index`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${BASE}/tribal/projects`,    lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
     { url: `${BASE}/tribal/awards`,      lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${BASE}/call`,               lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/contact`,            lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
@@ -67,6 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/governors`,          lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
 
     // Secondary intelligence and dispatch
+    { url: `${BASE}/news`,               lastModified: now, changeFrequency: 'daily',   priority: 0.7 },
     { url: `${BASE}/intelligence`,       lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
     { url: `${BASE}/answers`,            lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/dispatch`,           lastModified: now, changeFrequency: 'daily',   priority: 0.5 },

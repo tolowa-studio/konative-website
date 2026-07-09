@@ -8,5 +8,26 @@
   // in production while working locally (Node has it natively). Confirmed root
   // cause via `wrangler tail` 2026-07-06.
   "compatibility_flags": ["nodejs_compat", "enable_weak_ref"],
-  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" }
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+
+  // Cloudflare-native intelligence data plane (2026-07-09).
+  // Provision: npm run d1:provision (creates DB + applies migrations).
+  // database_id below is filled by d1-provision.mjs after `wrangler d1 create`.
+  "r2_buckets": [
+    { "binding": "TILES", "bucket_name": "konative-tiles" },
+    { "binding": "DATA", "bucket_name": "konative-data" }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "konative-intel",
+      "database_id": "51a1334a-4963-416a-b7de-227b6c903de8"
+    }
+  ],
+  "kv_namespaces": [
+    { "binding": "CACHE", "id": "a9987cc837ae4559b3852ff26cd0aa1b" }
+  ],
+  "analytics_engine_datasets": [
+    { "binding": "METRICS", "dataset": "konative_metrics" }
+  ]
 }

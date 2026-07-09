@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { queryInterconnectionQueueRadius, isD1QueueReady } from "@/lib/db";
 import type { InterconnectionQueueRow, QueueAuthority, QueueRadiusResponse } from "@/types/queue";
 
 export const dynamic = "force-dynamic";
@@ -105,13 +106,37 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const { lat, lng, radius_km: radiusKm } = parsed.data;
+
+  if (await isD1QueueReady()) {
+    const d1Rows = await queryInterconnectionQueueRadius(lat, lng, radiusKm);
+    const rows = (d1Rows ?? []).map((row) =>
+      mapRpcRow({
+        id: row.id,
+        authority: row.authority,
+        project_name: row.project_name,
+        capacity_mw: row.capacity_mw,
+        resource_type: row.resource_type,
+        study_phase: row.study_phase,
+        queue_date: row.queue_date,
+        expected_cod: row.expected_cod,
+        poi_name: row.poi_name,
+        poi_lat: row.poi_lat,
+        poi_lng: row.poi_lng,
+        source_url: row.source_url,
+        last_updated: row.last_updated,
+        distance_km: row.distance_km ?? 0,
+      }),
+    );
+    return NextResponse.json(buildResponse(lat, lng, radiusKm, rows));
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!supabaseUrl || !supabaseAnon) {
-    return NextResponse.json({ error: "Supabase env vars are not configured" }, { status: 500 });
+    return NextResponse.json({ error: "Data store not configured" }, { status: 500 });
   }
 
-  const { lat, lng, radius_km: radiusKm } = parsed.data;
   const supabase = createClient(supabaseUrl, supabaseAnon, {
     auth: { persistSession: false, autoRefreshToken: false },
   });

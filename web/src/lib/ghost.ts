@@ -101,3 +101,34 @@ export const KONATIVE_NEWSLETTER_SLUG =
   process.env.KONATIVE_NEWSLETTER_SLUG || "konative-dispatch";
 export const KONATIVE_TAG_SLUG =
   process.env.KONATIVE_TAG_SLUG || "konative-dispatch";
+
+// --- Tribal Infrastructure Brief (Konative Dispatch extension) ---------------
+// Biweekly/weekly tribal DC + interconnect + grant radar. Not yet publishing;
+// tag + newsletter slugs reserved for Phase 4 draft-tribal-brief.ts pipeline.
+export const TRIBAL_INFRASTRUCTURE_BRIEF_TAG_SLUG =
+  process.env.TRIBAL_INFRASTRUCTURE_BRIEF_TAG_SLUG ||
+  "tribal-infrastructure-brief";
+export const TRIBAL_INFRASTRUCTURE_BRIEF_NEWSLETTER_SLUG =
+  process.env.TRIBAL_INFRASTRUCTURE_BRIEF_NEWSLETTER_SLUG ||
+  "tribal-infrastructure-brief";
+
+/** List published Tribal Infrastructure Brief posts (Content API). Returns [] until first issue ships. */
+export async function fetchTribalInfrastructureBriefPosts(
+  limit = 10,
+): Promise<{ slug: string; title: string; updated_at: string | null }[]> {
+  const tag = TRIBAL_INFRASTRUCTURE_BRIEF_TAG_SLUG;
+  try {
+    const res = await ghostContentFetch(
+      `/ghost/api/content/posts/?limit=${limit}&fields=slug,title,updated_at&filter=${encodeURIComponent(
+        `tag:${tag}`,
+      )}`,
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as {
+      posts?: { slug: string; title: string; updated_at: string | null }[];
+    };
+    return data.posts ?? [];
+  } catch {
+    return [];
+  }
+}

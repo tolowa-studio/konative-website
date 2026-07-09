@@ -13,6 +13,11 @@
 import { NextResponse } from "next/server";
 import { createClient as createSanity } from "@sanity/client";
 import { createClient as createSupabase } from "@supabase/supabase-js";
+import {
+  queryDcFacilitiesMap,
+  queryNetworkFacilitiesMap,
+  queryGenerationPipelineMap,
+} from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -117,6 +122,29 @@ async function fetchStalledProjects() {
 
 async function fetchFacilities() {
   try {
+    const d1Rows = await queryDcFacilitiesMap(2000);
+    if (d1Rows && d1Rows.length > 0) {
+      const features = d1Rows.map((r) => ({
+        type: "Feature" as const,
+        geometry: point(r.lng, r.lat),
+        properties: {
+          layer: "facilities",
+          id: r.id,
+          name: r.name,
+          operator: r.operator,
+          city: r.city,
+          state: r.state,
+          country: r.country,
+          status: r.status,
+          mw: r.capacity_mw || 0,
+          facilityType: r.facility_type,
+          source: r.source,
+          sourceUrl: r.source_url,
+        },
+      }));
+      return { features, total: features.length };
+    }
+
     const { data, error } = await supabase
       .from("dc_facilities_map")
       .select("id,name,operator,city,state,country,status,capacity_mw,facility_type,source,source_url,lng,lat")
@@ -146,6 +174,29 @@ async function fetchFacilities() {
 
 async function fetchNetwork() {
   try {
+    const d1Rows = await queryNetworkFacilitiesMap();
+    if (d1Rows && d1Rows.length > 0) {
+      const features = d1Rows.map((r) => ({
+        type: "Feature" as const,
+        geometry: point(r.lng, r.lat),
+        properties: {
+          layer: "network",
+          id: r.pdb_id,
+          name: r.name,
+          org_name: r.org_name,
+          city: r.city,
+          state: r.state,
+          country: r.country,
+          net_count: r.net_count,
+          ix_count: r.ix_count,
+          carrier_count: r.carrier_count,
+          status: r.status,
+          source: "peeringdb",
+        },
+      }));
+      return { features, total: features.length };
+    }
+
     // Paginate to bypass PostgREST 1000-row default cap
     const PAGE = 1000;
     let all: unknown[] = [];
@@ -183,11 +234,35 @@ async function fetchNetwork() {
 
 async function fetchPower() {
   try {
+    const minYear = new Date().getFullYear();
+    const d1Rows = await queryGenerationPipelineMap(minYear, 500);
+    if (d1Rows && d1Rows.length > 0) {
+      const features = d1Rows.map((r) => ({
+        type: "Feature" as const,
+        geometry: point(r.lng, r.lat),
+        properties: {
+          layer: "power",
+          id: r.plant_id,
+          name: r.plant_name,
+          utilityName: r.utility_name,
+          state: r.state,
+          county: r.county,
+          technology: r.technology,
+          mw: r.capacity_mw,
+          plannedYear: r.planned_year,
+          statusCode: r.status_code,
+          ba: r.balancing_authority,
+          source: "eia_860m",
+        },
+      }));
+      return { features, total: features.length };
+    }
+
     const { data, error } = await supabase
       .from("generation_pipeline_map")
       .select("plant_id,plant_name,utility_name,state,county,technology,capacity_mw,planned_year,status_code,balancing_authority,lng,lat")
       .not("capacity_mw", "is", null)
-      .gte("planned_year", new Date().getFullYear())
+      .gte("planned_year", minYear)
       .order("capacity_mw", { ascending: false })
       .limit(500);
     if (error || !data) return { features: [], total: 0 };

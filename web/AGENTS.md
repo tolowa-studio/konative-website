@@ -11,15 +11,15 @@ The immediate objective is to keep the public site consistent with the current K
 3. **No chaos architecture.** Do not add pages, blocks, patterns, or schema complexity without a clear reason.
 4. **Konative is the product surface.** It should feel premium, specific, data-rich, and credible to infrastructure buyers.
 5. **Notion is the system of record.** When creating or updating work, sync relevant outcomes to the AI OS workspace via Desktop Commander / Notion access.
-6. **Prefer small safe iterations.** Show plans, then implement in batches.
-7. **Use real content structure, not placeholders.** Temporary filler is acceptable only when clearly marked and easy to replace.
+6. **Cloudflare-native data.** Tabular intelligence → D1. Geo/objects → R2. Do not add Supabase or Railway Postgres for site data. See `web/docs/database-setup.md` and `.context/konative-api-platform-architecture.md`.
+7. **Prefer small safe iterations.** Show plans, then implement in batches.
 
 ## Current project context
 - Domain: `konative.com`
 - Business: AI-native connectivity intelligence and carrier-neutral brokerage
 - Primary goal: generate qualified connectivity, datacenter, market-intelligence, and partnership inquiries
 - Design direction: bright corporate brokerage aesthetic using white, black/steel, and velocity red `#C8001F`
-- Stack: Next.js 16, Sanity, Builder.io surfaces, Supabase-backed intelligence/data products
+- Stack: Next.js 16 on **Cloudflare Workers** (OpenNext), Sanity CMS, **Cloudflare D1 + R2** for intelligence data, Ghost on Railway for newsletter
 
 ## Current primary page scope
 - Home

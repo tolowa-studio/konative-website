@@ -33,6 +33,12 @@
     "verify:canada-dataset:sanity": "tsx --env-file=.env.local scripts/verify-canada-dataset.ts --sanity",
     "seed:audience:tribes": "tsx --env-file=.env.local scripts/seed-audience-tribes.ts",
     "seed:audience:advisors": "tsx --env-file=.env.local scripts/seed-audience-advisors.ts",
+    "seed:curated-tribal-news": "tsx --env-file=.env.local scripts/seed-curated-tribal-news.ts",
+    "seed:news-sources": "tsx --env-file=.env.local scripts/seed-news-sources.ts",
+    "d1:provision": "node scripts/d1-provision.mjs",
+    "d1:migrate-from-supabase": "node scripts/migrate-supabase-to-d1.mjs",
+    "stash:remember-architecture": "node scripts/stash-remember-fleet-architecture.mjs",
+    "notion:update-architecture": "node scripts/update-notion-fleet-architecture.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "tiles:sync": "node -e \"const{cpSync}=require('fs');cpSync('../tiles/v1','public/tiles/v1',{recursive:true,force:true});console.log('tiles synced');\""

@@ -1,13 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { querySponsorshipPlacements } from '@/lib/db'
 import { supabase } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams
-  const fromDate = params.get('from_date')
-  const toDate = params.get('to_date')
-  const sponsorName = params.get('sponsor_name')
+  const fromDate = params.get('from_date') ?? undefined
+  const toDate = params.get('to_date') ?? undefined
+  const sponsorName = params.get('sponsor_name') ?? undefined
+
+  const d1Rows = await querySponsorshipPlacements({ fromDate, toDate, sponsorName })
+  if (d1Rows && d1Rows.length > 0) {
+    const placements = d1Rows.map((p) => ({
+      ...p,
+      is_active: Boolean(p.is_active),
+      ctr:
+        (p.impressions ?? 0) > 0
+          ? (((p.clicks ?? 0) / (p.impressions ?? 1)) * 100).toFixed(2) + '%'
+          : '0%',
+    }))
+    return NextResponse.json({ placements })
+  }
 
   let query = supabase
     .from('sponsorship_placements')

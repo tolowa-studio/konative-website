@@ -7,8 +7,10 @@ import { usePathname } from "next/navigation";
 const navLinks: { label: string; url: string }[] = [
   { label: "Connectivity", url: "/connectivity" },
   { label: "Tribal & Rural", url: "/tribal" },
+  { label: "Tribal DC", url: "/tribal/projects" },
   { label: "Data Center", url: "/data-center-connectivity" },
   { label: "Map & Intelligence", url: "/map" },
+  { label: "News", url: "/news" },
   { label: "About", url: "/about" },
 ];
 

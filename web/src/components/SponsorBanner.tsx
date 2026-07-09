@@ -23,25 +23,12 @@ export default function SponsorBanner({ variant }: SponsorBannerProps) {
   useEffect(() => {
     async function fetchPlacement() {
       try {
-        const supabaseUrl =
-          process.env.NEXT_PUBLIC_SUPABASE_URL ||
-          "https://tcbworxmlmxoyzcvdjhh.supabase.co";
-        const supabaseKey =
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjYndvcnhtbG14b3l6Y3ZkamhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyODczMTksImV4cCI6MjA5MTg2MzMxOX0.bAU-JCOSEH5RuJZcpDR5WTSU7zTjOEQ4sn6kaY8UIYg";
-        const now = new Date().toISOString();
         const res = await fetch(
-          `${supabaseUrl}/rest/v1/sponsorship_placements?select=id,sponsor_name,logo_url,tagline,cta_url,cta_text,placement_type&is_active=eq.true&start_date=lte.${now}&end_date=gte.${now}&placement_type=eq.${variant}&limit=1`,
-          {
-            headers: {
-              apikey: supabaseKey,
-              Authorization: `Bearer ${supabaseKey}`,
-            },
-          },
+          `/api/v1/sponsors/placement?variant=${encodeURIComponent(variant)}`,
         );
         if (res.ok) {
           const data = await res.json();
-          if (data.length > 0) setPlacement(data[0]);
+          if (data.placement) setPlacement(data.placement);
         }
       } catch {
         // Silently fail — sponsors are non-critical

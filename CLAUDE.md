@@ -4,6 +4,21 @@
 
 Agent context for the monorepo: app code lives in **`web/`** (Next.js 16 + Sanity + Builder.io). See `web/AGENTS.md` for site-specific rules.
 
+## Data architecture (2026-07-09 — operator approved)
+
+**Konative intelligence data is Cloudflare-native.** Do not recommend Supabase or Railway Postgres for site data.
+
+| Layer | Store |
+|-------|-------|
+| Curated CMS | Sanity |
+| Tabular ingest | Cloudflare D1 (`konative-intel`) |
+| PMTiles / snapshots | Cloudflare R2 |
+| Cache | Cloudflare KV |
+| Metrics | Cloudflare Analytics Engine |
+| Newsletter | Ghost (Railway) |
+
+Supabase project `tcbworxmlmxoyzcvdjhh` is **deprecated** — decommission after D1 migration. Full spec: `.context/konative-api-platform-architecture.md` rev 3. Stash: `/tools` + `/projects/konative`.
+
 ## Local development
 
 - From `web/`: `npm ci` then **`npm run dev`** — app URL **`http://localhost:3005`** (port **3005** is the repo default so it does not collide with common bindings on **3000** / **3010** / **3011**, e.g. Docker).

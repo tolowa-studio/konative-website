@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
+import { queryTbcpAwardBySlug, queryTbcpSlugs } from "@/lib/db";
 import {
   JsonLd,
   breadcrumbSchema,
@@ -27,7 +28,46 @@ interface Award {
   raw_properties: Record<string, unknown>;
 }
 
+function parseRawProperties(
+  raw: string | Record<string, unknown> | null | undefined,
+): Record<string, unknown> {
+  if (!raw) return {};
+  if (typeof raw === "object") return raw;
+  try {
+    return JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
+}
+
+function mapAward(row: {
+  id: string;
+  slug: string;
+  grantee_name: string;
+  award_amount_usd: number | null;
+  nofo_round: string | null;
+  project_type?: string | null;
+  lat: number | null;
+  lng: number | null;
+  raw_properties?: string | Record<string, unknown> | null;
+}): Award {
+  return {
+    id: row.id,
+    slug: row.slug,
+    grantee_name: row.grantee_name,
+    award_amount_usd: row.award_amount_usd,
+    nofo_round: row.nofo_round,
+    project_type: row.project_type ?? null,
+    lat: row.lat,
+    lng: row.lng,
+    raw_properties: parseRawProperties(row.raw_properties),
+  };
+}
+
 async function getAward(slug: string): Promise<Award | null> {
+  const d1Row = await queryTbcpAwardBySlug(slug);
+  if (d1Row) return mapAward(d1Row);
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
@@ -58,6 +98,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export async function generateStaticParams() {
+  const d1Slugs = await queryTbcpSlugs();
+  if (d1Slugs.length > 0) {
+    return d1Slugs.map((slug) => ({ slug }));
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||

@@ -1,7 +1,8 @@
+import { queryTbcpAwards, isD1TbcpReady } from "@/lib/db";
 import { supabase } from "@/lib/supabase";
 
 /**
- * Server-side reader for the `tbcp_awards` Supabase table.
+ * Server-side reader for the `tbcp_awards` table (D1 primary, Supabase fallback).
  *
  * The table holds real NTIA Tribal Broadband Connectivity Program Round 1–2
  * awards with public-read RLS ("Public read tbcp_awards" USING (true)), so the
@@ -62,26 +63,33 @@ function toNumber(v: number | string | null): number {
  * Returns `null` on any failure so the page still builds/renders without a
  * live connection.
  */
+async function fetchAwardRows(): Promise<AwardRow[] | null> {
+  if (await isD1TbcpReady()) {
+    const d1Rows = await queryTbcpAwards("state, award_amount_usd, nofo_round");
+    if (d1Rows && d1Rows.length > 0) return d1Rows as AwardRow[];
+  }
+
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("tbcp_awards")
+    .select("state, award_amount_usd, nofo_round");
+
+  if (error || !data || data.length === 0) return null;
+  return data as AwardRow[];
+}
+
 export async function getTbcpSummary(
   topN = 6,
 ): Promise<TbcpSummary | null> {
   try {
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
-      return null;
-    }
-
-    const { data, error } = await supabase
-      .from("tbcp_awards")
-      .select("state, award_amount_usd, nofo_round");
-
-    if (error || !data || data.length === 0) {
-      return null;
-    }
-
-    const rows = data as AwardRow[];
+    const rows = await fetchAwardRows();
+    if (!rows || rows.length === 0) return null;
 
     let totalUsd = 0;
     const byState = new Map<string, { count: number; totalUsd: number }>();

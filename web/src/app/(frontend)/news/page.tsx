@@ -1,10 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
   NEWS_SOURCE_COUNTRY_OPTIONS,
   NEWS_TOPIC_OPTIONS,
+  TRIBAL_NEWS_TOPIC_VALUES,
   isNewsTopicValue,
 } from "../../../lib/newsConstants";
+
+export const metadata: Metadata = {
+  title: "News — Konative",
+  description:
+    "Curated news on tribal data centers, tribal energy, broadband grants, and connectivity infrastructure across North America.",
+};
 
 export const revalidate = 3600;
 import { getSanityReadClient } from "../../../sanity/readClient";
@@ -55,10 +63,12 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   let isDataUnavailable = false;
   let news: {
     docs: any[];
+    featured?: any[];
     page?: number;
     totalPages?: number;
   } = {
     docs: [],
+    featured: [],
     page: currentPage,
     totalPages: 1,
   };
@@ -67,6 +77,12 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     `_type == "newsItem" && status == "published"` +
     (country !== "all" ? ` && "${country}" in coalesce(countries, [])` : "") +
     (topic !== "all" ? ` && "${topic}" in coalesce(topics, [])` : "");
+
+  const featuredFilter =
+    `_type == "newsItem" && status == "published" && (` +
+    TRIBAL_NEWS_TOPIC_VALUES.map((t) => `"${t}" in coalesce(topics, [])`).join(" || ") +
+    `)` +
+    (country !== "all" ? ` && "${country}" in coalesce(countries, [])` : "");
 
   try {
     const client = getSanityReadClient();
@@ -86,10 +102,27 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
       }`,
       {},
     );
+    const featured =
+      topic === "all" && currentPage === 1
+        ? await client.fetch<any[]>(
+            `*[${featuredFilter}] | order(publishedAt desc)[0...6]{
+              "id": _id,
+              title,
+              url,
+              summary,
+              sourceName,
+              publishedAt,
+              countries,
+              topics
+            }`,
+            {},
+          )
+        : [];
     news = {
       docs,
       page: currentPage,
       totalPages: Math.max(1, Math.ceil(total / ITEMS_PER_PAGE)),
+      featured,
     };
   } catch (_error) {
     isDataUnavailable = true;
@@ -162,7 +195,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               margin: 0,
             }}
           >
-            MARKET <span style={{ color: "#C8001F" }}>INTELLIGENCE</span> FEED
+            TRIBAL & <span style={{ color: "#C8001F" }}>INFRASTRUCTURE</span> NEWS
           </h1>
           <p
             style={{
@@ -170,12 +203,13 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               fontSize: 16,
               lineHeight: 1.6,
               color: "#6B7280",
-              maxWidth: 560,
+              maxWidth: 640,
               marginTop: 16,
               marginBottom: 0,
             }}
           >
-            US and Canada coverage for datacenter construction, permitting, regulations, and capital announcements.
+            Curated coverage of tribal data centers, energy sovereignty, broadband grants, and connectivity
+            infrastructure across the US and Canada — from DOE and NTIA program updates to on-the-ground project news.
           </p>
         </div>
       </section>
@@ -305,6 +339,93 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
           </p>
         </div>
       </div>
+
+      {/* Featured tribal coverage */}
+      {(news.featured?.length ?? 0) > 0 && topic === "all" && currentPage === 1 && (
+        <section style={{ padding: "32px 32px 0", background: "#fff" }}>
+          <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+            <p
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 600,
+                fontSize: 10,
+                textTransform: "uppercase" as const,
+                letterSpacing: "0.15em",
+                color: "#C8001F",
+                marginBottom: 16,
+              }}
+            >
+              Featured — Tribal & Infrastructure
+            </p>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                gap: 20,
+                marginBottom: 8,
+              }}
+            >
+              {news.featured!.map((item: any) => (
+                <a
+                  key={item.id}
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: "block",
+                    padding: 20,
+                    border: "1px solid #E5E7EB",
+                    background: "#F9FAFB",
+                    textDecoration: "none",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "'Inter', sans-serif",
+                      fontWeight: 600,
+                      fontSize: 10,
+                      textTransform: "uppercase" as const,
+                      letterSpacing: "0.1em",
+                      color: "#888",
+                    }}
+                  >
+                    {item.sourceName} · {formatDate(item.publishedAt)}
+                  </span>
+                  <span
+                    style={{
+                      display: "block",
+                      fontFamily: "'Barlow Condensed', sans-serif",
+                      fontWeight: 700,
+                      fontSize: 18,
+                      textTransform: "uppercase" as const,
+                      color: "#111",
+                      marginTop: 8,
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {item.title}
+                  </span>
+                  {item.summary && (
+                    <span
+                      style={{
+                        display: "block",
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: 13,
+                        lineHeight: 1.5,
+                        color: "#555",
+                        marginTop: 8,
+                      }}
+                    >
+                      {item.summary.slice(0, 140)}
+                      {item.summary.length > 140 ? "…" : ""}
+                    </span>
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Article List */}
       <section style={{ padding: "40px 32px 120px", background: "#fff" }}>

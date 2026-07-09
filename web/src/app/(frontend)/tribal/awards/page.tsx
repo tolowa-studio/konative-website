@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { createClient } from "@supabase/supabase-js";
 import {
   JsonLd,
   breadcrumbSchema,
   SITE_URL,
 } from "@/components/seo/JsonLd";
+import { queryTbcpAwardsList } from "@/lib/db";
 import AwardsClient from "./AwardsClient";
 
 export const revalidate = 3600;
@@ -68,11 +70,69 @@ const collectionPageJsonLd = {
   about: datasetJsonLd,
 };
 
-export default function TBCPAwardsPage() {
+function parseRawProperties(
+  raw: string | Record<string, unknown> | null | undefined,
+): Record<string, unknown> {
+  if (!raw) return {};
+  if (typeof raw === "object") return raw;
+  try {
+    return JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
+}
+
+async function getAwards() {
+  const d1Rows = await queryTbcpAwardsList(500);
+  if (d1Rows && d1Rows.length > 0) {
+    return d1Rows.map((row) => ({
+      id: row.id,
+      slug: row.slug,
+      grantee_name: row.grantee_name,
+      award_amount_usd: row.award_amount_usd,
+      nofo_round: row.nofo_round,
+      project_type: row.project_type ?? null,
+      lat: row.lat,
+      lng: row.lng,
+      raw_properties: parseRawProperties(row.raw_properties),
+    }));
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return [];
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const { data, error } = await supabase
+    .from("tbcp_awards")
+    .select(
+      "id,slug,grantee_name,award_amount_usd,nofo_round,project_type,lat,lng,raw_properties",
+    )
+    .order("award_amount_usd", { ascending: false })
+    .limit(500);
+  if (error) return [];
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    slug: row.slug,
+    grantee_name: row.grantee_name,
+    award_amount_usd: row.award_amount_usd,
+    nofo_round: row.nofo_round,
+    project_type: row.project_type ?? null,
+    lat: row.lat,
+    lng: row.lng,
+    raw_properties: parseRawProperties(row.raw_properties),
+  }));
+}
+
+export default async function TBCPAwardsPage() {
+  const awards = await getAwards();
+
   return (
     <>
       <JsonLd data={[breadcrumbJsonLd, datasetJsonLd, collectionPageJsonLd]} />
-      <AwardsClient />
+      <AwardsClient awards={awards} />
     </>
   );
 }

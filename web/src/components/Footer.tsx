@@ -39,6 +39,8 @@ export default function Footer() {
             title="Intelligence"
             links={[
               ["Intelligence Hub", "/intelligence"],
+              ["News Feed", "/news"],
+              ["Tribal DC Tracker", "/tribal/projects"],
               ["Market Coverage", "/markets"],
               ["TBCP Awards", "/tribal/awards"],
               ["Connectivity Map", "/map"],

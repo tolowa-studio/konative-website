@@ -25,9 +25,12 @@ interface NewsSourceSeed {
   name: string;
   slug: string;
   feedUrl: string;
+  sourceUrl?: string;
   sourceType: "rss" | "newsroom" | "government" | "industry";
   active: boolean;
   category?: string;
+  countries?: string[];
+  topics?: string[];
 }
 
 const sources: NewsSourceSeed[] = [
@@ -138,6 +141,30 @@ const sources: NewsSourceSeed[] = [
     sourceType: "rss",
     active: true,
     category: "power",
+  },
+  {
+    _id: "newsSource-ntia-tbcp",
+    name: "NTIA Tribal Broadband",
+    slug: "ntia-tbcp",
+    feedUrl: "https://broadbandusa.ntia.gov/taxonomy/term/140/feed",
+    sourceUrl: "https://www.ntia.gov/funding-programs/internet-all/tribal-broadband-connectivity-program",
+    sourceType: "government",
+    active: true,
+    category: "tribal-broadband",
+    countries: ["us"],
+    topics: ["tribal-broadband", "grants-funding"],
+  },
+  {
+    _id: "newsSource-doe-indian-energy",
+    name: "DOE Office of Indian Energy",
+    slug: "doe-indian-energy",
+    feedUrl: "",
+    sourceUrl: "https://www.energy.gov/indianenergy",
+    sourceType: "government",
+    active: false,
+    category: "tribal-energy",
+    countries: ["us"],
+    topics: ["tribal-energy", "tribal-data-center", "grants-funding"],
   },
 ];
 

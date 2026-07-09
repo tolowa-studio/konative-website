@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { createClient } from "@supabase/supabase-js";
 
 const RED = "#C8001F";
 const STEEL = "#374151";
@@ -22,6 +21,10 @@ interface Award {
   raw_properties: Record<string, unknown>;
 }
 
+interface AwardsClientProps {
+  awards: Award[];
+}
+
 function fmt(n: number | null) {
   if (!n) return "—";
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
@@ -34,33 +37,12 @@ const PROJECT_TYPE_LABELS: Record<string, string> = {
   "A": "Adoption",
 };
 
-export default function AwardsClient() {
-  const [awards, setAwards] = useState<Award[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function AwardsClient({ awards: initialAwards }: AwardsClientProps) {
+  const [awards] = useState<Award[]>(initialAwards);
   const [search, setSearch] = useState("");
   const [filterNofo, setFilterNofo] = useState("");
   const [filterType, setFilterType] = useState("");
   const [sortBy, setSortBy] = useState<"amount" | "name">("amount");
-
-  useEffect(() => {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!supabaseUrl || !supabaseKey) {
-      setLoading(false);
-      return;
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    supabase
-      .from("tbcp_awards")
-      .select("id,slug,grantee_name,award_amount_usd,nofo_round,project_type,lat,lng,raw_properties")
-      .order("award_amount_usd", { ascending: false })
-      .limit(500)
-      .then(({ data }) => {
-        setAwards((data as Award[]) || []);
-        setLoading(false);
-      });
-  }, []);
 
   const nofoOptions = useMemo(() => {
     const s = new Set(awards.map((a) => a.nofo_round).filter(Boolean));
@@ -168,8 +150,10 @@ export default function AwardsClient() {
 
       {/* Table */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px" }}>
-        {loading ? (
-          <div style={{ fontFamily: MONO, fontSize: 13, color: "#9CA3AF", padding: "48px 0" }}>Loading awards...</div>
+        {awards.length === 0 ? (
+          <div style={{ fontFamily: MONO, fontSize: 13, color: "#9CA3AF", padding: "48px 0" }}>
+            Award data temporarily unavailable. Please check back shortly.
+          </div>
         ) : (
           <>
             <div style={{ overflowX: "auto" }}>

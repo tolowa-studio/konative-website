@@ -50,10 +50,10 @@ const sections = [
   },
   {
     href: "/news",
-    label: "Connectivity Briefings",
+    label: "News Feed",
     eyebrow: "News + Analysis",
-    headline: "Research tied to a buying or sourcing decision",
-    summary: "Briefings on fiber, carrier supply, funded programs, interconnection, rural infrastructure, cloud, security, and network procurement.",
+    headline: "Tribal data centers, energy, broadband grants, and infrastructure coverage",
+    summary: "Curated external briefings on DOE and NTIA programs, tribal DC projects, connectivity grants, and market signals tied to procurement decisions.",
   },
   {
     href: "/governors",

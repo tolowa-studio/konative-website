@@ -6,6 +6,10 @@ export const NEWS_SOURCE_COUNTRY_OPTIONS = [
 ] as const;
 
 export const NEWS_TOPIC_OPTIONS = [
+  { label: "Tribal Data Centers", value: "tribal-data-center" },
+  { label: "Tribal Energy & Power", value: "tribal-energy" },
+  { label: "Tribal Broadband", value: "tribal-broadband" },
+  { label: "Grants & Funding", value: "grants-funding" },
   { label: "Data Center Construction", value: "construction" },
   { label: "Permitting and Zoning", value: "permitting" },
   { label: "Rules and Regulations", value: "regulations" },
@@ -16,6 +20,14 @@ export const NEWS_TOPIC_OPTIONS = [
 ] as const;
 
 export type NewsTopicValue = (typeof NEWS_TOPIC_OPTIONS)[number]["value"];
+
+/** Topics surfaced in the default tribal-focused news view. */
+export const TRIBAL_NEWS_TOPIC_VALUES = [
+  "tribal-data-center",
+  "tribal-energy",
+  "tribal-broadband",
+  "grants-funding",
+] as const satisfies readonly NewsTopicValue[];
 
 export function isNewsTopicValue(value: string): value is NewsTopicValue {
   return (NEWS_TOPIC_OPTIONS as readonly { value: string }[]).some((option) => option.value === value);
