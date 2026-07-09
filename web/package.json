@@ -21,6 +21,8 @@
     "sanity:typegen": "sanity schema extract --path=./src/sanity/extract.json && sanity typegen generate",
     "ingest-news": "tsx scripts/ingest-news.ts",
     "draft:saudi-tracker": "tsx scripts/draft-saudi-tracker.ts",
+    "draft:tribal-brief": "tsx --env-file=.env.local scripts/draft-tribal-brief.ts",
+    "draft:tribal-brief:publish": "tsx --env-file=.env.local scripts/draft-tribal-brief.ts --publish",
     "builder": "builder",
     "builder:import": "builder import -o ./builder-export",
     "builder:create": "builder create",

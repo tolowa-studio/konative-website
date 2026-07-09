@@ -132,3 +132,51 @@ export async function fetchTribalInfrastructureBriefPosts(
     return [];
   }
 }
+
+export interface GhostDraftPostInput {
+  title: string;
+  slug: string;
+  html: string;
+  customExcerpt?: string;
+  tagSlug?: string;
+  tagName?: string;
+}
+
+/** Create a draft post in Ghost Admin (review before publish/send). */
+export async function createGhostDraftPost(
+  input: GhostDraftPostInput,
+): Promise<{ id: string; slug: string; adminUrl: string }> {
+  const tagSlug = input.tagSlug ?? TRIBAL_INFRASTRUCTURE_BRIEF_TAG_SLUG;
+  const tagName = input.tagName ?? "Tribal Infrastructure Brief";
+  const payload = {
+    posts: [
+      {
+        title: input.title,
+        slug: input.slug,
+        html: input.html,
+        custom_excerpt: input.customExcerpt,
+        status: "draft",
+        tags: [{ name: tagName, slug: tagSlug }],
+      },
+    ],
+  };
+  const res = await ghostAdminFetch("/ghost/api/admin/posts/?source=html", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`Ghost draft create failed (${res.status}): ${text.slice(0, 400)}`);
+  }
+  const data = (await res.json()) as {
+    posts?: { id: string; slug: string; url?: string }[];
+  };
+  const post = data.posts?.[0];
+  if (!post?.id) throw new Error("Ghost draft create returned no post");
+  const base = ghostUrl();
+  return {
+    id: post.id,
+    slug: post.slug,
+    adminUrl: `${base}/ghost/#/editor/post/${post.id}`,
+  };
+}
