@@ -44,3 +44,12 @@ See `.context/2026-07-14-jeramey-unblock-checklist.md`.
 ## Current operating posture
 
 **No-send hold** on the old sequence. Next live motion is the capped 12-account validation packet after human approval only.
+
+## Live writes executed 2026-07-15
+
+- Promoted 3 bounce/failure emails into Control suppressions.
+- Applied Mailgun unsubs for all 3.
+- Twenty DNC: 1 applied (`brentsch@ngtcorporation.com`); 2 failed known `value.slice` bug (`toni.pepper@…`, `louisesather@…`).
+- Paused runs `cr_478fa50e…` (Konative) and `cr_1ae636f6…` (Tolowa) → `paused` / `always_on_gtm_hold`.
+- Prospeo API live: FREE plan, **100 credits**, renews ~2026-07-23.
+- Still **no sends**.
