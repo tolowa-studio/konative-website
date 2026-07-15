@@ -45,6 +45,15 @@ See `.context/2026-07-14-jeramey-unblock-checklist.md`.
 
 **No-send hold** on the old sequence. Next live motion is the capped 12-account validation packet after human approval only.
 
+## Locked validation set (2026-07-15)
+
+Recommendation applied. See `docs/outreach/2026-07-14-launch-ready-locked-set.md`.
+
+- Send-queue ready (unsent): **A1, A3, B1, B2, B3**
+- Hold: **A2**
+- MOTION run: `cr_1f2d92db3d3c46c98509` paused / `launch_ready_awaiting_send_approval`
+- Remaining gate: Jeramey **OK to send**
+
 ## Live writes executed 2026-07-15
 
 - Promoted 3 bounce/failure emails into Control suppressions.
