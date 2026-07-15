@@ -27,9 +27,9 @@ export interface TbcpIntelligenceProps {
  * renders nothing — no broken empty state. Numbers are never hardcoded; they
  * flow entirely from the live query result passed in.
  *
- * On light surfaces the section frames the brokerage thesis: grants funded the
- * infrastructure that already landed; Konative brokers the operational
- * connectivity layer that runs on top of it.
+ * On light surfaces the section frames the brokerage thesis: awards create
+ * implementation and procurement work; Konative brokers vendor-neutral
+ * enterprise carrier options for operating sites.
  */
 export default function TbcpIntelligence({
   summary,
@@ -78,12 +78,12 @@ export default function TbcpIntelligence({
           {totalAwards.toLocaleString("en-US")} grants worth{" "}
           {formatUsdCompact(totalUsd)}
         </strong>{" "}
-        across {distinctStates} states in Rounds 1 and 2. That federal capital
-        funded the <strong style={{ color: TEXT }}>infrastructure</strong>: fiber,
-        middle-mile, and last-mile plant. Konative brokers the layer it doesn&apos;t
-        pay for — the{" "}
-        <strong style={{ color: TEXT }}>operational connectivity</strong> that runs
-        on top of it, for the life of the account.
+        across {distinctStates} states in Rounds 1 and 2. TBCP can fund
+        infrastructure, backhaul, middle/last mile, leases/IRUs, engineering, and
+        related design work (confirm against the current NOFO). Konative brokers{" "}
+        <strong style={{ color: TEXT }}>vendor-neutral enterprise carrier
+        procurement</strong> for casinos, health, government, and multi-site ops —
+        with sources cited and supplier economics disclosed.
       </p>
 
       {/* Stat band */}

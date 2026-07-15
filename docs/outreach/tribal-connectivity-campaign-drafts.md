@@ -1,48 +1,50 @@
 # Tribal connectivity campaign drafts
 
 **Status:** Draft only. Do not send or load into an active sequence without
-Jeramey approval.
+Jeramey approval. Rebuilt 2026-07-14 for One-Site Snapshot / Market Brief motion.
 
-## Campaign A — TBCP award-to-operations
+## Shared rules
+
+- Subject: `One carrier question for [property]`
+- One sourced trigger; no TBCP “does not fund connectivity” claims
+- Offer asynchronous artifact (no meeting required)
+- AVANT sub-agent economics disclosed; buyer owns contracts
+- Grants-only contacts → Tolowa Pacific / Funding Navigator, not this commercial copy
+
+## Campaign A — Prior-award implementation (Konative commercial)
 
 ### Email 1
 
-**Subject:** A practical question after [Organization]'s broadband award
+**Subject:** One carrier question for [Property]
 
 Hi [First name],
 
-I saw the public TBCP award for [Organization] and wanted to ask a practical
-question that often comes after the infrastructure work begins:
+I saw the public [TBCP/program] record for [Organization] ([source URL]) and had a
+practical question as implementation moves forward:
 
-Who is planning the ongoing enterprise connectivity that sits on top of the
-build—redundant internet, transport, voice, security, cloud access, and managed
-network services for government, health, education, gaming, or other operations?
+Who owns carrier contracts for [Property] — renewals, secondary paths, and the
+enterprise services that sit alongside the funded build?
 
-Konative is a vendor-neutral connectivity brokerage and Avant sub-agent. We
-compare suppliers and stay involved through ordering, installation, escalation,
-and renewal. The supplier generally compensates us, so the brokerage work
-usually adds no advisory fee to the buyer.
+Konative is a vendor-neutral connectivity brokerage and AVANT sub-agent. We can
+prepare a One-Site Carrier + Renewal Snapshot for [Property] with no meeting
+required: public carrier options, renewal questions, redundancy questions that
+need engineering confirmation, and a short next-step tree, with sources cited.
+Suppliers may compensate us when you select a provider; you own the contracts.
 
-We are not calling about grant administration. We are looking at the operational
-layer that remains after the funded infrastructure is built.
+Would that one-pager be useful, or is there someone else who owns those contracts?
 
-Would a short award-to-operations connectivity review be useful?
-
-Jeramey
+Jeramey James  
+Konative
 
 ### Follow-up
 
-**Subject:** Re: [Organization]'s operational connectivity
+**Subject:** Re: One carrier question for [Property]
 
 Hi [First name],
 
-Following up because the most expensive connectivity problems often appear
-after a build is underway: one physical path serving two “different” providers,
-contracts renewing at different times, unmanaged failover, or enterprise
-services that were outside the original grant scope.
-
-If someone else owns network planning or carrier relationships, I would
-appreciate being pointed in the right direction.
+Following up in case the snapshot would help before the next renewal or site
+project. Happy to send the one-pager asynchronously, or to be pointed to the
+right owner.
 
 Jeramey
 
@@ -50,20 +52,20 @@ Jeramey
 
 ### Email 1
 
-**Subject:** Carrier-neutral connectivity review for [Organization]
+**Subject:** One carrier question for [Property]
 
 Hi [First name],
 
-I work with Tribal and rural organizations on internet, fiber, SD-WAN, voice,
-cloud connectivity, mobility, and security.
+[One sourced trigger — expansion, outage note, RFP, or renewal window].
 
-Konative is vendor-neutral. We can review the current provider and contract
-portfolio, identify single points of failure or upcoming renewals, and source
-alternatives through Avant's supplier portfolio without forcing a provider
-change.
+That usually surfaces a concrete question about carrier options and failover
+assumptions at [Property].
 
-Is connectivity strategy handled by you, or is there someone else I should
-contact?
+Konative can prepare a One-Site Carrier + Renewal Snapshot — no meeting
+required — and source DIA, transport, SD-WAN/SASE, voice, mobility, and security
+comparisons through AVANT when you are ready to procure.
+
+Is connectivity for [Property] yours, or who should I send the snapshot to?
 
 Jeramey
 
@@ -71,20 +73,19 @@ Jeramey
 
 ### Email 1
 
-**Subject:** Connectivity resilience at [Property / Organization]
+**Subject:** One carrier question for [Property]
 
 Hi [First name],
 
-Casino and hospitality networks carry several businesses at once: payments,
-surveillance, guest access, hotel systems, voice, cloud applications, and
-back-office operations.
+Casino and hospitality networks run payments, surveillance, guest access,
+hotel systems, voice, and back office on shared infrastructure.
 
-Konative helps organizations verify carrier and physical-path diversity, review
-renewals, and compare internet, SD-WAN/SASE, voice, security, mobility, and
-backup-connectivity options through Avant's supplier portfolio.
+Given [sourced trigger], I can send a one-page resilience snapshot for
+[Property]: public carrier options, renewal questions, and physical-path
+questions that need engineering confirmation (we never claim diversity from
+public names alone).
 
-Would it be useful to compare the current network against a simple resilience
-checklist before the next contract renewal or site project?
+Would that be useful before the next renewal or renovation milestone?
 
 Jeramey
 
@@ -92,35 +93,28 @@ Jeramey
 
 ### Email 1
 
-**Subject:** Connectivity planning for [Project / Market]
+**Subject:** One carrier question for [Project / Market]
 
 Hi [First name],
 
-Konative tracks data-center development and infrastructure signals across the
-United States and Canada. We use that research to help developers, operators,
-and tenants source the network layer earlier:
+[Sourced facility, tenant, or route signal].
 
-- diverse internet and transport;
-- dark fiber and wavelengths;
-- DCI and cloud on-ramps;
-- colocation, cross-connects, and managed network services.
+Konative can prepare a Market Connectivity Brief / carrier-fiber path intake
+for [Project / Market]: known carrier and on-ramp signals, missing engineering
+facts, and a procurement sequence — with estimates labeled and custom-quote
+items called out. We operate as an AVANT sub-agent via Pathfinder.
 
-We operate as an Avant sub-agent and can coordinate multi-supplier sourcing
-through Pathfinder.
-
-Is the connectivity plan for [Project / Market] already assigned, or would an
-initial carrier and fiber-path review be useful?
+Is connectivity for [Project] already assigned, or should the brief go to someone
+else?
 
 Jeramey
 
 ## Approval checklist
 
-- Confirm recipient and role in Twenty.
-- Confirm organization spelling.
-- Verify award amount and program round from the public source before including
-  either in copy.
-- Remove claims that are not relevant to the recipient.
-- Set the CRM record to **Approved for outreach**.
-- Send from the approved domain and mailbox.
-- Create the next action before sending.
-
+- Confirm recipient and role in Twenty (role-fit only).
+- Confirm organization spelling and named property.
+- Verify trigger from the public source before including it.
+- Suppression + duplicate-send clear.
+- Email verified or phone path documented.
+- Set CRM record to **Approved for outreach**.
+- Send only after Jeramey approval; create next action before sending.

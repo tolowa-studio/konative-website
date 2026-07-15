@@ -72,12 +72,12 @@ const FAQ_ITEMS = [
   {
     question: "How do I get started with Konative for a Tribal connectivity project?",
     answer:
-      "Book a 15-minute discovery call at konative.com/call or fill out the contact form at konative.com/contact. Konative will ask about your locations, current services, bandwidth and resilience requirements, and any funding context (TBCP awards, other federal programs). From there we run the supplier market and return a structured comparison — usually within a few business days for straightforward requirements.",
+      "Request a One-Site Carrier + Renewal Snapshot via konative.com/contact (property, address, role, timing, current concern). No meeting required for the first artifact. If you only need grant help, use the Funding Navigator. Konative will return cited carrier and renewal questions for the named site, then quote the market through Avant when you are ready to procure.",
   },
   {
     question: "Are you applying for NTIA TBCP Round 3 funding — should you engage before or after award?",
     answer:
-      "Before, if possible. TBCP Round 3 and the Native Entities Grant Program fund the physical infrastructure — fiber, middle-mile, last-mile — but not the operational connectivity layer that runs on top of it once that infrastructure is built. Engaging pre-award lets Konative help specify carrier-grade operational connectivity into the proposal itself and line up carrier terms in advance, so the connectivity is ready to execute the moment funding lands rather than starting from zero post-award. Full Round 3 eligibility, deadlines, and program details are on the NTIA Round 3 page.",
+      "Before, if possible — but keep lanes clear. Grant application help belongs with the free Funding Navigator / Tolowa Pacific trust path. TBCP Round 3 and NEGP eligible uses can include infrastructure, backhaul/middle/last mile, leases/IRUs, engineering, network design, and consulting (confirm against the current NOFO). Konative's commercial offer is a One-Site Carrier + Renewal Snapshot for operating properties: public carrier options, renewal questions, and next steps, without requiring a meeting. Full Round 3 eligibility and deadlines are on the Funding Navigator and NTIA Round 3 pages.",
   },
 ];
 
@@ -202,7 +202,7 @@ export default function TribalPage() {
           { text: "BROKERAGE.", tone: "rust" },
         ]}
         subhead="Konative is a sovereignty-aware, vendor-neutral connectivity broker serving tribal nations, tribal enterprises, and rural broadband authorities across the US and Canada. We source internet, fiber, transport, voice, cloud, and security from 100+ suppliers at no cost — and help you navigate NTIA Tribal Broadband Connectivity Program funding."
-        primaryCta={{ label: "Book a Discovery Call →", href: "/call" }}
+        primaryCta={{ label: "Request a One-Site Snapshot →", href: "/contact#request" }}
         secondaryCta={{ label: "Contact Us →", href: "/contact" }}
         heroImage={{
           src: "https://images.unsplash.com/photo-1771179909412-813719cfca69?auto=format&fit=crop&w=2000&q=70",
@@ -211,7 +211,7 @@ export default function TribalPage() {
         }}
         ctaHeadlineTop="ONE REQUIREMENT."
         ctaHeadlineBottom="THE WHOLE MARKET."
-        ctaSub="Tell us what your nation or enterprise needs — we'll quote it across the full supplier portfolio, sovereignty-aware, at no cost to you."
+        ctaSub="Tell us the property, address, role, timing, and current concern — we'll prepare a One-Site Carrier + Renewal Snapshot. Konative is an AVANT sub-agent; suppliers may compensate us when you select a provider. You own the contracts."
       >
         {/* Funding Navigator promo band */}
         <section style={{ background: "#08142D", borderTop: `3px solid ${RED}`, padding: "44px 0" }}>
@@ -309,9 +309,9 @@ export default function TribalPage() {
             Tribal enterprises — gaming, government, healthcare, education, and public safety — need the same
             carrier-grade connectivity as any enterprise, plus an advisor who understands sovereignty, federal
             funding programs, and right-of-way on Tribal lands. Konative brokers the full stack. If your nation
-            is applying for <Link href="/ntia" style={{ color: RED, textDecoration: "underline" }}>NTIA TBCP Round 3 funding</Link>,
-            engaging on the operational connectivity layer before award — not after — is what makes funded
-            infrastructure usable on day one.
+            is applying for <Link href="/tribal/funding-navigator" style={{ color: RED, textDecoration: "underline" }}>NTIA TBCP Round 3 funding</Link>,
+            use the Funding Navigator for grant help, and request a One-Site Carrier + Renewal Snapshot when
+            an operating property needs carrier options, renewals, or redundancy questions.
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
             {[
@@ -533,7 +533,7 @@ export default function TribalPage() {
           </div>
           <div style={{ marginTop: 48, textAlign: "center" }}>
             <Link
-              href="/call"
+              href="/contact#request"
               style={{
                 fontFamily: BODY,
                 fontWeight: 600,
@@ -548,7 +548,7 @@ export default function TribalPage() {
                 display: "inline-block",
               }}
             >
-              Book a 15-Min Call →
+              Request a One-Site Snapshot →
             </Link>
           </div>
         </PitchSection>

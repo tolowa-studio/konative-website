@@ -1,43 +1,45 @@
 # B13 — NTIA TBCP Round 3 Connectivity Partner Campaign
 
-**Status:** Active · time-sensitive
-**Owner:** Konative (subagent under Avant Communications)
-**Landing asset:** `/ntia` (`web/src/app/(frontend)/ntia/page.tsx`)
-**Hard deadline:** Application window closes **September 17, 2026**
+**Status:** Rebuilt under always-on GTM repair (2026-07-14) · no broad sends  
+**Owner:** Konative (AVANT sub-agent)  
+**Landing assets:** `/tribal/funding-navigator` (grant lane), `/ntia` + `/tribal` (commercial lane)  
+**Hard deadline:** Application window closes **September 17, 2026**  
 **Award horizon:** Rolling awards begin **Spring 2027**
 
 ---
 
 ## 1. Objective
 
-Position Konative as the **connectivity design partner** for Tribal entities
-applying to the NTIA Tribal Broadband Connectivity Program (TBCP) Round 3 and the
-Native Entities Grant Program (NEGP), so that carrier-grade operational
-connectivity is specified into their proposals **before the Sept 17, 2026
-deadline** — and Konative is the pre-negotiated, vendor-neutral broker that
-executes and manages that connectivity when awards land in Spring 2027.
+Keep **two lanes clear**:
 
-The grant funds infrastructure. Konative sells the recurring operational layer
-that runs on top of it. This campaign gets Konative into the room during the
-pre-award window, when the connectivity architecture is still being decided.
+1. **Grant help** — free Funding Navigator / Tolowa Pacific trust path through Sept 17.
+2. **Commercial brokerage** — Konative One-Site Carrier + Renewal Snapshot for operating
+   tribal enterprise properties (casino, health, utility, public safety, multi-site).
 
-**One-line thesis:** *Grants fund the fiber. We broker the connectivity that
-runs on it — at $0 cost to the Tribe.*
+Do **not** claim TBCP “does not fund the connectivity / operational layer.” The current
+NOFO permits infrastructure, backhaul/middle/last mile, leases/IRUs, engineering, network
+design, consulting, and related costs — confirm with NTIA. Do not disguise grant outreach
+as immediate brokerage demand.
+
+**One-line thesis:** *Grant help and commercial carrier procurement are separate doors.
+Konative’s door starts with a cited One-Site Snapshot — suppliers may compensate us; you own the contracts.*
 
 ---
 
 ## 2. ICP — who we're targeting
 
-Primary: **Tribal entities that are applying (or evaluating applying) to R3/NEGP.**
+Primary commercial ICP: **Tribal enterprise sites with an operational trigger** (renewal,
+expansion, resilience, prior-award implementation) — not grants-only applicants.
 
 | Segment | Buying role / first contact | Why they need Konative |
 | --- | --- | --- |
-| Tribal governments | Broadband director, IT director, tribal administrator, grants/planning lead | Own the application and the enterprise (gaming, gov, health, education) that will run on the network. |
-| Tribal broadband authorities / utilities | Executive director, network/ops lead | Build the infrastructure; still need the operational connectivity + carrier contracts on top. |
-| Tribal colleges & universities (TCUs) | CIO / IT director | Campus connectivity, redundancy, cloud on-ramps. |
-| Tribal organizations | Program director, consortium lead | Multi-site connectivity across member entities. |
-| Alaska Native Corporations (ANCs) | Infrastructure / telecom lead | Remote, low-density routes where vendor-neutral sourcing matters most. |
-| Native Hawaiian organizations (DHHL) | Program / homestead infrastructure lead | Same infrastructure-vs-operational gap. |
+| Tribal gaming / hospitality | IT/ops, facilities, procurement, GM | Payments, surveillance, guest Wi-Fi, multi-service uptime |
+| Tribal health | CIO / facilities / network | Clinic and multi-site resilience |
+| Utilities / public safety | Network/ops leads | Critical communications |
+| Multi-site gov / enterprise | IT director, procurement | Carrier portfolio + renewals |
+| Prior-award implementers | Broadband + enterprise IT | Implementation-phase commercial circuits |
+
+Grants-only contacts → Tolowa Pacific / Funding Navigator, not Konative commercial sequence.
 
 **Disqualifiers / lower priority:** entities with no intent to apply this round,
 or that already have a locked-in incumbent connectivity contract with no renewal
@@ -127,34 +129,31 @@ First-touch email (skeleton — personalize per entity):
 
 > **Subject:** The connectivity TBCP Round 3 won't fund — before Sept 17
 >
-> [Name] — TBCP Round 3 and the Native Entities Grant Program put ~$790M toward
-> Tribal infrastructure, and the window closes September 17, 2026. The grant funds
-> the fiber and the build. It does **not** fund the operational connectivity that
-> runs on it — the enterprise internet, SD-WAN, voice, security, redundancy, and
-> cloud on-ramps that keep a gaming floor, clinic, or government office running.
+> Subject: One carrier question for [Property]
 >
-> Konative is a vendor-neutral connectivity brokerage (subagent under Avant, 100+
-> suppliers). We help Tribal applicants design and source that layer so it's
-> specified into the proposal now and ready to execute when funding lands in 2027
-> — at **no cost to the Tribe**; suppliers pay us.
+> [Name] — I saw [sourced trigger]. That usually surfaces a concrete question about
+> carrier options, renewals, or redundancy that needs engineering confirmation.
 >
-> Worth a 20-minute connectivity architecture review before the deadline?
+> Konative is a vendor-neutral connectivity brokerage and AVANT sub-agent. We can
+> prepare a One-Site Carrier + Renewal Snapshot for [property] — no meeting
+> required — with public options, renewal questions, and a short next-step tree,
+> sources cited. Suppliers may compensate us when you select a provider; you own
+> the contracts.
 >
-> [link → /ntia] · [book → cal.com/jeramey-james]
+> Grant strategy for TBCP Round 3 (closes September 17, 2026) stays on the
+> Funding Navigator / Tolowa Pacific path — this note is commercial only.
+>
+> Would the one-pager be useful, or who owns carrier contracts for [property]?
+>
+> [link → /tribal] · [snapshot request → /contact#request]
 
-Follow-up cadence (pre-award):
+Follow-up cadence (validation campaign only; human-approved):
 1. **Day 0** — first touch (above).
-2. **Day 4** — the gap, made concrete: one specific enterprise example (casino
-   floor / tribal clinic) + the $0-cost reframe.
-3. **Day 9** — vendor-neutral proof: "we're not a carrier; we quote the whole
-   market including fixed wireless/satellite where fiber doesn't reach."
-4. **Day 16** — deadline urgency: days remaining until Sept 17; offer to review
-   before submission.
-5. **Final-call (T-14 to T-2 before Sept 17)** — last chance to specify
-   connectivity into the proposal.
+2. **Day 4** — restate the trigger + offer snapshot; ask for the contract owner.
+3. **Day 9** — one phone attempt where appropriate.
+4. **Stop** after two consecutive zero-response batches on a cohort.
 
-All links point to `/ntia`; the on-page CTA routes to `/contact#request` and
-`cal.com/jeramey-james`.
+Do not restart the old broad architecture-review sequence.
 
 ---
 

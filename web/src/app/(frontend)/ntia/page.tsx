@@ -18,14 +18,14 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "NTIA TBCP Round 3 Connectivity Partner | Konative",
   description:
-    "TBCP Round 3 & NEGP close Sept 17, 2026. Konative brokers the operational connectivity grants don't fund — vendor-neutral, sovereignty-aware, $0 to the Tribe.",
+    "TBCP Round 3 & NEGP close Sept 17, 2026. Separate grant help from commercial brokerage: Konative delivers a One-Site Carrier + Renewal Snapshot — vendor-neutral, sovereignty-aware, AVANT economics disclosed.",
   keywords: [
     "NTIA TBCP Round 3",
     "Tribal Broadband Connectivity Program",
     "Native Entities Grant Program",
     "Tribal broadband grant connectivity partner",
     "sovereignty-aware connectivity broker",
-    "post-award connectivity design",
+    "one-site carrier snapshot",
     "vendor-neutral Tribal connectivity",
   ],
   alternates: { canonical: "/ntia" },
@@ -54,9 +54,9 @@ const facts: { value: string; label: string; note: string }[] = [
 
 const brings: { num: string; title: string; body: string }[] = [
   {
-    num: "01 — Review",
-    title: "Connectivity Architecture Review",
-    body: "We read your proposed build and map the operational connectivity that will have to run on it — DIA, transport, SD-WAN, voice, redundancy, cloud on-ramps, and security — so it's specified into the proposal, not discovered after award.",
+    num: "01 — Snapshot",
+    title: "One-Site Carrier + Renewal Snapshot",
+    body: "An asynchronous one-pager for a named property: public carrier/market options, renewal questions, redundancy questions that need engineering confirmation, relevant AVANT categories, and a short next-step tree — with citations and confidence labels. No meeting required to start.",
   },
   {
     num: "02 — Source",
@@ -65,18 +65,18 @@ const brings: { num: string; title: string; body: string }[] = [
   },
   {
     num: "03 — Terms",
-    title: "Pre-Negotiated Carrier Terms",
-    body: "We line up carrier pricing and terms during the pre-award window so that the moment funding lands, the connectivity contracts are ready to execute — not restarted from zero.",
+    title: "Procurement When Ready",
+    body: "When you are ready to buy — pre-award or post-award — we line up comparable carrier pricing and terms so execution is a deliberate procurement step, not a scramble.",
   },
   {
     num: "04 — Sovereignty",
     title: "Sovereignty-Aware Advisory",
-    body: "We understand Tribal jurisdiction and the line between an infrastructure grant and the operational connectivity that runs on top of it. We work with your enterprise and your grant team, not around them.",
+    body: "We understand Tribal jurisdiction. Grant application strategy stays on the Funding Navigator / Tolowa Pacific path; Konative stays in commercial carrier procurement for operating enterprises.",
   },
   {
-    num: "05 — Cost",
-    title: "$0 Cost to the Tribe",
-    body: "Suppliers pay our commission. The Tribe gets an expert, carrier-neutral connectivity advisor and a single point of contact for every carrier — at no charge, for the life of the account.",
+    num: "05 — Economics",
+    title: "Transparent Broker Economics",
+    body: "Konative operates as an AVANT sub-agent. Suppliers may compensate us when you select a provider. We do not call the service \"free\" without that disclosure. You own the contracts, the data, and the relationship.",
   },
 ];
 
@@ -118,19 +118,19 @@ const faqs: { question: string; answer: string }[] = [
       "Eligible applicants include Tribal governments, Tribal colleges and universities, Tribal organizations, Alaska Native Corporations, and Native Hawaiian organizations (DHHL). This is a sovereignty-aligned program directed to Native entities.",
   },
   {
-    question: "If the grant funds the infrastructure, what does Konative actually do?",
+    question: "If the grant can fund infrastructure and design, what does Konative actually do?",
     answer:
-      "Federal grants fund infrastructure — fiber, middle-mile, last-mile, and power. They do not fund the operational connectivity layer that runs on top of it: the enterprise internet, SD-WAN, voice, cybersecurity, redundancy, and cloud on-ramps that keep a gaming floor, clinic, government office, or school running. That recurring operational layer is what Konative sources, designs, and manages.",
+      "TBCP eligible uses can include infrastructure, backhaul/middle/last mile, leases/IRUs, engineering, network design, consulting, and related costs — always confirm against the current NOFO with your program officer. Grant application strategy and funding-window help belong on our Funding Navigator (and Tolowa Pacific). Konative's commercial work is vendor-neutral carrier procurement for operating enterprises: DIA, transport, SD-WAN, voice, security, cloud on-ramps, and renewals, starting with a One-Site Carrier + Renewal Snapshot.",
   },
   {
     question: "What does Konative cost a Tribe or Native entity?",
     answer:
-      "Nothing. Konative is a vendor-neutral connectivity brokerage operating as a subagent under Avant Communications. Suppliers pay our commission, so the Tribe gets an expert, carrier-neutral advisor and a single point of contact across every carrier at no cost.",
+      "Konative operates as a vendor-neutral connectivity brokerage and AVANT sub-agent. Suppliers may compensate us when you select a provider. There is typically no separate advisory fee to the buyer for standard brokerage, but we do not market the service as \"free\" without that disclosure. You own the contracts.",
   },
   {
     question: "We haven't been awarded yet. Is it too early to engage Konative?",
     answer:
-      "No — pre-award is the right time. Engaging before the September 17, 2026 deadline lets us specify carrier-grade operational connectivity into your proposal and pre-negotiate carrier terms, so the connectivity is ready to execute the moment funding lands in Spring 2027 rather than restarted from scratch.",
+      "For grant writing and NOFO strategy, start with the Funding Navigator. For commercial carrier questions on an operating casino, clinic, utility, or government site, a One-Site Snapshot is useful any time — especially when renewals, expansions, or redundancy are already on the calendar. We do not disguise grant outreach as brokerage demand.",
   },
   {
     question: "Is Konative really vendor-neutral?",
@@ -140,7 +140,7 @@ const faqs: { question: string; answer: string }[] = [
   {
     question: "Does a Round 3 award come with a specific connectivity contract, or does Konative sign anything on our behalf?",
     answer:
-      "Neither the grant nor Konative puts the Tribe into a connectivity contract automatically. NTIA's award funds the infrastructure build; the operational connectivity contract — internet, SD-WAN, voice, security — is a separate agreement between the Tribe (or Tribal entity) and the winning carrier once that carrier is selected. Konative runs the sourcing and negotiation process and stays engaged through the life of the contract, but the Tribe contracts directly with the carrier. Pre-negotiating those terms during the pre-award window is what lets execution happen quickly once funding is confirmed, rather than starting the carrier search from scratch in Spring 2027.",
+      "Neither the grant nor Konative puts the Tribe into a connectivity contract automatically. Commercial carrier agreements — internet, SD-WAN, voice, security — are between the Tribe (or Tribal entity) and the selected carrier. Konative runs vendor-neutral sourcing and stays engaged through the life of the contract; the Tribe contracts directly with the carrier.",
   },
 ];
 
@@ -193,20 +193,20 @@ export default async function NtiaPage() {
       <PitchLayout
         eyebrow="NTIA TBCP Round 3 · Deadline Sept 17, 2026"
         titleLines={[
-          { text: "GRANTS FUND", tone: "white" },
-          { text: "THE FIBER.", tone: "white" },
-          { text: "WE BROKER", tone: "dim" },
-          { text: "THE CONNECTIVITY.", tone: "rust" },
+          { text: "FUNDING WINDOW", tone: "white" },
+          { text: "CLOSES SEPT 17.", tone: "white" },
+          { text: "KEEP GRANT HELP", tone: "dim" },
+          { text: "AND BROKERAGE CLEAR.", tone: "rust" },
         ]}
-        subhead="The NTIA Tribal Broadband Connectivity Program Round 3 ($540M) and the Native Entities Grant Program ($250M) put $790M toward Tribal broadband — and the window closes September 17, 2026. But grants fund the build, not the operational connectivity that runs on it. Konative is the vendor-neutral, sovereignty-aware partner that designs and sources that layer, at no cost to the Tribe."
-        primaryCta={{ label: "Request a Round 3 connectivity consult →", href: "/contact#request" }}
-        secondaryCta={{ label: "Tribal Enterprise →", href: "/tribal" }}
-        ctaHeadlineTop="THE WINDOW CLOSES"
-        ctaHeadlineBottom="SEPTEMBER 17, 2026."
-        ctaSub="Engage before the deadline so carrier-grade connectivity is specified into your Round 3 proposal — ready to execute the moment funding lands in Spring 2027."
+        subhead="TBCP Round 3 ($540M) and the Native Entities Grant Program ($250M) close September 17, 2026. Use the Funding Navigator for NOFO help. Use Konative for vendor-neutral enterprise carrier procurement — starting with a One-Site Carrier + Renewal Snapshot — with AVANT sub-agent economics disclosed."
+        primaryCta={{ label: "Request a One-Site Snapshot →", href: "/contact#request" }}
+        secondaryCta={{ label: "Funding Navigator →", href: "/tribal/funding-navigator" }}
+        ctaHeadlineTop="TWO LANES."
+        ctaHeadlineBottom="ONE DEADLINE."
+        ctaSub="Grant strategy stays on the Funding Navigator. Commercial carrier questions for operating sites start with a cited One-Site Snapshot — no meeting required."
       >
-        {/* The gap grants don't fund */}
-        <PitchSection eyebrow="The Gap" heading="The layer grants don't fund">
+        {/* Lane separation */}
+        <PitchSection eyebrow="The Split" heading="Grant help vs commercial brokerage">
           <p
             style={{
               fontFamily: "Inter, sans-serif",
@@ -217,17 +217,22 @@ export default async function NtiaPage() {
               marginBottom: 40,
             }}
           >
-            Federal broadband grants fund <strong style={{ color: "#111111" }}>infrastructure</strong> — fiber,
-            middle-mile, last-mile, and power. They do not fund the{" "}
-            <strong style={{ color: "#111111" }}>operational connectivity</strong> that runs on top of it: the
-            enterprise internet, SD-WAN, voice, cybersecurity, redundancy, and cloud on-ramps that keep a gaming
-            floor, clinic, government office, or school actually running. That recurring operational layer is the
-            gap — and it is exactly what Konative sources, designs, and manages. See the full picture of what a
-            Tribal connectivity broker does across gaming, government, healthcare, and education on the{" "}
+            The current TBCP Round 3 NOFO permits infrastructure, backhaul/middle/last mile,
+            leases/IRUs, engineering, network design, consulting, and related costs — always
+            confirm eligible uses with your NTIA program officer.{" "}
+            <strong style={{ color: "#111111" }}>Do not treat prior marketing claims that TBCP
+            &quot;does not fund the connectivity layer&quot; as accurate.</strong>{" "}
+            Konative&apos;s job here is{" "}
+            <strong style={{ color: "#111111" }}>vendor-neutral commercial procurement</strong>{" "}
+            for casinos, clinics, utilities, public safety, and multi-site ops. See the{" "}
             <Link href="/tribal" style={{ color: "#C8001F", textDecoration: "underline" }}>
               Tribal Enterprise Connectivity
             </Link>{" "}
-            page.
+            page for the commercial lane and the{" "}
+            <Link href="/tribal/funding-navigator" style={{ color: "#C8001F", textDecoration: "underline" }}>
+              Funding Navigator
+            </Link>{" "}
+            for the grant lane.
           </p>
           <div
             style={{
@@ -254,7 +259,7 @@ export default async function NtiaPage() {
                   marginBottom: 12,
                 }}
               >
-                WHAT THE GRANT FUNDS
+                GRANT LANE
               </div>
               <h3
                 style={{
@@ -267,11 +272,11 @@ export default async function NtiaPage() {
                   marginBottom: 12,
                 }}
               >
-                The Infrastructure
+                Funding Navigator
               </h3>
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, lineHeight: 1.7, color: "#6B7280", margin: 0 }}>
-                Fiber routes, middle-mile and last-mile plant, towers, conduit, and the power to light them.
-                One-time capital to put the physical network in the ground.
+                NOFO guidance, eligibility, eligible uses (including infrastructure, design, and related costs
+                where permitted), and checklist help through Sept 17 — confirm with your NTIA officer.
               </p>
             </div>
             <div
@@ -292,7 +297,7 @@ export default async function NtiaPage() {
                   marginBottom: 12,
                 }}
               >
-                WHAT KONATIVE BROKERS
+                KONATIVE LANE
               </div>
               <h3
                 style={{
@@ -305,11 +310,11 @@ export default async function NtiaPage() {
                   marginBottom: 12,
                 }}
               >
-                The Operational Connectivity
+                One-Site Snapshot
               </h3>
               <p style={{ fontFamily: "Inter, sans-serif", fontSize: 14, lineHeight: 1.7, color: "#6B7280", margin: 0 }}>
-                Enterprise internet, SD-WAN, voice, cybersecurity, redundancy, and cloud on-ramps — the recurring
-                layer that keeps the enterprise running. Sourced vendor-neutral, at no cost to the Tribe.
+                Commercial carrier procurement for operating sites — DIA, SD-WAN, voice, security, renewals —
+                with cited public options and AVANT sub-agent economics disclosed. You own the contracts.
               </p>
             </div>
           </div>

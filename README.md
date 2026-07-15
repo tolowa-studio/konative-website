@@ -25,6 +25,8 @@ Dev server: **http://localhost:3005** (see root `CLAUDE.md`).
 
 - [`docs/founder-os-konative.md`](docs/founder-os-konative.md) — operating model (vision → workstreams → rhythm)
 - [`docs/requirements-prd.md`](docs/requirements-prd.md) — konative.com requirements and backlog epics
+- [`docs/operations/2026-07-14-always-on-gtm-status.md`](docs/operations/2026-07-14-always-on-gtm-status.md) — always-on GTM repair status + deliverable index
+- [`docs/strategy/2026-07-06-two-lane-gtm.md`](docs/strategy/2026-07-06-two-lane-gtm.md) — tribal + data-center GTM lanes
 - [`docs/DESIGN-DOC.md`](docs/DESIGN-DOC.md) — credibility-first strategy and launch direction
 - [`docs/phase-one-offer.md`](docs/phase-one-offer.md) — draft paid offer, CTA, pricing, timeline, and deliverables
 - [`docs/homepage-outline.md`](docs/homepage-outline.md) — homepage IA, section order, and supporting page map
