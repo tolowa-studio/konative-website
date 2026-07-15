@@ -6,12 +6,14 @@
 
 | ID | Vote | Contact found? |
 | --- | --- | --- |
-| A1 Ho-Chunk Beloit | Approve research ✓ | Not yet |
-| A2 Kewadin | Approve research ✓ | Not yet |
-| A3 Chumash Casino | Approve research ✓ | Not yet |
-| B1 Shoshone-Bannock | Approve research ✓ | Not yet |
-| B2 Cologix Columbus | Approve research ✓ | Exec seed only (Chairman) — see votes file |
-| B3 Lightpath | Approve research ✓ | Exec seed only (CEO) — see votes file |
+| B2 Cologix Columbus | Approve research ✓ | **Troy Peter**, **Josh Beck** verified; Chairman routing draft ready |
+| B3 Lightpath | Approve research ✓ | **Tim Haverkate**, **Ting Liu** verified; CEO routing draft ready |
+| A1 Ho-Chunk Beloit | Approve research ✓ | **Lael Hall** CITO verified |
+| A2 Kewadin | Approve research ✓ | **Robert Hollowell** email verified — **confirm title** |
+| A3 Chumash Casino | Approve research ✓ | **Mark Badal** verified |
+| B1 Shoshone-Bannock | Approve research ✓ | Names known; email still missing |
+
+See also: [director-contacts-and-routing-drafts.md](./2026-07-14-director-contacts-and-routing-drafts.md)
 
 ---
 
