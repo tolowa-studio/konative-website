@@ -1,8 +1,21 @@
 # Validation Draft Review Board — first 6 accounts
 
-**Status:** DRAFT ONLY — **no sends**  
-**Created:** 2026-07-14  
-**How to review:** Open this file in GitHub / IDE preview. For each account: ✅ Approve research continue · ⏸ Hold · ❌ Drop. Reply with account IDs + verdict.
+**Status:** RESEARCH APPROVED · DRAFTS ONLY — **no sends**  
+**Votes:** Jeramey approved all six for research on 2026-07-14  
+**Contact findings:** [2026-07-14-validation-votes-approved.md](./2026-07-14-validation-votes-approved.md)
+
+| ID | Vote | Contact found? |
+| --- | --- | --- |
+| A1 Ho-Chunk Beloit | Approve research ✓ | Not yet |
+| A2 Kewadin | Approve research ✓ | Not yet |
+| A3 Chumash Casino | Approve research ✓ | Not yet |
+| B1 Shoshone-Bannock | Approve research ✓ | Not yet |
+| B2 Cologix Columbus | Approve research ✓ | Exec seed only (Chairman) — see votes file |
+| B3 Lightpath | Approve research ✓ | Exec seed only (CEO) — see votes file |
+
+---
+
+## Original board (for draft copy)
 
 ---
 
