@@ -28,7 +28,13 @@ export default function HeroBackdrop({ src, alt, objectPosition = "center" }: He
   // wrapper must carry z-index:2 so text stays above this backdrop.
   return (
     <div aria-hidden={false} style={{ position: "absolute", inset: 0, zIndex: 1 }}>
-      <Image src={src} alt={alt} fill priority sizes="100vw" style={{ objectFit: "cover", objectPosition }} />
+      {/* translateZ(0) forces this backdrop onto its own compositor layer so the
+          photo paints on initial render. Without it, next/image `fill` inside
+          these custom-hero sections only painted after a forced repaint —
+          leaving the hero looking image-less on first load. */}
+      <div style={{ position: "absolute", inset: 0, transform: "translateZ(0)" }}>
+        <Image src={src} alt={alt} fill priority sizes="100vw" style={{ objectFit: "cover", objectPosition }} />
+      </div>
       {/* Left-only scrim: darkens just the left text zone and goes FULLY
           transparent past the halfway mark, so the photo reads clearly across
           the right half while left-aligned copy stays legible. A full-cover
