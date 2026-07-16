@@ -416,7 +416,7 @@ export default function SovereigntyPage() {
             }}
           >
             Fifteen minutes. Bring your hardest questions about contracts, data, and
-            commissions — or start with the $790M funding window closing September 17, 2026.
+            commissions. Grant help is free and separate — use the funding navigator if you need the Sept 17 window.
           </p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
             <a href={CAL_LINK} style={{ ...primaryBtnStyle, padding: "18px 44px" }}>

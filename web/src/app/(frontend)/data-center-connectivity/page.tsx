@@ -16,12 +16,12 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Data Center Connectivity Broker | Transport, Dark Fiber & Interconnection | Konative",
   description:
-    "Konative is a vendor-neutral data-center connectivity broker — an Avant sub-agent sourcing transport, dark fiber, cross-connects, colocation, and cloud on-ramps into your facility from 100+ carriers across North America. No cost to you.",
+    "Nearby fiber is not deliverable fiber. Konative is a vendor-neutral data-center connectivity broker — an Avant sub-agent that proves multi-path deliverability for mid-build sites and sources laterals, waves, DIA, DCI, and cloud on-ramps. No cost to you.",
   alternates: { canonical: "/data-center-connectivity" },
   openGraph: {
     title: "Data Center Connectivity Broker | Transport, Dark Fiber & Interconnection | Konative",
     description:
-      "Konative is a vendor-neutral data-center connectivity broker — an Avant sub-agent sourcing transport, dark fiber, cross-connects, colocation, and cloud on-ramps into your facility from 100+ carriers across North America. No cost to you.",
+      "Nearby fiber is not deliverable fiber. Konative proves multi-path deliverability for mid-build sites and sources laterals, waves, DIA, DCI, and cloud on-ramps — suppliers pay us.",
     url: `${SITE_URL}/data-center-connectivity`,
   },
 };
@@ -315,21 +315,21 @@ export default function DataCenterConnectivityPage() {
       <PitchLayout
         eyebrow="Data Center Connectivity · Avant Partner"
         titleLines={[
-          { text: "THE NETWORK", tone: "white" },
-          { text: "INTO YOUR", tone: "dim" },
-          { text: "FACILITY.", tone: "rust" },
+          { text: "NEARBY FIBER IS NOT", tone: "white" },
+          { text: "DELIVERABLE", tone: "rust" },
+          { text: "FIBER.", tone: "white" },
         ]}
-        subhead="Konative is a vendor-neutral data-center connectivity broker — an Avant sub-agent that sources transport, dark fiber, cross-connects, colocation, and cloud on-ramps into your facility from 100+ carriers across North America. We work for you, not the supplier, and because carriers pay our fee, there is no cost to you."
-        primaryCta={{ label: "Book a Discovery Call →", href: "/call" }}
-        secondaryCta={{ label: "Contact Us →", href: "/contact" }}
+        subhead="Konative maps which carriers can actually reach your mid-build site — laterals, waves, DIA, DCI, and physical diversity — before the schedule slips. Vendor-neutral AVANT sub-agent. Suppliers pay us; you get a one-page market brief, then a competitive quote set."
+        primaryCta={{ label: "Get a One-Page Site Brief →", href: "/contact?projectType=data_center#request" }}
+        secondaryCta={{ label: "Lateral Cost Estimator →", href: "/tools/lateral-estimator" }}
         heroImage={{
           src: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=70",
           alt: "Dense cable management and network cabling running along a data center server aisle",
           credit: { name: "Taylor Vick", url: "https://unsplash.com/@tvick" },
         }}
-        ctaHeadlineTop="BUILDING A CAMPUS?"
-        ctaHeadlineBottom="WE'LL SOURCE THE NETWORK."
-        ctaSub="Bring us the address, capacity plan, diversity requirement, and ready-for-service date. We'll turn them into a sourcing plan across the full supplier market."
+        ctaHeadlineTop="MID-BUILD?"
+        ctaHeadlineBottom="PROVE DELIVERABILITY FIRST."
+        ctaSub="Bring the parcel, capacity plan, diversity requirement, and ready-for-service date. We return a site-specific brief — meet points, extension risk, and carrier-validation questions — then run the market."
       >
         {/* Section 1: What we broker for data centers */}
         <PitchSection eyebrow="What We Broker" heading="Connectivity into the facility">
@@ -712,7 +712,7 @@ export default function DataCenterConnectivityPage() {
           </div>
           <div style={{ marginTop: 48, textAlign: "center" }}>
             <Link
-              href="/call"
+              href="/contact?projectType=data_center#request"
               style={{
                 fontFamily: BODY,
                 fontWeight: 600,
@@ -727,7 +727,7 @@ export default function DataCenterConnectivityPage() {
                 display: "inline-block",
               }}
             >
-              Book a 15-Min Call →
+              Get a One-Page Site Brief →
             </Link>
           </div>
         </PitchSection>

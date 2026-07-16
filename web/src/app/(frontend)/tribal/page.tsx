@@ -16,12 +16,12 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Tribal Enterprise Connectivity | Sovereignty-Aware Brokerage | Konative",
   description:
-    "Sovereignty-aware, vendor-neutral connectivity brokerage for Tribal gaming, government, healthcare, and education. Internet, SD-WAN, voice, transport, and security — sourced from 100+ suppliers at no cost to your enterprise.",
+    "Keep uptime. Make carriers compete. Native-owned, vendor-neutral connectivity brokerage for Tribal gaming, government, healthcare, and multi-site ops — internet, SD-WAN, voice, transport, and security at no cost to your enterprise.",
   alternates: { canonical: "/tribal" },
   openGraph: {
     title: "Tribal Enterprise Connectivity | Sovereignty-Aware Brokerage | Konative",
     description:
-      "Sovereignty-aware, vendor-neutral connectivity brokerage for Tribal gaming, government, healthcare, and education. Internet, SD-WAN, voice, transport, and security — sourced from 100+ suppliers at no cost to your enterprise.",
+      "Keep uptime. Make carriers compete. Native-owned, vendor-neutral connectivity brokerage for Tribal gaming and multi-site ops — suppliers pay us; you own the contracts.",
     url: `${SITE_URL}/tribal`,
   },
 };
@@ -75,9 +75,9 @@ const FAQ_ITEMS = [
       "Book a 15-minute discovery call at konative.com/call or fill out the contact form at konative.com/contact. Konative will ask about your locations, current services, bandwidth and resilience requirements, and any funding context (TBCP awards, other federal programs). From there we run the supplier market and return a structured comparison — usually within a few business days for straightforward requirements.",
   },
   {
-    question: "Are you applying for NTIA TBCP Round 3 funding — should you engage before or after award?",
+    question: "Are you applying for NTIA TBCP Round 3 funding — should you engage Konative before award?",
     answer:
-      "Before, if possible. TBCP Round 3 and the Native Entities Grant Program fund the physical infrastructure — fiber, middle-mile, last-mile — but not the operational connectivity layer that runs on top of it once that infrastructure is built. Engaging pre-award lets Konative help specify carrier-grade operational connectivity into the proposal itself and line up carrier terms in advance, so the connectivity is ready to execute the moment funding lands rather than starting from zero post-award. Full Round 3 eligibility, deadlines, and program details are on the NTIA Round 3 page.",
+      "Grant application help is a free trust resource — use the Funding Navigator — and is separate from Konative’s commercial brokerage. TBCP Round 3 and NEGP fund infrastructure; they are not a commissionable sales motion. Engage Konative brokerage when you have a named enterprise property with a commercial connectivity question (renewal, multi-site WAN, DIA, failover) — including prior-round awardees moving into operations. Do not wait for a grant award to fix casino or enterprise uptime.",
   },
 ];
 
@@ -195,23 +195,23 @@ export default function TribalPage() {
       <JsonLd data={faqJsonLd} />
 
       <PitchLayout
-        eyebrow="Tribal &amp; Rural Connectivity · Avant Partner"
+        eyebrow="Tribal Enterprise Connectivity · Native-Owned · Avant Partner"
         titleLines={[
-          { text: "SOVEREIGNTY-AWARE", tone: "white" },
-          { text: "CONNECTIVITY", tone: "dim" },
-          { text: "BROKERAGE.", tone: "rust" },
+          { text: "KEEP UPTIME.", tone: "white" },
+          { text: "MAKE CARRIERS", tone: "dim" },
+          { text: "COMPETE.", tone: "rust" },
         ]}
-        subhead="Konative is a sovereignty-aware, vendor-neutral connectivity broker serving tribal nations, tribal enterprises, and rural broadband authorities across the US and Canada. We source internet, fiber, transport, voice, cloud, and security from 100+ suppliers at no cost — and help you navigate NTIA Tribal Broadband Connectivity Program funding."
-        primaryCta={{ label: "Book a Discovery Call →", href: "/call" }}
-        secondaryCta={{ label: "Contact Us →", href: "/contact" }}
+        subhead="Native-owned, vendor-neutral connectivity brokerage for tribal gaming and multi-site ops — WAN, DIA, SD-WAN, voice, and security. Suppliers pay us; you own the contracts and the data. Written sovereignty commitment. Grant help is free and separate."
+        primaryCta={{ label: "Request a Continuity Snapshot →", href: "/contact?projectType=tribal_enterprise#request" }}
+        secondaryCta={{ label: "Sovereignty Commitment →", href: "/tribal/sovereignty" }}
         heroImage={{
           src: "https://images.unsplash.com/photo-1771179909412-813719cfca69?auto=format&fit=crop&w=2000&q=70",
           alt: "High-voltage transmission towers and power lines crossing a misty open rural landscape",
           credit: { name: "Felipe", url: "https://unsplash.com/@fecxst" },
         }}
-        ctaHeadlineTop="ONE REQUIREMENT."
-        ctaHeadlineBottom="THE WHOLE MARKET."
-        ctaSub="Tell us what your nation or enterprise needs — we'll quote it across the full supplier portfolio, sovereignty-aware, at no cost to you."
+        ctaHeadlineTop="ONE SITE OR MANY."
+        ctaHeadlineBottom="NO DISRUPTION PATH."
+        ctaSub="Tell us the properties, renewal windows, and failover gaps. We return a continuity snapshot — then run a competitive market without ripping out what works."
       >
         {/* Funding Navigator promo band */}
         <section style={{ background: "#08142D", borderTop: `3px solid ${RED}`, padding: "44px 0" }}>
@@ -243,7 +243,7 @@ export default function TribalPage() {
                 }}
               >
                 <span style={{ display: "block", width: 28, height: 2, background: RED }} />
-                Free Navigator · No Signup Required
+                Free Help · Not a Brokerage Pitch
               </div>
               <div
                 style={{
@@ -256,12 +256,12 @@ export default function TribalPage() {
                   marginBottom: 10,
                 }}
               >
-                $790M · Applications due <span style={{ color: "#FF526B" }}>Sept 17, 2026</span>
+                $790M applications due <span style={{ color: "#FF526B" }}>Sept 17, 2026</span>
               </div>
               <p style={{ fontFamily: BODY, fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.6)", margin: 0, maxWidth: 620 }}>
-                NTIA opened TBCP Round 3 ($540M) and the Native Entities Grant Program ($250M) on
-                June 17, 2026. Our free navigator covers eligibility, eligible uses, and the
-                application checklist — with a live countdown to the deadline.
+                Free TBCP Round 3 + NEGP navigator for the application window. Grant help is separate
+                from Konative brokerage — we do not farm awards into commission pitches. When you have
+                a named enterprise site with a commercial connectivity question, use the continuity snapshot instead.
               </p>
             </div>
             <Link
@@ -533,7 +533,7 @@ export default function TribalPage() {
           </div>
           <div style={{ marginTop: 48, textAlign: "center" }}>
             <Link
-              href="/call"
+              href="/contact?projectType=tribal_enterprise#request"
               style={{
                 fontFamily: BODY,
                 fontWeight: 600,
@@ -548,7 +548,7 @@ export default function TribalPage() {
                 display: "inline-block",
               }}
             >
-              Book a 15-Min Call →
+              Request a Continuity Snapshot →
             </Link>
           </div>
         </PitchSection>

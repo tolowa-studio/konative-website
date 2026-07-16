@@ -49,24 +49,18 @@ export default function HomePage() {
         </a>
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "150px 32px 72px" }}>
           <p style={eyebrow}>Vendor-neutral connectivity brokerage · AVANT partner</p>
-          <h1 style={{ fontFamily: DISPLAY, fontSize: "clamp(58px,9vw,118px)", lineHeight: .86, letterSpacing: "-.025em", textTransform: "uppercase", color: "#fff", maxWidth: 960, margin: "0 0 28px" }}>
-            Find the right connectivity for <span style={{ color: RED }}>every critical site.</span>
+          <h1 style={{ fontFamily: DISPLAY, fontSize: "clamp(52px,8.5vw,108px)", lineHeight: .86, letterSpacing: "-.025em", textTransform: "uppercase", color: "#fff", maxWidth: 980, margin: "0 0 28px" }}>
+            Nearby fiber is not <span style={{ color: RED }}>deliverable fiber.</span>
           </h1>
           <p style={{ maxWidth: 720, color: "rgba(255,255,255,.72)", fontSize: 18, lineHeight: 1.7, marginBottom: 36 }}>
-            Konative finds, compares, procures, and manages internet, fiber, transport, cloud, voice, and security for Tribal organizations, funded projects, data centers, and complex enterprises.
+            Konative maps which carriers can actually reach your mid-build data-center site — laterals, waves, DIA, diversity — before the schedule slips. Native-owned. Vendor-neutral. Suppliers pay us.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/contact#request" style={primary}>Check a location</Link>
-            <Link href="/contact?projectType=tribal_funded#request" style={secondary}>Bring us an RFP or funded project</Link>
+            <Link href="/contact?projectType=data_center#request" style={primary}>Get a one-page site brief</Link>
+            <Link href="/tribal" style={secondary}>Tribal enterprise connectivity</Link>
           </div>
-          <Link
-            href="/tribal/funding-navigator"
-            style={{ display: "inline-block", marginTop: 22, color: "#fff", fontSize: 13, fontWeight: 600, letterSpacing: ".04em", textDecoration: "none", borderBottom: "1px solid rgba(255,255,255,.4)", paddingBottom: 2 }}
-          >
-            $790M in Tribal broadband funding is open — applications due Sept 17, 2026. Free navigator →
-          </Link>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", maxWidth: 880, marginTop: 54, border: "1px solid rgba(255,255,255,.15)" }}>
-            {["100+ supplier portfolio", "One market comparison", "Supplier-paid advisory", "Lifecycle support"].map(x => <div key={x} style={{ padding: "18px 20px", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: ".11em", textTransform: "uppercase", borderRight: "1px solid rgba(255,255,255,.12)" }}>{x}</div>)}
+            {["Site-specific deliverability", "100+ supplier portfolio", "Supplier-paid advisory", "Lifecycle support"].map(x => <div key={x} style={{ padding: "18px 20px", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: ".11em", textTransform: "uppercase", borderRight: "1px solid rgba(255,255,255,.12)" }}>{x}</div>)}
           </div>
         </div>
       </section>
@@ -90,13 +84,19 @@ export default function HomePage() {
       </section>
 
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 32px" }}>
-        <p style={{ ...eyebrow, color: RED }}>Start with your situation</p>
-        <h2 style={sectionTitle}>Two urgent markets. One sourcing desk.</h2>
+        <p style={{ ...eyebrow, color: RED }}>Where we lean in</p>
+        <h2 style={sectionTitle}>One sourcing desk. Two rooms we know.</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,430px),1fr))", gap: 18, marginTop: 42 }}>
-          <Door href="/tribal" number="01" title="Tribal or grant-funded project" body="Turn program dollars and operating requirements into serviceable locations, competitive options, defensible procurement, and installed connectivity. Free tools: the $790M funding navigator and a 48-hour carrier availability report." cta="Plan funded connectivity" />
-          <Door href="/data-center-connectivity" number="02" title="Data-center site" body="Determine whether a site can obtain the internet, transport, dark fiber, wavelengths, cloud access, and physical diversity its operating plan requires. We publish the benchmarks nobody else will — plus a free lateral cost estimator." cta="Evaluate site connectivity" />
+          <Door href="/data-center-connectivity" number="01" title="Data center under construction" body="Prove which carriers can actually deliver multi-path connectivity to a named mid-build site — laterals, waves, DIA, DCI, diversity — without betting the schedule on a single carrier’s map. Free lateral cost estimator + published secondary-market benchmarks." cta="Get a site connectivity brief" />
+          <Door href="/tribal" number="02" title="Tribal gaming & enterprise" body="Keep uptime. Make carriers compete. Native-owned, vendor-neutral brokerage for casinos, multi-site ops, health, and government — renewal continuity and failover without rip-and-replace. Suppliers pay us; you own the contracts." cta="Request a continuity snapshot" />
         </div>
-        <p style={{ color: MUTED, marginTop: 22, lineHeight: 1.7 }}>Also sourcing multi-site enterprise, gaming and hospitality, healthcare, public safety, UCaaS/CCaaS, managed networks, cloud, mobility, and cybersecurity.</p>
+        <p style={{ color: MUTED, marginTop: 22, lineHeight: 1.7 }}>
+          Also sourcing multi-site enterprise, healthcare, public safety, UCaaS/CCaaS, managed networks, cloud, mobility, and cybersecurity.{" "}
+          <Link href="/tribal/funding-navigator" style={{ color: RED, fontWeight: 600, textDecoration: "none" }}>
+            Applying for TBCP Round 3 / NEGP by Sept 17?
+          </Link>{" "}
+          Free funding navigator — grant help is separate from brokerage.
+        </p>
       </section>
 
       <section style={{ background: "#F7F8FA", borderBlock: `1px solid ${LINE}`, padding: "88px 32px" }}>
@@ -125,7 +125,14 @@ export default function HomePage() {
       </section>
 
       <section style={{ background: DARK, padding: "84px 32px", color: "#fff", textAlign: "center" }}>
-        <div style={{ maxWidth: 850, margin: "0 auto" }}><p style={eyebrow}>One requirement is enough to start</p><h2 style={{ ...sectionTitle, color: "#fff", fontSize: "clamp(48px,7vw,82px)" }}>Bring the addresses. We&apos;ll run the market.</h2><p style={{ color: "rgba(255,255,255,.65)", lineHeight: 1.7, margin: "22px auto 30px", maxWidth: 650 }}>Share a funded project, renewal, new site, RFP, or urgent service problem. We will organize the requirement and identify the fastest credible sourcing path.</p><Link href="/contact#request" style={primary}>Get connectivity options</Link></div>
+        <div style={{ maxWidth: 850, margin: "0 auto" }}>
+          <p style={eyebrow}>One named site is enough to start</p>
+          <h2 style={{ ...sectionTitle, color: "#fff", fontSize: "clamp(48px,7vw,82px)" }}>Bring the address. We&apos;ll prove deliverability.</h2>
+          <p style={{ color: "rgba(255,255,255,.65)", lineHeight: 1.7, margin: "22px auto 30px", maxWidth: 650 }}>
+            Share a mid-build campus, renewal window, multi-site WAN, or urgent service problem. We return a one-page market brief — not a carrier pitch deck.
+          </p>
+          <Link href="/contact#request" style={primary}>Get a one-page site brief</Link>
+        </div>
       </section>
     </main>
   );

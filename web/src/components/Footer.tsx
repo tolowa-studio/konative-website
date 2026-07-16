@@ -20,7 +20,7 @@ export default function Footer() {
               <span style={{ color: RED }}>NATIVE</span>
             </Link>
             <p style={{ fontFamily: "Inter, sans-serif", fontSize: 13, lineHeight: 1.7, color: MUTED, maxWidth: 330 }}>
-              Vendor-neutral connectivity brokerage for enterprise networks, Tribal and rural organizations, and data-center infrastructure across North America.
+              Native-owned, vendor-neutral connectivity brokerage for data centers under construction and Tribal enterprises across North America. Nearby fiber is not deliverable fiber.
             </p>
             <Link href="/call" style={{ display: "inline-block", marginTop: 18, background: RED, color: "#fff", padding: "12px 18px", textDecoration: "none", fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
               Book a call
@@ -30,8 +30,8 @@ export default function Footer() {
           <FooterGroup
             title="Who We Serve"
             links={[
-              ["I'm a tribal nation / EDC", "/tribal"],
               ["I need data-center connectivity", "/data-center-connectivity"],
+              ["I'm a tribal nation / enterprise", "/tribal"],
               ["I'm an enterprise / multi-site", "/connectivity"],
             ]}
           />

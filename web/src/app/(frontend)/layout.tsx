@@ -19,7 +19,7 @@ export const viewport: Viewport = {
 export const metadata = {
   title: "Konative | Internet & Network Connectivity Brokerage",
   description:
-    "Konative is a vendor-neutral connectivity brokerage. We source, design, and manage internet, fiber, transport, SD-WAN, voice, and cloud connectivity for Tribal enterprises and the data centers powering AI — backed by Avant's 100+ supplier portfolio, at no cost to you.",
+    "Nearby fiber is not deliverable fiber. Konative is a Native-owned, vendor-neutral connectivity brokerage — an AVANT partner — for data centers under construction and Tribal enterprises. Site-specific briefs. Suppliers pay us.",
   metadataBase: new URL("https://konative.com"),
   icons: {
     icon: "/favicon.svg",

@@ -34,7 +34,7 @@ export const organizationSchema: JsonLdObject = {
   url: SITE_URL,
   logo: `${SITE_URL}/og-image.png`,
   description:
-    "Konative is North America's premier tribal connectivity and data center development brokerage. Vendor-neutral and AI-native, Konative helps tribal nations, Indigenous Development Corporations, enterprises, and landowners turn land, power, and connectivity needs into funded, sovereignty-compatible infrastructure deals across the US and Canada.",
+    "Konative is a Native-owned, vendor-neutral connectivity brokerage — an Avant sub-agent — for data centers under construction and Tribal enterprises across North America. Nearby fiber is not deliverable fiber. Suppliers pay; buyers get site-specific market briefs.",
   founder: [
     { "@type": "Person", name: "Jeramey James" },
     { "@type": "Person", name: "Scott Swartzbaugh" },
@@ -94,7 +94,7 @@ export const tribalConnectivityServiceSchema: JsonLdObject = {
   "@type": "Service",
   name: "Tribal & rural enterprise connectivity brokerage",
   description:
-    "Vendor-neutral connectivity brokerage for tribal nations, Indigenous Development Corporations, and rural enterprises. Konative sources internet, SD-WAN, fiber, transport, and managed connectivity from 100+ suppliers at no cost to the client across the US and Canada.",
+    "Keep uptime. Make carriers compete. Native-owned, vendor-neutral connectivity brokerage for tribal gaming and multi-site enterprise ops — internet, SD-WAN, fiber, transport, and managed connectivity. Suppliers pay; Tribes own the contracts.",
   url: `${SITE_URL}/tribal`,
   serviceType: "Connectivity Brokerage",
   areaServed: ["United States", "Canada"],
@@ -106,7 +106,7 @@ export const dataCenterConnectivityServiceSchema: JsonLdObject = {
   "@type": "Service",
   name: "Data-center connectivity brokerage",
   description:
-    "Vendor-neutral brokerage for data center connectivity requirements — fiber transport, cross-connects, colocation, cloud on-ramps, and interconnection — sourced from carriers and providers across North America.",
+    "Nearby fiber is not deliverable fiber. Vendor-neutral brokerage for mid-build data-center connectivity — laterals, waves, DIA, DCI, cross-connects, and cloud on-ramps — proved at a named site before the schedule slips.",
   url: `${SITE_URL}/data-center-connectivity`,
   serviceType: "Connectivity Brokerage",
   areaServed: ["United States", "Canada"],

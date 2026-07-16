@@ -14,14 +14,14 @@ const LINE = "#E5E7EB";
 const DISPLAY = "'Barlow Condensed', sans-serif";
 
 export const metadata: Metadata = {
-  title: "About — A Native-Owned Connectivity Brokerage | Konative",
+  title: "About — Native-Owned Connectivity Brokerage | Konative",
   description:
-    "Konative is a Native-owned connectivity and infrastructure brokerage — founded and majority-owned by Jeramey James, an enrolled citizen of the Tolowa Dee-ni' Nation. Sovereignty-first procurement for Tribal nations, funded programs, and data centers.",
+    "One sourcing desk for Tribal enterprises and data-center builds. Konative is founded and majority-owned by Jeramey James, Tolowa Dee-ni' Nation — a Native-owned AVANT connectivity brokerage with written sovereignty commitments.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About Konative — Native-Owned Connectivity Brokerage",
+    title: "About Konative — One Desk, Two Rooms",
     description:
-      "Founded and majority-owned by Jeramey James, an enrolled citizen of the Tolowa Dee-ni' Nation. A vendor-neutral connectivity broker built for Tribal nations and the operators who serve them.",
+      "Native-owned AVANT desk for Tribal enterprises and data-center builds — published benchmarks and a written sovereignty commitment.",
     url: `${SITE_URL}/about`,
     type: "profile",
   },
@@ -105,13 +105,13 @@ export default function AboutPage() {
               Native-owned · Tolowa Dee-ni&apos; · Vendor-neutral
             </span>
           </div>
-          <h1 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: "clamp(44px, 6.5vw, 88px)", lineHeight: 0.92, textTransform: "uppercase", letterSpacing: "0.01em", margin: "0 0 24px", maxWidth: 900 }}>
-            A Native-owned brokerage,<br /><span style={{ color: RED }}>built for Indian Country.</span>
+          <h1 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: "clamp(44px, 6.5vw, 88px)", lineHeight: 0.92, textTransform: "uppercase", letterSpacing: "0.01em", margin: "0 0 24px", maxWidth: 960 }}>
+            One sourcing desk for<br /><span style={{ color: RED }}>Tribal enterprises and data-center builds.</span>
           </h1>
           <p style={{ fontFamily: "Inter, sans-serif", fontSize: 18, lineHeight: 1.7, color: "rgba(255,255,255,0.72)", maxWidth: 680, margin: 0 }}>
             Konative is founded and majority-owned by Jeramey James, an enrolled citizen of the
-            Tolowa Dee-ni&apos; Nation. When a Tribal nation works with us, the dollars, the
-            accountability, and the sovereignty-first mindset stay inside Indian Country.
+            Tolowa Dee-ni&apos; Nation — a Native-owned AVANT desk built to sit in both rooms,
+            with published benchmarks and a written sovereignty commitment.
           </p>
         </div>
       </section>

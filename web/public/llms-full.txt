@@ -1,9 +1,10 @@
 # Konative — Full Reference
 
-> Konative (konative.com) is a vendor-neutral connectivity brokerage — an Avant sub-agent —
-> serving Tribal Nations, tribal enterprises, rural broadband authorities, and data-center
-> operators across the US and Canada. Suppliers pay Konative's fee when they win business;
-> buyers pay nothing. Konative does not write grants and federal money never flows through it.
+> Konative (konative.com) is a Native-owned, vendor-neutral connectivity brokerage — an Avant
+> sub-agent — for data centers under construction and Tribal enterprises across the US and Canada.
+> Core claim: nearby fiber is not deliverable fiber. Primary offer is a one-page site-specific
+> Market Connectivity Brief. Suppliers pay Konative's fee; buyers pay nothing. Grant help
+> (TBCP/NEGP navigator) is free and separate from brokerage — federal money never flows through Konative.
 
 ## Services brokered
 
@@ -12,9 +13,10 @@ SD-WAN and managed network, UCaaS and hosted voice, cloud connectivity (AWS Dire
 Azure ExpressRoute, Google Cloud Interconnect), managed security and SASE, mobility and fixed
 wireless, and colocation access — sourced through Avant's portfolio of 100+ suppliers.
 
-Buyer segments: Tribal gaming enterprises, Tribal governments and councils, Tribal economic
-development corporations, Tribal healthcare and education, Tribal broadband authorities,
-rural enterprises, and data-center operators.
+Buyer segments (priority): data-center operators and developers mid-build; Tribal gaming and
+multi-site enterprise ops; Tribal governments, healthcare, and education with a commercial
+connectivity trigger. Grant applicants use the free funding navigator — that is not a
+brokerage sales motion.
 
 ## Tribal Broadband Funding Navigator (/tribal/funding-navigator)
 

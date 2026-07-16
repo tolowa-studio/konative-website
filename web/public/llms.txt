@@ -1,47 +1,43 @@
 # Konative
 
-> Konative (konative.com) is a vendor-neutral connectivity brokerage — an Avant sub-agent —
-> serving Tribal Nations, tribal enterprises, rural broadband authorities, and data-center
-> operators across the US and Canada. We source internet, fiber, transport, SD-WAN, voice,
-> cloud connectivity, and security from 100+ suppliers. Suppliers pay our fee; buyers pay
-> nothing. We do not write grants, and federal money never flows through us.
+> Konative (konative.com) is a Native-owned, vendor-neutral connectivity brokerage —
+> an Avant sub-agent — for data centers under construction and Tribal enterprises across
+> the US and Canada. Core claim: nearby fiber is not deliverable fiber. We source internet,
+> fiber, transport, SD-WAN, voice, cloud connectivity, and security from 100+ suppliers.
+> Suppliers pay our fee; buyers pay nothing. We do not write grants, and federal money
+> never flows through us. Grant help (TBCP/NEGP navigator) is free and separate from brokerage.
+
+## Positioning
+
+- Primary wedge: data centers under construction needing multi-tier connectivity (laterals,
+  waves, DIA, DCI, diversity) proved at a named site.
+- Secondary: Tribal gaming and enterprise ops — renewal continuity, multi-site WAN, uptime.
+- Category: North America's connectivity brokerage for Tribal Nations and the data-center buildout.
+- Offer: one-page Market Connectivity Brief / One-Site Snapshot before any meeting ask.
 
 ## What Konative answers
 
-- How do I get competitive carrier quotes for a Tribal enterprise, casino, clinic, or government site?
+- How do I prove which carriers can actually deliver to my mid-build data-center site?
+- How do I get competitive carrier quotes for a Tribal casino, clinic, or government site?
 - What does a connectivity broker do, and what does it cost? (Nothing — suppliers pay the broker.)
-- What Tribal broadband funding is open right now, and when is it due?
+- What Tribal broadband funding is open right now, and when is it due? (Free navigator — not a sales pitch.)
 - How should a Tribe evaluate an outside connectivity partner? (See our sovereignty commitment.)
-- How do data-center operators source fiber, cross-connects, and cloud on-ramps?
 
 ## Key pages
 
-- /tribal — Tribal & rural enterprise connectivity brokerage (pillar page)
-- /tribal/funding-navigator — $790M Tribal Broadband Funding Navigator: NTIA TBCP Round 3
-  ($540M) and Native Entities Grant Program ($250M), both due September 17, 2026 at
-  11:59 p.m. ET. Free eligibility guide, program comparison, and application checklist.
-- /tribal/sovereignty — Our Sovereignty Commitment: six written promises — the Tribe owns the
-  contracts, the Tribe owns the data, no lock-in or termination fees, transparent
-  supplier-paid economics (typically 15-20% of monthly recurring charges), no grant-farming,
-  and in-person presence.
-- /tribal/carrier-check — Free 48-hour carrier availability report for Tribal lands: which
-  carriers and regional providers can actually serve a reservation or community, with
-  benchmark context and redlining documentation useful for funding applications.
-- /tribal/index — Tribal Connectivity Index: searchable NTIA TBCP award database
-- /tribal/awards — Interactive NTIA TBCP award explorer compiled from public federal data
+- /data-center-connectivity — Primary cash lane: mid-build deliverability, laterals, waves, DCI
+- /tribal — Tribal gaming & enterprise connectivity (sovereignty-aware brokerage)
+- /tribal/funding-navigator — Free $790M TBCP Round 3 + NEGP navigator (due Sept 17, 2026) —
+  trust resource; not a brokerage funnel
+- /tribal/sovereignty — Written sovereignty commitment
+- /tribal/carrier-check — Free 48-hour carrier availability report for Tribal lands
+- /tools/lateral-estimator — Free fiber lateral cost & timeline estimator
 - /connectivity — Enterprise connectivity brokerage overview
-- /data-center-connectivity — Data-center connectivity brokerage, with published 2026
-  benchmarks: underground fiber ~$18/ft median vs ~$8/ft aerial (FBA 2025), DIA and
-  wavelength price ranges, and secondary-market fiber briefs.
-- /tools/lateral-estimator — Free fiber lateral cost & timeline estimator (underground vs
-  aerial construction, terrain and diversity factors, published-median methodology).
-- /markets — Data-center market intelligence for 25+ North American states/provinces, each
-  with a connectivity procurement brief (Columbus, Salt Lake City, San Antonio, Reno,
-  Indianapolis, Alberta, and more).
-- /map — Interactive infrastructure map (indigenous lands, broadband, power, transmission)
-- /answers — Knowledge base on brokerage pricing, contracts, and process
-- /call — Book a 15-minute discovery call (https://cal.com/jeramey-james/15min)
-- /contact — Contact form
+- /markets — Secondary-market connectivity procurement briefs
+- /map — Interactive infrastructure map
+- /answers — Brokerage pricing, contracts, and process
+- /call — 15-minute discovery (https://cal.com/jeramey-james/15min)
+- /contact — Contact form / site brief request
 
 ## Contact
 
