@@ -9,16 +9,28 @@ type NavItem = NavLink | { label: string; children: NavLink[] };
 
 const navLinks: NavItem[] = [
   { label: "Data Center", url: "/data-center-connectivity" },
-  { label: "Tribal & Rural", url: "/tribal" },
+  {
+    label: "Tribal & Rural",
+    children: [
+      { label: "Tribal Connectivity", url: "/tribal" },
+      { label: "Tribal DC Tracker", url: "/tribal/projects" },
+      { label: "Funding Navigator", url: "/tribal/funding-navigator" },
+      { label: "Carrier Check", url: "/tribal/carrier-check" },
+      { label: "TBCP Awards", url: "/tribal/awards" },
+      { label: "NTIA / TBCP", url: "/ntia" },
+    ],
+  },
   { label: "Connectivity", url: "/connectivity" },
-  { label: "Tribal DC", url: "/tribal/projects" },
   {
     label: "Map & Intelligence",
     children: [
       { label: "Interactive Map", url: "/map" },
+      { label: "Market Signals", url: "/governors" },
       { label: "Canada", url: "/canada" },
       { label: "Markets", url: "/markets" },
       { label: "Intelligence", url: "/intelligence" },
+      { label: "Dispatch", url: "/dispatch" },
+      { label: "Lateral Estimator", url: "/tools/lateral-estimator" },
     ],
   },
   { label: "News", url: "/news" },
@@ -266,7 +278,7 @@ export default function Header() {
                             border: "1px solid #E5E7EB",
                             borderRadius: 6,
                             boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                            minWidth: 180,
+                            minWidth: 200,
                             padding: "6px 0",
                           }}
                         >
