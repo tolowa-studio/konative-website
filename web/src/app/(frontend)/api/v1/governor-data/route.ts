@@ -1,10 +1,11 @@
 /**
- * GET /api/v1/governor-data?type=governors|stalled-projects|tribal-projects|all
+ * GET /api/v1/governor-data?type=governors|live-projects|stalled-projects|tribal-projects|all
  *
  * Returns GeoJSON FeatureCollections backing the /governors map page:
- *   - governors        : Sanity `governor` docs (capital city points)
- *   - stalled-projects : Sanity `dataCenterProject` filtered to stalled/canceled/paused/blocked
- *   - tribal-projects  : Sanity `tribalProject` docs (US + Canada tribal/First Nations)
+ *   - governors        : Sanity `governor` docs (capital city points) — all 50 US states
+ *   - live-projects    : construction + announced by default; add `&includeOperational=1` for full inventory
+ *   - stalled-projects : stalled / canceled / paused / blocked
+ *   - tribal-projects  : Sanity `tribalProject` docs (US tribal + Canada First Nations)
  *
  * Properties on each feature carry everything the sidebar needs (no second fetch).
  */
@@ -96,19 +97,12 @@ interface ProjectRow {
   sourceUrl?: string;
 }
 
-async function fetchStalledProjects(): Promise<FC> {
-  const rows = await sanity.fetch<ProjectRow[]>(
-    `*[_type == "dataCenterProject" && defined(location) && status in ["stalled","canceled","paused","blocked"]]{
-      _id, name, operator, location, city, state, country,
-      status, capacityMw,
-      blockReason, blockReasonDetail, ownerFunder, relatedSources, stalledAt, sourceUrl
-    }`,
-  );
+function mapProjectFeatures(rows: ProjectRow[], layer: "live-projects" | "stalled-projects"): FC {
   const features = rows.map((p) => ({
     type: "Feature" as const,
     geometry: point(p.location.lng, p.location.lat),
     properties: {
-      layer: "stalled-projects",
+      layer,
       id: p._id,
       name: p.name,
       operator: p.operator ?? "",
@@ -126,6 +120,36 @@ async function fetchStalledProjects(): Promise<FC> {
     },
   }));
   return fc(features);
+}
+
+/**
+ * Live = pipeline by default (construction + announced).
+ * Full operational inventory is ~1.4k points and will crush the map —
+ * only include when `includeOperational=1`.
+ */
+async function fetchLiveProjects(includeOperational: boolean): Promise<FC> {
+  const statuses = includeOperational
+    ? `["operational","construction","announced"]`
+    : `["construction","announced"]`;
+  const rows = await sanity.fetch<ProjectRow[]>(
+    `*[_type == "dataCenterProject" && defined(location) && status in ${statuses}]{
+      _id, name, operator, location, city, state, country,
+      status, capacityMw,
+      blockReason, blockReasonDetail, ownerFunder, relatedSources, stalledAt, sourceUrl
+    }`,
+  );
+  return mapProjectFeatures(rows, "live-projects");
+}
+
+async function fetchStalledProjects(): Promise<FC> {
+  const rows = await sanity.fetch<ProjectRow[]>(
+    `*[_type == "dataCenterProject" && defined(location) && status in ["stalled","canceled","paused","blocked"]]{
+      _id, name, operator, location, city, state, country,
+      status, capacityMw,
+      blockReason, blockReasonDetail, ownerFunder, relatedSources, stalledAt, sourceUrl
+    }`,
+  );
+  return mapProjectFeatures(rows, "stalled-projects");
 }
 
 interface TribalRow {
@@ -184,10 +208,15 @@ async function fetchTribalProjects(): Promise<FC> {
 
 export async function GET(req: NextRequest) {
   const type = req.nextUrl.searchParams.get("type") ?? "all";
+  const includeOperational =
+    req.nextUrl.searchParams.get("includeOperational") === "1";
 
   try {
     if (type === "governors") {
       return NextResponse.json(await fetchGovernors());
+    }
+    if (type === "live-projects") {
+      return NextResponse.json(await fetchLiveProjects(includeOperational));
     }
     if (type === "stalled-projects") {
       return NextResponse.json(await fetchStalledProjects());
@@ -195,8 +224,9 @@ export async function GET(req: NextRequest) {
     if (type === "tribal-projects") {
       return NextResponse.json(await fetchTribalProjects());
     }
-    const [governors, stalled, tribal] = await Promise.all([
+    const [governors, live, stalled, tribal] = await Promise.all([
       fetchGovernors(),
+      fetchLiveProjects(includeOperational),
       fetchStalledProjects(),
       fetchTribalProjects(),
     ]);
@@ -204,18 +234,22 @@ export async function GET(req: NextRequest) {
       type: "FeatureCollection",
       features: [
         ...governors.features,
+        ...live.features,
         ...stalled.features,
         ...tribal.features,
       ],
       counts: {
         governors: governors.features.length,
+        liveProjects: live.features.length,
         stalledProjects: stalled.features.length,
         tribalProjects: tribal.features.length,
         total:
           governors.features.length +
+          live.features.length +
           stalled.features.length +
           tribal.features.length,
       },
+      includeOperational,
     });
   } catch (e) {
     console.error("governor-data error", e);

@@ -10,7 +10,14 @@ const MAP_STYLE = 'https://tiles.openfreemap.org/styles/dark'
 
 // ── Camera presets ────────────────────────────────────────────────────────────
 
-type StateCode = 'ALL' | 'NV' | 'WV' | 'FL' | 'OK'
+type UsStateCode =
+  | 'AL' | 'AK' | 'AZ' | 'AR' | 'CA' | 'CO' | 'CT' | 'DE' | 'FL' | 'GA'
+  | 'HI' | 'ID' | 'IL' | 'IN' | 'IA' | 'KS' | 'KY' | 'LA' | 'ME' | 'MD'
+  | 'MA' | 'MI' | 'MN' | 'MS' | 'MO' | 'MT' | 'NE' | 'NV' | 'NH' | 'NJ'
+  | 'NM' | 'NY' | 'NC' | 'ND' | 'OH' | 'OK' | 'OR' | 'PA' | 'RI' | 'SC'
+  | 'SD' | 'TN' | 'TX' | 'UT' | 'VT' | 'VA' | 'WA' | 'WV' | 'WI' | 'WY'
+
+type StateCode = 'ALL' | UsStateCode
 type Scope = 'governors' | 'tribal-us' | 'tribal-ca' | 'continent'
 
 interface ScopeView {
@@ -22,7 +29,7 @@ interface ScopeView {
 }
 
 const SCOPES: ScopeView[] = [
-  { code: 'governors', label: 'Governors (NV/WV/FL/OK)', longitude: -93, latitude: 36, zoom: 3.6 },
+  { code: 'governors', label: 'Governors (US)', longitude: -96, latitude: 38, zoom: 3.4 },
   { code: 'tribal-us', label: 'US tribal', longitude: -100, latitude: 40, zoom: 3.4 },
   { code: 'tribal-ca', label: 'Canada First Nations', longitude: -113, latitude: 55, zoom: 3.6 },
   { code: 'continent', label: 'All (continent)', longitude: -100, latitude: 45, zoom: 2.9 },
@@ -37,12 +44,62 @@ interface StateView {
 }
 
 const STATE_VIEWS: StateView[] = [
-  { code: 'ALL', label: 'All four states', longitude: -93, latitude: 36, zoom: 3.6 },
-  { code: 'OK', label: 'Oklahoma', longitude: -97.5, latitude: 35.6, zoom: 6 },
-  { code: 'NV', label: 'Nevada', longitude: -117, latitude: 39, zoom: 5.7 },
-  { code: 'WV', label: 'West Virginia', longitude: -80.5, latitude: 38.7, zoom: 6.5 },
+  { code: 'ALL', label: 'All states', longitude: -96, latitude: 38, zoom: 3.4 },
+  { code: 'AL', label: 'Alabama', longitude: -86.9, latitude: 32.8, zoom: 6 },
+  { code: 'AK', label: 'Alaska', longitude: -153, latitude: 64, zoom: 3.5 },
+  { code: 'AZ', label: 'Arizona', longitude: -111.7, latitude: 34.2, zoom: 5.5 },
+  { code: 'AR', label: 'Arkansas', longitude: -92.4, latitude: 34.8, zoom: 6 },
+  { code: 'CA', label: 'California', longitude: -119.4, latitude: 37.2, zoom: 5 },
+  { code: 'CO', label: 'Colorado', longitude: -105.5, latitude: 39, zoom: 5.5 },
+  { code: 'CT', label: 'Connecticut', longitude: -72.7, latitude: 41.6, zoom: 7.5 },
+  { code: 'DE', label: 'Delaware', longitude: -75.5, latitude: 39, zoom: 7.5 },
   { code: 'FL', label: 'Florida', longitude: -82.5, latitude: 28, zoom: 5.8 },
+  { code: 'GA', label: 'Georgia', longitude: -83.4, latitude: 32.7, zoom: 6 },
+  { code: 'HI', label: 'Hawaii', longitude: -157, latitude: 20.8, zoom: 6 },
+  { code: 'ID', label: 'Idaho', longitude: -114.7, latitude: 44.4, zoom: 5.5 },
+  { code: 'IL', label: 'Illinois', longitude: -89.4, latitude: 40, zoom: 5.5 },
+  { code: 'IN', label: 'Indiana', longitude: -86.1, latitude: 39.8, zoom: 6 },
+  { code: 'IA', label: 'Iowa', longitude: -93.2, latitude: 42, zoom: 6 },
+  { code: 'KS', label: 'Kansas', longitude: -98.5, latitude: 38.5, zoom: 6 },
+  { code: 'KY', label: 'Kentucky', longitude: -84.8, latitude: 37.5, zoom: 6 },
+  { code: 'LA', label: 'Louisiana', longitude: -92, latitude: 31, zoom: 6 },
+  { code: 'ME', label: 'Maine', longitude: -69, latitude: 45.5, zoom: 6 },
+  { code: 'MD', label: 'Maryland', longitude: -76.8, latitude: 39.1, zoom: 7 },
+  { code: 'MA', label: 'Massachusetts', longitude: -71.8, latitude: 42.3, zoom: 7 },
+  { code: 'MI', label: 'Michigan', longitude: -85, latitude: 44.5, zoom: 5.5 },
+  { code: 'MN', label: 'Minnesota', longitude: -94.2, latitude: 46.3, zoom: 5.5 },
+  { code: 'MS', label: 'Mississippi', longitude: -89.6, latitude: 32.7, zoom: 6 },
+  { code: 'MO', label: 'Missouri', longitude: -92.5, latitude: 38.5, zoom: 6 },
+  { code: 'MT', label: 'Montana', longitude: -109.6, latitude: 47, zoom: 5 },
+  { code: 'NE', label: 'Nebraska', longitude: -99.8, latitude: 41.5, zoom: 6 },
+  { code: 'NV', label: 'Nevada', longitude: -117, latitude: 39, zoom: 5.7 },
+  { code: 'NH', label: 'New Hampshire', longitude: -71.5, latitude: 43.7, zoom: 6.5 },
+  { code: 'NJ', label: 'New Jersey', longitude: -74.5, latitude: 40.1, zoom: 7 },
+  { code: 'NM', label: 'New Mexico', longitude: -106, latitude: 34.4, zoom: 5.5 },
+  { code: 'NY', label: 'New York', longitude: -75, latitude: 43, zoom: 5.5 },
+  { code: 'NC', label: 'North Carolina', longitude: -79.5, latitude: 35.5, zoom: 6 },
+  { code: 'ND', label: 'North Dakota', longitude: -100.5, latitude: 47.5, zoom: 5.5 },
+  { code: 'OH', label: 'Ohio', longitude: -82.8, latitude: 40.4, zoom: 6 },
+  { code: 'OK', label: 'Oklahoma', longitude: -97.5, latitude: 35.6, zoom: 6 },
+  { code: 'OR', label: 'Oregon', longitude: -120.5, latitude: 44, zoom: 5.5 },
+  { code: 'PA', label: 'Pennsylvania', longitude: -77.5, latitude: 41, zoom: 6 },
+  { code: 'RI', label: 'Rhode Island', longitude: -71.5, latitude: 41.7, zoom: 8 },
+  { code: 'SC', label: 'South Carolina', longitude: -80.9, latitude: 33.9, zoom: 6.5 },
+  { code: 'SD', label: 'South Dakota', longitude: -100.2, latitude: 44.5, zoom: 6 },
+  { code: 'TN', label: 'Tennessee', longitude: -86.3, latitude: 35.8, zoom: 6 },
+  { code: 'TX', label: 'Texas', longitude: -99.5, latitude: 31.5, zoom: 5 },
+  { code: 'UT', label: 'Utah', longitude: -111.5, latitude: 39.5, zoom: 5.5 },
+  { code: 'VT', label: 'Vermont', longitude: -72.6, latitude: 44.1, zoom: 7 },
+  { code: 'VA', label: 'Virginia', longitude: -78.5, latitude: 37.5, zoom: 6 },
+  { code: 'WA', label: 'Washington', longitude: -120.5, latitude: 47.5, zoom: 6 },
+  { code: 'WV', label: 'West Virginia', longitude: -80.5, latitude: 38.7, zoom: 6.5 },
+  { code: 'WI', label: 'Wisconsin', longitude: -89.6, latitude: 44.6, zoom: 5.5 },
+  { code: 'WY', label: 'Wyoming', longitude: -107.5, latitude: 43, zoom: 5.5 },
 ]
+
+const STATE_VIEW_BY_CODE = Object.fromEntries(STATE_VIEWS.map((v) => [v.code, v])) as Record<StateCode, StateView>
+const QUICK_PICK_STATES: UsStateCode[] = ['OK', 'NV', 'WV', 'FL']
+const SELECTABLE_STATES = STATE_VIEWS.filter((v) => v.code !== 'ALL')
 
 // ── Colors ────────────────────────────────────────────────────────────────────
 
@@ -51,6 +108,17 @@ const STATUS_COLORS: Record<string, string> = {
   canceled: '#ef4444',
   paused: '#a78bfa',
   blocked: '#fb7185',
+}
+
+const LIVE_STATUS_COLORS: Record<string, string> = {
+  operational: '#10b981',
+  construction: '#3b82f6',
+  announced: '#94a3b8',
+}
+
+const PROJECT_STATUS_COLORS: Record<string, string> = {
+  ...LIVE_STATUS_COLORS,
+  ...STATUS_COLORS,
 }
 
 const TRIBAL_STATUS_COLORS: Record<string, string> = {
@@ -65,6 +133,31 @@ const TRIBAL_STATUS_COLORS: Record<string, string> = {
 const GOVERNOR_COLOR = '#22d3ee'
 
 // ── Layer specs ───────────────────────────────────────────────────────────────
+
+const liveLayer: CircleLayerSpecification = {
+  id: 'live-projects',
+  type: 'circle',
+  source: 'live-projects',
+  paint: {
+    'circle-radius': [
+      'interpolate', ['linear'], ['zoom'],
+      3, 3,
+      6, 6,
+      9, 10,
+    ],
+    'circle-color': [
+      'match',
+      ['get', 'status'],
+      'operational', LIVE_STATUS_COLORS.operational,
+      'construction', LIVE_STATUS_COLORS.construction,
+      'announced', LIVE_STATUS_COLORS.announced,
+      '#9ca3af',
+    ],
+    'circle-stroke-width': 1.5,
+    'circle-stroke-color': '#0b0f17',
+    'circle-opacity': 0.9,
+  },
+}
 
 const stalledLayer: CircleLayerSpecification = {
   id: 'stalled-projects',
@@ -226,23 +319,26 @@ export default function GovernorMapClient() {
 
   // Data
   const [governors, setGovernors] = useState<FeatureCollection<Point>>(EMPTY_FC)
+  const [live, setLive] = useState<FeatureCollection<Point>>(EMPTY_FC)
   const [stalled, setStalled] = useState<FeatureCollection<Point>>(EMPTY_FC)
   const [tribal, setTribal] = useState<FeatureCollection<Point>>(EMPTY_FC)
   const [loading, setLoading] = useState(true)
 
   // Layer toggles
   const [showGovernors, setShowGovernors] = useState(true)
+  const [showLive, setShowLive] = useState(true)
+  const [showOperational, setShowOperational] = useState(false)
   const [showStalled, setShowStalled] = useState(true)
-  const [showTribal, setShowTribal] = useState(false)
+  const [showTribal, setShowTribal] = useState(true)
 
   // Filters
-  const [scope, setScope] = useState<Scope>('governors')
+  const [scope, setScope] = useState<Scope>('continent')
   const [stateView, setStateView] = useState<StateCode>('ALL')
 
   // Selection
   const [selected, setSelected] = useState<Selected>(null)
 
-  // Load all three feature collections in parallel.
+  // Load governors / stalled / tribal once; live pipeline reloads when operational toggle flips.
   useEffect(() => {
     let cancelled = false
     Promise.all([
@@ -261,18 +357,42 @@ export default function GovernorMapClient() {
     return () => { cancelled = true }
   }, [])
 
-  // ── Filtering ───────────────────────────────────────────────────────────────
+  useEffect(() => {
+    let cancelled = false
+    const q = showOperational
+      ? '/api/v1/governor-data?type=live-projects&includeOperational=1'
+      : '/api/v1/governor-data?type=live-projects'
+    fetch(q)
+      .then((r) => r.json())
+      .then((l) => {
+        if (cancelled) return
+        if (l?.type === 'FeatureCollection') setLive(l)
+      })
+      .catch((e) => console.error('live-projects load', e))
+    return () => { cancelled = true }
+  }, [showOperational])
 
-  // State-pill filter only narrows the governor + stalled layers (which are state-scoped).
-  // It does not narrow tribal (which spans US + Canada).
-  const filteredStalled = useMemo<FeatureCollection<Point>>(() => {
-    if (stateView === 'ALL' || scope !== 'governors') return showStalled ? stalled : EMPTY_FC
-    if (!showStalled) return EMPTY_FC
+  const filterProjectsByState = useCallback((
+    collection: FeatureCollection<Point>,
+    enabled: boolean,
+  ): FeatureCollection<Point> => {
+    if (!enabled) return EMPTY_FC
+    if (stateView === 'ALL' || scope !== 'governors') return collection
     return {
       type: 'FeatureCollection',
-      features: stalled.features.filter((f) => f.properties?.state === stateView),
+      features: collection.features.filter((f) => f.properties?.state === stateView),
     }
-  }, [stalled, stateView, scope, showStalled])
+  }, [stateView, scope])
+
+  const filteredLive = useMemo(
+    () => filterProjectsByState(live, showLive),
+    [live, showLive, filterProjectsByState],
+  )
+
+  const filteredStalled = useMemo(
+    () => filterProjectsByState(stalled, showStalled),
+    [stalled, showStalled, filterProjectsByState],
+  )
 
   const filteredGovernors = useMemo<FeatureCollection<Point>>(() => {
     if (!showGovernors) return EMPTY_FC
@@ -312,7 +432,7 @@ export default function GovernorMapClient() {
   // Camera flyTo on scope or state change.
   useEffect(() => {
     if (scope === 'governors') {
-      const v = STATE_VIEWS.find((s) => s.code === stateView) ?? STATE_VIEWS[0]
+      const v = STATE_VIEW_BY_CODE[stateView] ?? STATE_VIEW_BY_CODE.ALL
       mapRef.current?.flyTo({
         center: [v.longitude, v.latitude],
         zoom: v.zoom,
@@ -336,6 +456,7 @@ export default function GovernorMapClient() {
     }
     if (scope === 'continent') {
       setShowTribal(true)
+      setShowLive(true)
       setShowStalled(true)
       setShowGovernors(true)
     }
@@ -350,7 +471,7 @@ export default function GovernorMapClient() {
     const props = feature.properties as Record<string, unknown>
     if (props?.layer === 'governors') {
       setSelected({ kind: 'governor', data: hydrateGovernor(props) })
-    } else if (props?.layer === 'stalled-projects') {
+    } else if (props?.layer === 'live-projects' || props?.layer === 'stalled-projects') {
       setSelected({ kind: 'project', data: hydrateProject(props) })
     } else if (props?.layer === 'tribal-projects') {
       setSelected({ kind: 'tribal', data: hydrateTribal(props) })
@@ -360,11 +481,12 @@ export default function GovernorMapClient() {
   // Build interactive layer ids dynamically (only enabled layers receive clicks).
   const interactiveLayerIds = useMemo<string[]>(() => {
     const ids: string[] = []
+    if (showLive) ids.push('live-projects')
     if (showStalled) ids.push('stalled-projects')
     if (showGovernors) ids.push('governors')
     if (showTribal) ids.push('tribal-projects-halo')
     return ids
-  }, [showStalled, showGovernors, showTribal])
+  }, [showLive, showStalled, showGovernors, showTribal])
 
   return (
     <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 56px)' }}>
@@ -373,7 +495,7 @@ export default function GovernorMapClient() {
         <div className="gov-toolbar-title">
           <strong>Governor + Tribal Brief</strong>
           <span className="gov-subtitle">
-            Stalled state projects · Governors · Tribal / First Nations DCs (US + Canada)
+            Live + stalled state DCs · Governors (US) · Tribal / First Nations (US + Canada)
           </span>
         </div>
 
@@ -383,6 +505,23 @@ export default function GovernorMapClient() {
             <input type="checkbox" checked={showGovernors} onChange={(e) => setShowGovernors(e.target.checked)} />
             <i className="dot" style={{ background: GOVERNOR_COLOR }} />
             Governors
+          </label>
+          <label className="gov-toggle">
+            <input type="checkbox" checked={showLive} onChange={(e) => setShowLive(e.target.checked)} />
+            <i className="dot" style={{ background: LIVE_STATUS_COLORS.construction }} />
+            Live pipeline
+          </label>
+          <label className="gov-toggle" title="Adds ~1.4k operational sites — use when zoomed into a state">
+            <input
+              type="checkbox"
+              checked={showOperational}
+              onChange={(e) => {
+                setShowOperational(e.target.checked)
+                if (e.target.checked) setShowLive(true)
+              }}
+            />
+            <i className="dot" style={{ background: LIVE_STATUS_COLORS.operational }} />
+            Operational
           </label>
           <label className="gov-toggle">
             <input type="checkbox" checked={showStalled} onChange={(e) => setShowStalled(e.target.checked)} />
@@ -412,30 +551,57 @@ export default function GovernorMapClient() {
           ))}
         </div>
         {scope === 'governors' && (
-          <div className="gov-state-pills">
-            {STATE_VIEWS.map((v) => (
+          <div className="gov-state-filter">
+            <button
+              type="button"
+              className={`gov-pill ${stateView === 'ALL' ? 'gov-pill-active' : ''}`}
+              onClick={() => { setStateView('ALL'); setSelected(null) }}
+            >
+              All
+            </button>
+            {QUICK_PICK_STATES.map((code) => (
               <button
-                key={v.code}
+                key={code}
                 type="button"
-                className={`gov-pill ${stateView === v.code ? 'gov-pill-active' : ''}`}
-                onClick={() => { setStateView(v.code); setSelected(null) }}
+                className={`gov-pill ${stateView === code ? 'gov-pill-active' : ''}`}
+                onClick={() => { setStateView(code); setSelected(null) }}
               >
-                {v.code === 'ALL' ? 'All' : v.code}
+                {code}
               </button>
             ))}
+            <select
+              className="gov-state-select"
+              value={stateView === 'ALL' ? '' : stateView}
+              onChange={(e) => {
+                const code = e.target.value as UsStateCode
+                if (code) {
+                  setStateView(code)
+                  setSelected(null)
+                }
+              }}
+              aria-label="Select US state"
+            >
+              <option value="">State…</option>
+              {SELECTABLE_STATES.map((v) => (
+                <option key={v.code} value={v.code}>{v.code} — {v.label}</option>
+              ))}
+            </select>
           </div>
         )}
       </div>
 
       <Map
         ref={(r) => { mapRef.current = r }}
-        initialViewState={{ longitude: -93, latitude: 36, zoom: 3.6 }}
+        initialViewState={{ longitude: -100, latitude: 45, zoom: 2.9 }}
         mapStyle={MAP_STYLE}
         interactiveLayerIds={interactiveLayerIds}
         onClick={onMapClick}
         cursor="pointer"
         style={{ width: '100%', height: '100%' }}
       >
+        <Source id="live-projects" type="geojson" data={filteredLive}>
+          <Layer {...liveLayer} />
+        </Source>
         <Source id="stalled-projects" type="geojson" data={filteredStalled}>
           <Layer {...stalledLayer} />
         </Source>
@@ -450,7 +616,12 @@ export default function GovernorMapClient() {
 
       {/* Legend */}
       <div className="gov-legend">
-        <span className="legend-group"><strong>State DC</strong>
+        <span className="legend-group"><strong>Live DC</strong>
+          {Object.entries(LIVE_STATUS_COLORS).map(([k, color]) => (
+            <span key={k}><i className="dot" style={{ background: color }} />{k}</span>
+          ))}
+        </span>
+        <span className="legend-group"><strong>Stalled DC</strong>
           {Object.entries(STATUS_COLORS).map(([k, color]) => (
             <span key={k}><i className="dot" style={{ background: color }} />{k}</span>
           ))}
@@ -466,7 +637,7 @@ export default function GovernorMapClient() {
       <div className="gov-counts">
         {loading ? 'Loading…' : (
           <>
-            {filteredStalled.features.length} stalled · {filteredGovernors.features.length} gov · {filteredTribal.features.length} tribal
+            {filteredLive.features.length} live · {filteredStalled.features.length} stalled · {filteredGovernors.features.length} gov · {filteredTribal.features.length} tribal
           </>
         )}
       </div>
@@ -520,8 +691,15 @@ export default function GovernorMapClient() {
           position: absolute; top: 64px; left: 12px; right: 12px; z-index: 10;
           display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
         }
-        .gov-scope-pills, .gov-state-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-        .gov-state-pills { margin-left: auto; }
+        .gov-scope-pills, .gov-state-filter { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .gov-state-filter { margin-left: auto; }
+        .gov-state-select {
+          background: rgba(11, 15, 23, 0.85); backdrop-filter: blur(8px);
+          border: 1px solid #374151; color: #e5e7eb;
+          padding: 4px 8px; border-radius: 999px; font-size: 12px; cursor: pointer;
+          max-width: 140px;
+        }
+        .gov-state-select:focus { outline: 1px solid #22d3ee; border-color: #22d3ee; }
         .gov-pill {
           background: rgba(11, 15, 23, 0.85); backdrop-filter: blur(8px);
           border: 1px solid #374151; color: #e5e7eb;
@@ -611,7 +789,8 @@ function GovernorCard({ g }: { g: GovernorProps }) {
 }
 
 function ProjectCard({ p }: { p: ProjectProps }) {
-  const statusColor = STATUS_COLORS[p.status] ?? '#9ca3af'
+  const statusColor = PROJECT_STATUS_COLORS[p.status] ?? '#9ca3af'
+  const isStalledStatus = p.status in STATUS_COLORS
   return (
     <>
       <header>
@@ -623,9 +802,9 @@ function ProjectCard({ p }: { p: ProjectProps }) {
         </p>
         {p.ownerFunder && <p className="meta">Owner / Funder: <strong>{p.ownerFunder}</strong></p>}
         {p.operator && p.operator !== p.ownerFunder && <p className="meta">Operator: {p.operator}</p>}
-        {p.stalledAt && <p className="meta">Stalled: {p.stalledAt}</p>}
+        {isStalledStatus && p.stalledAt && <p className="meta">Stalled: {p.stalledAt}</p>}
       </header>
-      {p.blockReason && (
+      {isStalledStatus && p.blockReason && (
         <section>
           <h4>Reason: {p.blockReason}</h4>
           {p.blockReasonDetail && <p>{p.blockReasonDetail}</p>}
