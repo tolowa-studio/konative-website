@@ -25,14 +25,15 @@ export default function HeroBackdrop({ src, alt, objectPosition = "center" }: He
   return (
     <div aria-hidden={false} style={{ position: "absolute", inset: 0, zIndex: 0 }}>
       <Image src={src} alt={alt} fill priority sizes="100vw" style={{ objectFit: "cover", objectPosition }} />
-      {/* Left-weighted darkening so left-aligned hero copy stays legible */}
+      {/* Left-weighted darkening so left-aligned hero copy stays legible while
+          the photo stays clearly visible on the right two-thirds. */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(90deg, rgba(10,15,30,0.94) 0%, rgba(10,15,30,0.86) 42%, rgba(10,15,30,0.55) 100%)",
+            "linear-gradient(90deg, rgba(10,15,30,0.85) 0%, rgba(10,15,30,0.62) 50%, rgba(10,15,30,0.32) 100%)",
         }}
       />
       {/* Vertical fade so the section edges blend into the page */}
@@ -42,7 +43,7 @@ export default function HeroBackdrop({ src, alt, objectPosition = "center" }: He
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to bottom, rgba(10,15,30,0.4) 0%, rgba(10,15,30,0) 32%, rgba(10,15,30,0.7) 100%)",
+            "linear-gradient(to bottom, rgba(10,15,30,0.35) 0%, rgba(10,15,30,0) 40%, rgba(10,15,30,0.6) 100%)",
         }}
       />
     </div>

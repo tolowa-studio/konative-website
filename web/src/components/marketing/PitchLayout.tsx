@@ -69,14 +69,15 @@ export default function PitchLayout({
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-            {/* Cinematic overlay — dark gradient keeps light text legible */}
+            {/* Cinematic overlay — dark enough on the left for legible copy,
+                light enough on the right to keep the photo clearly visible. */}
             <div
               aria-hidden="true"
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(90deg, rgba(10,15,30,0.94) 0%, rgba(10,15,30,0.86) 42%, rgba(10,15,30,0.55) 100%)",
+                  "linear-gradient(90deg, rgba(10,15,30,0.85) 0%, rgba(10,15,30,0.62) 50%, rgba(10,15,30,0.32) 100%)",
               }}
             />
             <div
@@ -85,7 +86,7 @@ export default function PitchLayout({
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(to bottom, rgba(10,15,30,0.4) 0%, rgba(10,15,30,0) 32%, rgba(10,15,30,0.65) 100%)",
+                  "linear-gradient(to bottom, rgba(10,15,30,0.35) 0%, rgba(10,15,30,0) 40%, rgba(10,15,30,0.6) 100%)",
               }}
             />
           </>
