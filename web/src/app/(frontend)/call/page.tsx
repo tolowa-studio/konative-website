@@ -143,11 +143,16 @@ export default function CallPage() {
                 border: `1px solid ${BORDER}`,
                 background: "rgba(255,255,255,0.015)",
                 padding: "0",
-                overflow: "hidden",
-                minHeight: 600,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                // Fixed height + internal scroll, not min-height. Cal.com's inline
+                // embed auto-resizes its iframe to match measured content height —
+                // for this event type that measurement comes back ~2000px (mostly
+                // blank iframe past the actual ~650px-tall calendar UI), which reads
+                // as a giant empty box once a visitor scrolls into that dead zone.
+                // Capping the wrapper's height clips the excess and gives the widget
+                // its own scrollbar instead.
+                height: 680,
+                overflowY: "auto",
+                overflowX: "hidden",
               }}
             >
               {/* Cal.com inline embed — replace data-cal-link with your booking slug */}
