@@ -162,24 +162,28 @@ export default async function CanadaPage() {
           scrimSide="right"
         />
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 1160, margin: '0 auto', display: 'flex', justifyContent: 'flex-end' }}>
-          <div style={{ maxWidth: 640 }}>
+          {/* Translucent panel behind the copy — guarantees legibility over a
+              busy/high-contrast photo (bright water, hard edges) regardless of
+              scrim tuning, and reads as an intentional "content card" rather
+              than a legibility patch. */}
+          <div style={{ maxWidth: 640, background: 'rgba(6,10,20,0.6)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: '2rem 2.25rem' }}>
             <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8001F', marginBottom: '0.75rem' }}>
               Market Intelligence · Canada
             </p>
             <h1 style={{ fontSize: 'clamp(2.25rem, 5.5vw, 3.5rem)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, margin: '0 0 1rem', letterSpacing: '-0.01em', lineHeight: 1.05 }}>
               CANADA: 10 GW PIPELINE, FOUR DIFFERENT MARKETS
             </h1>
-            <p style={{ color: '#94a3b8', maxWidth: 640, lineHeight: 1.65, margin: '0 0 1.5rem', fontSize: '1.0625rem' }}>
+            <p style={{ color: '#c3cbdb', maxWidth: 640, lineHeight: 1.65, margin: '0 0 1.5rem', fontSize: '1.0625rem' }}>
               Canada has {live?.operational ?? 117} operational data centres tracked, {live?.pipeline ?? '30+'} in the pipeline, and {live?.stalled ?? 'multiple'} with stalled or blocked status in our research dataset. The four major markets (Quebec, Ontario, Alberta, BC) operate under structurally different power regimes — and the federal Sovereign AI Compute Strategy is committing C$2B with explicit preference for Indigenous-partnered projects.
             </p>
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
               <Link href="/map" style={{ background: '#C8001F', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
                 Explore Canada on the Map →
               </Link>
-              <Link href="/contact" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
+              <Link href="/contact" style={{ background: 'rgba(255,255,255,0.06)', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
                 Discuss a Canadian Site →
               </Link>
-              <Link href="/methodology" style={{ background: 'transparent', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
+              <Link href="/methodology" style={{ background: 'rgba(255,255,255,0.06)', color: '#f6f7fb', padding: '0.75rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #334155' }}>
                 How We Score Sites
               </Link>
             </div>
