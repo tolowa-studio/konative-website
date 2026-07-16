@@ -105,6 +105,11 @@
 /* ─── 3. Base Styles ─── */
 html {
   scroll-behavior: smooth;
+  /* Reserve space for the 64px fixed header on every in-page anchor jump
+     (#team, #request, etc.) so targets land below the nav, not tucked under
+     it. 80px = 64px header + 16px breathing room. Applies site-wide to all
+     :target and scrollIntoView scrolling. */
+  scroll-padding-top: 80px;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
