@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import HeroBackdrop from '@/components/marketing/HeroBackdrop'
 
 export const revalidate = 3600;
 
@@ -102,8 +103,12 @@ export default function MethodologyPage() {
   return (
     <div style={{ background: '#0b1020', minHeight: '100vh', color: '#f6f7fb', fontFamily: 'Inter, system-ui, sans-serif' }}>
       {/* Hero */}
-      <div style={{ borderBottom: '1px solid #1e293b', padding: '4rem 2rem 3rem' }}>
-        <div style={{ maxWidth: 880, margin: '0 auto' }}>
+      <div style={{ position: 'relative', overflow: 'hidden', background: '#0b1020', borderBottom: '1px solid #1e293b', padding: '4rem 2rem 3rem' }}>
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1542621334-a254cf47733d?auto=format&fit=crop&w=2000&q=70"
+          alt="Engineering blueprint schematic drawing with a pencil"
+        />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 880, margin: '0 auto' }}>
           <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8001F', marginBottom: '0.75rem' }}>
             Methodology
           </p>

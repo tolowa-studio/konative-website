@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { PitchSection } from "@/components/marketing/PitchLayout";
+import HeroBackdrop from "@/components/marketing/HeroBackdrop";
 import {
   JsonLd,
   faqSchema,
@@ -182,6 +183,10 @@ export default function SovereigntyPage() {
           borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}
       >
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1783099372643-4a30fc3f4568?auto=format&fit=crop&w=2000&q=70"
+          alt="A vast open plain stretching to the horizon under a big open sky"
+        />
         <div
           aria-hidden="true"
           style={{

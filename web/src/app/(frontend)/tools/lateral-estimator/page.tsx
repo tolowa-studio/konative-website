@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { PitchSection } from "@/components/marketing/PitchLayout";
+import HeroBackdrop from "@/components/marketing/HeroBackdrop";
 import {
   JsonLd,
   faqSchema,
@@ -191,6 +192,10 @@ export default function LateralEstimatorPage() {
           borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}
       >
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1565364507085-325347bae748?auto=format&fit=crop&w=2000&q=70"
+          alt="Excavator beside large conduit pipes at an underground cable trench"
+        />
         <div
           aria-hidden="true"
           style={{

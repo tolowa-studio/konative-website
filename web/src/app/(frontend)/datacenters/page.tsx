@@ -55,6 +55,11 @@ export default function DatacentersPage() {
       subhead="Connectivity for greenfield datacenters is designed long before commissioning. Konative tracks early demand signals, maps carrier options, and brokers the transport, dark fiber, DIA, colocation uplinks, and cloud routes that make a campus bankable."
       primaryCta={{ label: "Get Site Analysis", href: "/contact" }}
       secondaryCta={{ label: "View Intelligence Hub", href: "/intelligence" }}
+      heroImage={{
+        src: "https://images.unsplash.com/photo-1695668548342-c0c1ad479aee?auto=format&fit=crop&w=2000&q=70",
+        alt: "Rows of illuminated server racks inside a modern data center hall",
+        credit: { name: "Kevin Ache", url: "https://unsplash.com/@kevinache" },
+      }}
       ctaHeadlineTop="TELL US YOUR SITE."
       ctaHeadlineBottom="WE'LL MAP THE NETWORK."
       ctaSub="Share the location, load profile, target carriers, and timeline. We will turn the market into options you can actually act on."

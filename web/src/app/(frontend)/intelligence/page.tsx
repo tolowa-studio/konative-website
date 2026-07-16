@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import HeroBackdrop from "@/components/marketing/HeroBackdrop";
 
 export const revalidate = 3600;
 
@@ -88,7 +89,11 @@ const metrics = [
 export default function IntelligenceIndexPage() {
   return (
     <main style={{ background: "#fff", minHeight: "100vh", color: TEXT, fontFamily: BODY }}>
-      <section style={{ position: "relative", overflow: "hidden", borderBottom: `1px solid ${DIVIDER}` }}>
+      <section style={{ position: "relative", overflow: "hidden", background: DARK, borderBottom: `1px solid ${DIVIDER}` }}>
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=70"
+          alt="Dense network cabling running through a dark data-center server room"
+        />
         <div
           aria-hidden="true"
           style={{
@@ -189,7 +194,7 @@ const titleStyle = {
   fontSize: "clamp(54px, 8vw, 104px)",
   lineHeight: 0.9,
   textTransform: "uppercase" as const,
-  color: TEXT,
+  color: "#ffffff",
   letterSpacing: "0.005em",
   margin: "0 0 28px",
   maxWidth: 920,
@@ -198,7 +203,7 @@ const titleStyle = {
 const ledeStyle = {
   fontSize: 18,
   lineHeight: 1.65,
-  color: MUTED,
+  color: "rgba(255,255,255,0.78)",
   maxWidth: 720,
   margin: 0,
 };

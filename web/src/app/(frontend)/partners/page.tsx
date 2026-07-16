@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import HeroBackdrop from '@/components/marketing/HeroBackdrop'
 
 export const revalidate = 3600;
 
@@ -144,8 +145,12 @@ export default function PartnersPage() {
   return (
     <div style={{ background: '#08142D', color: '#f6f7fb', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
       {/* Hero */}
-      <section style={{ padding: '5rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <section style={{ position: 'relative', overflow: 'hidden', background: '#08142D', padding: '5rem 2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1606814540563-5c02d62fd409?auto=format&fit=crop&w=2000&q=70"
+          alt="Blue light passing over fiber-optic carrier network cabling"
+        />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#C8001F', fontSize: 11, fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: 18 }}>
             <span style={{ width: 28, height: 1, background: '#C8001F' }} />
             The Partner Ticker

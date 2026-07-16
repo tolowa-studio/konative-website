@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { createClient } from '@sanity/client'
+import HeroBackdrop from '@/components/marketing/HeroBackdrop'
 
 export const revalidate = 3600;
 
@@ -154,8 +155,12 @@ export default async function CanadaPage() {
   return (
     <div style={{ background: '#0b1020', minHeight: '100vh', color: '#f6f7fb', fontFamily: 'Inter, system-ui, sans-serif' }}>
       {/* Hero */}
-      <section style={{ padding: '4rem 2rem 3rem', borderBottom: '1px solid #1e293b', background: 'linear-gradient(180deg, #0f1728 0%, #0b1020 100%)' }}>
-        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+      <section style={{ position: 'relative', overflow: 'hidden', padding: '4rem 2rem 3rem', borderBottom: '1px solid #1e293b', background: 'linear-gradient(180deg, #0f1728 0%, #0b1020 100%)' }}>
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1560279966-2d681f3d4dfc?auto=format&fit=crop&w=2000&q=70"
+          alt="Aerial view of a large hydroelectric dam and power infrastructure"
+        />
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 960, margin: '0 auto' }}>
           <p style={{ fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#C8001F', marginBottom: '0.75rem' }}>
             Market Intelligence · Canada
           </p>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import HeroBackdrop from '@/components/marketing/HeroBackdrop'
 import type { MARKETS } from './[state]/page'
 
 type MarketsMap = typeof MARKETS
@@ -22,7 +23,11 @@ export default function MarketsClient({ markets }: { markets: MarketsMap }) {
 
   return (
     <div className="markets-page" style={{ background: '#fff', minHeight: '100vh', fontFamily: 'Inter, sans-serif', color: TEXT }}>
-      <div style={{ position: 'relative', overflow: 'hidden', paddingTop: 142, paddingBottom: 56, paddingLeft: 48, paddingRight: 48, borderBottom: `1px solid ${DIVIDER}` }}>
+      <div style={{ position: 'relative', overflow: 'hidden', background: '#0A0F1E', paddingTop: 142, paddingBottom: 56, paddingLeft: 48, paddingRight: 48, borderBottom: `1px solid ${DIVIDER}` }}>
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1506747111041-18b1844bf60f?auto=format&fit=crop&w=2000&q=70"
+          alt="North American city grid glowing at night from above"
+        />
         <div aria-hidden="true" style={{
           position: 'absolute', inset: 0,
           backgroundImage: 'linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)',
@@ -34,10 +39,10 @@ export default function MarketsClient({ markets }: { markets: MarketsMap }) {
               <span style={{ display: 'block', width: 28, height: 2, background: RED }} />
               Intelligence by Market
             </p>
-            <h1 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800, fontSize: 'clamp(50px, 7vw, 96px)', lineHeight: 0.9, textTransform: 'uppercase', color: TEXT, margin: '0 0 22px', maxWidth: 860 }}>
+            <h1 style={{ fontFamily: '"Barlow Condensed", sans-serif', fontWeight: 800, fontSize: 'clamp(50px, 7vw, 96px)', lineHeight: 0.9, textTransform: 'uppercase', color: '#ffffff', margin: '0 0 22px', maxWidth: 860 }}>
               NORTH AMERICAN<br /><span style={{ color: RED }}>CONNECTIVITY MARKETS</span>
             </h1>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, lineHeight: 1.65, color: MUTED, maxWidth: 650, margin: '0 0 28px' }}>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, lineHeight: 1.65, color: 'rgba(255,255,255,0.78)', maxWidth: 650, margin: '0 0 28px' }}>
               Power pipeline, network infrastructure, route pressure, and project data for {Object.keys(markets).length} key markets. Built to help buyers and developers understand where connectivity demand is forming.
             </p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>

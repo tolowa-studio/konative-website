@@ -201,6 +201,11 @@ export default async function NtiaPage() {
         subhead="The NTIA Tribal Broadband Connectivity Program Round 3 ($540M) and the Native Entities Grant Program ($250M) put $790M toward Tribal broadband — and the window closes September 17, 2026. But grants fund the build, not the operational connectivity that runs on it. Konative is the vendor-neutral, sovereignty-aware partner that designs and sources that layer, at no cost to the Tribe."
         primaryCta={{ label: "Request a Round 3 connectivity consult →", href: "/contact#request" }}
         secondaryCta={{ label: "Tribal Enterprise →", href: "/tribal" }}
+        heroImage={{
+          src: "https://images.unsplash.com/photo-1763515186653-2df0fba44697?auto=format&fit=crop&w=2000&q=70",
+          alt: "Excavator digging a trench for rural broadband cable installation",
+          credit: { name: "Chandler Cruttenden", url: "https://unsplash.com/@chanphoto" },
+        }}
         ctaHeadlineTop="THE WINDOW CLOSES"
         ctaHeadlineBottom="SEPTEMBER 17, 2026."
         ctaSub="Engage before the deadline so carrier-grade connectivity is specified into your Round 3 proposal — ready to execute the moment funding lands in Spring 2027."

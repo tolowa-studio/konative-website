@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { PitchSection } from "@/components/marketing/PitchLayout";
+import HeroBackdrop from "@/components/marketing/HeroBackdrop";
 import {
   JsonLd,
   faqSchema,
@@ -192,6 +193,10 @@ export default function CarrierCheckPage() {
           borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}
       >
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1761025483276-e64413c003cb?auto=format&fit=crop&w=2000&q=70"
+          alt="A tall telecom tower standing in an open rural field at sunset"
+        />
         <div
           aria-hidden="true"
           style={{

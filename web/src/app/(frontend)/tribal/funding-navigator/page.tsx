@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { PitchSection } from "@/components/marketing/PitchLayout";
+import HeroBackdrop from "@/components/marketing/HeroBackdrop";
 import {
   JsonLd,
   faqSchema,
@@ -365,6 +366,10 @@ export default function FundingNavigatorPage() {
           borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}
       >
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1552772588-12592fc15a64?auto=format&fit=crop&w=2000&q=70"
+          alt="Power transmission lines crossing a wide rural landscape at dusk"
+        />
         <div
           aria-hidden="true"
           style={{
