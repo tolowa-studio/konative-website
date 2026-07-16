@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
 
+import { newsCurationSinceIso } from '../../../../../lib/newsConstants'
+
 export const dynamic = 'force-dynamic'
 
 const sanity = createClient({
@@ -17,9 +19,16 @@ export async function GET(request: NextRequest) {
   const search = params.get('search')
   const limit = Math.min(Number(params.get('limit')) || 50, 200)
   const offset = Number(params.get('offset')) || 0
+  const since = newsCurationSinceIso()
 
-  const filters = [`_type == "newsItem"`, `defined(title)`, `defined(publishedAt)`]
-  const groqParams: Record<string, unknown> = { limit, offset, offsetEnd: offset + limit }
+  const filters = [
+    `_type == "newsItem"`,
+    `status == "published"`,
+    `defined(title)`,
+    `defined(publishedAt)`,
+    `publishedAt >= $since`,
+  ]
+  const groqParams: Record<string, unknown> = { limit, offset, offsetEnd: offset + limit, since }
 
   if (category) {
     filters.push(`topics[] match $category`)
@@ -44,7 +53,7 @@ export async function GET(request: NextRequest) {
       "source": sourceName,
       "published_at": publishedAt,
       url,
-      "image_url": null
+      "image_url": imageUrl
     },
     "total": count(*[${where}])
   }`

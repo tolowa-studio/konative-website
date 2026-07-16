@@ -1,12 +1,16 @@
+import type { CSSProperties, ReactNode } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
+  NEWS_CURATION_WINDOW_DAYS,
   NEWS_SOURCE_COUNTRY_OPTIONS,
   NEWS_TOPIC_OPTIONS,
   TRIBAL_NEWS_TOPIC_VALUES,
   isNewsTopicValue,
+  newsCurationSinceIso,
 } from "../../../lib/newsConstants";
+import { getSanityReadClient } from "../../../sanity/readClient";
 
 export const metadata: Metadata = {
   title: "News — Konative",
@@ -15,13 +19,7 @@ export const metadata: Metadata = {
 };
 
 export const revalidate = 3600;
-import { getSanityReadClient } from "../../../sanity/readClient";
-
 export const dynamic = "force-dynamic";
-
-const THUMBNAIL_PLACEHOLDER =
-  "linear-gradient(135deg, rgba(200,0,31,0.72), rgba(17,17,17,0.92)), " +
-  "repeating-linear-gradient(-35deg, rgba(255,255,255,0.16) 0px, rgba(255,255,255,0.16) 1px, transparent 1px, transparent 18px)";
 
 type NewsDoc = {
   id: string;
@@ -45,6 +43,31 @@ type NewsPageProps = {
 
 const ITEMS_PER_PAGE = 24;
 
+const chipActiveStyle: CSSProperties = {
+  background: "#C8001F",
+  color: "#fff",
+  fontFamily: "'Inter', sans-serif",
+  fontWeight: 500,
+  fontSize: 12,
+  padding: "6px 14px",
+  textDecoration: "none",
+  display: "inline-block",
+  whiteSpace: "nowrap",
+};
+
+const chipInactiveStyle: CSSProperties = {
+  background: "#F9FAFB",
+  color: "#374151",
+  border: "1px solid #E5E7EB",
+  fontFamily: "'Inter', sans-serif",
+  fontWeight: 500,
+  fontSize: 12,
+  padding: "6px 14px",
+  textDecoration: "none",
+  display: "inline-block",
+  whiteSpace: "nowrap",
+};
+
 const buildQueryString = (params: Record<string, string | number | undefined>) => {
   const query = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
@@ -63,6 +86,155 @@ const formatDate = (value?: string) => {
     day: "numeric",
   }).format(date);
 };
+
+const topicLabel = (topics?: string[]) => {
+  const first = topics?.[0];
+  if (!first) return "Infrastructure";
+  return NEWS_TOPIC_OPTIONS.find((option) => option.value === first)?.label || first;
+};
+
+/** Prefer imaged stories for mosaic slots without losing recency order among peers. */
+const preferImages = (docs: NewsDoc[], count: number): NewsDoc[] => {
+  const withImage = docs.filter((doc) => Boolean(doc.imageUrl));
+  const withoutImage = docs.filter((doc) => !doc.imageUrl);
+  return [...withImage, ...withoutImage].slice(0, count);
+};
+
+function SteelFallback({
+  item,
+  height,
+  children,
+}: {
+  item: NewsDoc;
+  height: number | string;
+  children?: ReactNode;
+}) {
+  const monogram = (item.sourceName || "K").trim().charAt(0).toUpperCase();
+  return (
+    <span
+      className="news-tile__fallback"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        height,
+        minHeight: typeof height === "number" ? height : undefined,
+        padding: 16,
+        backgroundColor: "#111111",
+        backgroundImage:
+          "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
+        backgroundSize: "24px 24px",
+        borderLeft: "4px solid #C8001F",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <span
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 600,
+          fontSize: 10,
+          letterSpacing: "0.15em",
+          textTransform: "uppercase",
+          color: "#C8001F",
+        }}
+      >
+        {topicLabel(item.topics)}
+      </span>
+      <span
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          right: 8,
+          bottom: -8,
+          fontFamily: "'Barlow Condensed', sans-serif",
+          fontWeight: 800,
+          fontSize: 96,
+          lineHeight: 1,
+          color: "rgba(255,255,255,0.12)",
+          pointerEvents: "none",
+        }}
+      >
+        {monogram}
+      </span>
+      {children}
+    </span>
+  );
+}
+
+function TileMedia({
+  item,
+  aspect,
+  minHeight,
+  priority,
+}: {
+  item: NewsDoc;
+  aspect: string;
+  minHeight: number;
+  priority?: boolean;
+}) {
+  if (item.imageUrl) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- feed hostnames vary; CSS background was the prior pattern
+      <img
+        className="news-tile__media"
+        src={item.imageUrl}
+        alt=""
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
+        style={{
+          width: "100%",
+          height: "100%",
+          minHeight,
+          aspectRatio: aspect,
+          objectFit: "cover",
+          display: "block",
+          background: "#111",
+        }}
+      />
+    );
+  }
+  return <SteelFallback item={item} height={minHeight} />;
+}
+
+function MetaRow({ item, onDark }: { item: NewsDoc; onDark?: boolean }) {
+  return (
+    <span
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 8,
+        alignItems: "center",
+      }}
+    >
+      {item.sourceName ? (
+        <span
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 600,
+            fontSize: 10,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            background: "#C8001F",
+            color: "#fff",
+            padding: "2px 8px",
+          }}
+        >
+          {item.sourceName}
+        </span>
+      ) : null}
+      <span
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: 11,
+          color: onDark ? "rgba(255,255,255,0.72)" : "#888",
+        }}
+      >
+        {formatDate(item.publishedAt)}
+      </span>
+    </span>
+  );
+}
 
 export default async function NewsPage({ searchParams }: NewsPageProps) {
   const params = await searchParams;
@@ -85,24 +257,32 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     totalPages: 1,
   };
 
+  const since = newsCurationSinceIso();
+  const windowClause = ` && defined(publishedAt) && publishedAt >= $since`;
+
   const filter =
     `_type == "newsItem" && status == "published"` +
+    windowClause +
     (country !== "all" ? ` && "${country}" in coalesce(countries, [])` : "") +
     (topic !== "all" ? ` && "${topic}" in coalesce(topics, [])` : "");
 
   const featuredFilter =
-    `_type == "newsItem" && status == "published" && (` +
+    `_type == "newsItem" && status == "published"` +
+    windowClause +
+    ` && (` +
     TRIBAL_NEWS_TOPIC_VALUES.map((t) => `"${t}" in coalesce(topics, [])`).join(" || ") +
     `)` +
     (country !== "all" ? ` && "${country}" in coalesce(countries, [])` : "");
 
   try {
     const client = getSanityReadClient();
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const end = start + ITEMS_PER_PAGE;
-    const total = await client.fetch<number>(`count(*[${filter}])`, {});
+    const total = await client.fetch<number>(`count(*[${filter}])`, { since });
+    const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+    const safePage = Math.min(currentPage, totalPages);
+    const safeStart = (safePage - 1) * ITEMS_PER_PAGE;
+    const safeEnd = safeStart + ITEMS_PER_PAGE;
     const docs = await client.fetch<NewsDoc[]>(
-      `*[${filter}] | order(publishedAt desc)[${start}...${end}]{
+      `*[${filter}] | order(publishedAt desc)[${safeStart}...${safeEnd}]{
         "id": _id,
         title,
         url,
@@ -113,12 +293,12 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
         countries,
         topics
       }`,
-      {},
+      { since },
     );
     const featured =
-      topic === "all" && currentPage === 1
+      topic === "all" && safePage === 1
         ? await client.fetch<NewsDoc[]>(
-            `*[${featuredFilter}] | order(publishedAt desc)[0...6]{
+            `*[${featuredFilter}] | order(publishedAt desc)[0...8]{
               "id": _id,
               title,
               url,
@@ -129,534 +309,538 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               countries,
               topics
             }`,
-            {},
+            { since },
           )
         : [];
     news = {
       docs,
-      page: currentPage,
-      totalPages: Math.max(1, Math.ceil(total / ITEMS_PER_PAGE)),
+      page: safePage,
+      totalPages,
       featured,
     };
   } catch (_error) {
     isDataUnavailable = true;
   }
 
+  const deskPage = news.page ?? 1;
   const activeFilterCount = (country !== "all" ? 1 : 0) + (topic !== "all" ? 1 : 0);
+  const showMosaic = deskPage === 1 && activeFilterCount === 0 && news.docs.length > 0;
+  const mosaicDocs = showMosaic ? preferImages(news.docs, 6) : [];
+  const mosaicIds = new Set(mosaicDocs.map((doc) => doc.id));
+  const listDocs = showMosaic ? news.docs.filter((doc) => !mosaicIds.has(doc.id)) : news.docs;
+  const featuredDocs = (news.featured || []).filter((doc) => !mosaicIds.has(doc.id)).slice(0, 6);
 
-  const chipActiveStyle: React.CSSProperties = {
-    background: "#C8001F",
-    color: "#fff",
-    fontFamily: "'Inter', sans-serif",
-    fontWeight: 500,
-    fontSize: 12,
-    padding: "6px 14px",
-    textDecoration: "none",
-    display: "inline-block",
-  };
-
-  const chipInactiveStyle: React.CSSProperties = {
-    background: "#F9FAFB",
-    color: "#374151",
-    border: "1px solid #E5E7EB",
-    fontFamily: "'Inter', sans-serif",
-    fontWeight: 500,
-    fontSize: 12,
-    padding: "6px 14px",
-    textDecoration: "none",
-    display: "inline-block",
-  };
+  const [lead, secondaryA, secondaryB, ...tertiaries] = mosaicDocs;
 
   return (
     <main className="news-page" style={{ background: "#fff", minHeight: "100vh" }}>
-      {/* Page Header */}
-      <section style={{ position: "relative", overflow: "hidden", background: "#fff", padding: "118px 32px 72px", borderBottom: "1px solid #E5E7EB" }}>
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
-        />
-        <div className="news-page__hero-grid" style={{ position: "relative", maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(280px, 420px)", gap: 48, alignItems: "end" }}>
-          <div>
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 500,
-              fontSize: 11,
-              textTransform: "uppercase",
-              letterSpacing: "0.2em",
-              color: "#C8001F",
-              marginBottom: 16,
-              margin: "0 0 16px 0",
-            }}
-          >
-            INTELLIGENCE FEED
-          </p>
-          <h1
-            style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(48px, 7vw, 88px)",
-              lineHeight: 0.92,
-              textTransform: "uppercase",
-              color: "#111111",
-              letterSpacing: "0.01em",
-              margin: 0,
-            }}
-          >
-            TRIBAL & <span style={{ color: "#C8001F" }}>INFRASTRUCTURE</span> NEWS
-          </h1>
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 16,
-              lineHeight: 1.6,
-              color: "#6B7280",
-              maxWidth: 640,
-              marginTop: 16,
-              marginBottom: 0,
-            }}
-          >
-            Curated coverage of tribal data centers, energy sovereignty, broadband grants, and connectivity
-            infrastructure across the US and Canada — from DOE and NTIA program updates to on-the-ground project news.
-          </p>
-          </div>
-          <div
-            aria-hidden="true"
-            style={{
-              borderLeft: "4px solid #C8001F",
-              background: "#111111",
-              color: "#fff",
-              padding: 28,
-              minHeight: 210,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              boxShadow: "0 22px 60px rgba(17,17,17,0.16)",
-            }}
-          >
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.58)" }}>
-              North America Desk
-            </span>
-            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 42, fontWeight: 800, lineHeight: 0.95, textTransform: "uppercase" }}>
-              Policy, Power, Fiber, Capital
-            </span>
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.72)" }}>
-              Signals for tribal, rural, and indigenous infrastructure markets.
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* Filter Bar */}
-      <section
-        style={{
-          background: "#fff",
-          borderBottom: "1px solid #E5E7EB",
-          padding: "24px 32px",
-        }}
-      >
+      {/* Compact masthead — mosaic owns the first viewport */}
+      <section className="news-masthead" style={{ padding: "96px 32px 28px", borderBottom: "1px solid #E5E7EB" }}>
         <div
           style={{
-            maxWidth: 1280,
+            maxWidth: 1440,
             margin: "0 auto",
             display: "flex",
-            flexWrap: "wrap" as const,
-            gap: 32,
-            alignItems: "flex-start",
+            flexWrap: "wrap",
+            gap: 16,
+            alignItems: "flex-end",
+            justifyContent: "space-between",
           }}
         >
-          {/* Country filter */}
-          <div>
-            <span
+          <div style={{ maxWidth: 920 }}>
+            <p
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 600,
                 fontSize: 10,
-                textTransform: "uppercase" as const,
                 letterSpacing: "0.15em",
-                color: "#666",
-                marginBottom: 10,
-                display: "block",
+                textTransform: "uppercase",
+                color: "#C8001F",
+                margin: "0 0 10px",
               }}
             >
-              COUNTRY
-            </span>
-            <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8 }}>
-              {["all", ...NEWS_SOURCE_COUNTRY_OPTIONS.map((option) => option.value)].map((value) => {
-                const label =
-                  value === "all"
-                    ? "All"
-                    : NEWS_SOURCE_COUNTRY_OPTIONS.find((option) => option.value === value)?.label || value;
-                const isActive = country === value;
-                const query = buildQueryString({
-                  country: value === "all" ? undefined : value,
-                  topic: topic === "all" ? undefined : topic,
-                });
-
-                return (
-                  <Link
-                    key={value}
-                    href={query ? `/news?${query}` : "/news"}
-                    style={isActive ? chipActiveStyle : chipInactiveStyle}
-                  >
-                    {label}
-                  </Link>
-                );
-              })}
-            </div>
+              Intelligence Feed
+            </p>
+            <h1
+              style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(36px, 5vw, 64px)",
+                lineHeight: 0.95,
+                textTransform: "uppercase",
+                color: "#111",
+                margin: 0,
+                letterSpacing: "0.01em",
+              }}
+            >
+              Tribal & <span style={{ color: "#C8001F" }}>Infrastructure</span> News
+            </h1>
+            <p
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 14,
+                lineHeight: 1.5,
+                color: "#6B7280",
+                margin: "10px 0 0",
+                maxWidth: 640,
+              }}
+            >
+              Policy, power, fiber, and capital signals across tribal and rural North America.
+            </p>
           </div>
-
-          {/* Topic filter */}
-          <div>
-            <span
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 600,
-                fontSize: 10,
-                textTransform: "uppercase" as const,
-                letterSpacing: "0.15em",
-                color: "#666",
-                marginBottom: 10,
-                display: "block",
-              }}
-            >
-              TOPIC
-            </span>
-            <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8 }}>
-              {["all", ...NEWS_TOPIC_OPTIONS.map((option) => option.value)].map((value) => {
-                const label =
-                  value === "all"
-                    ? "All"
-                    : NEWS_TOPIC_OPTIONS.find((option) => option.value === value)?.label || value;
-                const isActive = topic === value;
-                const query = buildQueryString({
-                  country: country === "all" ? undefined : country,
-                  topic: value === "all" ? undefined : value,
-                });
-
-                return (
-                  <Link
-                    key={value}
-                    href={query ? `/news?${query}` : "/news"}
-                    style={isActive ? chipActiveStyle : chipInactiveStyle}
-                  >
-                    {label}
-                  </Link>
-                );
-              })}
-            </div>
+          <div
+            style={{
+              borderLeft: "4px solid #C8001F",
+              background: "#F3F4F6",
+              color: "#374151",
+              padding: "10px 14px",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+            }}
+          >
+            North America Desk · Policy · Power · Fiber
           </div>
         </div>
       </section>
 
-      {/* Meta Bar */}
-      <div
-        style={{
-          background: "#F9FAFB",
-          padding: "12px 32px",
-          borderBottom: "1px solid #E5E7EB",
-        }}
-      >
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+      {/* Curated mosaic — browser start page above the fold */}
+      {showMosaic && lead ? (
+        <section className="news-mosaic-wrap" style={{ padding: "20px 32px 8px" }}>
+          <div className="news-mosaic" data-count={mosaicDocs.length}>
+            <a
+              className="news-tile news-tile--lead"
+              href={lead.url}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                gridArea: "lead",
+                textDecoration: "none",
+                color: "inherit",
+                position: "relative",
+                overflow: "hidden",
+                display: "block",
+                minHeight: 320,
+                background: "#111",
+              }}
+            >
+              <span style={{ position: "absolute", inset: 0 }}>
+                <TileMedia item={lead} aspect="3 / 2" minHeight={320} priority />
+              </span>
+              <span
+                className="news-tile__scrim"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: lead.imageUrl
+                    ? "linear-gradient(transparent 35%, rgba(17,17,17,0.88))"
+                    : "transparent",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  padding: "28px 24px",
+                  gap: 10,
+                }}
+              >
+                <MetaRow item={lead} onDark />
+                <span
+                  style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontWeight: 800,
+                    fontSize: "clamp(28px, 3.5vw, 44px)",
+                    lineHeight: 1,
+                    textTransform: "uppercase",
+                    color: "#fff",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }}
+                >
+                  {lead.title}
+                </span>
+                {lead.summary ? (
+                  <span
+                    style={{
+                      fontFamily: "'Inter', sans-serif",
+                      fontSize: 14,
+                      lineHeight: 1.5,
+                      color: "rgba(255,255,255,0.78)",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      maxWidth: 640,
+                    }}
+                  >
+                    {lead.summary}
+                  </span>
+                ) : null}
+              </span>
+            </a>
+
+            {secondaryA ? (
+              <a
+                className="news-tile news-tile--secondary"
+                href={secondaryA.url}
+                target="_blank"
+                rel="noreferrer"
+                style={{ gridArea: "sec-a", textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", minHeight: 0 }}
+              >
+                <TileMedia item={secondaryA} aspect="4 / 5" minHeight={180} />
+                <span style={{ padding: "14px 4px 0", display: "flex", flexDirection: "column", gap: 8 }}>
+                  <MetaRow item={secondaryA} />
+                  <span
+                    style={{
+                      fontFamily: "'Barlow Condensed', sans-serif",
+                      fontWeight: 700,
+                      fontSize: 22,
+                      lineHeight: 1.1,
+                      textTransform: "uppercase",
+                      color: "#111",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {secondaryA.title}
+                  </span>
+                  {secondaryA.summary ? (
+                    <span
+                      style={{
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: 13,
+                        lineHeight: 1.5,
+                        color: "#555",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {secondaryA.summary}
+                    </span>
+                  ) : null}
+                </span>
+              </a>
+            ) : null}
+
+            {secondaryB ? (
+              <a
+                className="news-tile news-tile--secondary"
+                href={secondaryB.url}
+                target="_blank"
+                rel="noreferrer"
+                style={{ gridArea: "sec-b", textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", minHeight: 0 }}
+              >
+                <TileMedia item={secondaryB} aspect="16 / 9" minHeight={120} />
+                <span style={{ padding: "14px 4px 0", display: "flex", flexDirection: "column", gap: 8 }}>
+                  <MetaRow item={secondaryB} />
+                  <span
+                    style={{
+                      fontFamily: "'Barlow Condensed', sans-serif",
+                      fontWeight: 700,
+                      fontSize: 20,
+                      lineHeight: 1.1,
+                      textTransform: "uppercase",
+                      color: "#111",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {secondaryB.title}
+                  </span>
+                </span>
+              </a>
+            ) : null}
+
+            {tertiaries.map((item, index) => (
+              <a
+                key={item.id}
+                className="news-tile news-tile--tertiary"
+                href={item.url}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  gridArea: `tert-${index + 1}`,
+                  textDecoration: "none",
+                  color: "inherit",
+                  display: "flex",
+                  flexDirection: "column",
+                  minHeight: 0,
+                }}
+              >
+                <TileMedia item={item} aspect="16 / 9" minHeight={100} />
+                <span style={{ padding: "12px 4px 0", display: "flex", flexDirection: "column", gap: 6 }}>
+                  <MetaRow item={item} />
+                  <span
+                    style={{
+                      fontFamily: "'Barlow Condensed', sans-serif",
+                      fontWeight: 700,
+                      fontSize: 18,
+                      lineHeight: 1.15,
+                      textTransform: "uppercase",
+                      color: "#111",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {item.title}
+                  </span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {/* Sticky filter shelf — after the mosaic */}
+      <section className="news-filter-shelf" style={{ padding: "0 32px", position: "sticky", top: 64, zIndex: 30 }}>
+        <div
+          style={{
+            maxWidth: 1440,
+            margin: "0 auto",
+            background: "rgba(255,255,255,0.92)",
+            backdropFilter: "blur(8px)",
+            borderBottom: "1px solid #E5E7EB",
+            padding: "16px 0 14px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-start" }}>
+            <div>
+              <span
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 600,
+                  fontSize: 10,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  color: "#666",
+                  marginBottom: 8,
+                  display: "block",
+                }}
+              >
+                Country
+              </span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {["all", ...NEWS_SOURCE_COUNTRY_OPTIONS.map((option) => option.value)].map((value) => {
+                  const label =
+                    value === "all"
+                      ? "All"
+                      : NEWS_SOURCE_COUNTRY_OPTIONS.find((option) => option.value === value)?.label || value;
+                  const isActive = country === value;
+                  const query = buildQueryString({
+                    country: value === "all" ? undefined : value,
+                    topic: topic === "all" ? undefined : topic,
+                  });
+                  return (
+                    <Link key={value} href={query ? `/news?${query}` : "/news"} style={isActive ? chipActiveStyle : chipInactiveStyle}>
+                      {label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <span
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 600,
+                  fontSize: 10,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  color: "#666",
+                  marginBottom: 8,
+                  display: "block",
+                }}
+              >
+                Topic
+              </span>
+              <div className="news-topic-scroll" style={{ display: "flex", flexWrap: "nowrap", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
+                {["all", ...NEWS_TOPIC_OPTIONS.map((option) => option.value)].map((value) => {
+                  const label =
+                    value === "all"
+                      ? "All"
+                      : NEWS_TOPIC_OPTIONS.find((option) => option.value === value)?.label || value;
+                  const isActive = topic === value;
+                  const query = buildQueryString({
+                    country: country === "all" ? undefined : country,
+                    topic: value === "all" ? undefined : value,
+                  });
+                  return (
+                    <Link key={value} href={query ? `/news?${query}` : "/news"} style={isActive ? chipActiveStyle : chipInactiveStyle}>
+                      {label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
           <p
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: 12,
               color: "#888",
               margin: 0,
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 12,
+              flexWrap: "wrap",
             }}
           >
-            {isDataUnavailable
-              ? "Live feed is temporarily unavailable while the CMS data connection is recovering. Please refresh in a few minutes."
-              : `Showing ${news.docs.length} items on page ${news.page ?? 1} of ${news.totalPages ?? 1}${activeFilterCount > 0 ? " with active filters." : "."}`}
+            <span>
+              {isDataUnavailable
+                ? "Live feed is temporarily unavailable while the CMS data connection is recovering."
+                : `Last ${NEWS_CURATION_WINDOW_DAYS} days · ${news.docs.length} on page ${news.page ?? 1} of ${news.totalPages ?? 1}${activeFilterCount > 0 ? " with filters" : ""}`}
+            </span>
+            {activeFilterCount > 0 ? (
+              <Link href="/news" style={{ color: "#C8001F", textDecoration: "none", fontWeight: 600 }}>
+                Clear filters
+              </Link>
+            ) : null}
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* Featured tribal coverage */}
-      {(news.featured?.length ?? 0) > 0 && topic === "all" && currentPage === 1 && (
-        <section style={{ padding: "32px 32px 0", background: "#fff" }}>
-          <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+      {/* Featured tribal shelf */}
+      {featuredDocs.length > 0 && topic === "all" && deskPage === 1 ? (
+        <section style={{ padding: "28px 32px 8px" }}>
+          <div style={{ maxWidth: 1440, margin: "0 auto" }}>
             <p
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 600,
                 fontSize: 10,
-                textTransform: "uppercase" as const,
                 letterSpacing: "0.15em",
+                textTransform: "uppercase",
                 color: "#C8001F",
-                marginBottom: 16,
+                margin: "0 0 14px",
               }}
             >
               Featured — Tribal & Infrastructure
             </p>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                gap: 20,
-                marginBottom: 8,
-              }}
-            >
-              {news.featured!.map((item) => (
-                <a
-                  key={item.id}
-                  href={item.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    display: "block",
-                    overflow: "hidden",
-                    border: "1px solid #E5E7EB",
-                    background: "#fff",
-                    textDecoration: "none",
-                  }}
-                >
-                  <span
-                    aria-hidden="true"
-                    style={{
-                      display: "block",
-                      height: 150,
-                      background: item.imageUrl ? `url('${item.imageUrl}') center/cover no-repeat` : THUMBNAIL_PLACEHOLDER,
-                      borderBottom: "1px solid #E5E7EB",
-                    }}
-                  />
-                  <span style={{ display: "block", padding: 20 }}>
-                  <span
-                    style={{
-                      fontFamily: "'Inter', sans-serif",
-                      fontWeight: 600,
-                      fontSize: 10,
-                      textTransform: "uppercase" as const,
-                      letterSpacing: "0.1em",
-                      color: "#888",
-                    }}
-                  >
-                    {item.sourceName} · {formatDate(item.publishedAt)}
+            <div className="news-featured-shelf">
+              {featuredDocs.map((item) => (
+                <a key={item.id} className="news-featured-tile" href={item.url} target="_blank" rel="noreferrer">
+                  <span className="news-featured-tile__media">
+                    {item.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={item.imageUrl} alt="" loading="lazy" />
+                    ) : (
+                      <SteelFallback item={item} height={140} />
+                    )}
                   </span>
-                  <span
-                    style={{
-                      display: "block",
-                      fontFamily: "'Barlow Condensed', sans-serif",
-                      fontWeight: 700,
-                      fontSize: 18,
-                      textTransform: "uppercase" as const,
-                      color: "#111",
-                      marginTop: 8,
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {item.title}
-                  </span>
-                  {item.summary && (
-                    <span
-                      style={{
-                        display: "block",
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: 13,
-                        lineHeight: 1.5,
-                        color: "#555",
-                        marginTop: 8,
-                      }}
-                    >
-                      {item.summary.slice(0, 140)}
-                      {item.summary.length > 140 ? "…" : ""}
-                    </span>
-                  )}
+                  <span className="news-featured-tile__body">
+                    <MetaRow item={item} />
+                    <span className="news-featured-tile__title">{item.title}</span>
                   </span>
                 </a>
               ))}
             </div>
           </div>
         </section>
-      )}
+      ) : null}
 
-      {/* Article List */}
-      <section style={{ padding: "40px 32px 120px", background: "#fff" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+      {/* Dense list rail */}
+      <section style={{ padding: "28px 32px 80px" }}>
+        <div style={{ maxWidth: 1440, margin: "0 auto" }}>
           {news.docs.length === 0 ? (
-            <div>
+            <div
+              style={{
+                background: "#111",
+                color: "#fff",
+                borderLeft: "4px solid #C8001F",
+                padding: 32,
+              }}
+            >
               <h2
                 style={{
                   fontFamily: "'Barlow Condensed', sans-serif",
                   fontWeight: 700,
                   fontSize: 32,
-                  textTransform: "uppercase" as const,
-                  color: "#111",
-                  marginBottom: 12,
-                  margin: "0 0 12px 0",
+                  textTransform: "uppercase",
+                  margin: "0 0 12px",
                 }}
               >
                 {isDataUnavailable ? "Feed unavailable" : "No news items match these filters yet."}
               </h2>
-              <p
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: 15,
-                  color: "#555",
-                  margin: 0,
-                }}
-              >
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, color: "rgba(255,255,255,0.72)", margin: 0 }}>
                 {isDataUnavailable
                   ? "Our ingestion and CMS services are reconnecting."
                   : "Try broadening your country/topic filters or run ingestion to populate fresh stories."}
               </p>
             </div>
-          ) : (
-            <div
-              className="news-page__article-grid"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                gap: 24,
-              }}
-            >
-              {news.docs.map((item, index) => (
-              <article
-                key={item.id}
-                className={index === 0 ? "news-page__article-card news-page__article-card--lead" : "news-page__article-card"}
-                style={{
-                  border: "1px solid #E5E7EB",
-                  background: "#fff",
-                  display: "flex",
-                  flexDirection: "column" as const,
-                  minHeight: index === 0 ? 470 : 390,
-                  gridColumn: index === 0 ? "span 2" : undefined,
-                  boxShadow: index === 0 ? "0 18px 48px rgba(17,17,17,0.08)" : "none",
-                }}
-              >
-                {/* Thumbnail */}
-                <div
+          ) : listDocs.length === 0 ? null : (
+            <>
+              {showMosaic ? (
+                <p
                   style={{
-                    width: "100%",
-                    minHeight: index === 0 ? 260 : 170,
-                    background: item.imageUrl
-                      ? `url('${item.imageUrl}') center/cover no-repeat`
-                      : THUMBNAIL_PLACEHOLDER,
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 600,
+                    fontSize: 10,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: "#C8001F",
+                    margin: "0 0 12px",
                   }}
-                />
-
-                {/* Article content */}
-                <div style={{ flex: 1, padding: index === 0 ? 28 : 22, display: "flex", flexDirection: "column" }}>
-                  {/* Meta row */}
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 12,
-                      alignItems: "center",
-                      marginBottom: 8,
-                      flexWrap: "wrap" as const,
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: "'Inter', sans-serif",
-                        fontWeight: 600,
-                        fontSize: 10,
-                        textTransform: "uppercase" as const,
-                        letterSpacing: "0.12em",
-                        background: "#C8001F",
-                        color: "#fff",
-                        padding: "2px 8px",
-                      }}
-                    >
-                      {item.sourceName}
+                >
+                  More from the desk
+                </p>
+              ) : null}
+              <div className="news-list-rail">
+                {listDocs.map((item) => (
+                  <a key={item.id} className="news-list-row" href={item.url} target="_blank" rel="noreferrer">
+                    <span className="news-list-row__thumb">
+                      {item.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={item.imageUrl} alt="" loading="lazy" />
+                      ) : (
+                        <SteelFallback item={item} height={72} />
+                      )}
                     </span>
-                    <span
-                      style={{
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: 11,
-                        color: "#888",
-                      }}
-                    >
-                      {formatDate(item.publishedAt)}
+                    <span className="news-list-row__body">
+                      <MetaRow item={item} />
+                      <span className="news-list-row__title">{item.title}</span>
                     </span>
-                    {Array.isArray(item.countries) && item.countries.length > 0 && (
-                      <span
-                        style={{
-                          fontFamily: "'Inter', sans-serif",
-                          fontSize: 11,
-                          color: "#888",
-                        }}
-                      >
-                        {item.countries.map((entry: string) => entry.toUpperCase()).join(", ")}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Title */}
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      fontFamily: "'Barlow Condensed', sans-serif",
-                      fontWeight: 700,
-                      fontSize: index === 0 ? 34 : 24,
-                      lineHeight: 1.02,
-                      textTransform: "uppercase" as const,
-                      color: "#111",
-                      letterSpacing: "0.01em",
-                      textDecoration: "none",
-                      display: "block",
-                    }}
-                  >
-                    {item.title}
                   </a>
-
-                  {/* Summary */}
-                  {item.summary && (
-                    <p
-                      style={{
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: 14,
-                        lineHeight: 1.6,
-                        color: "#555",
-                        marginTop: 8,
-                        marginBottom: 18,
-                      }}
-                    >
-                      {index === 0 ? item.summary : item.summary.slice(0, 180)}
-                      {index !== 0 && item.summary.length > 180 ? "…" : ""}
-                    </p>
-                  )}
-                  <span style={{ marginTop: "auto", fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color: "#C8001F" }}>
-                    Read source
-                  </span>
-                </div>
-              </article>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </section>
 
-      {/* Pagination */}
-      {(news.totalPages ?? 1) > 1 && (
-        <nav aria-label="Pagination" style={{ padding: "0 32px 80px", background: "#fff" }}>
+      {(news.totalPages ?? 1) > 1 ? (
+        <nav aria-label="Pagination" style={{ padding: "0 32px 80px" }}>
           <div
             style={{
-              maxWidth: 1280,
+              maxWidth: 1440,
               margin: "0 auto",
               display: "flex",
-              flexDirection: "row" as const,
+              flexWrap: "wrap",
               gap: 8,
             }}
           >
-            {Array.from({ length: news.totalPages ?? 1 }).map((_, index) => {
+            {Array.from({ length: Math.min(news.totalPages ?? 1, 24) }).map((_, index) => {
               const targetPage = index + 1;
               const query = buildQueryString({
                 country: country === "all" ? undefined : country,
                 topic: topic === "all" ? undefined : topic,
                 page: targetPage === 1 ? undefined : targetPage,
               });
-              const isCurrentPage = targetPage === currentPage;
+              const isCurrentPage = targetPage === deskPage;
               return (
                 <Link
                   key={targetPage}
@@ -670,7 +854,6 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                           fontFamily: "'Inter', sans-serif",
                           fontSize: 12,
                           textDecoration: "none",
-                          display: "inline-block",
                         }
                       : {
                           background: "#F9FAFB",
@@ -680,7 +863,6 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                           fontFamily: "'Inter', sans-serif",
                           fontSize: 12,
                           textDecoration: "none",
-                          display: "inline-block",
                         }
                   }
                 >
@@ -690,7 +872,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
             })}
           </div>
         </nav>
-      )}
+      ) : null}
     </main>
   );
 }

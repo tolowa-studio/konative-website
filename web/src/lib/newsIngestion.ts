@@ -3,6 +3,8 @@ import { createHash } from "node:crypto";
 import { XMLParser } from "fast-xml-parser";
 import type { SanityClient } from "@sanity/client";
 
+import { newsCurationSinceIso } from "./newsConstants";
+
 type SourceDoc = {
   _id: string;
   id: string;
@@ -66,16 +68,73 @@ const normalizeDate = (value: unknown) => {
   return parsed.toISOString();
 };
 
+const isHttpUrl = (value: unknown): value is string =>
+  typeof value === "string" && /^https?:\/\//i.test(value.trim());
+
+const looksLikeImageUrl = (url: string) =>
+  /\.(jpe?g|png|webp|gif|avif)(\?|#|$)/i.test(url) || /\/image\//i.test(url);
+
+/** Pull first absolute <img src> from HTML fragments in description / content:encoded. */
+const firstImgSrc = (html: unknown): string | undefined => {
+  if (typeof html !== "string" || !html.includes("<img")) return undefined;
+  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  const src = match?.[1]?.trim();
+  return isHttpUrl(src) ? src : undefined;
+};
+
+const mediaUrls = (node: unknown): string[] => {
+  const urls: string[] = [];
+  for (const entry of asArray(node as Record<string, unknown> | Record<string, unknown>[] | undefined)) {
+    if (!entry || typeof entry !== "object") continue;
+    const record = entry as Record<string, unknown>;
+    if (isHttpUrl(record.url)) urls.push(record.url.trim());
+    if (isHttpUrl(record.href)) urls.push(String(record.href).trim());
+    // Nested media:group → media:content / media:thumbnail
+    urls.push(...mediaUrls(record["media:content"]));
+    urls.push(...mediaUrls(record["media:thumbnail"]));
+    urls.push(...mediaUrls(record["media:group"]));
+  }
+  return urls;
+};
+
+const enclosureUrl = (enclosure: unknown): string | undefined => {
+  for (const entry of asArray(enclosure as Record<string, unknown> | Record<string, unknown>[] | undefined)) {
+    if (!entry || typeof entry !== "object") continue;
+    const record = entry as Record<string, unknown>;
+    const url = typeof record.url === "string" ? record.url.trim() : "";
+    if (!isHttpUrl(url)) continue;
+    const type = typeof record.type === "string" ? record.type : "";
+    if (type.startsWith("image/") || looksLikeImageUrl(url) || !type) return url;
+  }
+  return undefined;
+};
+
 const pickImageUrl = (item: any): string | undefined => {
+  const htmlBlob = [item?.["content:encoded"], item?.description, item?.content, item?.summary]
+    .map((value) => (typeof value === "string" ? value : typeof value?.["#text"] === "string" ? value["#text"] : ""))
+    .join(" ");
+
   const candidates = [
     item?.image?.url,
-    item?.enclosure?.type?.startsWith?.("image/") ? item?.enclosure?.url : undefined,
-    item?.["media:content"]?.url,
-    item?.["media:thumbnail"]?.url,
+    enclosureUrl(item?.enclosure),
+    ...mediaUrls(item?.["media:content"]),
+    ...mediaUrls(item?.["media:thumbnail"]),
+    ...mediaUrls(item?.["media:group"]),
     item?.thumbnail?.url,
+    item?.["itunes:image"]?.href,
+    typeof item?.["itunes:image"] === "string" ? item["itunes:image"] : undefined,
+    // Atom link rel="enclosure" / image
+    ...asArray(item?.link)
+      .filter((link: any) => {
+        const rel = String(link?.rel || "").toLowerCase();
+        const type = String(link?.type || "");
+        return rel === "enclosure" || rel === "image" || type.startsWith("image/");
+      })
+      .map((link: any) => link?.href),
+    firstImgSrc(htmlBlob),
   ];
 
-  return candidates.find((value) => typeof value === "string" && /^https?:\/\//.test(value));
+  return candidates.find((value) => isHttpUrl(value))?.trim();
 };
 
 const fingerprintFor = (sourceId: string, rawFingerprint: string, publishedAt: string) =>
@@ -171,6 +230,12 @@ async function ingestSource(sanity: SanityClient, source: SourceDoc): Promise<Pe
     let skipped = 0;
 
     for (const item of parsedItems) {
+      // Live desk only retains the curation window — skip older feed entries on create.
+      if (item.publishedAt < newsCurationSinceIso()) {
+        skipped += 1;
+        continue;
+      }
+
       const ingestFingerprint = fingerprintFor(source._id, item.rawFingerprint, item.publishedAt);
       const stableId = `newsitem.${ingestFingerprint}`;
 
@@ -180,6 +245,20 @@ async function ingestSource(sanity: SanityClient, source: SourceDoc): Promise<Pe
       );
 
       if (existingId) {
+        // Backfill imageUrl when a later ingest finds a photo the original create missed.
+        if (item.imageUrl) {
+          try {
+            const existingImage = await sanity.fetch<string | null>(
+              `*[_id == $id][0].imageUrl`,
+              { id: existingId },
+            );
+            if (!existingImage) {
+              await sanity.patch(existingId).set({ imageUrl: item.imageUrl }).commit();
+            }
+          } catch {
+            // Non-fatal — skip still counts as skip.
+          }
+        }
         skipped += 1;
         continue;
       }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { newsCurationSinceIso } from "../../../../lib/newsConstants";
 import { getSanityReadClient } from "../../../../sanity/readClient";
 
 export const dynamic = "force-dynamic";
@@ -10,8 +11,9 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = Math.min(MAX, Math.max(1, Number.parseInt(searchParams.get("limit") || "8", 10) || 8));
   const country = searchParams.get("country");
+  const since = newsCurationSinceIso();
 
-  let filter = `_type == "newsItem" && status == "published"`;
+  let filter = `_type == "newsItem" && status == "published" && defined(publishedAt) && publishedAt >= $since`;
   if (country === "us" || country === "ca") {
     filter += ` && "${country}" in coalesce(countries, [])`;
   }
@@ -40,7 +42,7 @@ export async function GET(request: Request) {
         publishedAt,
         countries
       }`,
-      {},
+      { since },
     );
     return NextResponse.json({ items: items ?? [] });
   } catch {
