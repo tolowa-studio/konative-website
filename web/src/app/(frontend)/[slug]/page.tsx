@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { RenderBlocks } from "../../../blocks/RenderBlocks";
+import { newsCurationSinceIso } from "../../../lib/newsConstants";
 import { getSanityReadClient } from "../../../sanity/readClient";
 
 export const revalidate = 3600;
@@ -33,10 +34,11 @@ function normalizeLayoutBlocks(raw: unknown): unknown[] {
   return [];
 }
 
-const latestNewsQuery = `*[_type == "newsItem" && status == "published"] | order(publishedAt desc)[0...20]{
+const latestNewsQuery = `*[_type == "newsItem" && status == "published" && defined(publishedAt) && publishedAt >= $since] | order(publishedAt desc)[0...20]{
   "id": _id,
   title,
   url,
+  imageUrl,
   summary,
   sourceName,
   publishedAt,
@@ -54,7 +56,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   try {
     const client = getSanityReadClient();
     pageData = await client.fetch(pageQuery, { slug: decodedSlug });
-    newsItems = await client.fetch(latestNewsQuery);
+    newsItems = await client.fetch(latestNewsQuery, { since: newsCurationSinceIso() });
   } catch (error) {
     if (decodedSlug === "home") {
       return (

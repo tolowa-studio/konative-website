@@ -1,5 +1,15 @@
 /** Shared news filter metadata (formerly Payload `NewsSources` constants). */
 
+/** Public /news desk only surfaces stories this recent — not the full Sanity archive. */
+export const NEWS_CURATION_WINDOW_DAYS = 10;
+
+/** ISO timestamp for the start of the live curation window (UTC). */
+export function newsCurationSinceIso(now = new Date()): string {
+  const since = new Date(now);
+  since.setUTCDate(since.getUTCDate() - NEWS_CURATION_WINDOW_DAYS);
+  return since.toISOString();
+}
+
 export const NEWS_SOURCE_COUNTRY_OPTIONS = [
   { label: "United States", value: "us" },
   { label: "Canada", value: "ca" },

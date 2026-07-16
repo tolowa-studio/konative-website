@@ -102,14 +102,16 @@ const sources = [
     countries: ["ca"],
     topics: ["tribal-data-center", "tribal-energy"],
   },
+  // DCD feed is owned by newsSource-datacenter-dynamics (seed-news-sources.ts).
+  // Keep this id only as an inactive alias so re-seeds do not double-ingest the same RSS.
   {
     _id: "newsSource-dcd",
-    name: "Data Centre Dynamics",
+    name: "Data Centre Dynamics (legacy alias)",
     slug: "datacenter-dynamics-tribal",
     sourceUrl: "https://www.datacenterdynamics.com",
-    feedUrl: "https://www.datacenterdynamics.com/en/rss/",
+    feedUrl: "",
     sourceType: "rss" as const,
-    active: true,
+    active: false,
     countries: ["ca", "us"],
     topics: ["tribal-data-center", "construction"],
   },
@@ -357,7 +359,7 @@ const items: CuratedItem[] = [
     url: "https://www.datacenterdynamics.com/en/news/canadian-indian-reserve-wiikwemkoong-installs-data-center/",
     summary:
       "Ontario First Nation deploys containerized data center for digital sovereignty — migrating community data from external cloud storage to tribally controlled infrastructure.",
-    sourceId: "newsSource-dcd",
+    sourceId: "newsSource-datacenter-dynamics",
     sourceName: "Data Centre Dynamics",
     publishedAt: "2025-05-23T12:00:00.000Z",
     countries: ["ca"],
