@@ -17,6 +17,7 @@ const navLinks: NavItem[] = [
       { label: "Funding Navigator", url: "/tribal/funding-navigator" },
       { label: "Carrier Check", url: "/tribal/carrier-check" },
       { label: "TBCP Awards", url: "/tribal/awards" },
+      { label: "Sovereignty", url: "/tribal/sovereignty" },
       { label: "NTIA / TBCP", url: "/ntia" },
     ],
   },
