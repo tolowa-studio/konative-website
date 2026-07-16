@@ -23,7 +23,13 @@ export interface HeroBackdropProps {
 
 export default function HeroBackdrop({ src, alt, objectPosition = "center" }: HeroBackdropProps) {
   return (
-    <div aria-hidden={false} style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+    {/* No z-index here: an explicit z-index:0 made this wrapper a stacking
+        context, which pushed the photo BEHIND the host section's opaque
+        background and rendered every custom-hero image invisible (verified in
+        real Chrome). Left as the section's first child, it paints below the
+        later grid/content siblings in normal tree order — image visible,
+        text on top. */}
+    <div aria-hidden={false} style={{ position: "absolute", inset: 0 }}>
       <Image src={src} alt={alt} fill priority sizes="100vw" style={{ objectFit: "cover", objectPosition }} />
       {/* Left-only scrim: darkens just the left text zone and goes FULLY
           transparent past the halfway mark, so the photo reads clearly across
