@@ -4,15 +4,30 @@ import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const navLinks: { label: string; url: string }[] = [
+type NavLink = { label: string; url: string };
+type NavItem = NavLink | { label: string; children: NavLink[] };
+
+const navLinks: NavItem[] = [
   { label: "Data Center", url: "/data-center-connectivity" },
   { label: "Tribal & Rural", url: "/tribal" },
   { label: "Connectivity", url: "/connectivity" },
   { label: "Tribal DC", url: "/tribal/projects" },
-  { label: "Map & Intelligence", url: "/map" },
+  {
+    label: "Map & Intelligence",
+    children: [
+      { label: "Interactive Map", url: "/map" },
+      { label: "Canada", url: "/canada" },
+      { label: "Markets", url: "/markets" },
+      { label: "Intelligence", url: "/intelligence" },
+    ],
+  },
   { label: "News", url: "/news" },
   { label: "About", url: "/about" },
 ];
+
+function isGroup(item: NavItem): item is { label: string; children: NavLink[] } {
+  return "children" in item;
+}
 
 /**
  * Pages that render a full-bleed dark hero under the header (so the header
@@ -35,6 +50,7 @@ export default function Header() {
 
   const [scrolled, setScrolled] = useState(!hasDarkHero);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [ctaHovered, setCtaHovered] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -204,8 +220,82 @@ export default function Header() {
           {/* Desktop center nav */}
           {!isMobile && (
             <nav style={navStyle}>
-              {navLinks.map((link) => {
-                const isHovered = hoveredLink === link.url;
+              {navLinks.map((item) => {
+                if (isGroup(item)) {
+                  const isActiveGroup = item.children.some((c) => c.url === pathname);
+                  const isOpen = openGroup === item.label;
+                  const groupLabelStyle: React.CSSProperties = {
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 500,
+                    fontSize: 11,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: isOpen || isActiveGroup ? "#C8001F" : linkColor,
+                    opacity: isOpen || isActiveGroup ? 1 : 0.85,
+                    transition: "color 0.3s, opacity 0.2s",
+                    cursor: "default",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 4,
+                  };
+                  return (
+                    <div
+                      key={item.label}
+                      style={{ position: "relative" }}
+                      onMouseEnter={() => setOpenGroup(item.label)}
+                      onMouseLeave={() => setOpenGroup(null)}
+                    >
+                      <span style={groupLabelStyle}>
+                        {item.label}
+                        <span style={{ fontSize: 8, transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▾</span>
+                      </span>
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "100%",
+                          left: 0,
+                          paddingTop: 12,
+                          opacity: isOpen ? 1 : 0,
+                          visibility: isOpen ? "visible" : "hidden",
+                          transition: "opacity 0.15s",
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: "#ffffff",
+                            border: "1px solid #E5E7EB",
+                            borderRadius: 6,
+                            boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                            minWidth: 180,
+                            padding: "6px 0",
+                          }}
+                        >
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.url}
+                              href={child.url}
+                              style={{
+                                display: "block",
+                                fontFamily: "'Inter', sans-serif",
+                                fontWeight: 500,
+                                fontSize: 12,
+                                letterSpacing: "0.04em",
+                                textDecoration: "none",
+                                color: child.url === pathname ? "#C8001F" : "#111111",
+                                padding: "9px 16px",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                const isHovered = hoveredLink === item.url;
                 const navLinkStyle: React.CSSProperties = {
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 500,
@@ -219,13 +309,13 @@ export default function Header() {
                 };
                 return (
                   <Link
-                    key={link.url}
-                    href={link.url}
+                    key={item.url}
+                    href={item.url}
                     style={navLinkStyle}
-                    onMouseEnter={() => setHoveredLink(link.url)}
+                    onMouseEnter={() => setHoveredLink(item.url)}
                     onMouseLeave={() => setHoveredLink(null)}
                   >
-                    {link.label}
+                    {item.label}
                   </Link>
                 );
               })}
@@ -260,25 +350,62 @@ export default function Header() {
 
       {/* Mobile drawer */}
       <nav style={drawerStyle} aria-hidden={!menuOpen}>
-        {navLinks.map((link) => (
-          <Link
-            key={link.url}
-            href={link.url}
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 500,
-              fontSize: 13,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              color: "#111111",
-              padding: "13px 28px",
-              borderBottom: "1px solid #E5E7EB",
-            }}
-          >
-            {link.label}
-          </Link>
-        ))}
+        {navLinks.map((item) =>
+          isGroup(item) ? (
+            <div key={item.label} style={{ borderBottom: "1px solid #E5E7EB" }}>
+              <div
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 600,
+                  fontSize: 11,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "#6B7280",
+                  padding: "13px 28px 6px",
+                }}
+              >
+                {item.label}
+              </div>
+              {item.children.map((child) => (
+                <Link
+                  key={child.url}
+                  href={child.url}
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 500,
+                    fontSize: 13,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    textDecoration: "none",
+                    color: "#111111",
+                    padding: "10px 28px 10px 40px",
+                    display: "block",
+                  }}
+                >
+                  {child.label}
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <Link
+              key={item.url}
+              href={item.url}
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 500,
+                fontSize: 13,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                color: "#111111",
+                padding: "13px 28px",
+                borderBottom: "1px solid #E5E7EB",
+              }}
+            >
+              {item.label}
+            </Link>
+          )
+        )}
         <Link
           href="/call"
           style={{
