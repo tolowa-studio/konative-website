@@ -105,7 +105,7 @@ export default function IntelligenceIndexPage() {
           }}
         />
         <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 4, height: 420, background: RED, transform: "rotate(18deg)", opacity: 0.9 }} />
-        <div style={{ position: "relative", maxWidth: 1180, margin: "0 auto", padding: "150px 48px 76px" }}>
+        <div style={{ position: "relative", zIndex: 2, maxWidth: 1180, margin: "0 auto", padding: "150px 48px 76px" }}>
           <p style={eyebrowStyle}>Intelligence</p>
           <h1 style={titleStyle}>
             THE SIGNAL LAYER <span style={{ color: RED }}>BEHIND BROKERAGE.</span>
