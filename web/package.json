@@ -44,7 +44,9 @@
     "notion:update-architecture": "node scripts/update-notion-fleet-architecture.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "tiles:sync": "node -e \"const{cpSync}=require('fs');cpSync('../tiles/v1','public/tiles/v1',{recursive:true,force:true});console.log('tiles synced');\""
+    "tiles:sync": "node -e \"const{cpSync}=require('fs');cpSync('../tiles/v1','public/tiles/v1',{recursive:true,force:true});console.log('tiles synced');\"",
+    "news:cleanup": "tsx --env-file=.env.local scripts/news-desk-cleanup.ts",
+    "news:cleanup:dry": "tsx --env-file=.env.local scripts/news-desk-cleanup.ts --dry-run"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
