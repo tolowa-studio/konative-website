@@ -69,15 +69,16 @@ export default function PitchLayout({
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-            {/* Cinematic overlay — dark enough on the left for legible copy,
-                light enough on the right to keep the photo clearly visible. */}
+            {/* Left-weighted scrim: legible copy on the left, photo clearly
+                visible on the right ~60%. Tuned live (two heavier overlays
+                previously stacked to near-opaque and hid the image). */}
             <div
               aria-hidden="true"
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(90deg, rgba(10,15,30,0.85) 0%, rgba(10,15,30,0.62) 50%, rgba(10,15,30,0.32) 100%)",
+                  "linear-gradient(100deg, rgba(10,15,30,0.82) 0%, rgba(10,15,30,0.55) 38%, rgba(10,15,30,0.18) 70%, rgba(10,15,30,0.08) 100%)",
               }}
             />
             <div
@@ -85,8 +86,7 @@ export default function PitchLayout({
               style={{
                 position: "absolute",
                 inset: 0,
-                background:
-                  "linear-gradient(to bottom, rgba(10,15,30,0.35) 0%, rgba(10,15,30,0) 40%, rgba(10,15,30,0.6) 100%)",
+                background: "linear-gradient(to bottom, rgba(10,15,30,0) 55%, rgba(10,15,30,0.35) 100%)",
               }}
             />
           </>

@@ -25,25 +25,25 @@ export default function HeroBackdrop({ src, alt, objectPosition = "center" }: He
   return (
     <div aria-hidden={false} style={{ position: "absolute", inset: 0, zIndex: 0 }}>
       <Image src={src} alt={alt} fill priority sizes="100vw" style={{ objectFit: "cover", objectPosition }} />
-      {/* Left-weighted darkening so left-aligned hero copy stays legible while
-          the photo stays clearly visible on the right two-thirds. */}
+      {/* Left-weighted scrim: darkens the left text zone for legibility while
+          clearing the right ~60% so the photo reads clearly. Tuned live — two
+          heavier overlays previously stacked to near-opaque and hid the image. */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(90deg, rgba(10,15,30,0.85) 0%, rgba(10,15,30,0.62) 50%, rgba(10,15,30,0.32) 100%)",
+            "linear-gradient(100deg, rgba(10,15,30,0.82) 0%, rgba(10,15,30,0.55) 38%, rgba(10,15,30,0.18) 70%, rgba(10,15,30,0.08) 100%)",
         }}
       />
-      {/* Vertical fade so the section edges blend into the page */}
+      {/* Light bottom fade so the section edge blends into the page below */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            "linear-gradient(to bottom, rgba(10,15,30,0.35) 0%, rgba(10,15,30,0) 40%, rgba(10,15,30,0.6) 100%)",
+          background: "linear-gradient(to bottom, rgba(10,15,30,0) 55%, rgba(10,15,30,0.35) 100%)",
         }}
       />
     </div>
