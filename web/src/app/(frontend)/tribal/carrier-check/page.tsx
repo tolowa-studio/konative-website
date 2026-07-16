@@ -207,7 +207,7 @@ export default function CarrierCheckPage() {
             backgroundSize: "56px 56px",
           }}
         />
-        <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 48px" }}>
+        <div style={{ position: "relative", zIndex: 2, maxWidth: 1100, margin: "0 auto", padding: "0 48px" }}>
           <div
             style={{
               display: "flex",
