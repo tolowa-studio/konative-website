@@ -76,12 +76,15 @@ describe("renderNtiaRound3Email", () => {
     expect(rendered.text).not.toContain("in undefined");
   });
 
-  it("always mentions the Konative connectivity-layer offer and the Round 3 deadline", () => {
+  it("always mentions the Snapshot offer, AVANT economics, and the Round 3 deadline", () => {
     const rendered = renderNtiaRound3Email(makeRow());
     expect(rendered.text).toContain("Konative");
-    expect(rendered.text).toContain("$0 cost to the Tribe");
+    expect(rendered.text).toContain("One-Site Carrier + Renewal Snapshot");
+    expect(rendered.subject).toContain("One carrier question for");
     expect(rendered.text).toContain("September 17, 2026");
     expect(rendered.html).toContain("September 17, 2026");
+    expect(rendered.text).not.toContain("does not fund");
+    expect(rendered.text).not.toContain("$0 cost to the Tribe");
   });
 
   it("never leaves an unresolved template placeholder in subject, html, or text", () => {

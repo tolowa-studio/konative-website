@@ -120,7 +120,9 @@ export default function ContactPage() {
           <Field label="Requirement type">
             <select name="projectType" style={inputStyle}>
               <option value="">Select...</option>
-              <option value="tribal_funded">Tribal or grant-funded project</option>
+              <option value="one_site_snapshot">One-Site Carrier + Renewal Snapshot</option>
+              <option value="market_connectivity_brief">Data-center Market Connectivity Brief</option>
+              <option value="tribal_funded">Tribal funding help / grant navigator</option>
               <option value="data_center">Data-center site connectivity</option>
               <option value="dark_fiber_transport">Dark fiber, transport, or wavelengths</option>
               <option value="business_connectivity">Enterprise internet, SD-WAN, or voice</option>
@@ -129,6 +131,14 @@ export default function ContactPage() {
               <option value="partnership">Partnership or referral</option>
               <option value="other">Other</option>
             </select>
+          </Field>
+
+          <Field label="Your role / title">
+            <input type="text" name="roleTitle" placeholder="Example: IT Director, Facilities, Procurement" style={inputStyle} />
+          </Field>
+
+          <Field label="Named property or site (if different from org)">
+            <input type="text" name="propertyName" placeholder="Example: Kewadin Casino Sault Ste. Marie" style={inputStyle} />
           </Field>
 
           <Field label="Service address(es) or coordinates">

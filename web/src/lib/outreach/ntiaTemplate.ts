@@ -2,10 +2,15 @@
  * NTIA Round 3 first-touch email template.
  *
  * Pure rendering logic, split out from `scripts/ntia-outreach-send.ts` so it is
- * unit-testable without touching Supabase or Mailgun. Renders a personalized
- * first-touch email for a TBCP awardee: Konative brokers the operational
- * connectivity layer TBCP grants don't fund — vendor-neutral, sovereignty-aware,
- * $0 to the Tribe. NTIA Round 3 NOFO deadline: September 17, 2026.
+ * unit-testable without touching Supabase or Mailgun. Personalized first-touch
+ * for a TBCP awardee: Konative offers an asynchronous One-Site Carrier +
+ * Renewal Snapshot — vendor-neutral, sovereignty-aware, AVANT sub-agent
+ * economics disclosed. NTIA Round 3 NOFO deadline: September 17, 2026.
+ *
+ * Do not claim TBCP "does not fund" operational connectivity. The NOFO permits
+ * infrastructure, backhaul/middle/last mile, leases/IRUs, engineering, network
+ * design, consulting, and related costs. Grant help belongs in the Tolowa
+ * Pacific trust lane; this template is commercial brokerage only.
  */
 
 /** Minimal shape of a `tbcp_awards` row needed to personalize the email. */
@@ -55,42 +60,47 @@ export function renderNtiaRound3Email(row: TbcpAwardRow): RenderedOutreachEmail 
         ? `We saw ${org} received a ${priorAward} TBCP award${stateClause} — congratulations on getting that funded.`
         : `We've been tracking TBCP awardees${stateClause}, and ${org} is on our radar as a Round 3 candidate.`;
 
-  const subject = `${org} — the connectivity layer TBCP doesn't fund (Round 3 deadline ${ROUND3_DEADLINE})`;
+  const subject = `One carrier question for ${org}`;
 
   const text = [
     `Hi there,`,
     ``,
     priorAwardSentence,
     ``,
-    `TBCP funds the network build — fiber, towers, middle mile. It does not fund the ongoing` +
-      ` operational layer: carrier contracts, capacity procurement, vendor management, and the` +
-      ` day-to-day work of actually running connectivity once it's built.`,
+    `As award work moves into implementation, enterprise sites often still need a clear` +
+      ` view of carrier options, renewals, and redundancy questions that require engineering` +
+      ` confirmation — separate from grant administration.`,
     ``,
-    `Konative brokers exactly that layer for Tribal nations: vendor-neutral, sovereignty-aware,` +
-      ` and at $0 cost to the Tribe. We get paid by the carriers and vendors we place, not by ${org}.`,
+    `Konative is a vendor-neutral connectivity brokerage and AVANT sub-agent. We can prepare` +
+      ` a One-Site Carrier + Renewal Snapshot (no meeting required): public carrier options,` +
+      ` renewal questions, and a short next-step decision tree with sources cited. Suppliers` +
+      ` may compensate us when you select a provider; you own the contracts.`,
     ``,
-    `With the NTIA Round 3 NOFO deadline on ${ROUND3_DEADLINE}, we're reaching out now so the` +
-      ` operational plan is ready alongside the grant application — not bolted on after the award.`,
+    `With the NTIA Round 3 window also closing ${ROUND3_DEADLINE}, grant strategy help stays` +
+      ` with Tolowa Pacific — this note is only about commercial carrier procurement for` +
+      ` operating sites.`,
     ``,
-    `Worth a 20-minute call to see if this fits?`,
+    `Would the one-page snapshot be useful, or who owns carrier contracts for the main site?`,
     ``,
-    `— Konative`,
+    `— Jeramey James, Konative`,
+    `Unsubscribe details are in the compliant footer of the live send.`,
   ].join("\n");
 
   const html = `
     <p>Hi there,</p>
     <p>${priorAwardSentence}</p>
-    <p>TBCP funds the network build — fiber, towers, middle mile. It does not fund the ongoing
-    operational layer: carrier contracts, capacity procurement, vendor management, and the
-    day-to-day work of actually running connectivity once it's built.</p>
-    <p><strong>Konative brokers exactly that layer</strong> for Tribal nations: vendor-neutral,
-    sovereignty-aware, and at <strong>$0 cost to the Tribe</strong>. We get paid by the carriers
-    and vendors we place, not by ${org}.</p>
-    <p>With the NTIA Round 3 NOFO deadline on <strong>${ROUND3_DEADLINE}</strong>, we're reaching
-    out now so the operational plan is ready alongside the grant application — not bolted on after
-    the award.</p>
-    <p>Worth a 20-minute call to see if this fits?</p>
-    <p>— Konative</p>
+    <p>As award work moves into implementation, enterprise sites often still need a clear
+    view of carrier options, renewals, and redundancy questions that require engineering
+    confirmation — separate from grant administration.</p>
+    <p><strong>Konative</strong> is a vendor-neutral connectivity brokerage and AVANT sub-agent.
+    We can prepare a <strong>One-Site Carrier + Renewal Snapshot</strong> (no meeting required):
+    public carrier options, renewal questions, and a short next-step decision tree with sources
+    cited. Suppliers may compensate us when you select a provider; you own the contracts.</p>
+    <p>With the NTIA Round 3 window also closing <strong>${ROUND3_DEADLINE}</strong>, grant
+    strategy help stays with Tolowa Pacific — this note is only about commercial carrier
+    procurement for operating sites.</p>
+    <p>Would the one-page snapshot be useful, or who owns carrier contracts for the main site?</p>
+    <p>— Jeramey James, Konative</p>
   `.trim();
 
   return { subject, html, text };

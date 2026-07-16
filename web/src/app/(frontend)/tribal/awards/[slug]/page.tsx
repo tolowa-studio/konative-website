@@ -238,13 +238,15 @@ export default async function AwardDetailPage({ params }: { params: Promise<{ sl
             Building on this award?
           </div>
           <p style={{ fontFamily: BODY, fontSize: 15, color: "#374151", lineHeight: 1.7, marginBottom: 28, maxWidth: 560 }}>
-            TBCP infrastructure grants fund the network. Konative brokers the enterprise connectivity, SD-WAN, voice, and security that runs on top — at no cost to your enterprise. We are vendor-neutral and sovereignty-aware.
+            Building on a TBCP award? Konative prepares a One-Site Carrier + Renewal Snapshot for the operating
+            property — public carrier options, renewal questions, and next steps with sources cited. We are an
+            AVANT sub-agent (suppliers may compensate us); you own the contracts. Vendor-neutral and sovereignty-aware.
           </p>
           <Link
-            href="/contact"
+            href="/contact#request"
             style={{ display: "inline-block", fontFamily: BODY, fontWeight: 600, fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", background: RED, color: "#fff", padding: "14px 32px", textDecoration: "none" }}
           >
-            Talk to a Connectivity Advisor →
+            Request a One-Site Snapshot →
           </Link>
         </div>
       </section>

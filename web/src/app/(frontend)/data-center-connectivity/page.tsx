@@ -320,7 +320,7 @@ export default function DataCenterConnectivityPage() {
           { text: "FACILITY.", tone: "rust" },
         ]}
         subhead="Konative is a vendor-neutral data-center connectivity broker — an Avant sub-agent that sources transport, dark fiber, cross-connects, colocation, and cloud on-ramps into your facility from 100+ carriers across North America. We work for you, not the supplier, and because carriers pay our fee, there is no cost to you."
-        primaryCta={{ label: "Book a Discovery Call →", href: "/call" }}
+        primaryCta={{ label: "Request a Market Connectivity Brief →", href: "/contact#request" }}
         secondaryCta={{ label: "Contact Us →", href: "/contact" }}
         heroImage={{
           src: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=70",
@@ -712,7 +712,7 @@ export default function DataCenterConnectivityPage() {
           </div>
           <div style={{ marginTop: 48, textAlign: "center" }}>
             <Link
-              href="/call"
+              href="/contact#request"
               style={{
                 fontFamily: BODY,
                 fontWeight: 600,
@@ -727,7 +727,7 @@ export default function DataCenterConnectivityPage() {
                 display: "inline-block",
               }}
             >
-              Book a 15-Min Call →
+              Request a Market Connectivity Brief →
             </Link>
           </div>
         </PitchSection>

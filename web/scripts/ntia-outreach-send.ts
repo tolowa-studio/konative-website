@@ -3,15 +3,14 @@
  *
  * NTIA Round 3 first-touch outreach campaign. Reads TBCP awardees from
  * Supabase `tbcp_awards` (service-role key), selects the segment that hasn't
- * been contacted yet, renders a personalized first-touch email (Konative
- * brokers the operational connectivity layer TBCP grants don't fund —
- * vendor-neutral, sovereignty-aware, $0 to the Tribe; NTIA Round 3 NOFO
- * deadline September 17, 2026), sends via Mailgun (`sendOutreachEmail`), and
+ * been contacted yet, renders a personalized first-touch email (One-Site
+ * Carrier + Renewal Snapshot offer — vendor-neutral, sovereignty-aware, AVANT
+ * economics disclosed; do not claim TBCP "doesn't fund" connectivity; NTIA
+ * Round 3 NOFO deadline September 17, 2026), sends via Mailgun (`sendOutreachEmail`), and
  * — only on a successful send — marks that row's `outreach_status` as
  * 'outreach_sent'.
  *
- * NON-DESTRUCTIVE BY DEFAULT: this script defaults to --dry-run. It prints
- * what it would send and updates NOTHING unless --send is explicitly passed.
+ * Do not run --send without Jeramey approval. Default remains --dry-run.
  * No DROP/DELETE/TRUNCATE anywhere; the only write is a single-column status
  * update, and only after a confirmed successful send.
  *
