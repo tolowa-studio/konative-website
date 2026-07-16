@@ -197,16 +197,6 @@ export default function CarrierCheckPage() {
           src="https://images.unsplash.com/photo-1761025483276-e64413c003cb?auto=format&fit=crop&w=2000&q=70"
           alt="A tall telecom tower standing in an open rural field at sunset"
         />
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
-        />
         <div style={{ position: "relative", zIndex: 2, maxWidth: 1100, margin: "0 auto", padding: "0 48px" }}>
           <div
             style={{

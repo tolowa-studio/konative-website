@@ -28,11 +28,6 @@ export default function MarketsClient({ markets }: { markets: MarketsMap }) {
           src="https://images.unsplash.com/photo-1506747111041-18b1844bf60f?auto=format&fit=crop&w=2000&q=70"
           alt="North American city grid glowing at night from above"
         />
-        <div aria-hidden="true" style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)',
-          backgroundSize: '56px 56px',
-        }} />
         <div className="markets-page__hero-grid" style={{ position: 'relative', zIndex: 2, maxWidth: 1320, margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(300px, 430px)', gap: 48, alignItems: 'end' }}>
           <div>
             <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: RED, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>

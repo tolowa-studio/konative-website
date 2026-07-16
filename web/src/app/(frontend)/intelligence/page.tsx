@@ -94,17 +94,7 @@ export default function IntelligenceIndexPage() {
           src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=70"
           alt="Dense network cabling running through a dark data-center server room"
         />
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
-        />
-        <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 4, height: 420, background: RED, transform: "rotate(18deg)", opacity: 0.9 }} />
+        <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 4, height: 420, background: RED, transform: "rotate(18deg)", opacity: 0.9, zIndex: 1 }} />
         <div style={{ position: "relative", zIndex: 2, maxWidth: 1180, margin: "0 auto", padding: "150px 48px 76px" }}>
           <p style={eyebrowStyle}>Intelligence</p>
           <h1 style={titleStyle}>

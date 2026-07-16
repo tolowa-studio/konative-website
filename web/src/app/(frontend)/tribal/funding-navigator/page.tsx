@@ -370,16 +370,6 @@ export default function FundingNavigatorPage() {
           src="https://images.unsplash.com/photo-1552772588-12592fc15a64?auto=format&fit=crop&w=2000&q=70"
           alt="Power transmission lines crossing a wide rural landscape at dusk"
         />
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
-        />
         <div style={{ position: "relative", zIndex: 2, maxWidth: 1100, margin: "0 auto", padding: "0 48px" }}>
           <div
             style={{
