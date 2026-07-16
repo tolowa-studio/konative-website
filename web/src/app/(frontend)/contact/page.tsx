@@ -2,6 +2,7 @@
 
 import type { CSSProperties, FormEvent, ReactNode } from "react";
 import { useState } from "react";
+import HeroBackdrop from "@/components/marketing/HeroBackdrop";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -70,29 +71,22 @@ export default function ContactPage() {
 
   return (
     <main style={{ background: "#fff", minHeight: "100vh" }}>
-      <section style={{ position: "relative", overflow: "hidden", borderBottom: `1px solid ${DIVIDER}` }}>
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(to right, rgba(55,65,81,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(55,65,81,0.05) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
+      <section style={{ position: "relative", overflow: "hidden", background: DARK }}>
+        <HeroBackdrop
+          src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=2000&q=70"
+          alt="Close-up of a fiber patch panel with cross-connects being made"
         />
-        <div aria-hidden="true" style={{ position: "absolute", top: -80, right: "10%", width: 4, height: 420, background: RED, transform: "rotate(18deg)", opacity: 0.9 }} />
-        <div style={{ position: "relative", maxWidth: 1180, margin: "0 auto", padding: "150px 48px 72px" }}>
-          <p style={eyebrowStyle}>Connectivity request</p>
-          <h1 style={titleStyle}>
+        <div style={{ position: "relative", zIndex: 2, maxWidth: 1180, margin: "0 auto", padding: "150px 48px 96px" }}>
+          <p style={{ ...eyebrowStyle, color: RED }}>Connectivity request</p>
+          <h1 style={{ ...titleStyle, color: "#fff" }}>
             LET&apos;S SOURCE THE <span style={{ color: RED }}>NETWORK.</span>
           </h1>
-          <p style={ledeStyle}>
+          <p style={{ ...ledeStyle, color: "rgba(255,255,255,0.72)" }}>
             Give us the service addresses, timing, and business requirement. We will organize the request, identify supplier options, compare commercial terms, and manage the path from quote to installation.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 32 }}>
             <a href="#request" style={primaryLinkStyle}>Get connectivity options</a>
-            <a href="https://cal.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={outlineLinkStyle}>Book a working session</a>
+            <a href="https://cal.com/jeramey-james" target="_blank" rel="noopener noreferrer" style={darkOutlineLinkStyle}>Book a working session</a>
           </div>
         </div>
       </section>
@@ -345,17 +339,17 @@ const darkPrimaryLinkStyle: CSSProperties = {
   display: "inline-block",
 };
 
-const outlineLinkStyle: CSSProperties = {
+const darkOutlineLinkStyle: CSSProperties = {
   fontFamily: BODY,
   fontWeight: 700,
   fontSize: 12,
   letterSpacing: "0.12em",
   textTransform: "uppercase",
-  background: "#fff",
-  color: STEEL,
+  background: "transparent",
+  color: "#f6f7fb",
   padding: "16px 32px",
   textDecoration: "none",
-  border: `1px solid ${DIVIDER}`,
+  border: "1px solid #334155",
   borderRadius: 2,
 };
 
