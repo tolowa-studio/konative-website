@@ -69,24 +69,18 @@ export default function PitchLayout({
               sizes="100vw"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
-            {/* Left-weighted scrim: legible copy on the left, photo clearly
-                visible on the right ~60%. Tuned live (two heavier overlays
-                previously stacked to near-opaque and hid the image). */}
+            {/* Left-only scrim that goes fully transparent past the halfway
+                mark — legible copy on the left, photo clearly visible on the
+                right half. A full-cover overlay (any alpha) crushed the photo
+                to black; a left-weighted scrim reaching 0 is the fix (verified
+                live). */}
             <div
               aria-hidden="true"
               style={{
                 position: "absolute",
                 inset: 0,
                 background:
-                  "linear-gradient(100deg, rgba(10,15,30,0.82) 0%, rgba(10,15,30,0.55) 38%, rgba(10,15,30,0.18) 70%, rgba(10,15,30,0.08) 100%)",
-              }}
-            />
-            <div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: "linear-gradient(to bottom, rgba(10,15,30,0) 55%, rgba(10,15,30,0.35) 100%)",
+                  "linear-gradient(90deg, rgba(10,15,30,0.8) 0%, rgba(10,15,30,0.45) 30%, rgba(10,15,30,0) 50%, rgba(10,15,30,0) 100%)",
               }}
             />
           </>
