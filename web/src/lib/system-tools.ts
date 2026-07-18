@@ -26,11 +26,6 @@ export function getGhostAdminUrl(): string | null {
 
 export type IntegrationHealth = {
   sanity: { configured: boolean; reachable: boolean };
-  /** Public key present; optional server private key for drafts. Production `/` is never Builder — see `/builder/*`. */
-  builder: {
-    configured: boolean;
-    privateKey: boolean;
-  };
   ghost: { configured: boolean; reachable: boolean };
 };
 
@@ -50,8 +45,6 @@ async function fetchOk(url: string, init?: RequestInit): Promise<boolean> {
 export async function getIntegrationHealth(): Promise<IntegrationHealth> {
   const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.trim();
   const dataset = (process.env.NEXT_PUBLIC_SANITY_DATASET || "production").trim();
-  const builderKey = process.env.NEXT_PUBLIC_BUILDER_API_KEY?.trim();
-  const builderPrivate = process.env.BUILDER_PRIVATE_API_KEY?.trim();
 
   const ghostUrl =
     process.env.NEXT_PUBLIC_GHOST_URL?.trim() || process.env.GHOST_URL?.trim();
@@ -78,10 +71,6 @@ export async function getIntegrationHealth(): Promise<IntegrationHealth> {
 
   return {
     sanity: { configured: sanityConfigured, reachable: sanityReachable },
-    builder: {
-      configured: !!builderKey,
-      privateKey: !!builderPrivate,
-    },
     ghost: {
       configured: !!(ghostUrl && ghostContentKey),
       reachable: ghostReachable,

@@ -24,9 +24,6 @@
     "draft:saudi-tracker": "tsx scripts/draft-saudi-tracker.ts",
     "draft:tribal-brief": "tsx --env-file=.env.local scripts/draft-tribal-brief.ts",
     "draft:tribal-brief:publish": "tsx --env-file=.env.local scripts/draft-tribal-brief.ts --publish",
-    "builder": "builder",
-    "builder:import": "builder import -o ./builder-export",
-    "builder:create": "builder create",
     "queue:ingest": "tsx scripts/queue/run-nightly.ts",
     "seed:canada-dc": "tsx --env-file=.env.local scripts/seed-canada-dc.ts",
     "seed:canada-dc:dry": "tsx scripts/seed-canada-dc.ts --dry-run",
@@ -50,8 +47,6 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
-    "@builder.io/react": "^9.3.0",
-    "@builder.io/sdk": "^6.3.0",
     "@calcom/embed-react": "^1.5.3",
     "@sanity/client": "^7.21.0",
     "@sanity/image-url": "^1.2.0",
@@ -78,7 +73,6 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@builder.io/cli": "^1.2.10",
     "@opennextjs/cloudflare": "^1.19.11",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.0.0",

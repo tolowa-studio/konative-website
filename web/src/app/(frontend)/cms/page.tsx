@@ -7,7 +7,7 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Systems | Konative",
-  description: "CMS and publishing tools — Sanity, Builder.io, Ghost.",
+  description: "CMS and publishing tools — Sanity, Ghost.",
   robots: { index: false, follow: false },
 };
 
@@ -48,10 +48,7 @@ export default async function CmsSystemPage() {
   const health = await getIntegrationHealth();
   const ghostAdmin = getGhostAdminUrl();
 
-  const allConfigured =
-    health.sanity.configured &&
-    health.builder.configured &&
-    health.ghost.configured;
+  const allConfigured = health.sanity.configured && health.ghost.configured;
 
   return (
     <main className="cms-hub">
@@ -128,76 +125,6 @@ export default async function CmsSystemPage() {
                 <SetupStep num={4}>
                   API → Tokens → create <strong>Editor</strong> token → set{" "}
                   <EnvVar name="SANITY_API_TOKEN" />
-                </SetupStep>
-              </ol>
-            )}
-          </div>
-
-          {/* ── Builder.io ── */}
-          <div className="cms-hub__card">
-            <div className="cms-hub__card-top">
-              <h2 className="cms-hub__card-title">Builder.io</h2>
-              <Badge
-                tone={!health.builder.configured ? "setup" : "ok"}
-                label={
-                  !health.builder.configured
-                    ? "Not configured"
-                    : health.builder.privateKey
-                      ? "Public + private key"
-                      : "Public key set"
-                }
-              />
-            </div>
-            <p className="cms-hub__card-desc">
-              Optional visual editor for <code className="cms-hub__code">/builder/*</code> routes. The live site
-              homepage (<code className="cms-hub__code">/</code>) is built in this Next.js app — hero and sections live
-              in code, not in Builder.
-            </p>
-
-            {health.builder.configured ? (
-              <>
-                <a
-                  href="https://builder.io/content"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cms-hub__card-cta"
-                >
-                  Open Builder.io ↗
-                </a>
-                <ol className="cms-hub__setup-list" style={{ marginTop: "1rem" }}>
-                  <SetupStep num={1}>
-                    In Builder → Models → <strong>page</strong> → set <strong>Preview URL</strong> to your deployment
-                    (e.g. <code className="cms-hub__code">https://konative.com</code> or a preview build URL). Open{" "}
-                    <code className="cms-hub__code">/builder</code> on the site to edit — not the root URL.
-                  </SetupStep>
-                  {!health.builder.privateKey ? (
-                    <SetupStep num={2}>
-                      Optional: set <EnvVar name="BUILDER_PRIVATE_API_KEY" /> (server-only) so the app can fetch{" "}
-                      <strong>draft</strong> content when previewing.
-                    </SetupStep>
-                  ) : null}
-                  <SetupStep num={health.builder.privateKey ? 2 : 3}>
-                    Content for model <code className="cms-hub__code">page</code> must be <strong>published</strong> to
-                    render on <code className="cms-hub__code">/builder/…</code>. If you see the “no content” message,
-                    check URL targeting and publish state, then redeploy after env changes (
-                    <EnvVar name="NEXT_PUBLIC_*" /> is baked at build time).
-                  </SetupStep>
-                </ol>
-              </>
-            ) : (
-              <ol className="cms-hub__setup-list">
-                <SetupStep num={1}>
-                  Go to{" "}
-                  <a href="https://builder.io" target="_blank" rel="noopener noreferrer">
-                    builder.io
-                  </a>{" "}
-                  → create account or sign in
-                </SetupStep>
-                <SetupStep num={2}>
-                  Settings → Space → copy <strong>Public API Key</strong>
-                </SetupStep>
-                <SetupStep num={3}>
-                  Set <EnvVar name="NEXT_PUBLIC_BUILDER_API_KEY" /> in the Cloudflare Worker settings
                 </SetupStep>
               </ol>
             )}
