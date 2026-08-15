@@ -13,7 +13,7 @@ This repository is MotionOS Conductor-ready.
 ## Repo
 
 - Local path: `/Users/jerameyjames/repos/konative-website`
-- Origin: `https://github.com/jerameyjames/konative-website.git`
+- Origin: `https://github.com/tolowa-studio/konative-website.git`
 - Stash namespace: `/projects/konative`
 
 ## Control-plane model
