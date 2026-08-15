@@ -3,28 +3,41 @@
 
 ---
 
-## 1. Cal.com Setup *(~45 minutes)*
+## 1. Cal.com Setup *(already done — do NOT create a new account)*
 
-### Create Your Account
+> **Corrected 2026-08-15.** This section previously told you to sign up for a
+> second Cal.com account with the username `konative`, producing
+> `cal.com/konative/discovery`. **That slug never resolved to a real event and
+> returned 404 for roughly two weeks while it was the sitewide primary CTA**
+> (shipped ~2026-06-23, fixed 2026-07-06). Following the old instructions would
+> recreate that outage.
+>
+> There is **one canonical Cal.com profile for every Tolowa Studio venture**,
+> Konative included: **https://cal.com/jeramey-james**. Do not create
+> per-venture accounts or invent per-venture slugs.
 
-1. Go to **https://cal.com**
-2. Click "Get Started" — sign up with your Google account (jeramey.james@gmail.com) for fastest setup
-3. During onboarding, set your username to **konative** — this locks in `cal.com/konative/...` URLs
-4. Set timezone to **America/Chicago** (or your local timezone — this matters for booking accuracy)
+**Live event types (verified in-browser 2026-07-06):**
 
-### Create the Discovery Call Event Type
+| Purpose | Link |
+|---|---|
+| Discovery / intro (15 min) | `https://cal.com/jeramey-james/15min` |
+| Standard (30 min) | `https://cal.com/jeramey-james/30min` |
+| Motion Audit (45 min) | `https://cal.com/jeramey-james/motion-audit` |
 
-From your Cal.com dashboard:
+Never use `meetings-na2.hubspot.com/jeramey-james` — HubSpot was retired May 2026.
 
-1. Click **"+ New Event Type"**
-2. Select **"One-on-One"**
+### Tuning the discovery event (optional)
 
-**Fill in the following settings exactly:**
+The `/15min` event already exists and is bookable. Only if you want to adjust it,
+open it from the **jeramey-james** dashboard and apply the settings below. Do not
+create a second event type for this.
+
+**Reference settings:**
 
 | Field | Value |
 |---|---|
 | Event name | 15-Minute Discovery Call |
-| URL slug | `discovery` |
+| URL slug | `15min` (already exists — do not create `discovery`) |
 | Description | A focused 15-minute call to explore how Konative can help your tribe or organization develop broadband infrastructure, data centers, or connectivity strategy. Come with questions. |
 | Duration | 15 minutes |
 | Location | **Whereby** or **Google Meet** (select "Video conferencing" and connect your preferred tool) |
@@ -61,10 +74,10 @@ Go to **"Advanced" → "Questions"** and add:
 
 ### Your Booking Link
 
-After saving, your link will be:
+The canonical booking link — already live, nothing to save:
 
 ```
-https://cal.com/konative/discovery
+https://cal.com/jeramey-james/15min
 ```
 
 ### Embed Code for the Next.js /call Page
@@ -99,7 +112,7 @@ export default function CallPage() {
     <main>
       <Cal
         namespace="discovery"
-        calLink="konative/discovery"
+        calLink="jeramey-james/15min"
         style={{ width: "100%", height: "100%", overflow: "scroll" }}
         config={{ layout: "month_view" }}
       />
@@ -112,7 +125,7 @@ If you prefer the inline iframe (no npm package), use this instead anywhere in t
 
 ```html
 <iframe
-  src="https://cal.com/konative/discovery?embed=true"
+  src="https://cal.com/jeramey-james/15min?embed=true"
   style="width:100%;height:700px;border:none;"
   title="Book a Discovery Call"
 />
@@ -518,7 +531,7 @@ The caveat: Google Business Profile is optimized for businesses with a physical 
 
 | Task | Estimated Time |
 |---|---|
-| Cal.com setup | 45 min |
+| Cal.com setup | done — canonical link already live |
 | NCAI submission | 30 min |
 | CCAB submission | 45 min |
 | DCD pitch email | 30 min |
