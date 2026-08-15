@@ -7,8 +7,13 @@
 
 # Generated outreach and Builder artifacts
 web/.tribal-outreach-contacts.json
+web/outreach-log-*.json
 web/dist/
 /tiles/
+
+# Build output — OpenNext bundle (~132MB) and local Wrangler state. Never commit these.
+web/.open-next/
+web/.wrangler/
 
 # ETL build artifacts
 .tmp/
