@@ -104,3 +104,36 @@ describe("contactSchema audience field", () => {
     expect(parsed.success).toBe(true);
   });
 });
+
+describe("contactSchema campaign metadata", () => {
+  it("preserves tribal scope builder metadata on the parsed payload", () => {
+    const parsed = contactSchema.safeParse({
+      name: "Jane",
+      email: "jane@example.com",
+      organization: "Test Tribe",
+      audience: "tribes",
+      context: "tbcp3-negp-scope-builder",
+      campaign: "tribal-2026",
+      segment: "A",
+      awardSlug: "test-tribe",
+      lane: "tbcp3",
+      source: "konative.com",
+      approvalStatus: "needs-review",
+      scopeTool: "tribal-voice-to-scope",
+      scopeMarkdown: "# Scope",
+      scopeAnswers: [
+        {
+          id: "locations",
+          label: "Locations",
+          prompt: "Which sites?",
+          value: "Clinic and government center",
+        },
+      ],
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.context).toBe("tbcp3-negp-scope-builder");
+      expect(parsed.data.scopeAnswers?.[0]?.id).toBe("locations");
+    }
+  });
+});

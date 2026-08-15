@@ -1,12 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import Image from "next/image";
-import { VoiceIntakeWidget } from "@/components/forms/VoiceIntakeWidget";
-import { CalEmbed } from "@/components/CalEmbed";
-
-const DataCenterMap = dynamic(() => import("@/components/DataCenterMap"), { ssr: false });
 
 const RED = "#C8001F";
 const DARK = "#08111F";
@@ -22,81 +16,92 @@ const outcomes = [
   ["One accountable team", "Manage sourcing, ordering, installation, escalation, and renewal."],
 ];
 
+const gtmMotions = [
+  ["Tribal awards", "Use TBCP and NEGP signals to move from public funding to operating connectivity, security, voice, cloud, and managed network needs."],
+  ["Gaming uptime", "Review casino and hospitality WAN, payments, surveillance, guest access, voice, cybersecurity, and failover before renewal pressure hits."],
+  ["Data-center build signals", "Turn map, power, stalled-project, and Canada market signals into early carrier, fiber-path, transport, DCI, and cloud on-ramp reviews."],
+  ["Canada partnerships", "Build a credible northern lane with First Nations, Indigenous economic development, carrier, engineering, and capital partners."],
+];
+
+const signalRows = [
+  ["164", "reviewed tribal contacts in the first campaign base"],
+  ["17", "TBCP award-matched organizations ready for approval review"],
+  ["60", "gaming and casino contacts for uptime and resilience outreach"],
+  ["US + Canada", "operating focus for tribal, Indigenous, rural, and data-center connectivity"],
+];
+
 export default function HomePage() {
   return (
     <main style={{ color: TEXT, background: "#fff" }}>
-      <section style={{ minHeight: "92dvh", position: "relative", overflow: "hidden", background: DARK }}>
-        <div style={{ position: "absolute", inset: 0, opacity: .5 }}>
-          <Image
-            src="https://images.unsplash.com/photo-1506606401543-2e73709cebb4?auto=format&fit=crop&w=2400&q=70"
-            alt="Aerial view of a metropolitan grid glowing at night, conveying continental-scale connectivity"
-            fill
-            priority
-            sizes="100vw"
-            style={{ objectFit: "cover", objectPosition: "center" }}
-          />
-        </div>
-        <div style={{ position: "absolute", inset: 0, opacity: .32 }}><DataCenterMap backgroundMode /></div>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,#08111F 0%,rgba(8,17,31,.94) 46%,rgba(8,17,31,.62) 100%)" }} />
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(8,17,31,.35) 0%, rgba(8,17,31,0) 30%, rgba(8,17,31,.72) 100%)" }} />
-        <a
-          href="https://unsplash.com/@zacong?utm_source=konative&utm_medium=referral"
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          style={{ position: "absolute", right: 16, bottom: 12, zIndex: 2, fontFamily: "Inter, sans-serif", fontSize: 10, letterSpacing: ".04em", color: "rgba(255,255,255,.5)", textDecoration: "none" }}
-        >
-          Photo: Zac Ong / Unsplash
-        </a>
-        <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "150px 32px 72px" }}>
-          <p style={eyebrow}>Vendor-neutral connectivity brokerage · AVANT partner</p>
-          <h1 style={{ fontFamily: DISPLAY, fontSize: "clamp(52px,8.5vw,108px)", lineHeight: .86, letterSpacing: "-.025em", textTransform: "uppercase", color: "#fff", maxWidth: 980, margin: "0 0 28px" }}>
-            Nearby fiber is not <span style={{ color: RED }}>deliverable fiber.</span>
-          </h1>
-          <p style={{ maxWidth: 720, color: "rgba(255,255,255,.72)", fontSize: 18, lineHeight: 1.7, marginBottom: 36 }}>
-            Konative maps which carriers can actually reach your mid-build data-center site — laterals, waves, DIA, diversity — before the schedule slips. Native-owned. Vendor-neutral. Suppliers pay us.
-          </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/contact?projectType=data_center#request" style={primary}>Get a one-page site brief</Link>
-            <Link href="/tribal" style={secondary}>Tribal enterprise connectivity</Link>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", maxWidth: 880, marginTop: 54, border: "1px solid rgba(255,255,255,.15)" }}>
-            {["Site-specific deliverability", "100+ supplier portfolio", "Supplier-paid advisory", "Lifecycle support"].map(x => <div key={x} style={{ padding: "18px 20px", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: ".11em", textTransform: "uppercase", borderRight: "1px solid rgba(255,255,255,.12)" }}>{x}</div>)}
-          </div>
-        </div>
-      </section>
-
-      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "88px 32px 0" }}>
-        <p style={{ ...eyebrow, color: RED }}>Describe it — we&apos;ll take it from there</p>
-        <h2 style={sectionTitle}>Talk to us. Literally.</h2>
-        <p style={{ color: MUTED, maxWidth: 640, lineHeight: 1.7, marginTop: 16, marginBottom: 42 }}>
-          Click the mic and describe what you need in your own words. We transcribe it, organize it into
-          a real brief, and get it to our team — no form to fill out. Or just book a time yourself below.
-        </p>
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 24, alignItems: "start" }} className="voice-intake-page-grid">
-          <VoiceIntakeWidget />
+      <section style={{ minHeight: "88dvh", position: "relative", overflow: "hidden", background: DARK }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 72% 28%, rgba(200,0,31,.18), transparent 36%), linear-gradient(90deg,#08111F 0%,#0B1424 60%,#101A2C 100%)" }} />
+        <div className="home-hero-grid" style={{ position: "relative", maxWidth: 1320, margin: "0 auto", padding: "116px 32px 72px", display: "grid", gridTemplateColumns: "minmax(0, .95fr) minmax(440px, .9fr)", gap: 42, alignItems: "center" }}>
           <div>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: RED, marginBottom: 12 }}>
-              Prefer to just pick a time?
+            <p style={eyebrow}>Indigenous-owned connectivity brokerage · AVANT partner</p>
+            <h1 className="home-hero-title" style={{ fontFamily: DISPLAY, fontSize: "clamp(54px,7.4vw,108px)", lineHeight: .86, letterSpacing: "-.025em", textTransform: "uppercase", color: "#fff", maxWidth: 840, margin: "0 0 28px" }}>
+              Source the network behind <span style={{ color: RED }}>critical infrastructure.</span>
+            </h1>
+            <p className="home-hero-copy" style={{ maxWidth: 680, color: "rgba(255,255,255,.72)", fontSize: 18, lineHeight: 1.7, marginBottom: 36 }}>
+              Konative is a vendor-neutral, sovereignty-aware brokerage for tribal and rural enterprises, Indigenous partners, and data-center teams across the United States and Canada. We use public data, maps, awards, and market signals to source internet, fiber, transport, cloud, voice, security, colocation, and interconnection.
             </p>
-            <CalEmbed />
+            <div className="home-hero-actions" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link href="/call" style={primary}>Book a connectivity review</Link>
+              <Link href="/tribal/grants" style={secondary}>TBCP 3 / NEGP help</Link>
+            </div>
+            <div className="home-signal-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", maxWidth: 800, marginTop: 48, border: "1px solid rgba(255,255,255,.15)" }}>
+              {["Tribal + rural", "Data-center connectivity", "US + Canada", "Map-backed outreach"].map(x => <div key={x} style={{ padding: "16px 18px", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: ".11em", textTransform: "uppercase", borderRight: "1px solid rgba(255,255,255,.12)" }}>{x}</div>)}
+            </div>
+          </div>
+          <div className="home-hero-map" style={{ minHeight: 520, border: "1px solid rgba(255,255,255,.16)", background: "rgba(255,255,255,.04)", boxShadow: "0 28px 80px rgba(0,0,0,.32)", position: "relative", overflow: "hidden" }}>
+            <img className="home-map-image" src="/images/connectivity-map-hero.png" alt="North America connectivity opportunity map with data center, network, and Indigenous land signal layers" />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(8,17,31,0) 40%, rgba(8,17,31,.74) 100%)", pointerEvents: "none" }} />
+            <div style={{ position: "absolute", left: 18, right: 18, bottom: 18, background: "rgba(8,17,31,.86)", border: "1px solid rgba(255,255,255,.12)", padding: 16 }}>
+              <p style={{ color: RED, fontSize: 10, fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 8 }}>Live sourcing surface</p>
+              <p style={{ color: "rgba(255,255,255,.76)", fontSize: 13, lineHeight: 1.55, margin: 0 }}>Public infrastructure signals become reviewed market questions, not automated claims.</p>
+            </div>
           </div>
         </div>
       </section>
 
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 32px" }}>
-        <p style={{ ...eyebrow, color: RED }}>Where we lean in</p>
-        <h2 style={sectionTitle}>One sourcing desk. Two rooms we know.</h2>
+        <p style={{ ...eyebrow, color: RED }}>Start with your situation</p>
+        <h2 style={sectionTitle}>Two go-to-market lanes. One sourcing desk.</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,430px),1fr))", gap: 18, marginTop: 42 }}>
-          <Door href="/data-center-connectivity" number="01" title="Data center under construction" body="Prove which carriers can actually deliver multi-path connectivity to a named mid-build site — laterals, waves, DIA, DCI, diversity — without betting the schedule on a single carrier’s map. Free lateral cost estimator + published secondary-market benchmarks." cta="Get a site connectivity brief" />
-          <Door href="/tribal" number="02" title="Tribal gaming & enterprise" body="Keep uptime. Make carriers compete. Native-owned, vendor-neutral brokerage for casinos, multi-site ops, health, and government — renewal continuity and failover without rip-and-replace. Suppliers pay us; you own the contracts." cta="Request a continuity snapshot" />
+          <Door href="/tribal/grants" number="01" title="TBCP 3 & Tribal grants" body="Turn TBCP 3, NEGP, award records, renewals, gaming uptime, healthcare, education, and rural enterprise needs into carrier-neutral sourcing and installed service." cta="Plan funded connectivity" />
+          <Door href="/data-center-connectivity" number="02" title="Data-center connectivity" body="Determine whether a site can obtain the internet, transport, dark fiber, wavelengths, cloud access, DCI, and physical diversity its operating plan requires." cta="Evaluate site connectivity" />
         </div>
-        <p style={{ color: MUTED, marginTop: 22, lineHeight: 1.7 }}>
-          Also sourcing multi-site enterprise, healthcare, public safety, UCaaS/CCaaS, managed networks, cloud, mobility, and cybersecurity.{" "}
-          <Link href="/tribal/funding-navigator" style={{ color: RED, fontWeight: 600, textDecoration: "none" }}>
-            Applying for TBCP Round 3 / NEGP by Sept 17?
-          </Link>{" "}
-          Free funding navigator — grant help is separate from brokerage.
-        </p>
+        <p style={{ color: MUTED, marginTop: 22, lineHeight: 1.7 }}>Also sourcing multi-site enterprise, gaming and hospitality, healthcare, public safety, UCaaS/CCaaS, managed networks, cloud, mobility, cybersecurity, and Canada partnership opportunities.</p>
+      </section>
+
+      <section style={{ background: "#fff", borderBlock: `1px solid ${LINE}`, padding: "88px 32px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,420px),1fr))", gap: 42, alignItems: "start" }}>
+            <div>
+              <p style={{ ...eyebrow, color: RED }}>GTM engine</p>
+              <h2 style={sectionTitle}>The site feeds reviewed outreach, not generic traffic.</h2>
+              <p style={{ color: MUTED, lineHeight: 1.75, fontSize: 16, maxWidth: 650, marginTop: 24 }}>
+                Every useful visitor should land in a lane, campaign, or partner motion. Konative turns public award data, market maps, stalled-project signals, and relationship context into approved Twenty CRM queues before any outreach begins.
+              </p>
+            </div>
+            <div style={{ border: `1px solid ${LINE}`, background: "#F7F8FA" }}>
+              {signalRows.map(([value, label]) => (
+                <div key={value} style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: 18, padding: "20px 24px", borderBottom: `1px solid ${LINE}`, alignItems: "baseline" }}>
+                  <strong style={{ fontFamily: DISPLAY, fontSize: 34, lineHeight: 1, color: RED, textTransform: "uppercase" }}>{value}</strong>
+                  <span style={{ color: MUTED, lineHeight: 1.55, fontSize: 14 }}>{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,260px),1fr))", gap: 0, marginTop: 44, border: `1px solid ${LINE}` }}>
+            {gtmMotions.map(([title, body], i) => (
+              <div key={title} style={{ padding: 28, borderRight: `1px solid ${LINE}`, background: i % 2 === 0 ? "#fff" : "#F9FAFB" }}>
+                <span style={{ color: RED, fontWeight: 800, fontSize: 12 }}>0{i + 1}</span>
+                <h3 style={{ fontFamily: DISPLAY, textTransform: "uppercase", fontSize: 28, lineHeight: 1, margin: "14px 0 12px" }}>{title}</h3>
+                <p style={{ color: MUTED, lineHeight: 1.65, margin: 0, fontSize: 14 }}>{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section style={{ background: "#F7F8FA", borderBlock: `1px solid ${LINE}`, padding: "88px 32px" }}>
@@ -112,10 +117,10 @@ export default function HomePage() {
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 32px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 30, alignItems: "end", flexWrap: "wrap", marginBottom: 34 }}>
           <div><p style={{ ...eyebrow, color: RED }}>Connectivity opportunity map</p><h2 style={sectionTitle}>Demand, infrastructure, and funding context.</h2></div>
-          <p style={{ color: MUTED, maxWidth: 430, lineHeight: 1.7 }}>The map is an evidence layer—not a promise of serviceability. We combine public infrastructure signals with supplier sourcing to answer a specific address.</p>
+          <p style={{ color: MUTED, maxWidth: 430, lineHeight: 1.7 }}>The map is an evidence layer, not a promise of serviceability. We combine public infrastructure signals with supplier sourcing to answer a specific address.</p>
         </div>
-        <div style={{ height: 560, position: "relative", border: `1px solid ${LINE}`, overflow: "hidden" }}>
-          <DataCenterMap backgroundMode />
+        <div className="home-map-band" style={{ minHeight: 560, height: "min(64vw, 640px)", position: "relative", border: `1px solid ${LINE}`, overflow: "hidden", background: "#EEF2F4" }}>
+          <img className="home-map-image" src="/images/connectivity-map-hero.png" alt="North America connectivity opportunity map with data center, network, and Indigenous land signal layers" />
           <div style={{ position: "absolute", left: 18, bottom: 18, background: "rgba(255,255,255,.94)", padding: 16, maxWidth: 390, border: `1px solid ${LINE}` }}>
             <strong>Need a real answer for a site?</strong>
             <p style={{ color: MUTED, fontSize: 13, lineHeight: 1.5 }}>Submit the address and requirement. Konative will initiate a market and serviceability review.</p>
@@ -125,14 +130,7 @@ export default function HomePage() {
       </section>
 
       <section style={{ background: DARK, padding: "84px 32px", color: "#fff", textAlign: "center" }}>
-        <div style={{ maxWidth: 850, margin: "0 auto" }}>
-          <p style={eyebrow}>One named site is enough to start</p>
-          <h2 style={{ ...sectionTitle, color: "#fff", fontSize: "clamp(48px,7vw,82px)" }}>Bring the address. We&apos;ll prove deliverability.</h2>
-          <p style={{ color: "rgba(255,255,255,.65)", lineHeight: 1.7, margin: "22px auto 30px", maxWidth: 650 }}>
-            Share a mid-build campus, renewal window, multi-site WAN, or urgent service problem. We return a one-page market brief — not a carrier pitch deck.
-          </p>
-          <Link href="/contact#request" style={primary}>Get a one-page site brief</Link>
-        </div>
+        <div style={{ maxWidth: 850, margin: "0 auto" }}><p style={eyebrow}>One requirement is enough to start</p><h2 style={{ ...sectionTitle, color: "#fff", fontSize: "clamp(48px,7vw,82px)" }}>Bring the addresses. We&apos;ll run the market.</h2><p style={{ color: "rgba(255,255,255,.65)", lineHeight: 1.7, margin: "22px auto 30px", maxWidth: 650 }}>Share a funded project, renewal, new site, RFP, Canada partnership idea, or urgent service problem. We will organize the requirement and identify the fastest credible sourcing path.</p><Link href="/call" style={primary}>Book a discovery call</Link></div>
       </section>
     </main>
   );

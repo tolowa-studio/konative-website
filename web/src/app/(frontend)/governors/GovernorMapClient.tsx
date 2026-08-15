@@ -6,7 +6,7 @@ import type { CircleLayerSpecification, SymbolLayerSpecification } from 'maplibr
 import type { Feature, FeatureCollection, Point } from 'geojson'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
-const MAP_STYLE = 'https://tiles.openfreemap.org/styles/dark'
+const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 
 // ── Camera presets ────────────────────────────────────────────────────────────
 

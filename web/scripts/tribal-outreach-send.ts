@@ -12,11 +12,14 @@
  *   --live      Required for any real send
  *   --limit N   Send max N emails (default 50 for safety)
  *   --from-idx  Start from index N (for batching)
+ *   --force     Allow more than 10 live sends in one run
  *
  * Run: npx tsx scripts/tribal-outreach-send.ts --dry-run --segment A --limit 5
- * Send: npx tsx scripts/tribal-outreach-send.ts --live --segment A --limit 50
+ * Send: ALLOW_TRIBAL_OUTREACH_LIVE=true npx tsx scripts/tribal-outreach-send.ts --live --segment A --limit 1
  *
- * FROM address: outreach@konative.com (must be verified in Resend)
+ * FROM address: jjames@tolowa.net (Resend verified sender)
+ * NOTE: Cloudflare Email Sending REST API returns 404 for /sending/domains —
+ *       product not provisioned on this account. Using Resend as sender.
  */
 
 import { config } from 'dotenv'
@@ -25,11 +28,11 @@ import fs from 'fs'
 
 config({ path: path.join(__dirname, '../.env.local') })
 
-import { Resend } from 'resend'
 import type { OutreachContact } from './tribal-outreach-match'
 
-const RESEND_KEY = process.env.RESEND_API_KEY!
-const FROM_EMAIL = 'Jeramey James, Konative <jjames@tolowa.net>'
+const RESEND_API_KEY = process.env.RESEND_API_KEY
+const RESEND_ENDPOINT = 'https://api.resend.com/emails'
+const FROM_EMAIL = 'jjames@tolowa.net'
 const REPLY_TO = 'jjames@konative.com'
 
 // Parse CLI args
@@ -39,11 +42,48 @@ const isDryRun = args.includes('--dry-run') || !isLive
 const segmentArg = args[args.indexOf('--segment') + 1] as 'A' | 'B' | 'C' | undefined
 const limitArg = parseInt(args[args.indexOf('--limit') + 1]) || 50
 const fromIdxArg = parseInt(args[args.indexOf('--from-idx') + 1]) || 0
+const forceArg = args.includes('--force')
+const liveGate = process.env.ALLOW_TRIBAL_OUTREACH_LIVE === 'true'
 
 interface EmailContent {
   subject: string
   html: string
   text: string
+}
+
+interface ResendEmailResponse {
+  id?: string
+  error?: { message: string; name: string }
+}
+
+async function sendResendEmail(contact: OutreachContact, email: EmailContent): Promise<string> {
+  if (!RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is required for --live mode')
+  }
+
+  const response = await fetch(RESEND_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: FROM_EMAIL,
+      to: [contact.email],
+      reply_to: REPLY_TO,
+      subject: email.subject,
+      html: email.html,
+      text: email.text,
+    }),
+  })
+
+  const data = (await response.json().catch(() => null)) as ResendEmailResponse | null
+
+  if (!response.ok || data?.error) {
+    throw new Error(data?.error?.message || `Resend HTTP ${response.status}`)
+  }
+
+  return data?.id || 'accepted'
 }
 
 function fmtAward(usd: number | null): string {
@@ -280,8 +320,24 @@ async function main() {
   console.log(`Segment filter: ${segmentArg || 'ALL'}`)
   console.log(`Limit: ${limitArg} | From index: ${fromIdxArg}\n`)
 
-  if (isLive && !RESEND_KEY) {
-    throw new Error('RESEND_API_KEY is required for --live mode')
+  if (isLive && !RESEND_API_KEY) {
+    console.error('❌ RESEND_API_KEY is required for --live mode')
+    process.exit(1)
+  }
+
+  if (isLive && !liveGate) {
+    console.error('❌ Set ALLOW_TRIBAL_OUTREACH_LIVE=true to enable live sends after CRM approval review.')
+    process.exit(1)
+  }
+
+  if (isLive && !segmentArg) {
+    console.error('❌ --segment A, B, or C is required for live sends.')
+    process.exit(1)
+  }
+
+  if (isLive && limitArg > 10 && !forceArg) {
+    console.error('❌ Live sends are capped at --limit 10 unless --force is provided after approval review.')
+    process.exit(1)
   }
 
   // Load contacts
@@ -308,7 +364,6 @@ async function main() {
     return
   }
 
-  const resend = isDryRun ? null : new Resend(RESEND_KEY)
   let sent = 0
   let errors = 0
   const results: Array<{ email: string; status: string; id?: string }> = []
@@ -332,28 +387,13 @@ async function main() {
     }
 
     try {
-      const result = await resend!.emails.send({
-        from: FROM_EMAIL,
-        to: contact.email,
-        replyTo: REPLY_TO,
-        subject: email.subject,
-        html: email.html,
-        text: email.text,
-        headers: {
-          'X-Konative-Segment': contact.segment,
-          'X-Konative-Nation': contact.nationName || '',
-        },
-      })
-
-      if (result.error) {
-        throw new Error(result.error.message)
-      }
+      const sendStatus = await sendResendEmail(contact, email)
 
       sent++
-      results.push({ email: contact.email, status: 'sent', id: result.data?.id })
-      console.log(`  ✓ [${contact.segment}] ${contact.email} → ${result.data?.id}`)
+      results.push({ email: contact.email, status: 'sent', id: sendStatus })
+      console.log(`  ✓ [${contact.segment}] ${contact.email} → ${sendStatus}`)
 
-      // Rate limit: Resend free tier = 2 req/sec
+      // Rate limit buffer (Resend free tier: 2 req/s)
       await new Promise(r => setTimeout(r, 600))
 
     } catch (err) {
@@ -365,16 +405,21 @@ async function main() {
   }
 
   if (!isDryRun) {
-    console.log(`\n✅ Done: ${sent} sent, ${errors} errors`)
+    const marker = errors > 0 ? '⚠️ Partial' : '✅ Complete'
+    console.log(`\n${marker}: ${sent} sent, ${errors} errors`)
 
     // Save results log
     const logPath = path.join(__dirname, `../outreach-log-${Date.now()}.json`)
     fs.writeFileSync(logPath, JSON.stringify({ contacts: results, sentAt: new Date().toISOString() }, null, 2))
     console.log(`Log saved: ${logPath}`)
+
+    if (errors > 0) {
+      process.exitCode = 1
+    }
   } else {
     console.log(`\n✅ Dry run complete — ${contacts.length} emails previewed`)
     console.log('\nTo send for real:')
-    console.log(`  npx tsx scripts/tribal-outreach-send.ts --segment A --limit 50`)
+    console.log(`  npx tsx scripts/tribal-outreach-send.ts --live --segment A --limit 1`)
   }
 }
 

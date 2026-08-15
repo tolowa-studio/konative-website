@@ -29,6 +29,11 @@ export default function ContactPage() {
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form));
+    const params = new URLSearchParams(window.location.search);
+    for (const key of ["context", "campaign", "segment", "awardSlug", "lane", "source"]) {
+      const value = params.get(key);
+      if (value && !data[key]) data[key] = value;
+    }
 
     try {
       const res = await fetch("/api/contact", {
@@ -103,8 +108,8 @@ export default function ContactPage() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))", gap: 16 }}>
-            <Field label="Organization">
-              <input type="text" name="organization" style={inputStyle} />
+            <Field label="Organization" required>
+              <input type="text" name="organization" required style={inputStyle} />
             </Field>
             <Field label="Phone">
               <input type="tel" name="phone" style={inputStyle} />

@@ -423,9 +423,21 @@ export default function TribalPage() {
             Konative maintains records of Tribal broadband awards and connectivity intelligence to help Tribal
             buyers understand the landscape before making procurement decisions.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
             <div style={proofCardBase}>
               <div style={proofNumStyle}>01</div>
+              <h3 style={proofTitleStyle}>TBCP 3 / NEGP Help</h3>
+              <p style={proofDescStyle}>
+                The 2026 Tribal Broadband Connectivity Program Round 3 and Native Entities Grant Program window
+                creates a new planning lane for Tribal broadband teams. Konative helps turn funding context into
+                carrier-ready connectivity scopes, supplier comparisons, and procurement next steps.
+              </p>
+              <Link href="/tribal/grants" style={proofCtaStyle}>
+                Plan Around TBCP 3 →
+              </Link>
+            </div>
+            <div style={proofCardBase}>
+              <div style={proofNumStyle}>02</div>
               <h3 style={proofTitleStyle}>Tribal Connectivity Awards</h3>
               <p style={proofDescStyle}>
                 Explore NTIA Tribal Broadband Connectivity Program award records — grantee names, award rounds,
@@ -437,16 +449,14 @@ export default function TribalPage() {
               </Link>
             </div>
             <div style={proofCardBase}>
-              {/* VERIFY: /tribal/index ships in Wave 2 — this link may 404 until that task is complete */}
-              <div style={proofNumStyle}>02</div>
+              <div style={proofNumStyle}>03</div>
               <h3 style={proofTitleStyle}>Tribal Connectivity Index</h3>
               <p style={proofDescStyle}>
-                The Tribal Connectivity Index is a curated intelligence layer tracking broadband availability,
-                carrier footprint, and funding activity across Tribal service areas in the US and Canada. Planned
-                for public release in Wave 2 of the Konative platform.
+                The Tribal Connectivity Index is a searchable intelligence layer tracking public TBCP award
+                records and funding activity for Tribal connectivity planning. It gives outreach and planning
+                conversations a shared public reference point before the supplier-market review begins.
               </p>
               <Link href="/tribal/index" style={proofCtaStyle}>
-                {/* VERIFY: /tribal/index ships in Wave 2 — may 404 until then */}
                 Tribal Connectivity Index →
               </Link>
             </div>

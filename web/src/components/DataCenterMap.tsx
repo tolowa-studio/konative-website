@@ -421,6 +421,7 @@ export default function DataCenterMap({ layerData: propData, counts: propCounts,
         onZoom={backgroundMode ? undefined : e => setMapZoom(e.viewState.zoom)}
         cursor={backgroundMode ? 'default' : hover ? 'pointer' : 'default'}
         attributionControl={backgroundMode ? false : { compact: true }}
+        style={{ width: '100%', height: '100%' }}
       >
         <Source id="dc" type="geojson" data={combined}>
           {showHeatmap && (

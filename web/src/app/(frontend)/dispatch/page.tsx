@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Konative Dispatch",
     description:
-      "Twice-weekly intelligence for energy infrastructure principals: powered land, stalled data center projects, capacity, capital.",
+      "Connectivity intelligence for Tribal broadband, funded programs, data-center networks, carriers, cloud, and procurement.",
     url: "/dispatch",
     type: "website",
   },
@@ -77,10 +77,11 @@ export default async function DispatchArchive() {
         <header className="dispatch__header">
           <p className="dispatch__eyebrow">Konative Dispatch</p>
           <h1 className="dispatch__title">
-            Powered land, stalled projects, and the rest of the data center brokerage market.
+            Connectivity intelligence for funded projects and critical sites.
           </h1>
           <p className="dispatch__sub">
-            Twice-weekly intelligence for energy infrastructure principals — developers, investors, landowners, occupiers.
+            Notes for Tribal broadband teams, rural enterprises, data-center operators, gaming properties,
+            and procurement leaders that need serviceable networks instead of supplier noise.
           </p>
           <div className="dispatch__signup">
             <NewsletterSignup variant="inline" source="dispatch_archive" />
