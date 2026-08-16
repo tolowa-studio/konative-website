@@ -1,4 +1,4 @@
-import { getD1, rethrowD1OperationFailure } from "@/lib/db/cloudflare";
+import { getD1, rethrowD1OperationFailure } from "@/lib/db/client";
 
 export interface NetworkFacilityMapRow {
   pdb_id: number | null;

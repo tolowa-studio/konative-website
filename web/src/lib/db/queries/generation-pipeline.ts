@@ -1,4 +1,4 @@
-import { getD1, rethrowD1OperationFailure } from "@/lib/db/cloudflare";
+import { getD1, rethrowD1OperationFailure } from "@/lib/db/client";
 
 export interface GenerationPipelineMapRow {
   plant_id: string | null;

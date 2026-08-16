@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient as createSanity } from '@sanity/client'
 import { createClient as createSupabase } from '@supabase/supabase-js'
 import {
+  DatabaseUnavailableError,
   countDcFacilities,
   countGenerationPipeline,
   countNetworkFacilities,
@@ -48,13 +49,15 @@ export async function GET() {
       networkNodesIndexed: net,
     })
   } catch (error) {
+    const dependency =
+      error instanceof DatabaseUnavailableError ? 'postgres' : 'D1'
     console.error('Konative health dependency failure', {
-      dependency: 'D1',
+      dependency,
       operation: 'GET /api/v1/health',
       error: error instanceof Error ? error.message : String(error),
     })
     return NextResponse.json(
-      { error: 'D1 dependency unavailable', dependency: 'D1' },
+      { error: `${dependency} dependency unavailable`, dependency },
       { status: 503 },
     )
   }
