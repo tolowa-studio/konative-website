@@ -23,11 +23,5 @@
       "database_name": "konative-intel",
       "database_id": "51a1334a-4963-416a-b7de-227b6c903de8"
     }
-  ],
-  "kv_namespaces": [
-    { "binding": "CACHE", "id": "a9987cc837ae4559b3852ff26cd0aa1b" }
-  ],
-  "analytics_engine_datasets": [
-    { "binding": "METRICS", "dataset": "konative_metrics" }
   ]
 }

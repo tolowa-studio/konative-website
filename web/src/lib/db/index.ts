@@ -2,7 +2,7 @@
  * Konative data access — Cloudflare D1 first, Supabase fallback during migration.
  * Target: D1-only; remove Supabase once migration verified (2026-07-09 decision).
  */
-export { getBindings, getD1, getCache, getMetrics } from "./cloudflare";
+export { getBindings, getD1 } from "./cloudflare";
 export { isD1TbcpReady, isD1QueueReady, resetD1ReadyCache } from "./isPopulated";
 export {
   queryTbcpAwards,
