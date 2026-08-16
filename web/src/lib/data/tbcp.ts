@@ -1,4 +1,8 @@
-import { queryTbcpAwards, isD1TbcpReady } from "@/lib/db";
+import {
+  CloudflareBindingUnavailableError,
+  queryTbcpAwards,
+  isD1TbcpReady,
+} from "@/lib/db";
 import { supabase } from "@/lib/supabase";
 
 /**
@@ -9,10 +13,10 @@ import { supabase } from "@/lib/supabase";
  * anon/public client can read it. This module aggregates that data into a
  * compact, on-brand summary for display on the marketing site.
  *
- * CRITICAL: this must degrade gracefully. If Supabase is unreachable, mis-
- * configured (missing env vars), or returns nothing, `getTbcpSummary()` returns
- * `null`. Callers must render a fallback or hide the section — never throw.
- * This keeps a no-network static build from crashing.
+ * If Supabase is unreachable, misconfigured (missing env vars), or returns
+ * nothing, `getTbcpSummary()` returns `null`. A missing Cloudflare D1 binding is
+ * different: it is rethrown so callers do not render missing data as a healthy
+ * empty section.
  */
 
 export interface TbcpStateStat {
@@ -60,8 +64,7 @@ function toNumber(v: number | string | null): number {
  * Aggregate the tbcp_awards table. Cached at the Next.js data-fetch layer via
  * the `revalidate` export on consuming components (public aggregate data).
  *
- * Returns `null` on any failure so the page still builds/renders without a
- * live connection.
+ * Returns `null` for non-D1 data failures. Missing D1 bindings are rethrown.
  */
 async function fetchAwardRows(): Promise<AwardRow[] | null> {
   if (await isD1TbcpReady()) {
@@ -140,8 +143,9 @@ export async function getTbcpSummary(
       topStatesByCount,
       roundSplit,
     };
-  } catch {
-    // Network error, DNS failure in static build, unexpected shape — degrade.
+  } catch (error) {
+    if (error instanceof CloudflareBindingUnavailableError) throw error;
+    // Supabase/network failure or unexpected data shape — degrade.
     return null;
   }
 }

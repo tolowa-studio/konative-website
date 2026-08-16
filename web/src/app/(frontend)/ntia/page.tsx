@@ -14,6 +14,7 @@ import {
 
 // Public aggregate TBCP data — cache for an hour.
 export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "NTIA TBCP Round 3 Connectivity Partner | Konative",

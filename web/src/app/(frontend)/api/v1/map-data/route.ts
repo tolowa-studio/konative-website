@@ -14,6 +14,7 @@ import { NextResponse } from "next/server";
 import { createClient as createSanity } from "@sanity/client";
 import { createClient as createSupabase } from "@supabase/supabase-js";
 import {
+  CloudflareBindingUnavailableError,
   queryDcFacilitiesMap,
   queryNetworkFacilitiesMap,
   queryGenerationPipelineMap,
@@ -167,7 +168,8 @@ async function fetchFacilities() {
       }));
 
     return { features, total: features.length };
-  } catch {
+  } catch (error) {
+    if (error instanceof CloudflareBindingUnavailableError) throw error;
     return { features: [], total: 0 };
   }
 }
@@ -227,7 +229,8 @@ async function fetchNetwork() {
       }));
 
     return { features, total: features.length };
-  } catch {
+  } catch (error) {
+    if (error instanceof CloudflareBindingUnavailableError) throw error;
     return { features: [], total: 0 };
   }
 }
@@ -283,7 +286,8 @@ async function fetchPower() {
       }));
 
     return { features, total: features.length };
-  } catch {
+  } catch (error) {
+    if (error instanceof CloudflareBindingUnavailableError) throw error;
     return { features: [], total: 0 };
   }
 }

@@ -9,6 +9,7 @@ import { queryTbcpAwardsList } from "@/lib/db";
 import AwardsClient from "./AwardsClient";
 
 export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "NTIA TBCP Award Database | Tribal Connectivity Index | Konative",

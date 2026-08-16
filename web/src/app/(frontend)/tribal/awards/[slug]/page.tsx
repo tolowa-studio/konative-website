@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
-import { queryTbcpAwardBySlug, queryTbcpSlugs } from "@/lib/db";
+import { queryTbcpAwardBySlug } from "@/lib/db";
 import {
   JsonLd,
   breadcrumbSchema,
@@ -10,6 +10,7 @@ import {
 } from "@/components/seo/JsonLd";
 
 export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const RED = "#C8001F";
 const DISPLAY = "'Barlow Condensed', sans-serif";
@@ -95,23 +96,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: `${award.grantee_name} received a ${amt} grant from the NTIA Tribal Broadband Connectivity Program. Enterprise connectivity brokerage available through Konative.`,
     alternates: { canonical: `/tribal/awards/${slug}` },
   };
-}
-
-export async function generateStaticParams() {
-  const d1Slugs = await queryTbcpSlugs();
-  if (d1Slugs.length > 0) {
-    return d1Slugs.map((slug) => ({ slug }));
-  }
-
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!supabaseUrl || !supabaseKey) return [];
-
-  const supabase = createClient(supabaseUrl, supabaseKey);
-  const { data } = await supabase.from("tbcp_awards").select("slug");
-  return (data || []).map((r: { slug: string }) => ({ slug: r.slug }));
 }
 
 function fmt(n: number | null) {
