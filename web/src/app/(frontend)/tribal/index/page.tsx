@@ -7,6 +7,7 @@ import IndexTableClient, { type AwardRow } from "./IndexTableClient";
 
 // Revalidate hourly — data changes when NTIA announces new awards.
 export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 const RED = "#C8001F";
 const DISPLAY = "'Barlow Condensed', sans-serif";

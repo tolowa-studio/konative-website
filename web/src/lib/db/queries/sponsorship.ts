@@ -25,7 +25,6 @@ export async function queryActiveSponsorshipPlacement(
   placementType: string,
 ): Promise<SponsorshipPlacementRow | null> {
   const db = getD1();
-  if (!db) return null;
   try {
     const now = new Date().toISOString();
     return await db
@@ -49,7 +48,6 @@ export async function querySponsorshipPlacements(
   filters: SponsorshipAnalyticsFilters = {},
 ): Promise<SponsorshipPlacementRow[] | null> {
   const db = getD1();
-  if (!db) return null;
   try {
     const conditions: string[] = [];
     const binds: string[] = [];

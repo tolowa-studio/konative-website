@@ -1,27 +1,25 @@
-import { getD1 } from "./cloudflare";
+import { getD1, rethrowD1OperationFailure } from "./cloudflare";
 
 let cachedReady: boolean | null = null;
 let cachedAt = 0;
 const CACHE_MS = 60_000;
 
-/** True when D1 binding exists and tbcp_awards has been migrated. */
+/** True when the reachable D1 tbcp_awards table has at least one row. */
 export async function isD1TbcpReady(): Promise<boolean> {
   const db = getD1();
-  if (!db) return false;
   try {
     const row = await db
       .prepare("SELECT 1 AS ok FROM tbcp_awards LIMIT 1")
       .first<{ ok: number }>();
     return !!row;
-  } catch {
-    return false;
+  } catch (error) {
+    return rethrowD1OperationFailure("isD1TbcpReady", error);
   }
 }
 
-/** True when D1 binding exists and interconnection_queue has been migrated. */
+/** True when the reachable D1 interconnection_queue table has at least one row. */
 export async function isD1QueueReady(): Promise<boolean> {
   const db = getD1();
-  if (!db) return false;
 
   const now = Date.now();
   if (cachedReady !== null && now - cachedAt < CACHE_MS) {
@@ -33,8 +31,8 @@ export async function isD1QueueReady(): Promise<boolean> {
       .prepare("SELECT 1 AS ok FROM interconnection_queue LIMIT 1")
       .first<{ ok: number }>();
     cachedReady = !!row;
-  } catch {
-    cachedReady = false;
+  } catch (error) {
+    return rethrowD1OperationFailure("isD1QueueReady", error);
   }
   cachedAt = now;
   return cachedReady;

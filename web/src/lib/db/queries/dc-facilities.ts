@@ -1,4 +1,4 @@
-import { getD1 } from "@/lib/db/cloudflare";
+import { getD1, rethrowD1OperationFailure } from "@/lib/db/cloudflare";
 
 export interface DcFacilityMapRow {
   id: string;
@@ -61,7 +61,6 @@ export async function queryDcFacilitiesMap(
   limit = 2000,
 ): Promise<DcFacilityMapRow[] | null> {
   const db = getD1();
-  if (!db) return null;
   try {
     const { results } = await db
       .prepare(
@@ -81,15 +80,14 @@ export async function queryDcFacilitiesMap(
   }
 }
 
-export async function countDcFacilities(): Promise<number | null> {
+export async function countDcFacilities(): Promise<number> {
   const db = getD1();
-  if (!db) return null;
   try {
     const row = await db
       .prepare(`SELECT COUNT(*) AS count FROM dc_facilities`)
       .first<{ count: number }>();
     return row?.count ?? 0;
-  } catch {
-    return null;
+  } catch (error) {
+    return rethrowD1OperationFailure("countDcFacilities", error);
   }
 }

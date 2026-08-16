@@ -1,4 +1,4 @@
-import { getD1 } from "@/lib/db/cloudflare";
+import { getD1, rethrowD1OperationFailure } from "@/lib/db/cloudflare";
 
 export interface GenerationPipelineMapRow {
   plant_id: string | null;
@@ -60,7 +60,6 @@ export async function queryGenerationPipelineMap(
   limit = 500,
 ): Promise<GenerationPipelineMapRow[] | null> {
   const db = getD1();
-  if (!db) return null;
   try {
     const { results } = await db
       .prepare(
@@ -84,15 +83,14 @@ export async function queryGenerationPipelineMap(
   }
 }
 
-export async function countGenerationPipeline(): Promise<number | null> {
+export async function countGenerationPipeline(): Promise<number> {
   const db = getD1();
-  if (!db) return null;
   try {
     const row = await db
       .prepare(`SELECT COUNT(*) AS count FROM generation_pipeline`)
       .first<{ count: number }>();
     return row?.count ?? 0;
-  } catch {
-    return null;
+  } catch (error) {
+    return rethrowD1OperationFailure("countGenerationPipeline", error);
   }
 }
