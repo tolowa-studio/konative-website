@@ -1,0 +1,33 @@
+name: One-time — sync SANITY_API_TOKEN into GCP Secret Manager
+
+# Manual, one-shot utility. The real Sanity write token already exists as
+# the GitHub Actions secret SANITY_API_TOKEN (used by the Cloudflare Worker
+# build). Cloud Run reads secrets from GCP Secret Manager, not GitHub, so
+# this copies the value over once. Delete this workflow after running it.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Write SANITY_API_TOKEN into Secret Manager
+        env:
+          SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+        run: |
+          printf '%s' "$SANITY_API_TOKEN" | gcloud secrets versions add konative-SANITY_API_TOKEN \
+            --project=tolowa-studio --data-file=-
+          echo "Synced. Value not printed."
