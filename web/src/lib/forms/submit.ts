@@ -1,5 +1,4 @@
 import { ZodSchema } from "zod";
-import { after } from "next/server";
 import { getSanityWriteClient } from "@/sanity/writeClient";
 import { scoreInquiry, type TriageResult } from "@/lib/forms/triage";
 
@@ -18,28 +17,99 @@ export interface SubmitOptions<T> {
   confirmationEmail?: { to: string; subject: string; html: string };
 }
 
-async function sendCloudflareEmail(args: { to: string; from: string; subject: string; html: string; logLabel: string }) {
-  const cfAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-  const cfEmailToken = process.env.CLOUDFLARE_EMAIL_API_TOKEN;
-  if (!cfAccountId || !cfEmailToken) {
-    console.warn(`[submitForm] CLOUDFLARE_ACCOUNT_ID/CLOUDFLARE_EMAIL_API_TOKEN not set — skipping ${args.logLabel}`);
-    return;
+const RESEND_ENDPOINT = "https://api.resend.com/emails";
+
+function trimEnv(value: string | undefined): string {
+  return (value ?? "").trim();
+}
+
+function isCrmWebhookRequired(): boolean {
+  return trimEnv(process.env.CRM_WEBHOOK_REQUIRED).toLowerCase() === "true";
+}
+
+/** Fail-closed Resend send — throws when credentials are missing or Resend rejects the request. */
+async function sendResendEmail(args: { to: string; from: string; subject: string; html: string; logLabel: string }) {
+  const apiKey = trimEnv(process.env.RESEND_API_KEY);
+  if (!apiKey) {
+    console.error(`[submitForm] RESEND_API_KEY not set — cannot send ${args.logLabel}`);
+    throw new Error("RESEND_API_KEY not configured");
   }
-  try {
-    const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/email/sending/send`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${cfEmailToken}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: args.from, to: args.to, subject: args.subject, html: args.html }),
-    });
-    if (!res.ok) {
-      console.error(`[submitForm] Cloudflare Email non-OK response for ${args.logLabel}: ${res.status} ${await res.text()}`);
-    }
-  } catch (err) {
-    console.error(`[submitForm] Cloudflare Email error for ${args.logLabel}:`, err);
+
+  const from = trimEnv(args.from);
+  const to = trimEnv(args.to);
+  if (!from) {
+    console.error(`[submitForm] RESEND_FROM not set — cannot send ${args.logLabel}`);
+    throw new Error("RESEND_FROM not configured");
+  }
+  if (!to) {
+    console.error(`[submitForm] RESEND_TO not set — cannot send ${args.logLabel}`);
+    throw new Error("RESEND_TO not configured");
+  }
+
+  const res = await fetch(RESEND_ENDPOINT, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ from, to, subject: args.subject, html: args.html }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error(`[submitForm] Resend non-OK response for ${args.logLabel}: ${res.status} ${body}`);
+    throw new Error(`Resend send failed (${res.status})`);
   }
 }
 
-/** Validate → persist to Sanity → notify the owner and CRM automation. */
+async function forwardToCrm(args: {
+  schemaType: string;
+  docId: string;
+  data: Record<string, unknown>;
+  triage: TriageResult | null;
+}): Promise<void> {
+  const crmWebhookUrl = trimEnv(process.env.TWENTY_INTAKE_WEBHOOK_URL) || trimEnv(process.env.INQUIRY_WEBHOOK_URL);
+  const crmRequired = isCrmWebhookRequired();
+
+  if (!crmWebhookUrl) {
+    if (crmRequired) {
+      console.error(
+        `[submitForm] CRM_WEBHOOK_REQUIRED=true but TWENTY_INTAKE_WEBHOOK_URL is not set — ${args.schemaType} (doc ${args.docId})`,
+      );
+      throw new Error("CRM webhook URL not configured");
+    }
+    console.warn(
+      `[submitForm] CRM intake webhook not set — ${args.schemaType} remains in Sanity (doc ${args.docId})`,
+    );
+    return;
+  }
+
+  const token = trimEnv(process.env.TWENTY_INTAKE_WEBHOOK_TOKEN);
+  const res = await fetch(crmWebhookUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({
+      source: "konative.com",
+      schemaType: args.schemaType,
+      sanityDocumentId: args.docId,
+      submittedAt: new Date().toISOString(),
+      data: args.data,
+      triage: args.triage,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error(
+      `[submitForm] CRM webhook non-OK response for ${args.schemaType} (doc ${args.docId}): ${res.status} ${body}`,
+    );
+    if (crmRequired) {
+      throw new Error(`CRM webhook failed (${res.status})`);
+    }
+  }
+}
+
+/** Validate → persist to Sanity → notify via Resend and CRM automation (fail-closed). */
 export async function submitForm<T extends Record<string, unknown>>(
   options: SubmitOptions<T>,
 ): Promise<SubmitResult> {
@@ -96,15 +166,11 @@ export async function submitForm<T extends Record<string, unknown>>(
     console.error(`[submitForm] Triage scoring/patch failed for ${schemaType} (doc ${docId}):`, err);
   }
 
-  // 4. Notify via Cloudflare Email Service — non-blocking, loud-fail in logs
-  // only. Cloudflare Email is the org-wide default for transactional email
-  // (Resend is being retired for this purpose; Mailgun is bulk/campaign-only
-  // and not provisioned for Konative).
+  // 4. Notify via Resend — awaited, fail-closed. Persist already succeeded.
   // .trim() guards against secrets set with a trailing newline (e.g. `echo`
-  // instead of `printf` into `wrangler secret put`) — Cloudflare Email
-  // rejects the whole address as invalid rather than silently trimming it.
-  const to = (process.env.RESEND_TO || "jeramey.james@gmail.com").trim();
-  const from = (process.env.RESEND_FROM || "Konative <team@konative.com>").trim();
+  // instead of `printf` into `wrangler secret put`).
+  const notifyTo = trimEnv(process.env.RESEND_TO);
+  const from = trimEnv(process.env.RESEND_FROM);
 
   const triageHtml = triage
     ? `<div style="margin:0 0 12px;padding:10px;background:#f5f5f5;font:13px monospace">` +
@@ -118,57 +184,47 @@ export async function submitForm<T extends Record<string, unknown>>(
     emailHtml ||
     `<h2>${emailSubject}</h2><pre>${JSON.stringify(parsed.data, null, 2)}</pre><p>Sanity doc: ${docId}</p>`;
 
-  // `after()` extends the Worker's execution past the response (maps to
-  // Cloudflare's ctx.waitUntil() via OpenNext) — a plain un-awaited fetch()
-  // can be silently killed the instant the response is sent on Workers.
-  after(() => sendCloudflareEmail({
-    to, from, subject: finalSubject, html: `${triageHtml}${baseHtml}`,
-    logLabel: `internal notification for ${schemaType} (doc ${docId})`,
-  }));
+  try {
+    await sendResendEmail({
+      to: notifyTo,
+      from,
+      subject: finalSubject,
+      html: `${triageHtml}${baseHtml}`,
+      logLabel: `internal notification for ${schemaType} (doc ${docId})`,
+    });
 
-  if (confirmationEmail) {
-    after(() => sendCloudflareEmail({
-      to: confirmationEmail.to, from, subject: confirmationEmail.subject, html: confirmationEmail.html,
-      logLabel: `confirmation email for ${schemaType} (doc ${docId})`,
-    }));
+    if (confirmationEmail) {
+      await sendResendEmail({
+        to: confirmationEmail.to,
+        from,
+        subject: confirmationEmail.subject,
+        html: confirmationEmail.html,
+        logLabel: `confirmation email for ${schemaType} (doc ${docId})`,
+      });
+    }
+  } catch (err) {
+    console.error(`[submitForm] Resend error for ${schemaType} (doc ${docId}):`, err);
+    return {
+      ok: false,
+      message: "Failed to send notification. Please try again.",
+    };
   }
 
-  // 5. Forward to Twenty/n8n when configured. Keep the public form successful
-  // when the automation layer is temporarily unavailable; Sanity remains the
-  // durable intake record and the webhook can be replayed from there.
-  const crmWebhookUrl =
-    process.env.TWENTY_INTAKE_WEBHOOK_URL || process.env.INQUIRY_WEBHOOK_URL;
-  if (!crmWebhookUrl) {
-    console.warn(
-      `[submitForm] CRM intake webhook not set — ${schemaType} remains in Sanity (doc ${docId})`,
-    );
-  } else {
-    after(async () => {
-      try {
-        const res = await fetch(crmWebhookUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(process.env.TWENTY_INTAKE_WEBHOOK_TOKEN
-              ? { Authorization: `Bearer ${process.env.TWENTY_INTAKE_WEBHOOK_TOKEN}` }
-              : {}),
-          },
-          body: JSON.stringify({
-            source: "konative.com",
-            schemaType,
-            sanityDocumentId: docId,
-            submittedAt: new Date().toISOString(),
-            data: parsed.data,
-            triage,
-          }),
-        });
-        if (!res.ok) {
-          console.error(`[submitForm] CRM webhook non-OK response for ${schemaType} (doc ${docId}): ${res.status} ${await res.text()}`);
-        }
-      } catch (err) {
-        console.error(`[submitForm] CRM webhook error for ${schemaType}:`, err);
-      }
+  // 5. Forward to Twenty/n8n when configured. Optional by default; fail-closed when
+  // CRM_WEBHOOK_REQUIRED=true. Lead and email are already durable at this point.
+  try {
+    await forwardToCrm({
+      schemaType,
+      docId,
+      data: parsed.data as Record<string, unknown>,
+      triage,
     });
+  } catch (err) {
+    console.error(`[submitForm] CRM webhook error for ${schemaType} (doc ${docId}):`, err);
+    return {
+      ok: false,
+      message: "Failed to route inquiry. Please try again.",
+    };
   }
 
   return { ok: true, id: docId };

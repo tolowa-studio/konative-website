@@ -1,10 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { z } from "zod";
 
+const mockCreate = vi.fn().mockResolvedValue({ _id: "mock-id-123" });
+
 // Mock Sanity write client
 vi.mock("@/sanity/writeClient", () => ({
   getSanityWriteClient: () => ({
-    create: vi.fn().mockResolvedValue({ _id: "mock-id-123" }),
+    create: mockCreate,
     patch: vi.fn().mockReturnValue({
       set: vi.fn().mockReturnThis(),
       commit: vi.fn().mockResolvedValue({ _id: "mock-id-123" }),
@@ -12,15 +14,9 @@ vi.mock("@/sanity/writeClient", () => ({
   }),
 }));
 
-// Mock fetch for Cloudflare Email / CRM webhook calls
-const mockFetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
+// Mock fetch for Resend / CRM webhook calls
+const mockFetch = vi.fn().mockResolvedValue({ ok: true, text: async () => "" });
 vi.stubGlobal("fetch", mockFetch);
-
-// Mock next/server's after() — outside a real request scope (as in tests),
-// it throws; run the callback immediately instead so behavior stays testable.
-vi.mock("next/server", () => ({
-  after: (cb: () => unknown) => cb(),
-}));
 
 const { submitForm } = await import("@/lib/forms/submit");
 
@@ -32,10 +28,17 @@ const testSchema = z.object({
 describe("submitForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.CLOUDFLARE_ACCOUNT_ID = "test-account-id";
-    process.env.CLOUDFLARE_EMAIL_API_TOKEN = "test-key";
-    process.env.RESEND_FROM = "test@example.com";
+    mockCreate.mockResolvedValue({ _id: "mock-id-123" });
+    mockFetch.mockResolvedValue({ ok: true, text: async () => "" });
+    process.env.RESEND_API_KEY = "test-key";
+    process.env.RESEND_FROM = "Konative <test@example.com>";
     process.env.RESEND_TO = "owner@example.com";
+    delete process.env.CRM_WEBHOOK_REQUIRED;
+    delete process.env.TWENTY_INTAKE_WEBHOOK_URL;
+    delete process.env.INQUIRY_WEBHOOK_URL;
+    delete process.env.TWENTY_INTAKE_WEBHOOK_TOKEN;
+    delete process.env.CLOUDFLARE_ACCOUNT_ID;
+    delete process.env.CLOUDFLARE_EMAIL_API_TOKEN;
   });
 
   it("returns ok:true with an id when valid data is submitted", async () => {
@@ -49,6 +52,10 @@ describe("submitForm", () => {
     if (result.ok) {
       expect(result.id).toBe("mock-id-123");
     }
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://api.resend.com/emails",
+      expect.objectContaining({ method: "POST" }),
+    );
   });
 
   it("returns ok:false with errors when validation fails", async () => {
@@ -62,10 +69,45 @@ describe("submitForm", () => {
     if (!result.ok && result.errors) {
       expect(result.errors.length).toBeGreaterThan(0);
     }
+    expect(mockCreate).not.toHaveBeenCalled();
   });
 
-  it("still returns ok:true if CLOUDFLARE_EMAIL_API_TOKEN is missing (no crash)", async () => {
-    delete process.env.CLOUDFLARE_EMAIL_API_TOKEN;
+  it("returns ok:false when RESEND_API_KEY is missing (fail-closed)", async () => {
+    delete process.env.RESEND_API_KEY;
+    const result = await submitForm({
+      schemaType: "contactInquiry",
+      zodSchema: testSchema,
+      payload: { name: "Jane Doe", email: "jane@example.com" },
+      emailSubject: "Test Contact",
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.message).toBe("Failed to send notification. Please try again.");
+    }
+    expect(mockCreate).toHaveBeenCalledOnce();
+  });
+
+  it("persists the lead before a Resend send failure (fail-closed)", async () => {
+    mockFetch.mockResolvedValueOnce({ ok: false, status: 403, text: async () => "domain not verified" });
+    const result = await submitForm({
+      schemaType: "contactInquiry",
+      zodSchema: testSchema,
+      payload: { name: "Jane Doe", email: "jane@example.com" },
+      emailSubject: "Test Contact",
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.message).toBe("Failed to send notification. Please try again.");
+    }
+    expect(mockCreate).toHaveBeenCalledOnce();
+    expect(mockFetch).toHaveBeenCalledWith(
+      "https://api.resend.com/emails",
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
+
+  it("trimmed trailing newline in RESEND_TO does not break send", async () => {
+    process.env.RESEND_TO = "owner@example.com\n";
     const result = await submitForm({
       schemaType: "contactInquiry",
       zodSchema: testSchema,
@@ -73,9 +115,65 @@ describe("submitForm", () => {
       emailSubject: "Test Contact",
     });
     expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.id).toBe("mock-id-123");
+    const resendCall = mockFetch.mock.calls.find(([url]) => url === "https://api.resend.com/emails");
+    expect(resendCall).toBeDefined();
+    const body = JSON.parse((resendCall![1] as { body: string }).body);
+    expect(body.to).toBe("owner@example.com");
+  });
+
+  it("returns ok:true when optional CRM webhook fails (lead and email already succeeded)", async () => {
+    process.env.TWENTY_INTAKE_WEBHOOK_URL = "https://crm.example.com/webhook";
+    mockFetch
+      .mockResolvedValueOnce({ ok: true, text: async () => "" }) // Resend
+      .mockResolvedValueOnce({ ok: false, status: 500, text: async () => "crm down" }); // CRM
+
+    const result = await submitForm({
+      schemaType: "contactInquiry",
+      zodSchema: testSchema,
+      payload: { name: "Jane Doe", email: "jane@example.com" },
+      emailSubject: "Test Contact",
+    });
+
+    expect(result.ok).toBe(true);
+    expect(mockCreate).toHaveBeenCalledOnce();
+  });
+
+  it("returns ok:false when CRM_WEBHOOK_REQUIRED=true and webhook fails (fail-closed after persist)", async () => {
+    process.env.CRM_WEBHOOK_REQUIRED = "true";
+    process.env.TWENTY_INTAKE_WEBHOOK_URL = "https://crm.example.com/webhook";
+    mockFetch
+      .mockResolvedValueOnce({ ok: true, text: async () => "" }) // Resend
+      .mockResolvedValueOnce({ ok: false, status: 500, text: async () => "crm down" }); // CRM
+
+    const result = await submitForm({
+      schemaType: "contactInquiry",
+      zodSchema: testSchema,
+      payload: { name: "Jane Doe", email: "jane@example.com" },
+      emailSubject: "Test Contact",
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.message).toBe("Failed to route inquiry. Please try again.");
     }
+    expect(mockCreate).toHaveBeenCalledOnce();
+  });
+
+  it("returns ok:false when CRM_WEBHOOK_REQUIRED=true but webhook URL is missing", async () => {
+    process.env.CRM_WEBHOOK_REQUIRED = "true";
+
+    const result = await submitForm({
+      schemaType: "contactInquiry",
+      zodSchema: testSchema,
+      payload: { name: "Jane Doe", email: "jane@example.com" },
+      emailSubject: "Test Contact",
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.message).toBe("Failed to route inquiry. Please try again.");
+    }
+    expect(mockCreate).toHaveBeenCalledOnce();
   });
 });
 
