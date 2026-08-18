@@ -1,4 +1,4 @@
-import { getD1 } from "@/lib/db/cloudflare";
+import { getD1 } from "@/lib/db/client";
 
 export interface InterconnectionQueueDbRow {
   id: string;

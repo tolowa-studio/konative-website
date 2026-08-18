@@ -1,4 +1,4 @@
-import { getD1, rethrowD1OperationFailure } from "./cloudflare";
+import { getD1, rethrowD1OperationFailure } from "./client";
 
 let cachedReady: boolean | null = null;
 let cachedAt = 0;

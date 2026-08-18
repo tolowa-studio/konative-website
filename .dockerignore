@@ -1,0 +1,42 @@
+# Keep the Docker build context small — the repo history includes large PMTiles artifacts.
+.git
+.github
+**/.git
+**/.next
+**/node_modules
+**/.open-next
+**/.turbo
+**/.vercel
+**/.env*
+!web/.env.local.example
+!web/.env.example
+
+# Large tile binaries (manifest JSON is bundled at build time via imports)
+tiles/
+**/*.pmtiles
+web/data/
+web/scripts/
+web/content/
+docs/
+.context/
+conductor/
+*.md
+!web/README.md
+
+# Tooling / IDE
+.cursor
+.vscode
+.idea
+**/__tests__
+**/*.test.ts
+**/*.test.tsx
+coverage/
+playwright-report/
+test-results/
+
+# Misc
+scripts/vercel-bootstrap.sh
+.DS_Store
+*.log
+tmp/
+dist/

@@ -4,10 +4,11 @@
  */
 export {
   CloudflareBindingUnavailableError,
+  DatabaseUnavailableError,
   getBindings,
   getD1,
   rethrowD1OperationFailure,
-} from "./cloudflare";
+} from "./client";
 export { isD1TbcpReady, isD1QueueReady, resetD1ReadyCache } from "./isPopulated";
 export {
   queryTbcpAwards,
