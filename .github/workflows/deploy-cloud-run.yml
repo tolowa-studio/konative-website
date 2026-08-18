@@ -93,13 +93,12 @@ jobs:
           ANTHROPIC_API_KEY=konative-ANTHROPIC_API_KEY:latest,\
           CRON_SECRET=konative-CRON_SECRET:latest,\
           NEWS_INGEST_TOKEN=konative-NEWS_INGEST_TOKEN:latest,\
-          CLOUDFLARE_ACCOUNT_ID=konative-CLOUDFLARE_ACCOUNT_ID:latest,\
-          CLOUDFLARE_EMAIL_API_TOKEN=konative-CLOUDFLARE_EMAIL_API_TOKEN:latest,\
           TWENTY_INTAKE_WEBHOOK_URL=konative-TWENTY_INTAKE_WEBHOOK_URL:latest,\
           TWENTY_INTAKE_WEBHOOK_TOKEN=konative-TWENTY_INTAKE_WEBHOOK_TOKEN:latest,\
           GHOST_URL=konative-GHOST_URL:latest,\
           GHOST_ADMIN_API_KEY=konative-GHOST_ADMIN_API_KEY:latest,\
           GHOST_CONTENT_API_KEY=konative-GHOST_CONTENT_API_KEY:latest,\
+          RESEND_API_KEY=konative-RESEND_API_KEY:latest,\
           RESEND_FROM=konative-RESEND_FROM:latest,\
           RESEND_TO=konative-RESEND_TO:latest,\
           DATABASE_URI=konative-DATABASE_URI:latest" \
