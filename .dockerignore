@@ -15,8 +15,11 @@
 tiles/
 **/*.pmtiles
 web/data/
-web/scripts/
 web/content/
+# NOTE: web/scripts/ is intentionally NOT excluded — API routes (queue/ingest,
+# ingest-canada-queue) import runtime logic from it (e.g.
+# web/scripts/promoteCanadaQueue.ts). Excluding it broke the Cloud Run Docker
+# build (2026-08-18): "Module not found: Can't resolve '../../../../../scripts/...'"
 docs/
 .context/
 conductor/
