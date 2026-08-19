@@ -3,13 +3,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
-  NEWS_CURATION_WINDOW_DAYS,
   NEWS_SOURCE_COUNTRY_OPTIONS,
   NEWS_TOPIC_OPTIONS,
-  TRIBAL_NEWS_TOPIC_VALUES,
   isNewsTopicValue,
   newsCurationSinceIso,
 } from "../../../lib/newsConstants";
+import {
+  formatNewsDate,
+  formatNewsDeskStatusLine,
+  fetchNewsPageData,
+  topicLabel,
+  type NewsDoc,
+} from "../../../lib/newsPageQuery";
 import { getSanityReadClient } from "../../../sanity/readClient";
 
 export const metadata: Metadata = {
@@ -21,18 +26,6 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 export const dynamic = "force-dynamic";
 
-type NewsDoc = {
-  id: string;
-  title?: string;
-  url?: string;
-  imageUrl?: string;
-  summary?: string;
-  sourceName?: string;
-  publishedAt?: string;
-  countries?: string[];
-  topics?: string[];
-};
-
 type NewsPageProps = {
   searchParams: Promise<{
     country?: string;
@@ -40,8 +33,6 @@ type NewsPageProps = {
     page?: string;
   }>;
 };
-
-const ITEMS_PER_PAGE = 24;
 
 const chipActiveStyle: CSSProperties = {
   background: "#C8001F",
@@ -74,23 +65,6 @@ const buildQueryString = (params: Record<string, string | number | undefined>) =
     if (value !== undefined && value !== "") query.set(key, String(value));
   });
   return query.toString();
-};
-
-const formatDate = (value?: string) => {
-  if (!value) return "";
-  const date = new Date(value);
-  if (Number.isNaN(date.valueOf())) return "";
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date);
-};
-
-const topicLabel = (topics?: string[]) => {
-  const first = topics?.[0];
-  if (!first) return "Infrastructure";
-  return NEWS_TOPIC_OPTIONS.find((option) => option.value === first)?.label || first;
 };
 
 /** Prefer imaged stories for mosaic slots without losing recency order among peers. */
@@ -230,7 +204,7 @@ function MetaRow({ item, onDark }: { item: NewsDoc; onDark?: boolean }) {
           color: onDark ? "rgba(255,255,255,0.72)" : "#888",
         }}
       >
-        {formatDate(item.publishedAt)}
+        {formatNewsDate(item.publishedAt)}
       </span>
     </span>
   );
@@ -245,6 +219,8 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   const currentPage = Number.isNaN(page) || page < 1 ? 1 : page;
 
   let isDataUnavailable = false;
+  let isShowingLatestFallback = false;
+  let newestPublishedAt: string | undefined;
   let news: {
     docs: NewsDoc[];
     featured?: NewsDoc[];
@@ -257,66 +233,21 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     totalPages: 1,
   };
 
-  const since = newsCurationSinceIso();
-  const windowClause = ` && defined(publishedAt) && publishedAt >= $since`;
-
-  const filter =
-    `_type == "newsItem" && status == "published"` +
-    windowClause +
-    (country !== "all" ? ` && "${country}" in coalesce(countries, [])` : "") +
-    (topic !== "all" ? ` && "${topic}" in coalesce(topics, [])` : "");
-
-  const featuredFilter =
-    `_type == "newsItem" && status == "published"` +
-    windowClause +
-    ` && (` +
-    TRIBAL_NEWS_TOPIC_VALUES.map((t) => `"${t}" in coalesce(topics, [])`).join(" || ") +
-    `)` +
-    (country !== "all" ? ` && "${country}" in coalesce(countries, [])` : "");
-
   try {
     const client = getSanityReadClient();
-    const total = await client.fetch<number>(`count(*[${filter}])`, { since });
-    const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
-    const safePage = Math.min(currentPage, totalPages);
-    const safeStart = (safePage - 1) * ITEMS_PER_PAGE;
-    const safeEnd = safeStart + ITEMS_PER_PAGE;
-    const docs = await client.fetch<NewsDoc[]>(
-      `*[${filter}] | order(publishedAt desc)[${safeStart}...${safeEnd}]{
-        "id": _id,
-        title,
-        url,
-        imageUrl,
-        summary,
-        sourceName,
-        publishedAt,
-        countries,
-        topics
-      }`,
-      { since },
-    );
-    const featured =
-      topic === "all" && safePage === 1
-        ? await client.fetch<NewsDoc[]>(
-            `*[${featuredFilter}] | order(publishedAt desc)[0...8]{
-              "id": _id,
-              title,
-              url,
-              imageUrl,
-              summary,
-              sourceName,
-              publishedAt,
-              countries,
-              topics
-            }`,
-            { since },
-          )
-        : [];
+    const pageData = await fetchNewsPageData(client, {
+      country,
+      topic,
+      currentPage,
+      since: newsCurationSinceIso(),
+    });
+    isShowingLatestFallback = pageData.isShowingLatestFallback;
+    newestPublishedAt = pageData.newestPublishedAt;
     news = {
-      docs,
-      page: safePage,
-      totalPages,
-      featured,
+      docs: pageData.docs,
+      featured: pageData.featured,
+      page: pageData.page,
+      totalPages: pageData.totalPages,
     };
   } catch (_error) {
     isDataUnavailable = true;
@@ -701,9 +632,15 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
             }}
           >
             <span>
-              {isDataUnavailable
-                ? "Live feed is temporarily unavailable while the CMS data connection is recovering."
-                : `Last ${NEWS_CURATION_WINDOW_DAYS} days · ${news.docs.length} on page ${news.page ?? 1} of ${news.totalPages ?? 1}${activeFilterCount > 0 ? " with filters" : ""}`}
+              {formatNewsDeskStatusLine({
+                isDataUnavailable,
+                isShowingLatestFallback,
+                docsCount: news.docs.length,
+                page: news.page ?? 1,
+                totalPages: news.totalPages ?? 1,
+                activeFilterCount,
+                newestPublishedAt,
+              })}
             </span>
             {activeFilterCount > 0 ? (
               <Link href="/news" style={{ color: "#C8001F", textDecoration: "none", fontWeight: 600 }}>
