@@ -1,0 +1,42 @@
+name: Konative Daily Ingest — News
+
+# Replaces the Railway cron from workers/index.js (`0 6 * * *` → /api/ingest-news).
+# Cloudflare Workers does not run this schedule natively; GitHub Actions hits the
+# live authenticated API route instead.
+#
+# Required repo secrets:
+#   CRON_SECRET  — same value as the site's CRON_SECRET env (Bearer auth on the route)
+# Optional repo variable:
+#   SITE_URL     — defaults to https://konative.com
+
+on:
+  schedule:
+    # Daily 06:00 UTC (was: Railway workers/index.js cron)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # allow manual trigger from the Actions UI
+
+jobs:
+  ingest:
+    name: Trigger news ingestion endpoint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SITE_URL: ${{ vars.SITE_URL || 'https://konative.com' }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
+    steps:
+      - name: Guard — CRON_SECRET present
+        run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_SECRET repo secret is not set — the ingest route will 401."
+            exit 1
+          fi
+
+      - name: Ingest news feeds
+        run: |
+          echo "→ GET ${SITE_URL}/api/ingest-news"
+          code=$(curl -sS -o /tmp/news.json -w '%{http_code}' \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "${SITE_URL}/api/ingest-news")
+          echo "HTTP ${code}"
+          cat /tmp/news.json || true
+          test "$code" = "200"
