@@ -1,58 +1,71 @@
-# AGENTS.md
+# AGENTS.md — konative.com
 
 ## Mission
-This repository is the **konative.com** web app: a Next.js site for connectivity intelligence, carrier-neutral brokerage, datacenter connectivity, market coverage, and qualified buyer intake.
 
-The immediate objective is to keep the public site consistent with the current Konative positioning: AI-native connectivity intelligence and brokerage, using the black/steel/velocity-red visual system now established on the homepage.
+Next.js site for connectivity intelligence, carrier-neutral brokerage, datacenter connectivity, market coverage, and qualified buyer intake. Public positioning: **AI-native connectivity intelligence and brokerage** — black/steel/velocity-red (`#C8001F`) brokerage aesthetic.
+
+## Platform (2026-08-19)
+
+- **Runtime:** Cloud Run (`konative-website-staging`) — public **konative.com** / **www**
+- **Data:** Supabase `tcbworxmlmxoyzcvdjhh` for intelligence tables and `/api/v1/*`
+- **CMS:** Sanity (+ Builder.io where already wired)
+- **Newsletter:** Ghost on Railway
+- **Intake automation:** Twenty + n8n on Railway
+- **DNS:** Bunny (`kiki` / `coco`); Porkbun registrar only — never flip NS to Porkbun
+- **Secrets:** GCP Secret Manager → Cloud Run
+
+Do **not** recommend Cloudflare Workers/OpenNext, D1, R2, KV, or Workers AI as the Konative platform. Cloudflare is leftover-only in this stack.
+
+## Product & legal content rules
+
+- Konative is **connectivity intelligence and vendor-neutral brokerage** for tribal nations, datacenters, enterprises, and infrastructure buyers — not outdoor living, manufacturer representation, or generic “AI platform” fluff.
+- Tribal/sovereignty copy must stay accurate: nations as counterparties, supplier-compensated brokerage (buyers pay $0 advisory), commission disclosure when asked.
+- Market intel and indices are **informational** — not investment advice; say so where editorial content warrants it.
+- CTAs: `/contact` or canonical Cal.com booking for warm-intent flows.
+- No current surface should describe Konative as an outdoor living or manufacturer-representation business.
+
+## CMS rules
+
+- **Sanity** is curated CMS: pages, tribal/news editorial, form submissions, map/editorial records. Prefer block-based `layout` fields and stable slugs; avoid one-off hardcoded page fields when a reusable block works.
+- **Builder.io** only where already integrated — do not expand scope without approval.
+- Globals/settings: navigation, SEO defaults, site-wide config in Sanity globals where the schema supports it.
+- Content imports: follow `web/content/seed/import-ready-checklist.md` for positioning alignment before bulk publish.
 
 ## Core principles
-1. **Consistency over one-off customization.** Shared surfaces should use the current brokerage brand system.
-2. **Phase-based delivery.** Work only on the current approved milestone.
-3. **No chaos architecture.** Do not add pages, blocks, patterns, or schema complexity without a clear reason.
-4. **Konative is the product surface.** It should feel premium, specific, data-rich, and credible to infrastructure buyers.
-5. **Notion is the system of record.** When creating or updating work, sync relevant outcomes to the AI OS workspace via Desktop Commander / Notion access.
-6. **Cloudflare-native data.** Tabular intelligence → D1. Geo/objects → R2. Do not add Supabase or Railway Postgres for site data. See `web/docs/database-setup.md` and `.context/konative-api-platform-architecture.md`.
-7. **Prefer small safe iterations.** Show plans, then implement in batches.
 
-## Current project context
-- Domain: `konative.com`
-- Business: AI-native connectivity intelligence and carrier-neutral brokerage
-- Primary goal: generate qualified connectivity, datacenter, market-intelligence, and partnership inquiries
-- Design direction: bright corporate brokerage aesthetic using white, black/steel, and velocity red `#C8001F`
-- Stack: Next.js 16 on **Cloudflare Workers** (OpenNext), Sanity CMS, **Cloudflare D1 + R2** for intelligence data, Ghost on Railway for newsletter
+1. Consistency over one-off customization — shared brokerage brand system.
+2. Phase-based delivery — current approved milestone only (`PLAN.md` when relevant).
+3. No chaos architecture — no new pages/blocks/schema without clear reason.
+4. Small safe iterations — state plan and expected files before major edits.
+5. Notion is the visible system of record — log outcomes to the AI OS workspace when tooling is available.
 
-## Current primary page scope
-- Home
-- Connectivity
-- Datacenters / Data Center Connectivity
-- Intelligence
-- Markets
-- Map / coverage
-- News / market intel
-- Contact / platform access
+## Page scope (primary)
 
-## Execution behavior
-- Always begin major work by restating the milestone and listing files expected to change.
-- Prefer editing existing files over generating parallel alternatives.
-- Keep folder structure clean and predictable.
-- Use TypeScript throughout.
-- Favor server components unless interactivity requires client components.
-- Use design tokens and consistent naming.
-- Keep content modeling generic enough for future reuse.
-- If a change affects the shared architecture, data model, or deploy workflow, document it in `docs/decisions.md`.
+Home · Connectivity · Datacenters · Intelligence · Markets · Map/coverage · News/market intel · Contact/platform access · Tribal lane where live
 
-## Notion behavior
-Because this environment has Notion + filesystem access, the agent may:
-- create/update project notes in the AI OS workspace,
-- seed task status updates,
-- create a Konative project page if missing,
-- add records to the Block Library and Site Registry,
-provided the action is clearly logged in the response.
+## Frozen — do not enable without explicit approval
 
-Do not invent database IDs. Discover them from the workspace or ask for confirmation if ambiguous.
+| Item | Rule |
+|------|------|
+| News ingest | **Off** — do not turn on cron, workflows, or `/api/ingest-news` automation |
+| Outreach campaign | **Wait for Claude** — no autonomous campaign sends |
+| Kit (ConvertKit) | **Not on Konative** — newsletter is Ghost only |
+| Public hostname cutover | Only after Cloud Run health verified on production URLs |
+| Cloud SQL / D1 / R2 | Not the active data plane — Supabase remains source for intel tables |
 
-## Definition of done for current site work
+## Execution
+
+- Restate milestone and file list before major work.
+- TypeScript throughout; prefer server components unless interactivity requires client.
+- Use design tokens and existing naming; edit existing files over parallel alternatives.
+- Architecture/deploy/data-model changes: note in `docs/decisions.md`.
+
+## Notion
+
+May create/update project notes, task status, Block Library / Site Registry entries when Notion access is available — log actions in the response. Do not invent database IDs; discover from workspace or confirm.
+
+## Definition of done
+
 - `npm run build` passes from `web/`.
-- Primary pages render with the current black/steel/red brokerage design language.
-- CTAs route to `/contact` or the canonical Cal.com booking link where warm-intent booking is intended.
-- No current content surface describes Konative as an outdoor living/manufacturer representation business.
+- Primary pages match black/steel/red brokerage language and positioning rules above.
+- CTAs route correctly; no stale outdoor-living or deprecated-platform copy in touched surfaces.
