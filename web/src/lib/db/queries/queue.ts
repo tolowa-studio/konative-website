@@ -56,7 +56,7 @@ export async function queryInterconnectionQueueRadius(
   lng: number,
   radiusKm: number,
 ): Promise<InterconnectionQueueDbRow[] | null> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const { minLat, maxLat, minLng, maxLng } = bboxForRadiusKm(lat, lng, radiusKm);
     const { results } = await db

@@ -60,7 +60,7 @@ function mapFacilityRow(row: {
 export async function queryDcFacilitiesMap(
   limit = 2000,
 ): Promise<DcFacilityMapRow[] | null> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const { results } = await db
       .prepare(
@@ -81,7 +81,7 @@ export async function queryDcFacilitiesMap(
 }
 
 export async function countDcFacilities(): Promise<number> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const row = await db
       .prepare(`SELECT COUNT(*) AS count FROM dc_facilities`)

@@ -6,6 +6,8 @@ const webDir = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  /** Cloud Run only — keep Node pg out of the OpenNext Worker bundle (TOL-321). */
+  serverExternalPackages: ["pg", "pg-cloudflare"],
   async redirects() {
     return [
       { source: "/powered-land", destination: "/data-center-connectivity", permanent: true },

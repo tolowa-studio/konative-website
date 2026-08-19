@@ -6,7 +6,7 @@ const CACHE_MS = 60_000;
 
 /** True when the reachable D1 tbcp_awards table has at least one row. */
 export async function isD1TbcpReady(): Promise<boolean> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const row = await db
       .prepare("SELECT 1 AS ok FROM tbcp_awards LIMIT 1")
@@ -19,7 +19,7 @@ export async function isD1TbcpReady(): Promise<boolean> {
 
 /** True when the reachable D1 interconnection_queue table has at least one row. */
 export async function isD1QueueReady(): Promise<boolean> {
-  const db = getD1();
+  const db = await getD1();
 
   const now = Date.now();
   if (cachedReady !== null && now - cachedAt < CACHE_MS) {

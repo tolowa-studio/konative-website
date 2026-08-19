@@ -43,7 +43,7 @@ describe("getD1 on Cloud Run without DATABASE_URI", () => {
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
     const { getD1, DatabaseUnavailableError } = await import("../client");
 
-    expect(() => getD1()).toThrow(DatabaseUnavailableError);
+    await expect(getD1()).rejects.toThrow(DatabaseUnavailableError);
     expect(errorSpy).toHaveBeenCalled();
     errorSpy.mockRestore();
   });

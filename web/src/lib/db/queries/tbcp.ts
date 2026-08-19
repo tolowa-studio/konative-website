@@ -18,7 +18,7 @@ export interface TbcpAwardRow {
 export async function queryTbcpAwards(
   select = "state, award_amount_usd, nofo_round",
 ): Promise<TbcpAwardRow[] | null> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const { results } = await db
       .prepare(`SELECT id, slug, grantee_name, tribe_name, ${select} FROM tbcp_awards`)
@@ -32,7 +32,7 @@ export async function queryTbcpAwards(
 export async function queryTbcpAwardBySlug(
   slug: string,
 ): Promise<TbcpAwardRow | null> {
-  const db = getD1();
+  const db = await getD1();
   try {
     return await db
       .prepare(
@@ -46,7 +46,7 @@ export async function queryTbcpAwardBySlug(
 }
 
 export async function queryTbcpAwardsList(limit = 1000): Promise<TbcpAwardRow[] | null> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const { results } = await db
       .prepare(
@@ -64,7 +64,7 @@ export async function queryTbcpAwardsList(limit = 1000): Promise<TbcpAwardRow[] 
 }
 
 export async function queryTbcpSlugs(): Promise<string[]> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const { results } = await db
       .prepare(`SELECT slug FROM tbcp_awards ORDER BY slug`)

@@ -4,7 +4,7 @@
 import type { IntelDatabase } from "./types";
 import { getKonativeDataRuntime } from "./runtime";
 import { getWorkerBindings, getWorkerD1 } from "./worker-bindings";
-import { getPostgresD1, PostgresDatabaseUnavailableError } from "./postgres";
+import { PostgresDatabaseUnavailableError } from "./postgres-errors";
 
 export class CloudflareBindingUnavailableError extends Error {
   constructor(binding: string) {
@@ -49,7 +49,7 @@ export function getBindings(): KonativeBindings {
 
 type IntelDatabaseClient = IntelDatabase;
 
-export function getD1(): IntelDatabaseClient {
+export async function getD1(): Promise<IntelDatabaseClient> {
   const runtime = getKonativeDataRuntime();
 
   if (runtime === "cloudflare-workers") {
@@ -67,6 +67,7 @@ export function getD1(): IntelDatabaseClient {
 
   if (runtime === "postgres") {
     try {
+      const { getPostgresD1 } = await import("./postgres");
       return getPostgresD1();
     } catch (error) {
       console.error("Konative Postgres database unavailable", {
