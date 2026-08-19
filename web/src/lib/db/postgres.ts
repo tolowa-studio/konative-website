@@ -6,13 +6,9 @@
  */
 import { Pool, type PoolClient } from "pg";
 import type { IntelDatabase, IntelPreparedStatement } from "./types";
+import { PostgresDatabaseUnavailableError } from "./postgres-errors";
 
-export class PostgresDatabaseUnavailableError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "PostgresDatabaseUnavailableError";
-  }
-}
+export { PostgresDatabaseUnavailableError };
 
 let pool: Pool | null = null;
 

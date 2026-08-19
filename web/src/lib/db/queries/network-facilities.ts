@@ -57,7 +57,7 @@ function mapNetworkRow(row: {
 export async function queryNetworkFacilitiesMap(): Promise<
   NetworkFacilityMapRow[] | null
 > {
-  const db = getD1();
+  const db = await getD1();
   try {
     const PAGE = 1000;
     const all: Parameters<typeof mapNetworkRow>[0][] = [];
@@ -85,7 +85,7 @@ export async function queryNetworkFacilitiesMap(): Promise<
 }
 
 export async function countNetworkFacilities(): Promise<number> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const row = await db
       .prepare(`SELECT COUNT(*) AS count FROM network_facilities`)

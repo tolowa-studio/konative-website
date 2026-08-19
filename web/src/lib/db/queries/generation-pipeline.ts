@@ -59,7 +59,7 @@ export async function queryGenerationPipelineMap(
   minYear = new Date().getFullYear(),
   limit = 500,
 ): Promise<GenerationPipelineMapRow[] | null> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const { results } = await db
       .prepare(
@@ -84,7 +84,7 @@ export async function queryGenerationPipelineMap(
 }
 
 export async function countGenerationPipeline(): Promise<number> {
-  const db = getD1();
+  const db = await getD1();
   try {
     const row = await db
       .prepare(`SELECT COUNT(*) AS count FROM generation_pipeline`)
