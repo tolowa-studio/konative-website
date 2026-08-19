@@ -40,7 +40,8 @@ jobs:
           gcloud projects add-iam-policy-binding "${{ env.GCP_PROJECT }}" \
             --member="serviceAccount:${DEPLOYER_SA}" \
             --role="roles/cloudsql.admin" \
-            --condition=None >/dev/null
+            --condition=None >/dev/null 2>&1 \
+            || true
 
       - name: Provision Cloud SQL + DATABASE_URI secret
         run: bash scripts/gcp-provision-cloud-sql.sh
