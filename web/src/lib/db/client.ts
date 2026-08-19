@@ -23,8 +23,6 @@ export class DatabaseUnavailableError extends Error {
 /** Cloudflare Worker bindings (Worker runtime only). */
 export interface KonativeBindings {
   DB?: D1Database;
-  TILES?: R2Bucket;
-  DATA?: R2Bucket;
   ASSETS?: { fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> };
 }
 
