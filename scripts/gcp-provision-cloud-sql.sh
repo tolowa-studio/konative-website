@@ -23,6 +23,8 @@ MIGRATION_FILE="${MIGRATION_FILE:-web/db/migrations/0001_konative_intel.sql}"
 CONNECTION_NAME="${GCP_PROJECT}:${GCP_REGION}:${INSTANCE_NAME}"
 
 echo "== Cloud SQL instance (${INSTANCE_NAME}) =="
+gcloud services enable sqladmin.googleapis.com --project="${GCP_PROJECT}" >/dev/null 2>&1 || true
+
 if gcloud sql instances describe "${INSTANCE_NAME}" --project="${GCP_PROJECT}" >/dev/null 2>&1; then
   echo "  Instance exists"
 else
@@ -75,7 +77,7 @@ echo "== IAM: runtime SA can connect to Cloud SQL =="
 gcloud projects add-iam-policy-binding "${GCP_PROJECT}" \
   --member="serviceAccount:${RUNTIME_SA}" \
   --role="roles/cloudsql.client" \
-  --condition=None >/dev/null
+  --condition=None >/dev/null 2>&1 || echo "  (skipped IAM bind — grant roles/cloudsql.client to ${RUNTIME_SA} manually if needed)"
 
 echo "== Apply schema (${MIGRATION_FILE}) =="
 if [[ ! -f "${MIGRATION_FILE}" ]]; then
