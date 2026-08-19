@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - 'web/**'
+      - 'scripts/gcp-provision-cloud-sql.sh'
       - '.github/workflows/deploy-cloud-run.yml'
       - '.dockerignore'
   workflow_dispatch:
@@ -40,6 +41,23 @@ jobs:
           service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
 
       - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Provision Cloud SQL when missing (TOL-314)
+        run: |
+          if gcloud sql instances describe konative-intel \
+            --project "${{ env.GCP_PROJECT }}" >/dev/null 2>&1; then
+            echo "Cloud SQL instance already exists — skipping provision"
+            exit 0
+          fi
+          echo "Cloud SQL instance missing — provisioning..."
+          DEPLOYER_SA="${{ vars.GCP_SERVICE_ACCOUNT }}"
+          gcloud projects add-iam-policy-binding "${{ env.GCP_PROJECT }}" \
+            --member="serviceAccount:${DEPLOYER_SA}" \
+            --role="roles/cloudsql.admin" \
+            --condition=None >/dev/null || true
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends postgresql-client
+          bash scripts/gcp-provision-cloud-sql.sh
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
