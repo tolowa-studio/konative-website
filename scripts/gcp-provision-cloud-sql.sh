@@ -32,6 +32,7 @@ else
   gcloud sql instances create "${INSTANCE_NAME}" \
     --project="${GCP_PROJECT}" \
     --database-version=POSTGRES_16 \
+    --edition=ENTERPRISE \
     --tier=db-f1-micro \
     --region="${GCP_REGION}" \
     --storage-type=SSD \
