@@ -22,6 +22,7 @@ env:
   AR_REPO: konative-website
   IMAGE_NAME: konative
   SERVICE_NAME: konative-website-staging
+  CLOUDSQL_INSTANCE: tolowa-studio:us-west1:konative-intel
 
 jobs:
   deploy:
@@ -75,12 +76,21 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
+          CLOUDSQL_FLAG=()
+          if gcloud sql instances describe konative-intel \
+            --project "${{ env.GCP_PROJECT }}" >/dev/null 2>&1; then
+            CLOUDSQL_FLAG=(--add-cloudsql-instances "${{ env.CLOUDSQL_INSTANCE }}")
+            echo "Cloud SQL instance found — attaching socket"
+          else
+            echo "Cloud SQL instance not found — deploy without socket (run provision-cloud-sql.yml)"
+          fi
           gcloud run deploy "${{ env.SERVICE_NAME }}" \
             --project "${{ env.GCP_PROJECT }}" \
             --image "${IMAGE}" \
             --region "${{ env.GCP_REGION }}" \
             --platform managed \
             --service-account konative-runtime@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com \
+            "${CLOUDSQL_FLAG[@]}" \
             --port 8080 \
             --allow-unauthenticated \
             --min-instances 0 \
@@ -120,10 +130,15 @@ jobs:
             --region "${{ env.GCP_REGION }}" \
             --format='value(status.url)')
           echo "Cloud Run URL: ${URL}"
-          code=$(curl -sf -o /tmp/health.json -w "%{http_code}" "${URL}/api/v1/health" || echo "000")
+          code=$(curl -sS -o /tmp/health.json -w "%{http_code}" "${URL}/api/v1/health")
           echo "Health status: ${code}"
-          cat /tmp/health.json || true
-          # 503 is expected until DATABASE_URI + TOL-314; homepage should still be reachable.
+          cat /tmp/health.json
           homepage=$(curl -sf -o /dev/null -w "%{http_code}" "${URL}/" || echo "000")
           echo "Homepage status: ${homepage}"
           test "${homepage}" = "200"
+          # Fail closed when DATABASE_URI is configured but health is not 200.
+          if gcloud secrets versions access latest --secret=konative-DATABASE_URI --project="${{ env.GCP_PROJECT }}" >/dev/null 2>&1; then
+            test "${code}" = "200"
+          else
+            echo "DATABASE_URI secret not set — health 503 acceptable until provision-cloud-sql.yml runs"
+          fi

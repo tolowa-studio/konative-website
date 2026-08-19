@@ -2,11 +2,14 @@ import { NextResponse } from 'next/server'
 import { createClient as createSanity } from '@sanity/client'
 import { createClient as createSupabase } from '@supabase/supabase-js'
 import {
+  CloudflareBindingUnavailableError,
   DatabaseUnavailableError,
   countDcFacilities,
   countGenerationPipeline,
   countNetworkFacilities,
 } from '@/lib/db'
+import { getKonativeDataRuntime } from '@/lib/db/runtime'
+import { PostgresDatabaseUnavailableError } from '@/lib/db/postgres-errors'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,8 +52,7 @@ export async function GET() {
       networkNodesIndexed: net,
     })
   } catch (error) {
-    const dependency =
-      error instanceof DatabaseUnavailableError ? 'postgres' : 'D1'
+    const dependency = resolveHealthDependency(error)
     console.error('Konative health dependency failure', {
       dependency,
       operation: 'GET /api/v1/health',
@@ -61,4 +63,21 @@ export async function GET() {
       { status: 503 },
     )
   }
+}
+
+function resolveHealthDependency(error: unknown): 'postgres' | 'D1' {
+  if (
+    error instanceof DatabaseUnavailableError ||
+    error instanceof PostgresDatabaseUnavailableError
+  ) {
+    return 'postgres'
+  }
+  if (error instanceof CloudflareBindingUnavailableError) {
+    return 'D1'
+  }
+  const runtime = getKonativeDataRuntime()
+  if (runtime === 'postgres' || runtime === 'unconfigured-node') {
+    return 'postgres'
+  }
+  return 'D1'
 }
