@@ -59,17 +59,21 @@ gcloud iam service-accounts add-iam-policy-binding "${DEPLOYER_SA}" \
   --member="${PRINCIPAL}"
 
 echo "== IAM: deployer SA roles =="
-for ROLE in roles/run.admin roles/artifactregistry.writer roles/iam.serviceAccountUser; do
+for ROLE in roles/run.admin roles/artifactregistry.writer roles/iam.serviceAccountUser roles/cloudsql.admin roles/secretmanager.admin roles/serviceusage.serviceUsageAdmin; do
   gcloud projects add-iam-policy-binding "${GCP_PROJECT}" \
     --member="serviceAccount:${DEPLOYER_SA}" \
     --role="${ROLE}" \
     --condition=None
 done
 
-echo "== IAM: runtime SA can read secrets =="
+echo "== IAM: runtime SA can read secrets and connect to Cloud SQL =="
 gcloud projects add-iam-policy-binding "${GCP_PROJECT}" \
   --member="serviceAccount:${RUNTIME_SA}" \
   --role="roles/secretmanager.secretAccessor" \
+  --condition=None
+gcloud projects add-iam-policy-binding "${GCP_PROJECT}" \
+  --member="serviceAccount:${RUNTIME_SA}" \
+  --role="roles/cloudsql.client" \
   --condition=None
 
 echo "== Secret Manager placeholders (create if missing; add values separately) =="
